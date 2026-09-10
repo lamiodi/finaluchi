@@ -1,0 +1,264 @@
+@import "tailwindcss";
+
+@theme {
+  --color-alabaster: #FFFFFF;
+  --color-alabaster-subtle: #FAFAFA;
+  --color-noir: #000000;
+  --color-noir-pure: #000000;
+  --color-oyster: #F4F4F4;
+  --color-champagne: #C5A880;
+  --color-champagne-light: #DFC7AA;
+  --color-muted: #666666;
+  --color-border: #EAEAEA;
+  --color-white: #FFFFFF;
+  --color-status-atelier: #000000;
+
+  --color-cloth-noir-onyx: #000000;
+  --color-cloth-alabaster-ivory: #FFFFFF;
+  --color-cloth-pearl-oyster: #F5F3ED;
+  --color-cloth-dune-crepe: #D2C4B2;
+  --color-cloth-cocoa-umber: #2E1B17;
+  --color-cloth-benin-malachite: #0A3D2E;
+  --color-cloth-yoruba-indigo: #142038;
+  --color-cloth-nile-lapis: #122846;
+  --color-cloth-ashanti-saffron: #C68B19;
+  --color-cloth-sahara-terracotta: #A84B29;
+  --color-cloth-amethyst-plum: #3E103F;
+  --color-cloth-champagne-gold: #C8B294;
+  --color-cloth-liquid-bronze: #8C6239;
+  --color-cloth-burnished-copper: #B86B43;
+  --color-cloth-platinum-silk: #E2E4E8;
+  --color-cloth-baobab-bark: #5A4D41;
+  --color-cloth-sage-palm: #78866B;
+  --color-cloth-sunstone-amber: #D97724;
+  --color-cloth-dusk-carmine: #722F37;
+
+  --font-display: 'Cormorant Garamond', 'Cinzel', Georgia, serif;
+  --font-heading: 'Cinzel', 'Cormorant Garamond', serif;
+  --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+@layer base {
+  :root {
+    /* --- 2.1 INTERFACE & CANVAS COLOR SYSTEM --- */
+    --color-alabaster: #FFFFFF;       /* Primary canvas pure white background */
+    --color-alabaster-subtle: #FAFAFA;/* Crisp studio light separation */
+    --color-noir: #000000;            /* Primary typography & pure black elements */
+    --color-noir-pure: #000000;       /* Video overlays & deep backdrop */
+    --color-oyster: #F4F4F4;          /* Sharp neutral surfaces & subtle cards */
+    --color-champagne: #C5A880;       /* Luminous couture warm champagne accent */
+    --color-champagne-light: #DFC7AA; /* Luminous warm champagne hover accent */
+    --color-muted: #666666;           /* Secondary copy, captions, timestamps */
+    --color-border: #EAEAEA;          /* Subtle dividing rules */
+    --color-white: #FFFFFF;           /* Elevated panels & pure white modals */
+    --color-status-atelier: #000000;  /* Atelier progress & bespoke indicators */
+
+    /* --- 2.2 COUTURE CLOTH & FABRIC COLOR PALETTES --- */
+    /* Group 1: Signature Neutrals & Mineral Silks */
+    --cloth-noir-onyx: #000000;          /* Obsidian Mulberry Silk Satin */
+    --cloth-alabaster-ivory: #FFFFFF;    /* Raw Ivory Silk Dupioni */
+    --cloth-pearl-oyster: #E4DEC8;       /* Luminous Pearl Silk Charmeuse (13-0905 TCX) */
+    --cloth-dune-crepe: #D2C4B2;         /* Desert Sand Hand-Spun Wool Crepe (14-1108 TCX) */
+    --cloth-cocoa-umber: #3E2723;        /* Dark Roasted Cocoa Wool (19-1218 TCX) */
+
+    /* Group 2: Imperial African Heritage & Jewel Dyes */
+    --cloth-benin-malachite: #0A3D2E;    /* Imperial Emerald Malachite Silk (19-5411 TCX) */
+    --cloth-yoruba-indigo: #1B2A4A;      /* Royal Indigofera Vat Dye Silk (19-3938 TCX) */
+    --cloth-nile-lapis: #1A365D;         /* Deep Lapis Blue Silk Organza (19-4033 TCX) */
+    --cloth-ashanti-saffron: #C68B19;    /* Royal Ashanti Sun Gold Brocade (15-0955 TCX) */
+    --cloth-sahara-terracotta: #A84B29;  /* Savanna Clay Terracotta Silk (18-1440 TCX) */
+    --cloth-amethyst-plum: #4A154B;      /* Imperial Velvet Deep Plum (19-2520 TCX) */
+
+    /* Group 3: Lustrous Metallics & Accent Satins */
+    --cloth-champagne-gold: #C8B294;     /* Atelier Champagne Lame (14-1118 TCX) */
+    --cloth-liquid-bronze: #8C6239;      /* Metallic Liquid Bronze Taffeta (18-0935 TCX) */
+    --cloth-burnished-copper: #B86B43;   /* Lustrous Spun Copper Silk (17-1436 TCX) */
+    --cloth-platinum-silk: #DCDFE4;      /* Cool Specular Platinum Luster (13-4105 TCX) */
+
+    /* Group 4: Earthy Savanna & Solstice Hues */
+    --cloth-baobab-bark: #5A4D41;        /* Aged Baobab Bark Linen (19-0822 TCX) */
+    --cloth-sage-palm: #78866B;          /* Whispering Sage Silk Georgette (16-0421 TCX) */
+    --cloth-sunstone-amber: #D97724;     /* Glowing Solstice Amber Silk (16-1349 TCX) */
+    --cloth-dusk-carmine: #722F37;       /* Royal Twilight Carmine Velvet (19-1725 TCX) */
+
+    /* --- 2.3 INTERACTIVE SWATCH COMPONENT TOKENS --- */
+    --swatch-size-desktop: 32px;
+    --swatch-size-mobile: 28px;
+    --swatch-gap: 10px;
+    --swatch-radius: 4px;
+    --swatch-ring-gap: 2px;
+    --swatch-ring-width: 1.5px;
+    --swatch-ring-color: var(--color-champagne);
+    --swatch-shadow: 0 2px 8px rgba(13, 13, 13, 0.08);
+    --swatch-shadow-active: 0 4px 14px rgba(13, 13, 13, 0.25);
+    --swatch-disabled-slash: rgba(13, 13, 13, 0.4);
+    
+    /* --- TYPOGRAPHY FAMILIES --- */
+    --font-display: 'Cormorant Garamond', 'Cinzel', Georgia, serif;
+    --font-serif-heading: 'Cinzel', 'Cormorant Garamond', serif;
+    --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* --- MOTION TOKENS (Emil Kowalski Design Engineering) --- */
+    --duration-micro: 160ms;
+    --duration-fast: 240ms;
+    --duration-standard: 380ms;
+    --duration-luxury: 650ms;
+    --duration-cinematic: 1200ms;
+
+    --ease-luxury: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-cinematic: cubic-bezier(0.7, 0, 0.2, 1);
+    --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  html {
+    font-family: var(--font-sans);
+    background-color: var(--color-alabaster);
+    color: var(--color-noir);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-alabaster);
+    color: var(--color-noir);
+    overflow-x: hidden;
+  }
+}
+
+/* Typography Utility Classes */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-heading {
+  font-family: var(--font-serif-heading);
+}
+
+.font-sans-luxury {
+  font-family: var(--font-sans);
+}
+
+.font-mono-luxury {
+  font-family: var(--font-mono);
+}
+
+/* Subtle luxury tracking & text rendering */
+.tracking-couture {
+  letter-spacing: 0.18em;
+}
+
+.tracking-loose-couture {
+  letter-spacing: 0.25em;
+}
+
+.tracking-tight-editorial {
+  letter-spacing: -0.02em;
+}
+
+/* Emil Kowalski Button Active State */
+.btn-luxury {
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), background-color 200ms ease, opacity 200ms ease, border-color 200ms ease;
+  will-change: transform;
+}
+
+.btn-luxury:active {
+  transform: scale(0.97);
+}
+
+/* Swatch Interactive Styles */
+.swatch-chip {
+  width: var(--swatch-size-desktop);
+  height: var(--swatch-size-desktop);
+  border-radius: var(--swatch-radius);
+  transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 200ms ease;
+  position: relative;
+  cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .swatch-chip:hover {
+    transform: scale(1.08);
+  }
+}
+
+.swatch-chip.active {
+  outline: var(--swatch-ring-width) solid var(--swatch-ring-color);
+  outline-offset: var(--swatch-ring-gap);
+  box-shadow: var(--swatch-shadow-active);
+}
+
+.swatch-chip.sold-out::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -2px;
+  right: -2px;
+  height: 1.5px;
+  background-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 2px rgba(0,0,0,0.5);
+  transform: rotate(-45deg);
+}
+
+.swatch-chip.made-to-order::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--color-champagne);
+  box-shadow: 0 0 4px rgba(200, 178, 148, 0.9);
+}
+
+/* Editorial Glass & Overlays */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Haute Couture Stark Selection */
+::selection {
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+/* Custom Scrollbar for Stark Luxury Aesthetics */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FFFFFF;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D4D4D4;
+  border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #000000;
+}
+
+/* Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
