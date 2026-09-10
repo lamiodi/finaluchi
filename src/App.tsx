@@ -190,6 +190,7 @@ export const App: React.FC = () => {
 
             <EditorialStorySection
               onExploreCollection={() => handleNavigatePillar('DINNER_DRESSES')}
+              onNavigatePillar={handleNavigatePillar}
               onExploreAtelier={() => {
                 const el = document.getElementById('digital-atelier-section');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });

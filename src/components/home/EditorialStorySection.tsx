@@ -4,12 +4,23 @@ import { useAudioStore } from '../../stores/audioStore';
 interface EditorialStorySectionProps {
   onExploreCollection: () => void;
   onExploreAtelier: () => void;
+  onNavigatePillar?: (pillar: string) => void;
 }
 
 export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
   onExploreCollection,
+  onNavigatePillar,
 }) => {
   const { playTactileClick } = useAudioStore();
+
+  const handleCategoryJump = (pillar: string) => {
+    playTactileClick();
+    if (onNavigatePillar) {
+      onNavigatePillar(pillar);
+    } else {
+      onExploreCollection();
+    }
+  };
 
   return (
     <section className="w-full bg-[#FFFFFF] py-14 sm:py-24 border-b border-black/10">
@@ -61,6 +72,34 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
               <p className="font-sans-luxury text-xs sm:text-sm text-neutral-600 leading-relaxed font-light">
                 Oversized hybrids of ceremonial regalia and padded outerwear; double-faced wool crepe jackets and liquid mulberry silks tailored singularly on granite tables. Each silhouette is drafted across 48 custom anatomical points, sculpted for commanding presence without restriction.
               </p>
+
+              {/* High-Conversion Category Jump Links */}
+              <div className="pt-3 flex flex-wrap gap-2 text-[11px] font-sans-luxury">
+                <button
+                  onClick={() => handleCategoryJump('DINNER_DRESSES')}
+                  className="px-3 py-1.5 bg-black text-white text-[10px] font-semibold uppercase tracking-wider hover:bg-neutral-800 transition-all flex items-center gap-1.5"
+                >
+                  <span>Gala Gowns</span>
+                  <span className="text-white/60 font-mono-luxury">₦520k</span>
+                  <span>⟶</span>
+                </button>
+                <button
+                  onClick={() => handleCategoryJump('JACKETS')}
+                  className="px-3 py-1.5 bg-neutral-100 hover:bg-black hover:text-white text-black text-[10px] font-semibold uppercase tracking-wider transition-all border border-black/15 flex items-center gap-1.5"
+                >
+                  <span>Pagoda Jackets</span>
+                  <span className="text-neutral-500 font-mono-luxury group-hover:text-white/60">₦290k</span>
+                  <span>⟶</span>
+                </button>
+                <button
+                  onClick={() => handleCategoryJump('PANTS')}
+                  className="px-3 py-1.5 bg-neutral-100 hover:bg-black hover:text-white text-black text-[10px] font-semibold uppercase tracking-wider transition-all border border-black/15 flex items-center gap-1.5"
+                >
+                  <span>Palazzo Pants</span>
+                  <span className="text-neutral-500 font-mono-luxury group-hover:text-white/60">₦220k</span>
+                  <span>⟶</span>
+                </button>
+              </div>
 
               {/* Verified Client Dignified Note */}
               <div className="pt-4 border-t border-black/10">

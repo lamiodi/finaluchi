@@ -316,4 +316,147 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <Heart className="w-4 h-4" />
             {totalWishlistCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-noir text-white text-[8px] fo
+              <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-noir text-white text-[8px] font-mono-luxury font-bold rounded-full flex items-center justify-center">
+                {totalWishlistCount}
+              </span>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Drawer Menu */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden bg-white border-t border-border px-5 py-6 space-y-6 animate-in slide-in-from-top-2 duration-300 shadow-xl max-h-[85vh] overflow-y-auto">
+          
+          <div>
+            <div className="text-[10px] font-mono-luxury text-[#A67C4A] uppercase tracking-widest font-semibold pb-2 border-b border-border/40 mb-3">
+              CLIENT CATEGORIES
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-xs font-semibold uppercase tracking-tight text-noir">
+              <button
+                onClick={() => {
+                  playTactileClick();
+                  onNavigatePillar('ALL');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="text-left py-2 px-2.5 bg-neutral-100 rounded-xs font-bold col-span-2 flex items-center justify-between"
+              >
+                <span>ALL CREATIONS</span>
+                <span className="text-xs text-muted">⟶</span>
+              </button>
+              {ATELIER_CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => {
+                    playTactileClick();
+                    onNavigatePillar(cat.id);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="text-left py-2 px-2.5 hover:bg-neutral-100 rounded-xs transition-colors border border-border/40 flex items-center justify-between"
+                >
+                  <span className="truncate">{cat.label}</span>
+                  <span className="text-[10px] text-muted">⟶</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Mobile Quick Action Buttons */}
+          <div className="space-y-2 pt-2 border-t border-border">
+            {/* Runway Mode on mobile */}
+          <button
+            onClick={() => {
+              playTactileClick();
+              onOpenRunway();
+              setIsMobileMenuOpen(false);
+            }}
+            className="w-full py-2.5 bg-noir text-white text-xs font-bold tracking-loose-couture uppercase rounded-xs flex items-center justify-center gap-2 hover:bg-neutral-800 transition-colors"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-[#C5A880]" />
+            <span>RUNWAY MODE</span>
+          </button>
+
+          <div className="grid grid-cols-2 gap-2">
+            {/* Client portal */}
+            <button
+              onClick={() => {
+                playTactileClick();
+                onOpenClientPortal();
+                setIsMobileMenuOpen(false);
+              }}
+              className="py-2.5 bg-white border border-border text-noir text-xs font-bold tracking-couture uppercase rounded-xs flex items-center justify-center gap-2 hover:bg-noir hover:text-white transition-colors"
+            >
+              <User className="w-3.5 h-3.5" />
+              <span>CLIENT PORTAL</span>
+            </button>
+
+            {/* Wishlist */}
+            <button
+              onClick={() => {
+                playTactileClick();
+                onOpenClientPortal();
+                setIsMobileMenuOpen(false);
+              }}
+              className="py-2.5 bg-white border border-border text-noir text-xs font-bold tracking-couture uppercase rounded-xs flex items-center justify-center gap-2 hover:bg-noir hover:text-white transition-colors"
+            >
+              <Heart className="w-3.5 h-3.5" />
+              <span>SAVED ({totalWishlistCount})</span>
+            </button>
+          </div>
+
+          <button
+            onClick={() => {
+              playTactileClick();
+              onOpenAppointments();
+              setIsMobileMenuOpen(false);
+            }}
+            className="w-full py-2.5 bg-noir text-white text-xs font-bold tracking-couture uppercase rounded-xs flex items-center justify-center gap-2 hover:bg-neutral-800 transition-colors"
+          >
+            <Calendar className="w-3.5 h-3.5" />
+            <span>BESPOKE FITTING</span>
+          </button>
+
+          <div className="grid grid-cols-2 gap-2">
+            {onOpenAbout && (
+              <button
+                onClick={() => {
+                  playTactileClick();
+                  onOpenAbout();
+                  setIsMobileMenuOpen(false);
+                }}
+                className="py-2 bg-white border border-border text-noir text-xs font-semibold uppercase tracking-tight rounded-xs hover:bg-neutral-100 transition-colors text-center"
+              >
+                ABOUT MAISON
+              </button>
+            )}
+
+            {onOpenContact && (
+              <button
+                onClick={() => {
+                  playTactileClick();
+                  onOpenContact();
+                  setIsMobileMenuOpen(false);
+                }}
+                className="py-2 bg-white border border-border text-noir text-xs font-semibold uppercase tracking-tight rounded-xs hover:bg-neutral-100 transition-colors text-center"
+              >
+                CONTACT CONCIERGE
+              </button>
+            )}
+          </div>
+
+          <button
+            onClick={() => {
+              playTactileClick();
+              onOpenAdmin();
+              setIsMobileMenuOpen(false);
+            }}
+            className="w-full py-1.5 text-[10px] font-mono-luxury text-muted hover:text-noir text-center uppercase tracking-widest pt-1"
+          >
+            Atelier Operations Desk (CRM)
+          </button>
+        </div>
+        </div>
+      )}
+    </header>
+  );
+};

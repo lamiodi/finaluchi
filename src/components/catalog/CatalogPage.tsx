@@ -401,4 +401,69 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
                     </div>
 
                     {/* Wishlist Heart */}
-                 
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        playTactileClick();
+                        toggleProductInEdit('edit-default', product.id);
+                      }}
+                      className={`absolute top-3 right-3 p-2.5 rounded-none backdrop-blur-md transition-all z-10 border ${
+                        saved
+                          ? 'bg-[#000000] text-[#FFFFFF] border-[#000000]'
+                          : 'bg-white/90 text-black border-black/10 hover:bg-[#000000] hover:text-[#FFFFFF] opacity-0 group-hover:opacity-100'
+                      }`}
+                      aria-label="Save to Wishlist"
+                    >
+                      <Heart className={`w-3.5 h-3.5 ${saved ? 'fill-current' : ''}`} />
+                    </button>
+
+                    {/* Color Swatch Previews */}
+                    <div className="absolute bottom-3 left-3 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+                      {product.colorways.slice(0, 4).map((cw) => (
+                        <span
+                          key={cw.id}
+                          className="w-3.5 h-3.5 rounded-full border border-white shadow-xs"
+                          style={{ backgroundColor: cw.color.hexCode }}
+                          title={cw.color.name}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Metadata */}
+                  <div className="flex flex-col flex-1 justify-between space-y-3">
+                    <div>
+                      <span className="text-[10px] font-mono-luxury text-black/60 tracking-[0.18em] uppercase block mb-1">
+                        {product.categoryName} • {product.fabricIntelligence.material.split('&')[0]}
+                      </span>
+                      <h3 className="font-sans-luxury text-sm sm:text-base font-semibold text-[#000000] tracking-tight group-hover:text-[#C5A880] transition-colors line-clamp-1 uppercase">
+                        {product.name}
+                      </h3>
+                      {isHeroCard && (
+                        <p className="text-xs text-black/65 font-light line-clamp-2 mt-2 leading-relaxed">
+                          {product.headline}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="pt-3 border-t border-black/10 flex items-center justify-between">
+                      <span className="text-xs sm:text-sm font-mono-luxury font-bold text-[#000000]">
+                        {formatPriceWithDisplay(product.basePriceKobo, displayCurrency)}
+                      </span>
+                      <span className="text-[11px] font-semibold text-black/70 tracking-widest uppercase group-hover:text-[#000000] group-hover:translate-x-0.5 transition-all flex items-center gap-1">
+                        DISCOVER <span className="text-xs">⟶</span>
+                      </span>
+                    </div>
+                  </div>
+
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+      </div>
+
+    </div>
+  );
+};
