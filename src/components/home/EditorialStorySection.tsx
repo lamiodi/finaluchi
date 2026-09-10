@@ -23,13 +23,13 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
   };
 
   return (
-    <section className="w-full bg-[#FFFFFF] py-14 sm:py-24 border-b border-black/10">
+    <section className="w-full bg-white py-20 sm:py-32">
       <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12">
         
-        {/* Section Header */}
-        <div className="flex items-center justify-between pb-6 sm:pb-8 border-b border-black/10 mb-8 sm:mb-10">
-          <h2 className="font-sans-luxury text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-noir uppercase leading-[1.08]">
-            NEW <span className="inline-block w-14 sm:w-20 h-6 sm:h-8 rounded-full align-middle bg-cover bg-center mx-1.5 border border-black/20 shadow-xs" style={{ backgroundImage: "url('/images/fc_asymmetric_silk_dress.jpg')" }}></span><br />COLLECTIONS & ATELIER
+        {/* Section Header — clean line, no decoration */}
+        <div className="flex items-end justify-between mb-12 sm:mb-16">
+          <h2 className="font-sans text-[11px] sm:text-xs font-semibold tracking-[0.2em] text-noir uppercase">
+            New Collections
           </h2>
 
           <button
@@ -37,92 +37,80 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
               playTactileClick();
               onExploreCollection();
             }}
-            className="group flex items-center gap-2 text-xs font-sans-luxury font-semibold tracking-loose-couture text-noir hover:opacity-60 transition-opacity self-start sm:self-center uppercase"
+            className="text-[11px] sm:text-xs font-sans font-medium tracking-[0.15em] text-noir/50 hover:text-noir transition-colors uppercase"
           >
-            <span>Read Editorial</span>
-            <span className="transform group-hover:translate-x-1.5 transition-transform">⟶</span>
+            View All
           </button>
         </div>
 
-        {/* Asymmetric Editorial Grid (High-Fashion Lookbook Editorial) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
+        {/* Asymmetric Editorial Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-start">
           
-          {/* Left Column: Full-Height Monumental Portrait Image */}
-          <div className="lg:col-span-6 overflow-hidden bg-[#FAFAFA] border border-black/10 hover:border-black rounded-xs group cursor-pointer transition-all duration-300" onClick={() => onExploreCollection()}>
-            <div className="aspect-[3/4.6] w-full overflow-hidden relative">
+          {/* Left Column: Monumental Portrait */}
+          <div
+            className="lg:col-span-7 overflow-hidden group cursor-pointer"
+            onClick={() => onExploreCollection()}
+          >
+            <div className="aspect-[3/4.2] w-full overflow-hidden">
               <img
                 src="/images/fc_editorial_monument.jpg"
                 alt="Finaluchi Couture Monumental Look"
-                className="w-full h-full object-cover object-[center_8%] transition-transform duration-700 ease-out group-hover:scale-105 contrast-[1.04]"
+                className="w-full h-full object-cover object-[center_8%] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
               />
-              <div className="absolute bottom-3 left-3 px-3 py-1.5 bg-black/85 backdrop-blur-md text-white text-[10px] font-mono-luxury uppercase tracking-widest rounded-xs border border-white/15">
-                Look 09 · Monumental Origami Velvet
-              </div>
             </div>
           </div>
 
-          {/* Right Column: Editorial Paragraph (Top) + Secondary Atelier Craft Shot (Bottom) */}
-          <div className="lg:col-span-6 flex flex-col justify-between h-full space-y-8 lg:pl-4">
+          {/* Right Column: Copy + Secondary Image */}
+          <div className="lg:col-span-5 flex flex-col justify-between h-full gap-10 lg:gap-14 lg:pt-8">
             
-            {/* Story Paragraph */}
-            <div className="max-w-md space-y-4 pt-2">
-              <p className="font-sans-luxury text-sm sm:text-base text-noir leading-relaxed font-normal">
+            {/* Story */}
+            <div className="max-w-sm space-y-5">
+              <p className="font-sans text-sm sm:text-[15px] text-noir leading-[1.7] font-normal">
                 A stoical elegance, you might call it. Black asymmetric dresses blowing voluminously in the sovereign wind.
               </p>
-              <p className="font-sans-luxury text-xs sm:text-sm text-neutral-600 leading-relaxed font-light">
-                Oversized hybrids of ceremonial regalia and padded outerwear; double-faced wool crepe jackets and liquid mulberry silks tailored singularly on granite tables. Each silhouette is drafted across 48 custom anatomical points, sculpted for commanding presence without restriction.
+              <p className="font-sans text-xs sm:text-[13px] text-noir/45 leading-[1.75] font-normal">
+                Oversized hybrids of ceremonial regalia and padded outerwear; double-faced wool crepe jackets and liquid mulberry silks tailored singularly on granite tables.
               </p>
 
-              {/* High-Conversion Category Jump Links */}
-              <div className="pt-3 flex flex-wrap gap-2 text-[11px] font-sans-luxury">
-                <button
-                  onClick={() => handleCategoryJump('DINNER_DRESSES')}
-                  className="px-3 py-1.5 bg-black text-white text-[10px] font-semibold uppercase tracking-wider hover:bg-neutral-800 transition-all flex items-center gap-1.5"
-                >
-                  <span>Gala Gowns</span>
-                  <span className="text-white/60 font-mono-luxury">₦520k</span>
-                  <span>⟶</span>
-                </button>
-                <button
-                  onClick={() => handleCategoryJump('JACKETS')}
-                  className="px-3 py-1.5 bg-neutral-100 hover:bg-black hover:text-white text-black text-[10px] font-semibold uppercase tracking-wider transition-all border border-black/15 flex items-center gap-1.5"
-                >
-                  <span>Pagoda Jackets</span>
-                  <span className="text-neutral-500 font-mono-luxury group-hover:text-white/60">₦290k</span>
-                  <span>⟶</span>
-                </button>
-                <button
-                  onClick={() => handleCategoryJump('PANTS')}
-                  className="px-3 py-1.5 bg-neutral-100 hover:bg-black hover:text-white text-black text-[10px] font-semibold uppercase tracking-wider transition-all border border-black/15 flex items-center gap-1.5"
-                >
-                  <span>Palazzo Pants</span>
-                  <span className="text-neutral-500 font-mono-luxury group-hover:text-white/60">₦220k</span>
-                  <span>⟶</span>
-                </button>
+              {/* Category Links — quiet, understated */}
+              <div className="pt-4 flex flex-wrap gap-x-5 gap-y-2">
+                {[
+                  { label: 'Gala Gowns', pillar: 'DINNER_DRESSES' },
+                  { label: 'Pagoda Jackets', pillar: 'JACKETS' },
+                  { label: 'Palazzo Pants', pillar: 'PANTS' },
+                ].map(({ label, pillar }) => (
+                  <button
+                    key={pillar}
+                    onClick={() => handleCategoryJump(pillar)}
+                    className="text-[10px] sm:text-[11px] font-sans font-medium tracking-[0.15em] text-noir/40 hover:text-noir transition-colors uppercase"
+                  >
+                    {label}
+                  </button>
+                ))}
               </div>
 
-              {/* Verified Client Dignified Note */}
-              <div className="pt-4 border-t border-black/10">
-                <blockquote className="text-xs italic text-noir/90 leading-relaxed font-light">
-                  "The drape of the mulberry silk is peerless. Tailored with absolute sculptural precision."
-                </blockquote>
-                <span className="text-[10px] font-mono-luxury text-muted uppercase tracking-widest block mt-1.5 font-medium">
-                  — Verified Private Client, Lagos Flagship Suite
+              {/* Testimonial — stripped to essence */}
+              <div className="pt-6 mt-2 border-t border-black/[0.06]">
+                <p className="text-[13px] italic text-noir/70 leading-relaxed font-light">
+                  "The drape of the mulberry silk is peerless."
+                </p>
+                <span className="text-[10px] font-sans text-noir/30 uppercase tracking-[0.15em] block mt-2">
+                  Private Client, Lagos
                 </span>
               </div>
             </div>
 
-            {/* Bottom: Secondary Atelier Cutting Table / Craftsmanship Image */}
-            <div className="max-w-sm overflow-hidden bg-[#FAFAFA] border border-black/10 hover:border-black rounded-xs shadow-xs group cursor-pointer transition-all duration-300" onClick={() => onExploreCollection()}>
-              <div className="aspect-[4/3] w-full overflow-hidden relative">
+            {/* Secondary Image — borderless, clean */}
+            <div
+              className="overflow-hidden group cursor-pointer"
+              onClick={() => onExploreCollection()}
+            >
+              <div className="aspect-[4/3] w-full overflow-hidden">
                 <img
                   src="/images/fc_atelier_craft.jpg"
                   alt="Finaluchi Couture Atelier Craftsmanship"
-                  className="w-full h-full object-cover object-[center_35%] transition-transform duration-700 ease-out group-hover:scale-105 contrast-[1.03]"
+                  className="w-full h-full object-cover object-[center_35%] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                 />
-                <div className="absolute bottom-3 left-3 px-3 py-1.5 bg-black/85 backdrop-blur-md text-white text-[10px] font-mono-luxury uppercase tracking-widest rounded-xs border border-white/15">
-                  Atelier N°3 · Hand-Cut Silk Pattern Drafting
-                </div>
               </div>
             </div>
 
