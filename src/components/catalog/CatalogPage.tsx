@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { SlidersHorizontal, ArrowUpDown, Check, Heart, X } from 'lucide-react';
 import { OccasionType, Product, ATELIER_CATEGORIES } from '../../types';
-import { getDepartmentById, CATEGORY_DEPARTMENTS } from '../../data/categoryContent';
+import { getDepartmentById } from '../../data/categoryContent';
 import { useCurrencyStore } from '../../stores/currencyStore';
 import { useWishlistStore } from '../../stores/wishlistStore';
 import { useAudioStore } from '../../stores/audioStore';
-import { formatPriceWithDisplay, formatKoboToNgn } from '../../utils/formatters';
+import { formatPriceWithDisplay } from '../../utils/formatters';
 
 interface CatalogPageProps {
   products: Product[];
