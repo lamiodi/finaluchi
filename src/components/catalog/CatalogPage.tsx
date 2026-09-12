@@ -91,29 +91,29 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
                 {activeDept.description}
               </p>
 
-              {/* Minimalist 3-Pillar Category Intelligence Strip */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-black/10 text-left mt-4 bg-[#FAFAFA] p-4 border border-black/10">
-                <div className="space-y-0.5">
-                  <span className="text-[9px] font-mono-luxury text-black/50 uppercase tracking-widest block font-medium">
-                    Design Details
+              {/* Minimalist Category Details */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-5 border-t border-black/10 text-left mt-5">
+                <div className="space-y-1">
+                  <span className="text-[10px] font-mono-luxury text-neutral-400 uppercase tracking-widest block font-medium">
+                    Fabric & Craft
                   </span>
-                  <p className="text-xs font-sans-luxury text-black font-semibold leading-tight">
+                  <p className="text-xs font-sans-luxury text-black font-medium leading-relaxed">
                     {activeDept.fabricProvenance}
                   </p>
                 </div>
-                <div className="space-y-0.5">
-                  <span className="text-[9px] font-mono-luxury text-black/50 uppercase tracking-widest block font-medium">
-                    Fit Approach
+                <div className="space-y-1">
+                  <span className="text-[10px] font-mono-luxury text-neutral-400 uppercase tracking-widest block font-medium">
+                    Fit & Silhouette
                   </span>
-                  <p className="text-xs font-sans-luxury text-black font-semibold leading-tight">
+                  <p className="text-xs font-sans-luxury text-black font-medium leading-relaxed">
                     {activeDept.anatomicalFit}
                   </p>
                 </div>
-                <div className="space-y-0.5">
-                  <span className="text-[9px] font-mono-luxury text-black/50 uppercase tracking-widest block font-medium">
-                    Best For
+                <div className="space-y-1">
+                  <span className="text-[10px] font-mono-luxury text-neutral-400 uppercase tracking-widest block font-medium">
+                    Occasion
                   </span>
-                  <p className="text-xs font-sans-luxury text-black font-semibold leading-tight">
+                  <p className="text-xs font-sans-luxury text-black font-medium leading-relaxed">
                     {activeDept.conversionHighlight}
                   </p>
                 </div>

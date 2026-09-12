@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
-  Heart, ShoppingBag, Ruler, Sparkles, ChevronDown, ChevronUp, 
-  RotateCw, Share2, Layers, Calendar, MessageCircle, ShieldCheck, CheckCircle2
+  Heart, ShoppingBag, Ruler, ChevronDown, ChevronUp, 
+  RotateCw, Share2, Calendar, MessageCircle
 } from 'lucide-react';
 import { Product, ProductColorway } from '../../types';
 import { useCurrencyStore } from '../../stores/currencyStore';
@@ -169,15 +169,12 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               /* Vertical Lookbook Image Stack */
               <div className="space-y-6">
                 {selectedColorway.mediaGalleryUrls.map((imgUrl, i) => (
-                  <div key={i} className="aspect-[3/4.2] w-full bg-[#FAFAFA] border border-black/10 overflow-hidden group relative">
+                  <div key={i} className="aspect-[3/4.2] w-full bg-[#FAFAFA] border border-black/10 overflow-hidden group">
                     <img
                       src={imgUrl}
                       alt={`${product.name} - View ${i + 1}`}
                       className="w-full h-full object-cover object-top group-hover:scale-102 transition-transform duration-700 ease-out"
                     />
-                    <div className="absolute top-4 left-4 text-[9px] font-mono-luxury text-[#000000] bg-white/90 border border-black/10 px-2.5 py-1 uppercase tracking-widest">
-                      ANGLE 0{i + 1}
-                    </div>
                   </div>
                 ))}
               </div>
@@ -191,7 +188,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             {/* Header / Badges */}
             <div className="space-y-3 pb-5 border-b border-black/10">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono-luxury text-[#C5A880] uppercase tracking-[0.25em] font-semibold">
+                <span className="text-[10px] font-mono-luxury text-[#8C7A6B] uppercase tracking-[0.25em] font-semibold">
                   {product.categoryName} • ARTICLE {selectedColorway.sku}
                 </span>
 
@@ -234,7 +231,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 <span className="text-2xl sm:text-3xl font-mono-luxury font-bold text-[#000000]">
                   {formatPriceWithDisplay(product.basePriceKobo + (selectedColorway.priceDeltaKobo || 0), displayCurrency)}
                 </span>
-                <span className="text-[10px] text-black/50 font-mono-luxury block mt-1 tracking-wider uppercase">
+                <span className="text-[10px] text-neutral-500 font-mono-luxury block mt-1 tracking-wider uppercase">
                   Confirm availability, delivery date and order terms before payment
                 </span>
               </div>
@@ -244,10 +241,10 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             <div className="space-y-3">
               <div className="flex items-center justify-between text-xs">
                 <span className="font-semibold text-[#000000] tracking-widest uppercase">
-                  COLOUR: <span className="text-[#C5A880] font-mono-luxury">{selectedColorway.color.code} — {selectedColorway.color.name}</span>
+                  COLOUR: <span className="text-[#8C7A6B] font-mono-luxury">{selectedColorway.color.name}</span>
                 </span>
                 {selectedColorway.isMadeToOrder && (
-                  <span className="text-[10px] font-mono-luxury text-[#C5A880] uppercase font-semibold tracking-widest">
+                  <span className="text-[10px] font-mono-luxury text-[#8C7A6B] uppercase font-semibold tracking-widest">
                     [MADE TO ORDER]
                   </span>
                 )}
@@ -272,8 +269,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 })}
               </div>
 
-              <span className="text-[10px] text-black/60 font-mono-luxury block tracking-wider uppercase">
-                Pantone Ref: {selectedColorway.color.pantoneRef} • {selectedColorway.color.lusterDescription}
+              <span className="text-[10px] text-neutral-500 font-mono-luxury block tracking-wider uppercase">
+                {selectedColorway.color.lusterDescription}
               </span>
             </div>
 
@@ -288,7 +285,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     playTactileClick();
                     setIsSizeGuideOpen(true);
                   }}
-                  className="flex items-center gap-1.5 text-black hover:text-[#C5A880] underline underline-offset-4 tracking-widest uppercase text-[11px] font-semibold transition-colors"
+                  className="flex items-center gap-1.5 text-black hover:text-[#8C7A6B] underline underline-offset-4 tracking-widest uppercase text-[11px] font-semibold transition-colors"
                 >
                   <Ruler className="w-3.5 h-3.5" />
                   <span>Size & Measurement Guide</span>
@@ -327,7 +324,6 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                         : 'bg-[#FFFFFF] text-[#000000] border-black/30 hover:bg-[#000000] hover:text-[#FFFFFF]'
                     }`}
                   >
-                    <Sparkles className="w-3.5 h-3.5 text-current" />
                     <span>CUSTOM / MADE TO MEASURE</span>
                   </button>
                 )}
@@ -352,14 +348,14 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 <span>ASK ABOUT THIS PIECE ON WHATSAPP</span>
               </button>
 
-              <div className="flex items-center justify-between text-[11px] text-black/60 font-mono-luxury pt-1">
-                <span>Order support from Abuja</span>
+              <div className="flex items-center justify-between text-[11px] text-neutral-500 font-mono-luxury pt-1 border-b border-black/10 pb-3">
+                <span>Abuja Atelier Direct</span>
                 <button
                   onClick={() => {
                     playTactileClick();
                     onBookAppointment();
                   }}
-                  className="text-[#000000] font-semibold underline underline-offset-2 flex items-center gap-1.5 hover:text-[#C5A880] transition-colors"
+                  className="text-[#000000] font-semibold underline underline-offset-2 flex items-center gap-1.5 hover:text-[#8C7A6B] transition-colors"
                 >
                   <Calendar className="w-3.5 h-3.5" />
                   <span>Request a Fitting</span>
@@ -367,110 +363,39 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               </div>
             </div>
 
-            {/* Buyer Protection & High-Confidence Ordering Protocol */}
-            <div className="p-4 bg-[#FAFAFA] border border-black/15 space-y-2.5">
-              <div className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-[#000000]">
-                <ShieldCheck className="w-4 h-4 text-[#C5A880]" />
-                <span>BUYER PROTECTION & ORDER CLARITY</span>
+            {/* Fabric & Craft Materiality — Minimalist Spec Grid */}
+            <div className="py-5 space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-sans-luxury font-bold tracking-widest uppercase text-black">
+                  Craft & Materiality
+                </span>
+                <span className="text-[10px] font-mono-luxury text-neutral-500 uppercase">
+                  {product.fabricIntelligence.weightGsm} GSM
+                </span>
               </div>
-              <p className="text-[11px] text-black/70 leading-relaxed font-light">
-                For custom couture and high-value orders, we recommend our 5-point verification standard before payment:
+
+              <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-xs">
+                <div>
+                  <span className="text-[10px] font-mono-luxury text-neutral-400 block uppercase tracking-wider">Material</span>
+                  <span className="font-medium text-black">{product.fabricIntelligence.material}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] font-mono-luxury text-neutral-400 block uppercase tracking-wider">Composition</span>
+                  <span className="font-medium text-black">{product.fabricIntelligence.composition}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] font-mono-luxury text-neutral-400 block uppercase tracking-wider">Finish</span>
+                  <span className="font-medium text-black">{product.fabricIntelligence.finish || product.fabricIntelligence.sheenFinish || 'Opulent Silk Luster'}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] font-mono-luxury text-neutral-400 block uppercase tracking-wider">Drape Profile</span>
+                  <span className="font-medium text-black">{product.silhouette.drape > 50 ? 'Fluid drape' : 'Architectural structure'}</span>
+                </div>
+              </div>
+
+              <p className="text-[11px] text-neutral-600 font-light leading-relaxed pt-2 border-t border-black/5">
+                {product.fabricIntelligence.drapeDescription}
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px] font-mono-luxury text-black/85 pt-1">
-                <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3 h-3 text-[#C5A880] shrink-0" />
-                  Written itemized invoice
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3 h-3 text-[#C5A880] shrink-0" />
-                  Guaranteed delivery date
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3 h-3 text-[#C5A880] shrink-0" />
-                  Measurement sign-off
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3 h-3 text-[#C5A880] shrink-0" />
-                  Clear alteration terms
-                </span>
-                <span className="flex items-center gap-1.5 col-span-1 sm:col-span-2 text-black">
-                  <CheckCircle2 className="w-3 h-3 text-[#C5A880] shrink-0" />
-                  Traceable business account or Paystack payments only
-                </span>
-              </div>
-            </div>
-
-            {/* Fabric Intelligence Matrix */}
-            <div className="p-5 bg-[#FFFFFF] border border-black/15 space-y-4">
-              <div className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-[#000000]">
-                <Layers className="w-4 h-4 text-[#C5A880]" />
-                <span>FABRIC & FINISH</span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 text-xs">
-                <div>
-                  <span className="text-[10px] font-mono-luxury text-black/50 block uppercase tracking-wider">Material</span>
-                  <span className="font-semibold text-[#000000]">{product.fabricIntelligence.material}</span>
-                </div>
-                <div>
-                  <span className="text-[10px] font-mono-luxury text-black/50 block uppercase tracking-wider">Composition</span>
-                  <span className="font-semibold text-[#000000]">{product.fabricIntelligence.composition}</span>
-                </div>
-                <div>
-                  <span className="text-[10px] font-mono-luxury text-black/50 block uppercase tracking-wider">Optical Finish</span>
-                  <span className="font-semibold text-[#000000]">{product.fabricIntelligence.finish || product.fabricIntelligence.sheenFinish || 'Opulent Silk Luster'}</span>
-                </div>
-                <div>
-                  <span className="text-[10px] font-mono-luxury text-black/50 block uppercase tracking-wider">Fabric Weight</span>
-                  <span className="font-semibold text-[#000000]">{product.fabricIntelligence.weightGsm} GSM</span>
-                </div>
-              </div>
-
-              <div className="pt-3 border-t border-black/10 text-[11px] text-black/70 font-light leading-relaxed">
-                {product.fabricIntelligence.drapeDescription} • Care: {product.fabricIntelligence.careInstructions}
-              </div>
-            </div>
-
-            {/* The Silhouette Behavior Matrix */}
-            <div className="p-5 bg-[#FFFFFF] border border-black/15 space-y-4">
-              <span className="text-xs font-bold tracking-widest uppercase text-[#000000] block">
-                FIT & MOVEMENT
-              </span>
-
-              <div className="space-y-3 text-[11px] font-mono-luxury">
-                {/* Fit */}
-                <div className="space-y-1.5">
-                  <div className="flex justify-between text-black/60 uppercase tracking-wider">
-                    <span>FITTED</span>
-                    <span>RELAXED</span>
-                  </div>
-                  <div className="w-full h-1 bg-black/10 overflow-hidden">
-                    <div className="h-full bg-[#000000]" style={{ width: `${product.silhouette.fit}%` }} />
-                  </div>
-                </div>
-
-                {/* Drape */}
-                <div className="space-y-1.5">
-                  <div className="flex justify-between text-black/60 uppercase tracking-wider">
-                    <span>STRUCTURED</span>
-                    <span>FLUID</span>
-                  </div>
-                  <div className="w-full h-1 bg-black/10 overflow-hidden">
-                    <div className="h-full bg-[#000000]" style={{ width: `${product.silhouette.drape}%` }} />
-                  </div>
-                </div>
-
-                {/* Weight */}
-                <div className="space-y-1.5">
-                  <div className="flex justify-between text-black/60 uppercase tracking-wider">
-                    <span>FEATHERWEIGHT</span>
-                    <span>HEAVYWEIGHT</span>
-                  </div>
-                  <div className="w-full h-1 bg-black/10 overflow-hidden">
-                    <div className="h-full bg-[#000000]" style={{ width: `${product.silhouette.weight}%` }} />
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* Collapsible Accordions for Details, Shipping & Returns */}

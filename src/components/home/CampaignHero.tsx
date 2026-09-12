@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, Sparkles, ArrowRight, ShieldCheck } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { useAudioStore } from '../../stores/audioStore';
 
 interface CampaignHeroProps {
@@ -180,19 +180,15 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
       {/* Content Overlay Grid */}
       <div className="relative z-10 max-w-[1680px] h-full mx-auto px-4 sm:px-8 lg:px-12 flex flex-col justify-between py-6 sm:py-10">
         
-        {/* Top Bar: Collection Badge & Provenance */}
-        <div className="w-full flex items-center justify-between">
-          <div className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white shadow-lg">
-            <span className="w-2 h-2 rounded-full bg-champagne animate-pulse" />
-            <span className="text-[10px] sm:text-xs font-mono-luxury uppercase tracking-widest text-white font-medium">
-              {slide.collectionCode} · {slide.season}
-            </span>
-          </div>
+        {/* Top Bar: Collection Provenance */}
+        <div className="w-full flex items-center justify-between border-b border-white/10 pb-3">
+          <span className="text-[10px] sm:text-xs font-mono-luxury uppercase tracking-[0.25em] text-white/90 font-medium">
+            {slide.collectionCode} · {slide.season}
+          </span>
 
-          <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/95 text-[11px] font-mono-luxury uppercase tracking-widest">
-            <ShieldCheck className="w-3.5 h-3.5 text-champagne" />
-            <span>Designed in Abuja, Nigeria</span>
-          </div>
+          <span className="hidden sm:block text-[10px] sm:text-xs font-mono-luxury uppercase tracking-[0.25em] text-white/60">
+            Abuja Atelier · Est. 2017
+          </span>
         </div>
 
         {/* Middle/Bottom Main Editorial Cards */}
@@ -202,10 +198,9 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
           <div className="lg:col-span-7 space-y-4 sm:space-y-6">
             
             {/* Category Subtitle */}
-            <div className="flex items-center gap-2 text-champagne text-xs font-mono-luxury tracking-loose-couture uppercase font-medium">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>{slide.category}</span>
-            </div>
+            <span className="text-xs font-mono-luxury tracking-[0.25em] text-[#C5A880] uppercase font-semibold block">
+              {slide.category}
+            </span>
 
             {/* Main Headline */}
             <h1 className="font-sans-luxury text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white uppercase leading-[0.92] drop-shadow-md">

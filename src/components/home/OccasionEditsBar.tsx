@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Sparkles, Compass, CheckCircle2 } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { ProductCategory } from '../../types';
 import { useAudioStore } from '../../stores/audioStore';
 import { StackSpreadStage, StackSpreadCard } from '../ui/stack-spread';
@@ -165,14 +165,13 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
         textFadeStart={0.20}
         showScrollHint={true}
         heading={
-          <div className="space-y-3 sm:space-y-4 max-w-5xl mx-auto pointer-events-none px-4">
-            <span className="text-[11px] sm:text-xs font-mono-luxury uppercase tracking-[0.28em] text-neutral-400 font-semibold block">
-              Department Archives
+          <div className="space-y-3 max-w-4xl mx-auto pointer-events-none px-4">
+            <span className="text-[10px] sm:text-[11px] font-mono-luxury uppercase tracking-[0.3em] text-[#8C7A6B] font-medium block">
+              Atelier Portfolio
             </span>
-            <h2 className="font-sans-luxury text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-noir uppercase leading-[1.06]">
+            <h2 className="font-sans-luxury text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-noir uppercase leading-[1.02]">
               Find Your Finaluchi Silhouette
             </h2>
-            <div className="w-12 h-0.5 bg-[#C5A880] mx-auto my-2" />
           </div>
         }
         subtitle={
@@ -183,7 +182,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
             <div className="pt-2 flex items-center justify-center gap-3">
               <button
                 onClick={() => handleNavigate('ALL')}
-                className="group inline-flex items-center gap-2.5 px-6 py-2.5 bg-black text-white text-[11px] font-sans-luxury font-semibold uppercase tracking-widest hover:bg-neutral-800 transition-all rounded-xs shadow-sm hover:gap-3.5"
+                className="group inline-flex items-center gap-2.5 px-7 py-3 bg-black text-white text-[11px] font-sans-luxury font-semibold uppercase tracking-widest hover:bg-neutral-800 transition-all rounded-xs shadow-sm hover:gap-3.5"
               >
                 <span>Shop All Categories</span>
                 <ArrowRight className="w-3.5 h-3.5 transition-transform" />
@@ -194,46 +193,51 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
       />
 
       {/* =========================================================================
-          TRUST & PROVENANCE FOOTNOTE (MINIMALIST LUXURY CONVERSION ANCHOR)
+          PROVENANCE & BUYER PROTECTION — MINIMALIST EDITORIAL RIBBON
           ========================================================================= */}
-      <div className="w-full bg-[#FFFFFF] py-12 sm:py-16 border-t border-black/10">
+      <div className="w-full bg-[#FFFFFF] py-14 sm:py-20 border-t border-black/10">
         <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-xs">
-            <div className="flex items-start gap-3.5">
-              <CheckCircle2 className="w-4 h-4 text-black shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <span className="font-sans-luxury font-bold uppercase tracking-wider text-noir block">
-                  ORIGINAL ABUJA FASHION HOUSE
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16">
+            
+            {/* Pillar 01 */}
+            <div className="space-y-2.5 border-t border-black/10 pt-4 md:border-t-0 md:pt-0">
+              <div className="flex items-baseline gap-2">
+                <span className="text-[10px] font-mono-luxury text-[#8C7A6B] font-semibold">01</span>
+                <span className="text-xs font-sans-luxury font-bold uppercase tracking-wider text-black">
+                  Original Abuja Atelier
                 </span>
-                <p className="text-[11px] text-neutral-600 font-light leading-relaxed">
-                  Finaluchi Couture designs and produces original women’s couture, ready-to-wear, asoebi and bridal wear in Abuja, Nigeria—rather than simply reselling clothing.
-                </p>
               </div>
+              <p className="text-xs text-neutral-600 font-light leading-relaxed">
+                Finaluchi Couture designs and crafts original women’s couture, ready-to-wear, asoebi and bridal wear in Abuja, Nigeria—rather than reselling mass-market fashion.
+              </p>
             </div>
 
-            <div className="flex items-start gap-3.5">
-              <Compass className="w-4 h-4 text-black shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <span className="font-sans-luxury font-bold uppercase tracking-wider text-noir block">
-                  GLAMOROUS NIGERIAN OCCASION WEAR
+            {/* Pillar 02 */}
+            <div className="space-y-2.5 border-t border-black/10 pt-4 md:border-t-0 md:pt-0">
+              <div className="flex items-baseline gap-2">
+                <span className="text-[10px] font-mono-luxury text-[#8C7A6B] font-semibold">02</span>
+                <span className="text-xs font-sans-luxury font-bold uppercase tracking-wider text-black">
+                  Nigerian Occasion Craft
                 </span>
-                <p className="text-[11px] text-neutral-600 font-light leading-relaxed">
-                  Signature sculpted corsetry, hand-laid crystal embellishments, dramatic architectural sleeves and sweeping trains engineered for milestone celebrations.
-                </p>
               </div>
+              <p className="text-xs text-neutral-600 font-light leading-relaxed">
+                Signature sculpted corsetry, hand-laid embellishments, architectural sleeve volumes, and dramatic trains engineered for milestone celebrations.
+              </p>
             </div>
 
-            <div className="flex items-start gap-3.5">
-              <Sparkles className="w-4 h-4 text-black shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <span className="font-sans-luxury font-bold uppercase tracking-wider text-noir block">
-                  BUYER PROTECTION PROTOCOL
+            {/* Pillar 03 */}
+            <div className="space-y-2.5 border-t border-black/10 pt-4 md:border-t-0 md:pt-0">
+              <div className="flex items-baseline gap-2">
+                <span className="text-[10px] font-mono-luxury text-[#8C7A6B] font-semibold">03</span>
+                <span className="text-xs font-sans-luxury font-bold uppercase tracking-wider text-black">
+                  Transparent Buying Protocol
                 </span>
-                <p className="text-[11px] text-neutral-600 font-light leading-relaxed">
-                  Request a written invoice, confirmed delivery date, measurement approval, alteration terms and refund policy. Pay securely through traceable business accounts.
-                </p>
               </div>
+              <p className="text-xs text-neutral-600 font-light leading-relaxed">
+                Written invoices, guaranteed delivery dates, measurement sign-off, and clear alteration policies. Traceable payments via corporate accounts and Paystack.
+              </p>
             </div>
+
           </div>
         </div>
       </div>

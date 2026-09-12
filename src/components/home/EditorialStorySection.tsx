@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAudioStore } from '../../stores/audioStore';
-import { Sparkles, Award, ShieldCheck, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { BRAND, buildWhatsAppUrl } from '../../data/brand';
 
 interface EditorialStorySectionProps {
@@ -60,120 +60,100 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
         </div>
 
         {/* Asymmetric Editorial Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
           
-          {/* Left Column: Monumental Portrait */}
+          {/* Left Column: Monumental Portrait (Unobstructed Editorial Focus) */}
           <div
-            className="lg:col-span-7 overflow-hidden group cursor-pointer relative"
+            className="lg:col-span-7 group cursor-pointer"
             onClick={() => onExploreCollection()}
           >
             <div className="aspect-[3/4.2] w-full overflow-hidden bg-neutral-100">
               <img
                 src="/images/fc_editorial_monument.jpg"
                 alt="Finaluchi Couture Monumental Evening Look"
-                className="w-full h-full object-cover object-[center_8%] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                className="w-full h-full object-cover object-[center_8%] transition-transform duration-700 ease-out group-hover:scale-[1.02]"
               />
             </div>
             
-            {/* Overlay Badge */}
-            <div className="absolute bottom-6 left-6 right-6 p-5 bg-black/85 backdrop-blur-md text-white border border-white/20">
-              <div className="flex items-center gap-2 text-[#DFC7AA] text-[10px] font-mono-luxury uppercase tracking-widest font-semibold mb-1">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>SIGNATURE OCCASION SILHOUETTES</span>
-              </div>
-              <p className="text-xs sm:text-sm font-light text-white/90 leading-relaxed">
-                Sculpted corsetry, hand-laid embellishments, dramatic architectural sleeves and sweeping trains engineered in our Abuja atelier.
-              </p>
+            {/* Minimal Editorial Caption */}
+            <div className="mt-3.5 flex items-baseline justify-between text-xs font-mono-luxury border-b border-black/10 pb-2">
+              <span className="font-semibold text-black uppercase tracking-wider">
+                Monumental Evening Silhouette
+              </span>
+              <span className="text-neutral-500 text-[11px]">
+                Hand-cut in Abuja Atelier
+              </span>
             </div>
           </div>
 
-          {/* Right Column: Narrative, Public History & Trust Actions */}
-          <div className="lg:col-span-5 flex flex-col justify-between h-full gap-8 lg:gap-10">
+          {/* Right Column: Narrative, Public History & Consultation */}
+          <div className="lg:col-span-5 flex flex-col justify-between h-full gap-8">
             
             {/* Story & Creative Direction */}
-            <div className="space-y-5">
-              <p className="font-sans text-sm sm:text-[15px] text-noir leading-[1.75] font-normal">
-                Finaluchi Couture (FLC) is an authentic Abuja-based Nigerian fashion brand rather than simply a clothing reseller. Led creatively by Fashion Director and Creative Designer <strong className="font-semibold text-black">Oluchi Irokanulo</strong> since October 2017, the house designs and produces original occasion wear for milestone moments.
+            <div className="space-y-6">
+              <p className="font-sans text-sm sm:text-[15px] text-noir leading-[1.8] font-normal">
+                Finaluchi Couture (FLC) is an authentic Abuja-based Nigerian fashion house rather than a clothing reseller. Led creatively by Fashion Director and Creative Designer <strong className="font-semibold text-black">Oluchi Irokanulo</strong> since October 2017, the house designs and crafts original occasion wear for landmark celebrations.
               </p>
               
-              <p className="font-sans text-xs sm:text-[13px] text-noir/65 leading-[1.75] font-normal">
-                Our design language balances bold modern glamour with classic couture craft: sculpted internal corsets, intricate crystal beadwork, dramatic sleeves, and floor-sweeping bridal trains—spanning women&apos;s couture, asoebi, event dressing, white and traditional bridal through <span className="font-semibold text-black">@flcbridals</span>, menswear via <span className="font-semibold text-black">@flcmen</span>, and lifestyle pieces through <span className="font-semibold text-black">@togetherbyflc</span>.
+              <p className="font-sans text-xs sm:text-[13px] text-noir/70 leading-[1.8] font-normal">
+                Our silhouettes balance bold contemporary glamour with meticulous couture construction: internal corsetry, crystal beadwork, architectural sleeves, and sweeping bridal trains—spanning women&apos;s couture, asoebi, event dressing, white and traditional bridal through <span className="font-semibold text-black">@flcbridals</span>, menswear via <span className="font-semibold text-black">@flcmen</span>, and lifestyle separates through <span className="font-semibold text-black">@togetherbyflc</span>.
               </p>
 
-              {/* Public Track Record Timeline Cards */}
-              <div className="pt-2 space-y-2.5">
-                <span className="text-[10px] font-mono-luxury uppercase tracking-widest text-[#A67C4A] font-bold block">
-                  PUBLIC EDITORIAL HISTORY & POP-UPS
+              {/* Minimalist Typographic Timeline (No Boxed Clutter) */}
+              <div className="pt-4 border-t border-black/10 space-y-4">
+                <span className="text-[10px] font-mono-luxury uppercase tracking-[0.25em] text-[#8C7A6B] font-semibold block">
+                  Heritage & Public Recognition
                 </span>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  <div className="p-3 bg-[#FAFAFA] border border-black/10 rounded-xs space-y-1">
-                    <div className="flex items-center gap-1.5 text-xs font-bold uppercase text-black">
-                      <Award className="w-3.5 h-3.5 text-[#A67C4A]" />
-                      <span>BellaNaija Feature</span>
-                    </div>
-                    <p className="text-[11px] text-neutral-600 leading-snug">
-                      Celebrated in a landmark 2020 BellaNaija AsoEbi feature for exceptional Nigerian occasion style.
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <span className="text-xs font-mono-luxury font-bold text-black block tracking-wider">2017 · ATELIER</span>
+                    <p className="text-[11px] text-neutral-600 font-light leading-relaxed">
+                      Founded in Abuja under the creative lead of Oluchi Irokanulo.
                     </p>
                   </div>
 
-                  <div className="p-3 bg-[#FAFAFA] border border-black/10 rounded-xs space-y-1">
-                    <div className="flex items-center gap-1.5 text-xs font-bold uppercase text-black">
-                      <Award className="w-3.5 h-3.5 text-[#A67C4A]" />
-                      <span>Legit.ng Spotlight</span>
-                    </div>
-                    <p className="text-[11px] text-neutral-600 leading-snug">
-                      Credited in a 2022 Legit.ng fashion feature for high-impact celebrity and red-carpet dressing.
+                  <div className="space-y-1">
+                    <span className="text-xs font-mono-luxury font-bold text-black block tracking-wider">2020 · BELLANAIJA</span>
+                    <p className="text-[11px] text-neutral-600 font-light leading-relaxed">
+                      Celebrated in a landmark AsoEbi editorial feature.
                     </p>
                   </div>
 
-                  <div className="p-3 bg-[#FAFAFA] border border-black/10 rounded-xs space-y-1">
-                    <div className="flex items-center gap-1.5 text-xs font-bold uppercase text-black">
-                      <Sparkles className="w-3.5 h-3.5 text-[#A67C4A]" />
-                      <span>Fairs & Lagos Pop-Up</span>
-                    </div>
-                    <p className="text-[11px] text-neutral-600 leading-snug">
-                      Showcased at premier Abuja trade fairs and hosted an exclusive Lagos pop-up in Lekki Phase 1.
+                  <div className="space-y-1">
+                    <span className="text-xs font-mono-luxury font-bold text-black block tracking-wider">2022 · LEGIT.NG</span>
+                    <p className="text-[11px] text-neutral-600 font-light leading-relaxed">
+                      Spotlighted for high-impact celebrity & red-carpet dressing.
                     </p>
                   </div>
 
-                  <div className="p-3 bg-[#FAFAFA] border border-black/10 rounded-xs space-y-1">
-                    <div className="flex items-center gap-1.5 text-xs font-bold uppercase text-black">
-                      <Sparkles className="w-3.5 h-3.5 text-[#A67C4A]" />
-                      <span>Active Collections 2026</span>
-                    </div>
-                    <p className="text-[11px] text-neutral-600 leading-snug">
-                      Continually releasing new couture, asoebi and bespoke bridal collections through June–July 2026.
+                  <div className="space-y-1">
+                    <span className="text-xs font-mono-luxury font-bold text-black block tracking-wider">2026 · HORIZONS</span>
+                    <p className="text-[11px] text-neutral-600 font-light leading-relaxed">
+                      New bridal & evening collections debuting through July 2026.
                     </p>
                   </div>
                 </div>
               </div>
 
-              {/* High-Conversion Buyer Protection Banner */}
-              <div className="p-4 bg-black text-white rounded-xs space-y-2 mt-4 border border-black">
-                <div className="flex items-center gap-2 text-[#DFC7AA] text-xs font-semibold uppercase tracking-wider">
-                  <ShieldCheck className="w-4 h-4" />
-                  <span>Transparent Ordering Charter</span>
-                </div>
-                <p className="text-[11px] text-white/80 leading-relaxed font-light">
-                  Before placing your custom order, receive a written invoice, confirmed delivery date, measurement approval, alteration terms and clear refund policy. Pay via traceable corporate channels.
+              {/* Minimalist Consultation Action */}
+              <div className="pt-4 border-t border-black/10 space-y-3">
+                <button
+                  onClick={handleCustomOrderWhatsApp}
+                  className="w-full py-4 bg-black text-white text-xs font-sans-luxury font-bold uppercase tracking-[0.2em] hover:bg-neutral-800 transition-all flex items-center justify-center gap-2.5 rounded-xs shadow-sm"
+                >
+                  <span>Inquire on WhatsApp ({BRAND.whatsappDisplay})</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+                <p className="text-[10px] font-mono-luxury text-neutral-500 text-center tracking-wider uppercase">
+                  Written invoice • Delivery date agreement • Verified payments
                 </p>
-                <div className="pt-1 flex items-center justify-between">
-                  <button
-                    onClick={handleCustomOrderWhatsApp}
-                    className="text-xs text-[#DFC7AA] hover:text-white font-bold uppercase tracking-wider flex items-center gap-1 underline underline-offset-4"
-                  >
-                    <span>Request Custom Quote on WhatsApp</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                  <span className="text-[10px] font-mono-luxury text-white/50">{BRAND.whatsappDisplay}</span>
-                </div>
               </div>
 
               {/* Category Quick Jumps */}
-              <div className="pt-2 flex flex-wrap gap-x-4 gap-y-2 border-t border-black/10 text-xs">
+              <div className="pt-4 flex flex-wrap gap-x-5 gap-y-2 border-t border-black/10 text-xs">
                 {[
-                  { label: 'Dinner Dresses & Gowns', pillar: 'DINNER_DRESSES' },
+                  { label: 'Dinner Dresses', pillar: 'DINNER_DRESSES' },
                   { label: '2-Piece Sets', pillar: '2PIECES' },
                   { label: 'Kimonos & Robes', pillar: 'KIMONO' },
                   { label: 'Tailored Jackets', pillar: 'JACKETS' },
@@ -190,20 +170,20 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
 
             </div>
 
-            {/* Secondary Image */}
+            {/* Secondary Image: Atelier Floor */}
             <div
-              className="overflow-hidden group cursor-pointer mt-4"
+              className="overflow-hidden group cursor-pointer mt-2"
               onClick={() => onExploreAtelier()}
             >
-              <div className="aspect-[16/9] w-full overflow-hidden bg-neutral-100 relative">
+              <div className="aspect-[16/9] w-full overflow-hidden bg-neutral-100">
                 <img
                   src="/images/fc_atelier_craft.jpg"
                   alt="Finaluchi Couture Atelier Craftsmanship in Abuja"
-                  className="w-full h-full object-cover object-[center_35%] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                  className="w-full h-full object-cover object-[center_35%] transition-transform duration-700 ease-out group-hover:scale-[1.02]"
                 />
-                <div className="absolute bottom-2 left-3 text-[10px] font-mono-luxury text-white/90 bg-black/60 px-2 py-0.5">
-                  Abuja Flagship Craft Floor
-                </div>
+              </div>
+              <div className="mt-2 text-[10px] font-mono-luxury text-neutral-500 uppercase tracking-widest">
+                Abuja Flagship Craft Floor
               </div>
             </div>
 

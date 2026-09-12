@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronRight, ChevronLeft, MessageCircle, ZoomIn, X, CheckCircle2 } from 'lucide-react';
+import { ChevronRight, ChevronLeft, ZoomIn, X } from 'lucide-react';
 import { ATELIER_STAGES } from '../../data/atelierStages';
 import { useAudioStore } from '../../stores/audioStore';
 
@@ -75,8 +75,8 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
           </div>
         </div>
 
-        {/* 6-Stage Interactive Navigation Bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 mb-8 sm:mb-12">
+        {/* 6-Stage Minimalist Navigation Tabs */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-8 sm:mb-12 border-b border-white/10 pb-4">
           {ATELIER_STAGES.map((stg, idx) => (
             <button
               key={stg.step}
@@ -85,16 +85,16 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
                 setActiveStageIndex(idx);
                 setIsNoteOpen(false);
               }}
-              className={`p-3 text-left border rounded-none transition-all ${
+              className={`text-left pb-3 transition-all border-b-2 ${
                 idx === activeStageIndex
-                  ? 'border-white bg-white/20 text-white shadow-lg'
-                  : 'border-white/15 bg-white/5 text-white/70 hover:text-white hover:border-white/40 hover:bg-white/10'
+                  ? 'border-white text-white font-medium'
+                  : 'border-transparent text-white/40 hover:text-white/80'
               }`}
             >
-              <span className="text-[9px] font-mono-luxury text-[#C5A880] block mb-1 font-semibold">
-                STAGE 0{idx + 1}
+              <span className="text-[10px] font-mono-luxury block mb-1 text-[#C5A880]">
+                0{idx + 1}
               </span>
-              <span className="text-xs font-sans-luxury font-semibold line-clamp-1">
+              <span className="text-xs font-sans-luxury line-clamp-1">
                 {stg.title.split('&')[0]}
               </span>
             </button>
@@ -102,17 +102,17 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
         </div>
 
         {/* Stage Content Presentation */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
           
           {/* Left: Imagery & Macro Zoom Stage */}
-          <div className="lg:col-span-7 relative group rounded-none overflow-hidden bg-black/40 border border-white/15 shadow-2xl">
+          <div className="lg:col-span-7 relative group overflow-hidden bg-black/40 border border-white/10 shadow-2xl">
             <div className="aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden relative">
               <img
                 src={stage.imageUrl}
                 alt={stage.title}
-                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-103"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-noir/80 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
             </div>
 
             {/* Macro Zoom Trigger Button */}
@@ -121,22 +121,22 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
                 playTactileClick();
                 setIsMacroModalOpen(true);
               }}
-              className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 px-2.5 sm:px-3.5 py-1.5 sm:py-2 bg-noir/80 backdrop-blur-md border border-white/40 text-white text-[10px] sm:text-xs font-mono-luxury tracking-couture uppercase flex items-center gap-1.5 hover:bg-white hover:text-noir transition-all btn-luxury rounded-none"
+              className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 px-3 py-1.5 bg-black/80 backdrop-blur-md border border-white/30 text-white text-[10px] font-mono-luxury tracking-widest uppercase flex items-center gap-1.5 hover:bg-white hover:text-black transition-all"
             >
               <ZoomIn className="w-3.5 h-3.5" />
-              <span>VIEW GARMENT DETAIL</span>
+              <span>Detail Zoom</span>
             </button>
 
-            <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 text-[10px] sm:text-xs font-mono-luxury text-white/70 bg-noir/60 sm:bg-transparent px-2 py-1 sm:p-0 rounded-none backdrop-blur-xs sm:backdrop-blur-none max-w-[55%] truncate">
-              {stage.leadTailor} — Abuja, Nigeria
+            <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 text-[10px] sm:text-xs font-mono-luxury text-white/70">
+              {stage.leadTailor} — Abuja Atelier
             </div>
           </div>
 
           {/* Right: Craftsmanship Commentary & Audio Notes */}
           <div className="lg:col-span-5 space-y-6">
             
-            <div className="space-y-2">
-              <span className="text-xs font-mono-luxury text-[#C5A880] uppercase tracking-loose-couture font-medium">
+            <div className="space-y-1.5">
+              <span className="text-[10px] font-mono-luxury text-[#C5A880] uppercase tracking-[0.25em] font-medium block">
                 {stage.subtitle}
               </span>
               <h3 className="font-sans-luxury text-2xl sm:text-4xl font-bold text-white leading-tight">
@@ -144,44 +144,38 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
               </h3>
             </div>
 
-            <blockquote className="p-4 bg-white/5 border border-white/15 text-xs sm:text-sm text-white/90 italic font-display leading-relaxed">
-              "{stage.quote}"
+            {/* Unboxed Typographic Quote */}
+            <blockquote className="pl-4 border-l border-[#C5A880] text-xs sm:text-sm text-white/80 italic font-display leading-relaxed">
+              &ldquo;{stage.quote}&rdquo;
             </blockquote>
 
             {/* Stage Technical Detail Checklist */}
-            <div className="space-y-2.5 pt-2">
-              <span className="text-[11px] font-semibold text-white tracking-loose-couture uppercase block font-sans-luxury">
-                WHAT TO CONFIRM:
+            <div className="space-y-2.5 pt-2 border-t border-white/10">
+              <span className="text-[10px] font-mono-luxury uppercase tracking-wider text-white/50 block">
+                Order Verification Criteria
               </span>
               <ul className="space-y-2">
                 {stage.details.map((detail, i) => (
-                  <li key={i} className="flex items-start gap-2 text-xs text-white/85 font-light">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#C5A880] shrink-0 mt-0.5" />
+                  <li key={i} className="flex items-start gap-2.5 text-xs text-white/80 font-light">
+                    <span className="text-[#C5A880] text-[10px] font-mono-luxury mt-0.5">•</span>
                     <span>{detail}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Ordering note */}
-            <div className="p-4 bg-white/5 border border-white/15 rounded-none space-y-2">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <MessageCircle className={`w-4 h-4 ${isNoteOpen ? 'text-[#C5A880]' : 'text-white/60'}`} />
-                  <span className="text-xs font-semibold text-white tracking-couture uppercase">
-                    ORDERING NOTE
-                  </span>
-                </div>
-                <button
-                  onClick={toggleNote}
-                  className="px-3 py-1 bg-white/10 hover:bg-white hover:text-noir text-white text-[11px] tracking-couture uppercase rounded-none transition-colors"
-                >
-                  {isNoteOpen ? 'HIDE NOTE' : 'VIEW NOTE'}
-                </button>
-              </div>
+            {/* Ordering Note Accordion */}
+            <div className="pt-2 border-t border-white/10">
+              <button
+                onClick={toggleNote}
+                className="flex items-center justify-between w-full py-2 text-xs font-mono-luxury text-white/60 hover:text-white transition-colors uppercase tracking-wider"
+              >
+                <span>Atelier Note</span>
+                <span>{isNoteOpen ? '− Close' : '+ Read Details'}</span>
+              </button>
               
               {isNoteOpen && (
-                <p className="text-xs text-white/90 pt-2 font-mono-luxury border-t border-white/10 animate-in fade-in">
+                <p className="text-xs text-white/80 pt-2 font-light leading-relaxed animate-in fade-in">
                   {stage.audioTranscript}
                 </p>
               )}
@@ -194,9 +188,9 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
                   playTactileClick();
                   onBookFitting();
                 }}
-                className="w-full py-3.5 bg-white text-noir text-xs font-bold tracking-loose-couture uppercase hover:bg-neutral-200 hover:text-noir transition-all btn-luxury rounded-none flex items-center justify-center gap-2"
+                className="w-full py-4 bg-white text-black text-xs font-sans-luxury font-bold uppercase tracking-[0.2em] hover:bg-neutral-200 transition-all rounded-xs flex items-center justify-center shadow-md"
               >
-                <span>REQUEST A CUSTOM ORDER ON WHATSAPP</span>
+                <span>Request Custom Order on WhatsApp</span>
               </button>
             </div>
 
