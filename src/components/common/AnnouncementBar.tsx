@@ -3,6 +3,7 @@ import { useCurrencyStore } from '../../stores/currencyStore';
 import { SupportedDisplayCurrency } from '../../utils/formatters';
 import { useAudioStore } from '../../stores/audioStore';
 import { Volume2, VolumeX } from 'lucide-react';
+import { BRAND, buildWhatsAppUrl } from '../../data/brand';
 
 interface AnnouncementBarProps {
   onOpenAppointments: () => void;
@@ -77,10 +78,14 @@ export const AnnouncementBar: React.FC<AnnouncementBarProps> = ({
           </button>
         </div>
 
-        {/* Center: Template Text */}
-        <div className="text-center font-normal text-white/85 text-[10px] sm:text-[11px] tracking-wide py-0.5">
-          5% off when subscribing to news • Complimentary global white-glove dispatch
-        </div>
+        <a
+          href={buildWhatsAppUrl('Hello Finaluchi Couture, I would like help choosing or ordering a piece.')}
+          target="_blank"
+          rel="noreferrer"
+          className="text-center font-normal text-white/85 hover:text-[#DFC7AA] text-[10px] sm:text-[11px] tracking-wide py-0.5 transition-colors"
+        >
+          Abuja-made occasion wear · Order support on WhatsApp {BRAND.whatsappDisplay}
+        </a>
 
         {/* Right: Contact & About Links */}
         <div className="hidden sm:flex items-center gap-4 text-white/70 text-[11px]">

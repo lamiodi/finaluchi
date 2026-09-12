@@ -35,7 +35,7 @@ interface OrderState {
 }
 
 export const useOrderStore = create<OrderState>((set, get) => ({
-  orders: [
+  orders: false ? [
     {
       id: 'ord-fc-sample-01',
       orderNumber: 'FC-94820',
@@ -84,9 +84,9 @@ export const useOrderStore = create<OrderState>((set, get) => ({
       estimatedDeliveryDate: new Date(Date.now() + 5 * 86400000).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
       certificateSerialNumber: 'FC-HS-2026-000142',
     }
-  ],
-  activeOrderId: 'ord-fc-sample-01',
-  certificates: [
+  ] : [],
+  activeOrderId: null,
+  certificates: false ? [
     {
       serialNumber: 'FC-HS-2026-000142',
       pieceName: 'Haute Soirée Sculptural Silk Gown',
@@ -106,8 +106,8 @@ export const useOrderStore = create<OrderState>((set, get) => ({
       qrCodeHash: 'e7b99c04f981293a9b1c77de29fbc883',
       verificationUrl: 'https://finaluchi.com/verify/FC-HS-2026-000142',
     }
-  ],
-  appointments: [
+  ] : [],
+  appointments: false ? [
     {
       id: 'apt-sample-01',
       guestName: 'Amara Okafor',
@@ -126,8 +126,8 @@ export const useOrderStore = create<OrderState>((set, get) => ({
       status: 'CONFIRMED',
       notes: 'Calibrating fit for upcoming December wedding guest gown.',
     }
-  ],
-  auditLogs: [
+  ] : [],
+  auditLogs: false ? [
     {
       id: 'log-01',
       actorRole: 'SYSTEM_RECONCILIATION',
@@ -150,7 +150,7 @@ export const useOrderStore = create<OrderState>((set, get) => ({
       ipAddress: '102.89.41.12',
       timestamp: new Date(Date.now() - 86400000).toISOString(),
     }
-  ],
+  ] : [],
 
   createOrder: (shippingAddress, packagingType, isGift, giftMessage) => {
     const cart = useCartStore.getState();
@@ -199,7 +199,7 @@ export const useOrderStore = create<OrderState>((set, get) => ({
       giftMessage,
       atelierCurrentStageIndex: 0,
       createdAt: new Date().toISOString(),
-      estimatedDeliveryDate: new Date(Date.now() + 7 * 86400000).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
+      estimatedDeliveryDate: 'To be confirmed',
       certificateSerialNumber: serial,
     };
 
@@ -252,17 +252,17 @@ export const useOrderStore = create<OrderState>((set, get) => ({
         serialNumber: serial,
         pieceName: targetOrder.items[0]?.productNameSnapshot || 'Finaluchi Haute Couture Piece',
         productName: targetOrder.items[0]?.productNameSnapshot || 'Finaluchi Haute Couture Piece',
-        collection: 'Autumn / Winter 2026 Digital Flagship',
-        collectionName: 'Autumn / Winter 2026 Digital Flagship',
+        collection: 'Finaluchi Couture',
+        collectionName: 'Finaluchi Couture',
         colorwayName: targetOrder.items[0]?.colorNameSnapshot || 'Noir Onyx Silk',
-        atelierLocation: 'Finaluchi Flagship Atelier, Victoria Island, Lagos',
-        masterTailor: 'Master Tailor Adebayo & Creative Director Uche',
-        leadArtisan: 'Master Tailor Adebayo & Creative Director Uche',
+        atelierLocation: 'Abuja, Nigeria',
+        masterTailor: 'Finaluchi Couture',
+        leadArtisan: 'Finaluchi Couture',
         registeredOwner: targetOrder.customerFullName,
         registrationDate: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
         issueDate: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
-        editionTotal: 25,
-        editionNumber: Math.floor(Math.random() * 15) + 1,
+        editionTotal: 1,
+        editionNumber: 1,
         qrCodeDataUrl: `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=https://finaluchi.com/certificate/${serial}`,
         qrCodeHash: `sha256_${serial}_${Date.now()}`,
         verificationUrl: `https://finaluchi.com/verify/${serial}`,
@@ -335,8 +335,8 @@ export const useOrderStore = create<OrderState>((set, get) => ({
     const newApt: Appointment = {
       ...data,
       id: `apt-${Date.now()}`,
-      status: 'CONFIRMED',
-      assignedArtisan: 'Master Tailor Adebayo',
+      status: 'PENDING',
+      assignedArtisan: 'To be confirmed',
     };
     set((state) => ({
       appointments: [newApt, ...state.appointments],

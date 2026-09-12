@@ -3,6 +3,13 @@ import { X, Calendar, Sparkles } from 'lucide-react';
 import { useOrderStore } from '../../stores/orderStore';
 import { useAudioStore } from '../../stores/audioStore';
 import { toast } from 'sonner';
+import { buildWhatsAppUrl } from '../../data/brand';
+
+const getTomorrowDate = () => {
+  const date = new Date();
+  date.setDate(date.getDate() + 1);
+  return date.toISOString().slice(0, 10);
+};
 
 interface BespokeAppointmentModalProps {
   isOpen: boolean;
@@ -14,8 +21,8 @@ export const BespokeAppointmentModal: React.FC<BespokeAppointmentModalProps> = (
   onClose,
 }) => {
   const [appointmentType, setAppointmentType] = useState<string>('IN_PERSON_FITTING');
-  const [date, setDate] = useState('2026-09-04');
-  const [timeSlot, setTimeSlot] = useState('14:00 - 15:30 WAT');
+  const [date, setDate] = useState(getTomorrowDate);
+  const [timeSlot, setTimeSlot] = useState('Afternoon');
   const [clientName, setClientName] = useState('');
   const [clientEmail, setClientEmail] = useState('');
   const [clientPhone, setClientPhone] = useState('');
@@ -28,7 +35,7 @@ export const BespokeAppointmentModal: React.FC<BespokeAppointmentModalProps> = (
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!clientName || !clientEmail || !clientPhone) {
+    if (!clientName || !clientPhone) {
       toast.error('Please complete all required fields.');
       return;
     }
@@ -36,10 +43,10 @@ export const BespokeAppointmentModal: React.FC<BespokeAppointmentModalProps> = (
     playSuccessChime();
 
     const location = appointmentType === 'IN_PERSON_FITTING'
-      ? 'Finaluchi Flagship Atelier, Victoria Island, Lagos'
+      ? 'Abuja fitting — address to be confirmed'
       : appointmentType === 'VIRTUAL_CONSULTATION'
-      ? 'Encrypted HD Video Link (Zoom / Meet)'
-      : 'Client Private Suite (Lagos / Abuja)';
+      ? 'Virtual consultation — platform to be confirmed'
+      : 'Event order consultation';
 
     bookAppointment({
       guestName: clientName,
@@ -56,7 +63,19 @@ export const BespokeAppointmentModal: React.FC<BespokeAppointmentModalProps> = (
       notes,
     });
 
-    toast.success(`Private fitting requested for ${date} (${timeSlot}). Our atelier concierge will confirm via phone.`);
+    const request = [
+      'Hello Finaluchi Couture, I would like to request a consultation.',
+      `Name: ${clientName}`,
+      `Phone: ${clientPhone}`,
+      clientEmail ? `Email: ${clientEmail}` : '',
+      `Format: ${appointmentType.replace(/_/g, ' ')}`,
+      `Preferred date: ${date}`,
+      `Preferred time: ${timeSlot}`,
+      notes ? `Occasion / notes: ${notes}` : '',
+    ].filter(Boolean).join('\n');
+
+    window.open(buildWhatsAppUrl(request), '_blank', 'noopener,noreferrer');
+    toast.success('WhatsApp opened with your consultation request ready to send.');
     onClose();
   };
 
@@ -69,10 +88,10 @@ export const BespokeAppointmentModal: React.FC<BespokeAppointmentModalProps> = (
           <div>
             <div className="flex items-center gap-2 text-[#C5A880] text-xs font-mono-luxury tracking-widest uppercase">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>PRIVATE CLIENT APPOINTMENT</span>
+              <span>CUSTOM ORDER CONSULTATION</span>
             </div>
             <h2 className="font-sans-luxury text-xl sm:text-2xl font-bold tracking-tight text-white uppercase mt-1">
-              Book Atelier Consultation
+              Plan Your Finaluchi Look
             </h2>
           </div>
 
@@ -97,9 +116,9 @@ export const BespokeAppointmentModal: React.FC<BespokeAppointmentModalProps> = (
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
               {[
-                { id: 'IN_PERSON_FITTING', label: 'Flagship Atelier', sub: 'Victoria Island, Lagos' },
-                { id: 'VIRTUAL_CONSULTATION', label: 'Virtual Video', sub: 'Global Encrypted Link' },
-                { id: 'PRIVATE_SUITE_VISIT', label: 'Private Suite', sub: 'Residence / Hotel Visit' },
+                { id: 'IN_PERSON_FITTING', label: 'Abuja Fitting', sub: 'Location confirmed by the team' },
+                { id: 'VIRTUAL_CONSULTATION', label: 'Virtual Call', sub: 'Discuss design, fit and timing' },
+                { id: 'EVENT_ORDER_CONSULTATION', label: 'Event Order', sub: 'Asoebi, bridal or occasion wear' },
               ].map((t) => (
                 <button
                   key={t.id}
@@ -131,6 +150,7 @@ export const BespokeAppointmentModal: React.FC<BespokeAppointmentModalProps> = (
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
+                min={getTomorrowDate()}
                 className="w-full p-3 bg-[#FFFFFF] border border-black/20 text-xs font-mono-luxury focus:outline-none focus:border-[#000000]"
                 required
               />
@@ -145,9 +165,9 @@ export const BespokeAppointmentModal: React.FC<BespokeAppointmentModalProps> = (
                 onChange={(e) => setTimeSlot(e.target.value)}
                 className="w-full p-3 bg-[#FFFFFF] border border-black/20 text-xs focus:outline-none focus:border-[#000000]"
               >
-                <option value="11:00 - 12:30 WAT">11:00 - 12:30 WAT (Morning)</option>
-                <option value="14:00 - 15:30 WAT">14:00 - 15:30 WAT (Afternoon)</option>
-                <option value="16:30 - 18:00 WAT">16:30 - 18:00 WAT (Evening Soirée)</option>
+                <option value="Morning">Morning</option>
+                <option value="Afternoon">Afternoon</option>
+                <option value="Evening">Evening</option>
               </select>
             </div>
           </div>
@@ -171,21 +191,20 @@ export const BespokeAppointmentModal: React.FC<BespokeAppointmentModalProps> = (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">
-                  Email Address *
+                  Email Address (Optional)
                 </label>
                 <input
                   type="email"
                   placeholder="client@domain.com"
                   value={clientEmail}
                   onChange={(e) => setClientEmail(e.target.value)}
-                  required
                   className="w-full p-3 bg-[#FFFFFF] border border-black/20 text-xs focus:outline-none focus:border-[#000000]"
                 />
               </div>
 
               <div>
                 <label className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">
-                  Phone Number *
+                  Phone / WhatsApp Number *
                 </label>
                 <input
                   type="tel"
@@ -203,7 +222,7 @@ export const BespokeAppointmentModal: React.FC<BespokeAppointmentModalProps> = (
                 Occasion / Dressing Notes (Optional)
               </label>
               <textarea
-                placeholder="Mention upcoming galas, wedding guest requirements, or specific silhouettes of interest..."
+                placeholder="Mention your event date, the piece or category you like, colour, sizing and any custom details..."
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={2}
@@ -218,11 +237,11 @@ export const BespokeAppointmentModal: React.FC<BespokeAppointmentModalProps> = (
             className="w-full py-4 bg-[#000000] text-[#FFFFFF] text-xs font-bold tracking-[0.25em] uppercase hover:bg-neutral-900 border border-[#000000] transition-all flex items-center justify-center gap-2 shadow-sm"
           >
             <Calendar className="w-4 h-4 text-white" />
-            <span>CONFIRM ATELIER APPOINTMENT</span>
+            <span>CONTINUE REQUEST ON WHATSAPP</span>
           </button>
 
           <p className="text-[10px] text-center text-black/50 font-mono-luxury">
-            Directly paired with Lead Artisan Adebayo • Private Consultation Suite
+            Your preferred time is a request until the Finaluchi team confirms it on WhatsApp.
           </p>
 
         </form>

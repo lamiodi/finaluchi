@@ -118,12 +118,13 @@
     background-color: var(--color-alabaster);
     color: var(--color-noir);
     scroll-behavior: smooth;
+    overflow-x: clip;
   }
 
   body {
     background-color: var(--color-alabaster);
     color: var(--color-noir);
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 }
 

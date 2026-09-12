@@ -58,14 +58,14 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
         <div className="flex items-center gap-2 text-[#C5A880] mb-1.5">
           <Ruler className="w-4 h-4" />
           <span className="text-[10px] sm:text-[11px] font-mono-luxury tracking-[0.25em] uppercase font-semibold">
-            ATELIER CALIBRATION
+            SIZE GUIDANCE
           </span>
         </div>
         <h3 className="font-sans-luxury text-2xl sm:text-3xl font-bold tracking-tight text-[#000000] uppercase mb-2">
-          Couture Size & Measurement Matrix
+          Size & Measurement Guide
         </h3>
         <p className="text-xs sm:text-sm text-black/70 leading-relaxed mb-6 font-light">
-          FINALUCHI garments are cut with precision architectural drape. If your measurements span across two sizes, we recommend selecting <strong className="font-semibold text-[#000000]">Made to Measure</strong> for a bespoke atelier pattern.
+          Use this chart as an initial guide only. Confirm the current size chart with the Finaluchi team before ordering, especially for corseted, tailored, bridal or custom pieces.
         </p>
 
         {/* Unit Toggle */}
@@ -130,10 +130,10 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
           <div className="space-y-1">
             <div className="flex items-center gap-2 text-xs font-bold text-[#000000] tracking-widest uppercase">
               <Sparkles className="w-3.5 h-3.5 text-[#C5A880]" />
-              <span>BESPOKE MADE-TO-MEASURE ATELIER FIT</span>
+              <span>CUSTOM / MADE-TO-MEASURE FIT</span>
             </div>
             <p className="text-xs text-black/65 font-light">
-              Submit your unique anatomical measurements or book a private fitting in our Lagos flagship salon.
+              Share measurements using the method provided by the Abuja team or request a fitting consultation before production.
             </p>
           </div>
           {onSelectMadeToMeasure && (
@@ -145,7 +145,7 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
               }}
               className="px-5 py-3 bg-[#000000] text-[#FFFFFF] text-xs font-bold tracking-widest uppercase whitespace-nowrap hover:bg-neutral-900 border border-[#000000] transition-all"
             >
-              CHOOSE BESPOKE FIT
+              CHOOSE CUSTOM FIT
             </button>
           )}
         </div>

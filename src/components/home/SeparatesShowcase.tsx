@@ -27,7 +27,7 @@ export const SeparatesShowcase: React.FC<SeparatesShowcaseProps> = ({
         {/* Section Header */}
         <div className="flex items-center justify-between pb-6 sm:pb-8 border-b border-black/10 mb-8 sm:mb-10">
           <h2 className="font-sans-luxury text-2xl sm:text-4xl font-bold tracking-tight text-noir uppercase">
-            2PIECES, 3PIECES & SEPARATES
+            MATCHING SETS & SEPARATES
           </h2>
 
           <button
@@ -37,7 +37,7 @@ export const SeparatesShowcase: React.FC<SeparatesShowcaseProps> = ({
             }}
             className="group flex items-center gap-2 text-xs font-sans-luxury font-semibold tracking-loose-couture text-noir hover:opacity-60 transition-opacity uppercase"
           >
-            <span>Explore All</span>
+            <span>Shop Sets</span>
             <span className="transform group-hover:translate-x-1.5 transition-transform">⟶</span>
           </button>
         </div>
@@ -84,7 +84,7 @@ export const SeparatesShowcase: React.FC<SeparatesShowcaseProps> = ({
                       {formatPriceWithDisplay(product.basePriceKobo, displayCurrency)}
                     </div>
                     <span className="text-[10px] font-sans-luxury tracking-widest uppercase text-black font-semibold opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-                      Discover ⟶
+                      View Piece ⟶
                     </span>
                   </div>
                 </div>

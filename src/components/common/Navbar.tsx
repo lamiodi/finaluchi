@@ -3,11 +3,9 @@ import {
   ShoppingBag, Search, Sparkles, Menu, X,
   ChevronDown, Heart, User, Calendar
 } from 'lucide-react';
-import { ATELIER_CATEGORIES } from '../../types';
 import { CATEGORY_DEPARTMENTS } from '../../data/categoryContent';
 import { useCartStore } from '../../stores/cartStore';
 import { useAudioStore } from '../../stores/audioStore';
-import { formatKoboToNgn } from '../../utils/formatters';
 
 interface NavbarProps {
   onNavigateHome: () => void;
@@ -16,7 +14,6 @@ interface NavbarProps {
   onOpenSearch: () => void;
   onOpenRunway: () => void;
   onOpenClientPortal: () => void;
-  onOpenAdmin: () => void;
   onOpenAppointments: () => void;
   onOpenContact?: () => void;
   onOpenAbout?: () => void;
@@ -29,7 +26,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenSearch,
   onOpenRunway,
   onOpenClientPortal,
-  onOpenAdmin,
   onOpenAppointments,
   onOpenContact,
   onOpenAbout,
@@ -85,7 +81,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 >
                   <div className="flex items-center justify-between pb-3 border-b border-black/10 mb-5">
                     <span className="text-[10px] font-mono-luxury text-[#A67C4A] uppercase tracking-widest font-semibold">
-                      13 Couture Departments · Lagos Atelier
+                      13 Product Categories · Women&apos;s Collection
                     </span>
                     <button
                       onClick={() => {
@@ -95,7 +91,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       }}
                       className="text-[11px] font-sans-luxury font-bold text-noir hover:underline uppercase tracking-tight"
                     >
-                      View All Creations (13) ⟶
+                      Shop All Categories (13) ⟶
                     </button>
                   </div>
 
@@ -123,9 +119,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                               </span>
                               <span className="text-[9px] font-mono-luxury text-black/40">⟶</span>
                             </div>
-                            <span className="text-[9px] font-mono-luxury text-black/50 ml-4">
-                              {formatKoboToNgn(cat.startingPriceKobo)}
-                            </span>
+                            <span className="text-[9px] font-mono-luxury text-black/50 ml-4">View category</span>
                           </button>
                         ))}
                       </div>
@@ -154,9 +148,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                               </span>
                               <span className="text-[9px] font-mono-luxury text-black/40">⟶</span>
                             </div>
-                            <span className="text-[9px] font-mono-luxury text-black/50 ml-4">
-                              {formatKoboToNgn(cat.startingPriceKobo)}
-                            </span>
+                            <span className="text-[9px] font-mono-luxury text-black/50 ml-4">View category</span>
                           </button>
                         ))}
                       </div>
@@ -185,9 +177,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                               </span>
                               <span className="text-[9px] font-mono-luxury text-black/40">⟶</span>
                             </div>
-                            <span className="text-[9px] font-mono-luxury text-black/50 ml-4">
-                              {formatKoboToNgn(cat.startingPriceKobo)}
-                            </span>
+                            <span className="text-[9px] font-mono-luxury text-black/50 ml-4">View category</span>
                           </button>
                         ))}
                       </div>
@@ -197,7 +187,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   {/* Footnote Bar with Bespoke Trigger */}
                   <div className="flex items-center justify-between pt-4 mt-4 border-t border-black/10 text-[10px]">
                     <span className="text-black/60 font-mono-luxury">
-                      Drafted to 48 anatomical points · Pure mulberry silks
+                      Couture, ready-to-wear and event dressing from Abuja
                     </span>
                     <button
                       onClick={() => {
@@ -207,7 +197,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       }}
                       className="font-bold text-black hover:underline uppercase tracking-wider flex items-center gap-1"
                     >
-                      <span>Request Bespoke Custom Fitting</span>
+                      <span>Request a Custom Order</span>
                       <span>⟶</span>
                     </button>
                   </div>
@@ -224,7 +214,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               }}
               className="hover:text-[#A67C4A] transition-colors py-1 text-muted uppercase tracking-wider font-medium"
             >
-              ATELIER
+              CUSTOM ORDERS
             </button>
           </nav>
         </div>
@@ -295,7 +285,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               openDrawer();
             }}
             className="p-1.5 hover:text-[#C5A880] transition-colors relative"
-            aria-label="Concierge Bag"
+            aria-label="Shopping Bag"
           >
             <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5" />
             {totalCartCount > 0 && (
@@ -330,7 +320,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           
           <div>
             <div className="text-[10px] font-mono-luxury text-[#A67C4A] uppercase tracking-widest font-semibold pb-2 border-b border-border/40 mb-3">
-              CLIENT CATEGORIES
+              SHOP CATEGORIES
             </div>
             <div className="grid grid-cols-2 gap-2 text-xs font-semibold uppercase tracking-tight text-noir">
               <button
@@ -344,7 +334,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span>ALL CREATIONS</span>
                 <span className="text-xs text-muted">⟶</span>
               </button>
-              {ATELIER_CATEGORIES.map((cat) => (
+              {CATEGORY_DEPARTMENTS.map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => {
@@ -413,7 +403,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="w-full py-2.5 bg-noir text-white text-xs font-bold tracking-couture uppercase rounded-xs flex items-center justify-center gap-2 hover:bg-neutral-800 transition-colors"
           >
             <Calendar className="w-3.5 h-3.5" />
-            <span>BESPOKE FITTING</span>
+            <span>REQUEST A CUSTOM ORDER</span>
           </button>
 
           <div className="grid grid-cols-2 gap-2">
@@ -426,7 +416,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }}
                 className="py-2 bg-white border border-border text-noir text-xs font-semibold uppercase tracking-tight rounded-xs hover:bg-neutral-100 transition-colors text-center"
               >
-                ABOUT MAISON
+                ABOUT FINALUCHI
               </button>
             )}
 
@@ -439,21 +429,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }}
                 className="py-2 bg-white border border-border text-noir text-xs font-semibold uppercase tracking-tight rounded-xs hover:bg-neutral-100 transition-colors text-center"
               >
-                CONTACT CONCIERGE
+                CONTACT
               </button>
             )}
           </div>
 
-          <button
-            onClick={() => {
-              playTactileClick();
-              onOpenAdmin();
-              setIsMobileMenuOpen(false);
-            }}
-            className="w-full py-1.5 text-[10px] font-mono-luxury text-muted hover:text-noir text-center uppercase tracking-widest pt-1"
-          >
-            Atelier Operations Desk (CRM)
-          </button>
         </div>
         </div>
       )}

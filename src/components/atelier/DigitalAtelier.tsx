@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronRight, ChevronLeft, Volume2, ZoomIn, X, CheckCircle2 } from 'lucide-react';
+import { ChevronRight, ChevronLeft, MessageCircle, ZoomIn, X, CheckCircle2 } from 'lucide-react';
 import { ATELIER_STAGES } from '../../data/atelierStages';
 import { useAudioStore } from '../../stores/audioStore';
 
@@ -10,7 +10,7 @@ interface DigitalAtelierProps {
 export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting }) => {
   const [activeStageIndex, setActiveStageIndex] = useState(0);
   const [isMacroModalOpen, setIsMacroModalOpen] = useState(false);
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [isNoteOpen, setIsNoteOpen] = useState(false);
   
   const { playTactileClick } = useAudioStore();
 
@@ -19,18 +19,18 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
   const handleNext = () => {
     playTactileClick();
     setActiveStageIndex((prev) => (prev + 1) % ATELIER_STAGES.length);
-    setIsPlayingAudio(false);
+    setIsNoteOpen(false);
   };
 
   const handlePrev = () => {
     playTactileClick();
     setActiveStageIndex((prev) => (prev - 1 + ATELIER_STAGES.length) % ATELIER_STAGES.length);
-    setIsPlayingAudio(false);
+    setIsNoteOpen(false);
   };
 
-  const toggleAudio = () => {
+  const toggleNote = () => {
     playTactileClick();
-    setIsPlayingAudio(!isPlayingAudio);
+    setIsNoteOpen(!isNoteOpen);
   };
 
   return (
@@ -45,10 +45,10 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 sm:pb-12 border-b border-white/20 mb-8 sm:mb-12">
           <div>
             <h2 className="font-sans-luxury text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white uppercase">
-              Anatomy of a Finaluchi Piece
+              How to Order with Confidence
             </h2>
             <p className="text-xs text-white/70 font-light mt-2 max-w-xl">
-              From hand-drafted anatomical muslins to pure mulberry silk hand-finishing on granite cutting tables.
+              A clearer path from first message to final fitting—for ready-to-wear, occasion and custom pieces.
             </p>
           </div>
 
@@ -83,7 +83,7 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
               onClick={() => {
                 playTactileClick();
                 setActiveStageIndex(idx);
-                setIsPlayingAudio(false);
+                setIsNoteOpen(false);
               }}
               className={`p-3 text-left border rounded-none transition-all ${
                 idx === activeStageIndex
@@ -124,11 +124,11 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
               className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 px-2.5 sm:px-3.5 py-1.5 sm:py-2 bg-noir/80 backdrop-blur-md border border-white/40 text-white text-[10px] sm:text-xs font-mono-luxury tracking-couture uppercase flex items-center gap-1.5 hover:bg-white hover:text-noir transition-all btn-luxury rounded-none"
             >
               <ZoomIn className="w-3.5 h-3.5" />
-              <span>400% MACRO ZOOM</span>
+              <span>VIEW GARMENT DETAIL</span>
             </button>
 
             <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 text-[10px] sm:text-xs font-mono-luxury text-white/70 bg-noir/60 sm:bg-transparent px-2 py-1 sm:p-0 rounded-none backdrop-blur-xs sm:backdrop-blur-none max-w-[55%] truncate">
-              {stage.leadTailor} — Lagos Atelier
+              {stage.leadTailor} — Abuja, Nigeria
             </div>
           </div>
 
@@ -144,14 +144,14 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
               </h3>
             </div>
 
-            <blockquote className="p-4 bg-white/5 border-l-2 border-[#C5A880] text-xs sm:text-sm text-white/90 italic font-display leading-relaxed">
+            <blockquote className="p-4 bg-white/5 border border-white/15 text-xs sm:text-sm text-white/90 italic font-display leading-relaxed">
               "{stage.quote}"
             </blockquote>
 
             {/* Stage Technical Detail Checklist */}
             <div className="space-y-2.5 pt-2">
               <span className="text-[11px] font-semibold text-white tracking-loose-couture uppercase block font-sans-luxury">
-                TECHNICAL ATELIER SPECIFICATIONS:
+                WHAT TO CONFIRM:
               </span>
               <ul className="space-y-2">
                 {stage.details.map((detail, i) => (
@@ -163,26 +163,26 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
               </ul>
             </div>
 
-            {/* Master Tailor Audio Note (Opt-in) */}
+            {/* Ordering note */}
             <div className="p-4 bg-white/5 border border-white/15 rounded-none space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Volume2 className={`w-4 h-4 ${isPlayingAudio ? 'text-[#C5A880] animate-pulse' : 'text-white/60'}`} />
+                  <MessageCircle className={`w-4 h-4 ${isNoteOpen ? 'text-[#C5A880]' : 'text-white/60'}`} />
                   <span className="text-xs font-semibold text-white tracking-couture uppercase">
-                    MASTER TAILOR AUDIO NOTE ({stage.audioNoteDuration})
+                    ORDERING NOTE
                   </span>
                 </div>
                 <button
-                  onClick={toggleAudio}
+                  onClick={toggleNote}
                   className="px-3 py-1 bg-white/10 hover:bg-white hover:text-noir text-white text-[11px] tracking-couture uppercase rounded-none transition-colors"
                 >
-                  {isPlayingAudio ? 'PAUSE COMMENTARY' : 'LISTEN TO TAILOR'}
+                  {isNoteOpen ? 'HIDE NOTE' : 'VIEW NOTE'}
                 </button>
               </div>
               
-              {isPlayingAudio && (
+              {isNoteOpen && (
                 <p className="text-xs text-white/90 pt-2 font-mono-luxury border-t border-white/10 animate-in fade-in">
-                  "{stage.audioTranscript}"
+                  {stage.audioTranscript}
                 </p>
               )}
             </div>
@@ -196,7 +196,7 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
                 }}
                 className="w-full py-3.5 bg-white text-noir text-xs font-bold tracking-loose-couture uppercase hover:bg-neutral-200 hover:text-noir transition-all btn-luxury rounded-none flex items-center justify-center gap-2"
               >
-                <span>BOOK BESPOKE ATELIER MEASUREMENT SESSION</span>
+                <span>REQUEST A CUSTOM ORDER ON WHATSAPP</span>
               </button>
             </div>
 
@@ -217,7 +217,7 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
               <X className="w-5 h-5" />
             </button>
             <h4 className="font-sans-luxury text-xl text-white mb-4 uppercase tracking-couture">
-              400% Macro Fiber Density Inspection — {stage.title}
+              Garment Detail — {stage.title}
             </h4>
             <div className="aspect-[16/9] w-full overflow-hidden rounded-none bg-black">
               <img
@@ -227,7 +227,7 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
               />
             </div>
             <p className="text-xs text-white/60 mt-3 font-mono-luxury">
-              Inspecting weave tension, optical luster refraction, and organic dye absorption.
+              Use the product imagery as a reference, then confirm fabric, colour and finishing details with the Finaluchi team.
             </p>
           </div>
         </div>

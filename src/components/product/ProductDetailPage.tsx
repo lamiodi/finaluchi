@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Heart, ShoppingBag, Ruler, Sparkles, ChevronDown, ChevronUp, 
-  RotateCw, Share2, Layers, Calendar 
+  RotateCw, Share2, Layers, Calendar, MessageCircle
 } from 'lucide-react';
 import { Product, ProductColorway } from '../../types';
 import { useCurrencyStore } from '../../stores/currencyStore';
@@ -11,11 +11,13 @@ import { useAudioStore } from '../../stores/audioStore';
 import { formatPriceWithDisplay } from '../../utils/formatters';
 import { SizeGuideModal } from '../common/SizeGuideModal';
 import { toast } from 'sonner';
+import { ORDER_CLARITY_NOTE, buildWhatsAppUrl } from '../../data/brand';
 
 interface ProductDetailPageProps {
   product: Product;
   allProducts: Product[];
   onSelectProduct: (product: Product) => void;
+  onBackToCatalog: () => void;
   onBookAppointment: () => void;
 }
 
@@ -23,6 +25,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   product,
   allProducts,
   onSelectProduct,
+  onBackToCatalog,
   onBookAppointment,
 }) => {
   const [selectedColorway, setSelectedColorway] = useState<ProductColorway>(
@@ -73,7 +76,20 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const handleAddToCart = () => {
     playSuccessChime();
     addToCart(product, selectedColorway, selectedSize, 1, isMadeToMeasure);
-    toast.success(`${product.name} (${selectedColorway.color.name}) reserved in your bag for 15 minutes.`);
+    toast.success(`${product.name} (${selectedColorway.color.name}) added to your bag.`);
+  };
+
+  const handleWhatsAppInquiry = () => {
+    playTactileClick();
+    const message = [
+      'Hello Finaluchi Couture, I would like to ask about this piece:',
+      product.name,
+      `Colour: ${selectedColorway.color.name}`,
+      `Size: ${isMadeToMeasure ? 'Custom / made to measure' : selectedSize}`,
+      `Listed price: ${formatPriceWithDisplay(product.basePriceKobo + (selectedColorway.priceDeltaKobo || 0), displayCurrency)}`,
+      'Please confirm availability, delivery timeline and order terms.',
+    ].join('\n');
+    window.open(buildWhatsAppUrl(message), '_blank', 'noopener,noreferrer');
   };
 
   const toggleAccordion = (name: string) => {
@@ -90,7 +106,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       
       {/* Breadcrumb Navigation */}
       <div className="max-w-[1680px] mx-auto px-4 sm:px-8 py-4 text-[11px] text-black/60 tracking-[0.2em] uppercase flex items-center gap-2 border-b border-black/10">
-        <button onClick={() => onSelectProduct(product)} className="hover:text-[#000000] transition-colors">House</button>
+        <button onClick={onBackToCatalog} className="hover:text-[#000000] transition-colors">Collections</button>
         <span>/</span>
         <span>{product.pillar.replace('_', ' ')}</span>
         <span>/</span>
@@ -213,7 +229,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   {formatPriceWithDisplay(product.basePriceKobo + (selectedColorway.priceDeltaKobo || 0), displayCurrency)}
                 </span>
                 <span className="text-[10px] text-black/50 font-mono-luxury block mt-1 tracking-wider uppercase">
-                  Complimentary Flagship Courier • Custom Archival Garment Box Included
+                  Confirm availability, delivery date and order terms before payment
                 </span>
               </div>
             </div>
@@ -269,7 +285,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   className="flex items-center gap-1.5 text-black hover:text-[#C5A880] underline underline-offset-4 tracking-widest uppercase text-[11px] font-semibold transition-colors"
                 >
                   <Ruler className="w-3.5 h-3.5" />
-                  <span>Size & Calibration Guide</span>
+                  <span>Size & Measurement Guide</span>
                 </button>
               </div>
 
@@ -306,7 +322,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     }`}
                   >
                     <Sparkles className="w-3.5 h-3.5 text-current" />
-                    <span>MADE TO MEASURE (BESPOKE ATELIER FIT)</span>
+                    <span>CUSTOM / MADE TO MEASURE</span>
                   </button>
                 )}
               </div>
@@ -322,8 +338,16 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 <span>ADD TO BAG</span>
               </button>
 
+              <button
+                onClick={handleWhatsAppInquiry}
+                className="w-full py-3.5 bg-[#FFFFFF] text-[#000000] text-xs font-bold tracking-[0.2em] uppercase border border-[#000000] hover:bg-[#000000] hover:text-white transition-all flex items-center justify-center gap-2"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>ASK ABOUT THIS PIECE ON WHATSAPP</span>
+              </button>
+
               <div className="flex items-center justify-between text-[11px] text-black/60 font-mono-luxury pt-1">
-                <span>Dispatches from Lagos Flagship</span>
+                <span>Order support from Abuja</span>
                 <button
                   onClick={() => {
                     playTactileClick();
@@ -332,7 +356,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   className="text-[#000000] font-semibold underline underline-offset-2 flex items-center gap-1.5 hover:text-[#C5A880] transition-colors"
                 >
                   <Calendar className="w-3.5 h-3.5" />
-                  <span>Book Atelier Fitting</span>
+                  <span>Request a Fitting</span>
                 </button>
               </div>
             </div>
@@ -341,7 +365,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             <div className="p-5 bg-[#FFFFFF] border border-black/15 space-y-4">
               <div className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-[#000000]">
                 <Layers className="w-4 h-4 text-[#C5A880]" />
-                <span>EXPLORE THE FABRIC INTELLIGENCE</span>
+                <span>FABRIC & FINISH</span>
               </div>
 
               <div className="grid grid-cols-2 gap-4 text-xs">
@@ -371,7 +395,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             {/* The Silhouette Behavior Matrix */}
             <div className="p-5 bg-[#FFFFFF] border border-black/15 space-y-4">
               <span className="text-xs font-bold tracking-widest uppercase text-[#000000] block">
-                THE SILHOUETTE BEHAVIOR MATRIX
+                FIT & MOVEMENT
               </span>
 
               <div className="space-y-3 text-[11px] font-mono-luxury">
@@ -419,7 +443,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   onClick={() => toggleAccordion('DETAILS')}
                   className="w-full py-4 flex items-center justify-between font-bold tracking-widest uppercase text-[#000000] hover:text-[#C5A880] transition-colors text-left"
                 >
-                  <span>ATELIER CRAFTSMANSHIP & DETAILS</span>
+                  <span>DESIGN, FIT & DETAILS</span>
                   {openAccordion === 'DETAILS' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </button>
                 {openAccordion === 'DETAILS' && (
@@ -438,14 +462,14 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   onClick={() => toggleAccordion('SHIPPING')}
                   className="w-full py-4 flex items-center justify-between font-bold tracking-widest uppercase text-[#000000] hover:text-[#C5A880] transition-colors text-left"
                 >
-                  <span>SHIPPING, DDU POLICY & RETURNS</span>
+                  <span>DELIVERY, ALTERATIONS & RETURNS</span>
                   {openAccordion === 'SHIPPING' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </button>
                 {openAccordion === 'SHIPPING' && (
                   <div className="pb-4 text-black/75 font-light leading-relaxed space-y-2 animate-in fade-in">
-                    <p><strong>Nigeria Delivery:</strong> 1–3 business days via White-Glove Courier. Complimentary on orders over ₦300,000.</p>
-                    <p><strong>International Shipments:</strong> Dispatched Delivered Duty Unpaid (DDU). Import tariffs, local VAT, and customs fees are the recipient's responsibility.</p>
-                    <p><strong>Returns:</strong> Ready-to-wear pieces may be returned within 14 days in original archival packaging with security tag intact. Bespoke Made-to-Measure pieces are tailored uniquely to anatomical specifications and are non-refundable.</p>
+                    <p>{ORDER_CLARITY_NOTE}</p>
+                    <p><strong>Delivery:</strong> Availability, production time, delivery fees and international shipping options must be confirmed for the selected piece.</p>
+                    <p><strong>Custom orders:</strong> Ask how fittings, alterations, cancellations and refunds apply before production begins.</p>
                   </div>
                 )}
               </div>
@@ -456,7 +480,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   onClick={() => toggleAccordion('CARE')}
                   className="w-full py-4 flex items-center justify-between font-bold tracking-widest uppercase text-[#000000] hover:text-[#C5A880] transition-colors text-left"
                 >
-                  <span>COMPOSITION & ARCHIVAL CARE</span>
+                  <span>COMPOSITION & CARE</span>
                   {openAccordion === 'CARE' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </button>
                 {openAccordion === 'CARE' && (
@@ -477,10 +501,10 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         <div className="pt-20 border-t border-black/10 mt-20">
           <div className="text-center space-y-3 mb-10">
             <span className="text-[10px] font-mono-luxury text-[#C5A880] uppercase tracking-[0.3em] font-semibold">
-              COMPLETE THE COUTURE WARDROBE
+              KEEP EXPLORING
             </span>
             <h2 className="font-sans-luxury text-2xl sm:text-4xl font-bold tracking-tight text-[#000000] uppercase">
-              Curated Pairings & Complements
+              More Finaluchi Pieces
             </h2>
           </div>
 

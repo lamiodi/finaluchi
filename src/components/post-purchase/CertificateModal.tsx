@@ -23,7 +23,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     playTactileClick();
     const url = certificate.verificationUrl || `https://finaluchi.com/verify/${certificate.serialNumber}`;
     navigator.clipboard.writeText(url);
-    toast.success('Certificate cryptographic verification URL copied to clipboard.');
+    toast.success('Order-record link copied to clipboard.');
   };
 
   const displayName = certificate.productName || certificate.pieceName;
@@ -65,13 +65,13 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
               />
             </div>
             <span className="text-[9px] sm:text-[10px] font-mono-luxury text-[#A67C4A] uppercase tracking-[0.25em] sm:tracking-[0.3em] block font-semibold">
-              FINALUCHI COUTURE • LAGOS ATELIER
+              FINALUCHI COUTURE • ABUJA, NIGERIA
             </span>
             <h2 className="font-display text-xl sm:text-3xl md:text-4xl font-bold tracking-tight text-noir uppercase">
-              Certificate of Authenticity
+              Garment Order Record
             </h2>
             <p className="text-[11px] sm:text-xs text-muted font-light max-w-md mx-auto">
-              This document certifies the singular craftsmanship, provenance, and registered ownership of an original Finaluchi Couture creation.
+              A saved record of the Finaluchi piece, selected details and original order reference.
             </p>
           </div>
 
@@ -113,7 +113,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                 {displayArtisan}
               </div>
               <span className="text-[9px] sm:text-[10px] text-muted font-mono-luxury block">
-                Master Pattern Maker • Lagos Atelier
+                Finaluchi Couture • Abuja
               </span>
             </div>
 
@@ -123,7 +123,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                 <QrCode className="w-10 sm:w-12 h-10 sm:h-12" />
               </div>
               <div className="text-left text-[10px] font-mono-luxury">
-                <span className="font-bold text-noir block">NFC / QR TOKEN</span>
+                <span className="font-bold text-noir block">ORDER REFERENCE</span>
                 <span className="text-muted block truncate max-w-[120px]">
                   {(certificate.qrCodeHash || certificate.serialNumber).slice(0, 16)}...
                 </span>
@@ -131,7 +131,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                   onClick={handleCopyVerification}
                   className="text-[#A67C4A] hover:text-noir underline mt-1 block font-medium"
                 >
-                  Copy Verification
+                  Copy Record Link
                 </button>
               </div>
             </div>
@@ -144,7 +144,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 mt-4 sm:mt-6">
           <div className="flex items-center gap-1.5 text-xs text-muted font-mono-luxury">
             <ShieldCheck className="w-4 h-4 text-[#A67C4A]" />
-            <span>Cryptographically Verified on Atelier Registry</span>
+            <span>Keep this record with your invoice and care guidance</span>
           </div>
 
           <button

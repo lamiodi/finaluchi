@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { 
-  CheckCircle2, ShieldCheck, QrCode, Sparkles, Package, 
-  Scissors, Truck, UserCheck, Search, Lock 
+  CheckCircle2, QrCode, Sparkles, Package,
+  Scissors, Truck, UserCheck, Search, Lock, MessageCircle
 } from 'lucide-react';
 import { useOrderStore } from '../../stores/orderStore';
 import { useAudioStore } from '../../stores/audioStore';
 import { formatKoboToNgn } from '../../utils/formatters';
 import { CertificateModal } from './CertificateModal';
 import { toast } from 'sonner';
+import { BRAND, buildWhatsAppUrl } from '../../data/brand';
 
 interface OrderTrackerPageProps {
   initialOrderNumber?: string;
@@ -15,25 +16,25 @@ interface OrderTrackerPageProps {
 }
 
 const ATELIER_JOURNEY_STAGES = [
-  { stage: '01', title: 'ORDER CONFIRMED & S2S VERIFIED', desc: 'Paystack transaction reconciled; inventory allocated.', icon: CheckCircle2 },
-  { stage: '02', title: 'MEASUREMENTS VERIFIED', desc: '48 anatomical points calibrated by Master Pattern Maker Adebayo.', icon: UserCheck },
-  { stage: '03', title: 'PATTERN DRAFTING', desc: 'Hand-chalked structural geometry drafted on archival card.', icon: Scissors },
-  { stage: '04', title: 'PRECISION CUTTING & SHEARING', desc: 'Single-layer shearing on hand-polished granite surfaces.', icon: Sparkles },
-  { stage: '05', title: 'MASTER TAILORING & INTERNAL CORSETRY', desc: 'Bench hand-stitching with enclosed French seams & silk filament thread.', icon: Scissors },
-  { stage: '06', title: 'SIGNATURE PACKAGING & NFC PAIRING', desc: 'Steamed, authenticated NFC chip assigned, encased in Champagne Keepsake Box.', icon: Package },
-  { stage: '07', title: 'WHITE-GLOVE DISPATCH', desc: 'Handed to courier for delivery to client.', icon: Truck },
+  { stage: '01', title: 'ORDER REQUEST RECEIVED', desc: 'The order details have been submitted for confirmation.', icon: CheckCircle2 },
+  { stage: '02', title: 'SIZE & MEASUREMENTS CONFIRMED', desc: 'Sizing or custom measurements have been reviewed for the selected piece.', icon: UserCheck },
+  { stage: '03', title: 'DESIGN DETAILS CONFIRMED', desc: 'Colour, fabric, finishing and any approved custom details are aligned.', icon: Sparkles },
+  { stage: '04', title: 'IN PRODUCTION', desc: 'The Finaluchi team is working on the confirmed order.', icon: Scissors },
+  { stage: '05', title: 'FITTING & ADJUSTMENTS', desc: 'Any agreed fitting review or alteration is being completed.', icon: UserCheck },
+  { stage: '06', title: 'FINAL QUALITY CHECK', desc: 'The finished piece is being reviewed for handover.', icon: Package },
+  { stage: '07', title: 'READY FOR COLLECTION OR DELIVERY', desc: 'Collection or delivery is arranged using the confirmed order details.', icon: Truck },
 ];
 
 export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
   initialOrderNumber,
 }) => {
-  const [searchInput, setSearchInput] = useState(initialOrderNumber || 'FC-94820');
+  const [searchInput, setSearchInput] = useState(initialOrderNumber || '');
   const [isCertOpen, setIsCertOpen] = useState(false);
 
   const { orders, getOrderByNumber, getCertificateBySerial } = useOrderStore();
   const { playTactileClick } = useAudioStore();
 
-  const currentOrder = getOrderByNumber(searchInput) || orders[0];
+  const currentOrder = searchInput.trim() ? getOrderByNumber(searchInput.trim()) : undefined;
   const certificate = currentOrder?.certificateSerialNumber
     ? getCertificateBySerial(currentOrder.certificateSerialNumber)
     : undefined;
@@ -54,14 +55,14 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
         <div className="max-w-[1680px] mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-[#C5A880] text-xs font-mono-luxury tracking-widest uppercase font-semibold">
-              <ShieldCheck className="w-4 h-4 text-[#C5A880]" />
-              <span>POST-PURCHASE CRAFT JOURNEY</span>
+              <Package className="w-4 h-4 text-[#C5A880]" />
+              <span>ORDER UPDATES</span>
             </div>
             <h1 className="font-sans-luxury text-3xl sm:text-5xl font-bold tracking-tight text-white uppercase">
-              Atelier Order Tracker
+              Track Your Finaluchi Order
             </h1>
             <p className="text-xs sm:text-sm text-white/70 font-light max-w-lg leading-relaxed">
-              Follow the living creation of your haute couture garment inside our Lagos flagship workshop.
+              Enter the order number issued for your purchase. If you have not received one, contact the Abuja team on WhatsApp.
             </p>
           </div>
 
@@ -99,7 +100,7 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-black/10">
                 <div>
                   <span className="text-[10px] font-mono-luxury text-[#C5A880] uppercase tracking-widest block mb-1 font-semibold">
-                    AUTHENTICATED CLIENT ORDER
+                    ORDER DETAILS
                   </span>
                   <h2 className="font-sans-luxury text-2xl sm:text-3xl font-bold text-[#000000] uppercase tracking-tight">
                     ORDER #{currentOrder.orderNumber}
@@ -119,7 +120,7 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
               {/* 7 Stages Stepper */}
               <div className="space-y-6">
                 <span className="text-xs font-semibold tracking-loose-couture uppercase text-black block">
-                  ATELIER WORKSHOP LIFECYCLE:
+                  ORDER PROGRESS:
                 </span>
 
                 <div className="relative pl-6 space-y-8 before:absolute before:left-2.5 before:top-3 before:bottom-3 before:w-0.5 before:bg-black/10">
@@ -158,7 +159,7 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
                             </span>
                             {isCurrent && (
                               <span className="px-2 py-0.5 bg-[#000000] text-white text-[9px] font-mono-luxury tracking-couture rounded-none uppercase">
-                                IN PROGRESS (ATELIER BENCH 03)
+                                CURRENT STAGE
                               </span>
                             )}
                           </div>
@@ -179,7 +180,7 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 text-[#C5A880] text-xs font-semibold tracking-couture uppercase">
                       <QrCode className="w-4 h-4" />
-                      <span>SERIALIZED DIGITAL CERTIFICATE OF AUTHENTICITY</span>
+                    <span>ORDER RECORD</span>
                     </div>
                     <p className="text-xs text-white/80 font-mono-luxury">
                       Serial: {certificate.serialNumber} • Registered to {certificate.registeredOwner}
@@ -242,8 +243,8 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
                     <span>{formatKoboToNgn(currentOrder.subtotalKobo)}</span>
                   </div>
                   <div className="flex justify-between text-muted">
-                    <span>Packaging ({currentOrder.packagingType}):</span>
-                    <span>Complimentary</span>
+                    <span>Packaging:</span>
+                    <span>{currentOrder.packagingType.replace(/_/g, ' ')}</span>
                   </div>
                   <div className="flex justify-between text-muted">
                     <span>Shipping:</span>
@@ -254,7 +255,7 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
                     <span>{formatKoboToNgn(currentOrder.taxKobo)}</span>
                   </div>
                   <div className="flex justify-between text-sm font-bold text-black pt-2 border-t border-black/10">
-                    <span>Total Paid (NGN):</span>
+                    <span>Order Total (NGN):</span>
                     <span>{formatKoboToNgn(currentOrder.totalKobo)}</span>
                   </div>
                 </div>
@@ -275,7 +276,7 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
 
                 <div className="p-3 bg-[#FAFAFA] border border-black/10 rounded-none text-[11px] font-mono-luxury text-muted flex items-center gap-2">
                   <Lock className="w-3.5 h-3.5 text-[#C5A880]" />
-                  <span>Paystack Ref: {currentOrder.gatewayReference || 'FC_PSTK_VERIFIED'}</span>
+                  <span>Payment status: {currentOrder.paymentStatus.replace(/_/g, ' ')}</span>
                 </div>
               </div>
 
@@ -284,7 +285,25 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
           </div>
 
         </div>
-      ) : null}
+      ) : (
+        <div className="max-w-2xl mx-auto px-4 sm:px-8 py-20 text-center space-y-5">
+          <Package className="w-10 h-10 text-[#C5A880] mx-auto" />
+          <div className="space-y-2">
+            <h2 className="font-sans-luxury text-2xl sm:text-3xl font-bold uppercase">Enter your order number</h2>
+            <p className="text-xs sm:text-sm text-black/60 leading-relaxed">
+              Order information appears only after a matching reference is entered. Need help finding yours?
+            </p>
+          </div>
+          <a
+            href={buildWhatsAppUrl('Hello Finaluchi Couture, I need help finding or tracking my order number.')}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white text-xs font-bold tracking-widest uppercase hover:bg-neutral-800 transition-colors"
+          >
+            <MessageCircle className="w-4 h-4" /> WhatsApp {BRAND.whatsappDisplay}
+          </a>
+        </div>
+      )}
 
       {/* Digital Certificate Modal */}
       {certificate && (

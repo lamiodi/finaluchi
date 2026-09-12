@@ -15,7 +15,7 @@ interface CheckoutModalProps {
 }
 
 const NIGERIAN_STATES = [
-  'Lagos', 'Abuja FCT', 'Rivers', 'Oyo', 'Anambra', 'Delta', 'Enugu', 'Kano',
+  'FCT (Abuja)', 'Lagos', 'Rivers', 'Oyo', 'Anambra', 'Delta', 'Enugu', 'Kano',
   'Kaduna', 'Ogun', 'Edo', 'Akwa Ibom', 'Imo', 'Abia', 'Cross River',
   'Ondo', 'Osun', 'Ekiti', 'Kwara', 'Plateau', 'Bayelsa', 'Benue', 'Borno',
   'Bauchi', 'Gombe', 'Jigawa', 'Kebbi', 'Kogi', 'Katsina', 'Nasarawa', 'Niger',
@@ -60,7 +60,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [state, setState] = useState('Lagos');
+  const [state, setState] = useState('FCT (Abuja)');
   const [city, setCity] = useState('');
   const [addressLine1, setAddressLine1] = useState('');
   const [postalCode, setPostalCode] = useState('');
@@ -105,7 +105,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     const newOrder = createOrder(shippingAddress, packagingType, isGift, giftMessage);
     
     // Trigger Paystack Gateway Modal
-    onPaymentInitiated(newOrder.id, total, email);
+    onPaymentInitiated(newOrder.orderNumber, total, email);
   };
 
   return (
@@ -117,10 +117,10 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
           <div>
             <div className="flex items-center gap-2 text-[#C5A880] text-xs font-mono-luxury tracking-widest uppercase">
               <Lock className="w-3.5 h-3.5" />
-              <span>FINALUCHI GUEST CHECKOUT • PAYSTACK VERIFIED</span>
+              <span>FINALUCHI CHECKOUT • PRICES CHARGED IN NGN</span>
             </div>
             <h2 className="font-sans-luxury text-2xl sm:text-3xl font-bold tracking-tight text-white uppercase mt-1">
-              Delivery & White-Glove Dispatch
+              Delivery Details
             </h2>
           </div>
 
@@ -153,7 +153,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     onClick={() => {
                       playTactileClick();
                       setCountry('NG');
-                      setState('Lagos');
+                      setState('FCT (Abuja)');
                     }}
                     className={`py-3 px-4 text-xs font-semibold tracking-wider uppercase border transition-all ${
                       country === 'NG'
@@ -161,7 +161,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                         : 'bg-[#FFFFFF] text-black/70 border-black/15 hover:border-[#000000]'
                     }`}
                   >
-                    🇳🇬 NIGERIA (LOCAL ATELIER)
+                    NIGERIA DELIVERY
                   </button>
 
                   <button
@@ -177,7 +177,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                         : 'bg-[#FFFFFF] text-black/70 border-black/15 hover:border-[#000000]'
                     }`}
                   >
-                    🌍 REST OF THE WORLD (DDU)
+                    INTERNATIONAL DELIVERY
                   </button>
                 </div>
               </div>
@@ -283,7 +283,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     <label className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">Town / City / Area *</label>
                     <input
                       type="text"
-                      placeholder={country === 'NG' ? 'e.g. Ikoyi / Victoria Island' : 'City name'}
+                      placeholder={country === 'NG' ? 'e.g. Maitama / Gwarinpa' : 'City name'}
                       required
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
@@ -343,7 +343,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 <div className="p-4 bg-amber-500/10 border border-amber-500/30 flex items-start gap-2.5 text-xs text-black/80">
                   <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                   <p className="text-[11px] leading-relaxed">
-                    <strong>Customs & Import Duties (DDU):</strong> International shipments are dispatched Delivered Duty Unpaid. Local customs clearance, import tariffs, and local VAT are the recipient's responsibility upon delivery.
+                    <strong>International order:</strong> Confirm destination availability, courier cost, delivery timeline, customs responsibilities and return terms before payment.
                   </p>
                 </div>
               )}
@@ -427,7 +427,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 </button>
 
                 <p className="text-[10px] text-center text-black/60 font-mono-luxury">
-                  🔒 Encrypted S2S Gateway • Instant Payment Confirmation
+                  Review the final amount, delivery timeline and order terms before authorising payment.
                 </p>
               </div>
 

@@ -24,7 +24,7 @@ export const Preloader: React.FC = () => {
         className="h-16 sm:h-20 w-auto invert brightness-200"
       />
       <span className="text-[10px] font-mono-luxury tracking-[0.35em] text-[#C5A880] uppercase font-semibold">
-        FINALUCHI COUTURE • LAGOS
+        FINALUCHI COUTURE • ABUJA
       </span>
       <div className="w-20 h-px bg-white/20 overflow-hidden">
         <div

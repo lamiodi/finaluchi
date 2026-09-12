@@ -31,12 +31,12 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
   const slides: HeroSlide[] = [
     {
       id: 'look-01',
-      collectionCode: '26/27',
-      season: 'AUTUMN-WINTER',
+      collectionCode: 'FLC OCCASION',
+      season: 'EVENT DRESSING',
       category: 'DINNER DRESSES & GOWNS',
-      lookTitle: 'Haute Soirée Emerald Silk Gown',
-      fabricPurity: '100% Mulberry Silk Satin (28-Momme)',
-      craftsmanship: 'Sculpted Peplum & Cascading Waterfall Train',
+      lookTitle: 'Statement Evening Gown',
+      fabricPurity: 'A sculpted silhouette for high-impact entrances',
+      craftsmanship: 'Corset structure, dramatic volume and a sweeping train',
       imageUrl: '/images/fc_haute_soiree_gown.jpg',
       objectPositionDesktop: 'center 6%',
       objectPositionMobile: 'center 4%',
@@ -45,12 +45,12 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
     },
     {
       id: 'look-02',
-      collectionCode: 'VOL. 04',
-      season: 'ROYAL INDIGO & EMERALD',
+      collectionCode: 'FLC TAILORING',
+      season: 'COORDINATED SETS',
       category: '2PIECES, 3PIECES & JACKETS',
-      lookTitle: 'Double-Faced Wool Crepe 3-Piece Suit',
-      fabricPurity: 'Super 140s Virgin Wool Crepe',
-      craftsmanship: '48-Point Anatomical Silhouette & Tailored Vest',
+      lookTitle: 'Three-Piece Tailored Set',
+      fabricPurity: 'A complete look with styling flexibility',
+      craftsmanship: 'Defined shoulders, a tailored waist and wide-leg balance',
       imageUrl: '/images/fc_luxury_threepiece.jpg',
       objectPositionDesktop: 'center 5%',
       objectPositionMobile: 'center 3%',
@@ -59,12 +59,12 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
     },
     {
       id: 'look-03',
-      collectionCode: 'ATELIER',
-      season: 'HAUTE COUTURE',
+      collectionCode: 'TOGETHER BY FLC',
+      season: 'COLLECTION PIECES',
       category: 'KIMONO, JUMPSUITS & SILKS',
-      lookTitle: 'Imperial Gold-Embroidered Silk Kimono',
-      fabricPurity: 'Heavyweight Silk Satin with Gold Thread',
-      craftsmanship: 'Hand-Gilded Flora Motif & Flowing Sleeves',
+      lookTitle: 'Embellished Kimono Layer',
+      fabricPurity: 'An expressive layer for day-to-evening dressing',
+      craftsmanship: 'Flowing sleeves, a defined waist and statement detail',
       imageUrl: '/images/fc_luxury_kimono.jpg',
       objectPositionDesktop: 'center 6%',
       objectPositionMobile: 'center 4%',
@@ -73,12 +73,12 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
     },
     {
       id: 'look-04',
-      collectionCode: 'SOLSTICE',
-      season: 'RESORT COUTURE',
+      collectionCode: 'FLC READY-TO-WEAR',
+      season: 'OCCASION EDIT',
       category: 'ASYMMETRIC SILK DRAPES',
-      lookTitle: 'Liquid Bronze Draped Cape Gown',
-      fabricPurity: 'Liquid Lame Silk & Pleated Chiffon',
-      craftsmanship: 'One-Shoulder Pleated Cape & Floor-Sweeping Drape',
+      lookTitle: 'Asymmetric Draped Gown',
+      fabricPurity: 'Fluid occasion dressing with a bold point of view',
+      craftsmanship: 'One-shoulder movement and a floor-sweeping finish',
       imageUrl: '/images/fc_asymmetric_silk_dress.jpg',
       objectPositionDesktop: 'center 6%',
       objectPositionMobile: 'center 3%',
@@ -87,12 +87,12 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
     },
     {
       id: 'look-05',
-      collectionCode: 'EDITION 01',
-      season: 'CEREMONIAL SILKS',
+      collectionCode: 'FLC BRIDALS',
+      season: 'BRIDAL COLLECTIONS',
       category: 'CAPE GOWNS & CORSETRY',
-      lookTitle: 'Sunstone Silk Organza Winged Ballgown',
-      fabricPurity: 'Layered Silk Organza & Internal Boned Corset',
-      craftsmanship: 'Dual Dramatic Winged Capes with Sunburst Drape',
+      lookTitle: 'Sculpted Bridal Ballgown',
+      fabricPurity: 'Traditional and white-wedding dressing with presence',
+      craftsmanship: 'Structured corsetry, dimensional layers and a dramatic cape',
       imageUrl: '/images/fc_organza_cape_gown.jpg',
       objectPositionDesktop: 'center 8%',
       objectPositionMobile: 'center 5%',
@@ -191,7 +191,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
 
           <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/95 text-[11px] font-mono-luxury uppercase tracking-widest">
             <ShieldCheck className="w-3.5 h-3.5 text-champagne" />
-            <span>48-Point Anatomical Cut</span>
+            <span>Designed in Abuja, Nigeria</span>
           </div>
         </div>
 
@@ -209,8 +209,8 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
 
             {/* Main Headline */}
             <h1 className="font-sans-luxury text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white uppercase leading-[0.92] drop-shadow-md">
-              NEW<br />
-              COLLECTION
+              DRESS<br />
+              THE MOMENT
             </h1>
 
             {/* Active Garment Spotlight Card */}
@@ -235,7 +235,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
                 }}
                 className="px-7 sm:px-9 py-3.5 bg-white text-black text-xs font-bold tracking-loose-couture rounded-xs uppercase hover:bg-black hover:text-white hover:border hover:border-white transition-all btn-luxury shadow-2xl flex items-center gap-2"
               >
-                <span>Shop Collection</span>
+                <span>Shop Women&apos;s Collection</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
 
@@ -247,7 +247,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
                   }}
                   className="px-6 sm:px-8 py-3.5 bg-black/60 backdrop-blur-md text-white text-xs font-semibold tracking-loose-couture rounded-xs uppercase hover:bg-white hover:text-black border border-white/35 transition-all btn-luxury"
                 >
-                  Explore Atelier
+                  Start a Custom Order
                 </button>
               )}
             </div>
@@ -356,4 +356,3 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
     </section>
   );
 };
-

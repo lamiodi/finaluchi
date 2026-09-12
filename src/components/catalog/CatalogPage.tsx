@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { SlidersHorizontal, ArrowUpDown, Check, Heart, X } from 'lucide-react';
-import { OccasionType, Product, ATELIER_CATEGORIES } from '../../types';
-import { getDepartmentById } from '../../data/categoryContent';
+import { OccasionType, Product } from '../../types';
+import { CATEGORY_DEPARTMENTS, getDepartmentById } from '../../data/categoryContent';
 import { useCurrencyStore } from '../../stores/currencyStore';
 import { useWishlistStore } from '../../stores/wishlistStore';
 import { useAudioStore } from '../../stores/audioStore';
@@ -95,7 +95,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-black/10 text-left mt-4 bg-[#FAFAFA] p-4 border border-black/10">
                 <div className="space-y-0.5">
                   <span className="text-[9px] font-mono-luxury text-black/50 uppercase tracking-widest block font-medium">
-                    Signature Fabric
+                    Design Details
                   </span>
                   <p className="text-xs font-sans-luxury text-black font-semibold leading-tight">
                     {activeDept.fabricProvenance}
@@ -103,7 +103,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
                 </div>
                 <div className="space-y-0.5">
                   <span className="text-[9px] font-mono-luxury text-black/50 uppercase tracking-widest block font-medium">
-                    Anatomical Draft
+                    Fit Approach
                   </span>
                   <p className="text-xs font-sans-luxury text-black font-semibold leading-tight">
                     {activeDept.anatomicalFit}
@@ -111,7 +111,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
                 </div>
                 <div className="space-y-0.5">
                   <span className="text-[9px] font-mono-luxury text-black/50 uppercase tracking-widest block font-medium">
-                    Couture Standard
+                    Best For
                   </span>
                   <p className="text-xs font-sans-luxury text-black font-semibold leading-tight">
                     {activeDept.conversionHighlight}
@@ -122,18 +122,18 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
           ) : (
             <div className="space-y-3 max-w-3xl">
               <h1 className="font-sans-luxury text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#000000] uppercase">
-                HAUTE COUTURE ARCHIVE{' '}
+                SHOP WOMEN&apos;S COLLECTION{' '}
                 <span className="text-xl sm:text-2xl font-mono-luxury text-black/40 font-light">
                   [{filteredProducts.length}]
                 </span>
               </h1>
               <p className="text-xs sm:text-sm text-black/70 max-w-2xl font-light leading-relaxed mx-auto">
-                13 singular couture departments crafted from virgin wool, pure mulberry silk, and hand-woven ancestral textiles. Hand-drafted to 48 anatomical points inside our Lagos atelier.
+                Explore Finaluchi Couture&apos;s 13 product categories across ready-to-wear, statement tailoring and occasion dressing. For custom work, share your event date and measurements with the Abuja team.
               </p>
               <div className="flex flex-wrap items-center justify-center gap-4 text-[10px] font-mono-luxury text-black/60 pt-2 uppercase tracking-widest">
-                <span>· 100% Lagos Atelier Handcrafted</span>
-                <span>· Complimentary Bespoke Custom Sizing</span>
-                <span>· Insured Worldwide Express</span>
+                <span>· Designed in Abuja</span>
+                <span>· Ready-to-Wear & Custom Options</span>
+                <span>· WhatsApp Order Support</span>
               </div>
             </div>
           )}
@@ -158,7 +158,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
             >
               All [{getItemCount('ALL')}]
             </button>
-            {ATELIER_CATEGORIES.map((cat) => {
+            {CATEGORY_DEPARTMENTS.map((cat) => {
               const count = getItemCount(cat.id);
               return (
                 <button
@@ -257,7 +257,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
             {/* Occasion Filter */}
             <div className="space-y-3">
               <span className="text-[10px] font-mono-luxury text-[#C5A880] uppercase tracking-[0.2em] font-semibold block">
-                OCCASION CURATION
+                SHOP BY OCCASION
               </span>
               <div className="flex flex-wrap gap-2 text-xs">
                 {['ALL', 'WEDDING', 'GALA_BLACK_TIE', 'PRIVATE_DINNER', 'VACATION', 'RED_CARPET'].map((occ) => (
@@ -282,7 +282,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
             {/* Color Family Filter */}
             <div className="space-y-3">
               <span className="text-[10px] font-mono-luxury text-[#C5A880] uppercase tracking-[0.2em] font-semibold block">
-                FABRIC PALETTE
+                COLOUR PALETTE
               </span>
               <div className="flex flex-wrap gap-2 text-xs">
                 {['ALL', 'NEUTRALS_MINERAL', 'IMPERIAL_JEWEL', 'METALLIC_SATIN', 'SAVANNA_SOLSTICE'].map((fam) => (
@@ -331,7 +331,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
         
         {filteredProducts.length === 0 ? (
           <div className="py-24 text-center space-y-4">
-            <h3 className="font-sans-luxury text-2xl sm:text-3xl text-[#000000] uppercase font-semibold">No pieces match this filter criteria.</h3>
+            <h3 className="font-sans-luxury text-2xl sm:text-3xl text-[#000000] uppercase font-semibold">No pieces match these filters.</h3>
             <p className="text-xs sm:text-sm text-black/60 font-light max-w-md mx-auto">Try selecting a different occasion or resetting your color palette filters to view our full collection.</p>
             <button
               onClick={() => {

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { X, MessageSquare, Mail, Phone, MapPin, Send, Clock, Sparkles, CheckCircle2 } from 'lucide-react';
+import { X, MessageSquare, Phone, MapPin, Send, Clock, Sparkles, CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAudioStore } from '../../stores/audioStore';
+import { BRAND, buildWhatsAppUrl } from '../../data/brand';
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -19,7 +20,6 @@ export const ContactModal: React.FC<ContactModalProps> = ({
   const [phone, setPhone] = useState('');
   const [subject, setSubject] = useState('BESPOKE_INQUIRY');
   const [message, setMessage] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSent, setIsSent] = useState(false);
 
   const { playTactileClick, playSuccessChime } = useAudioStore();
@@ -28,20 +28,25 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !email || !message) {
+    if (!name || !message) {
       toast.error('Please complete all required fields.');
       return;
     }
 
-    setIsSubmitting(true);
     playTactileClick();
+    const inquiry = [
+      'Hello Finaluchi Couture, I would like to make an inquiry.',
+      `Name: ${name}`,
+      phone ? `Phone: ${phone}` : '',
+      email ? `Email: ${email}` : '',
+      `Subject: ${subject.replace(/_/g, ' ')}`,
+      `Message: ${message}`,
+    ].filter(Boolean).join('\n');
 
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSent(true);
-      playSuccessChime();
-      toast.success('Your message has been received by the Private Client Concierge. We will reply within 4 business hours.');
-    }, 600);
+    window.open(buildWhatsAppUrl(inquiry), '_blank', 'noopener,noreferrer');
+    setIsSent(true);
+    playSuccessChime();
+    toast.success('WhatsApp opened with your inquiry ready to send.');
   };
 
   const handleReset = () => {
@@ -55,8 +60,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 
   const handleWhatsAppDirect = () => {
     playTactileClick();
-    const text = encodeURIComponent('Hello Finaluchi Couture Concierge, I would like to inquire about a couture piece / bespoke consultation.');
-    window.open(`https://wa.me/2348035550192?text=${text}`, '_blank');
+    window.open(buildWhatsAppUrl('Hello Finaluchi Couture, I would like help with a piece or custom order.'), '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -68,10 +72,10 @@ export const ContactModal: React.FC<ContactModalProps> = ({
           <div>
             <div className="flex items-center gap-2 text-[#C5A880] text-xs font-mono-luxury tracking-loose-couture uppercase">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>PRIVATE CLIENT CONCIERGE</span>
+              <span>FINALUCHI ORDER SUPPORT</span>
             </div>
             <h2 className="font-sans-luxury text-xl sm:text-2xl font-bold tracking-tight text-white uppercase mt-0.5">
-              Contact Finaluchi Atelier
+              Let&apos;s Plan Your Look
             </h2>
           </div>
 
@@ -102,21 +106,21 @@ export const ContactModal: React.FC<ContactModalProps> = ({
               </div>
               <div>
                 <div className="text-xs font-bold uppercase tracking-tight">Direct WhatsApp Line</div>
-                <div className="text-[11px] text-emerald-800 font-mono-luxury">+234 803 555 0192</div>
+                <div className="text-[11px] text-emerald-800 font-mono-luxury">{BRAND.whatsappDisplay}</div>
               </div>
             </button>
 
             <a
-              href="mailto:flc.finaluchi@gmail.com"
+              href={`tel:+${BRAND.whatsappNumber}`}
               onClick={() => playTactileClick()}
               className="p-3.5 bg-noir/5 border border-noir/15 hover:border-noir/40 hover:bg-noir/10 text-noir rounded-xs flex items-center gap-3 transition-all text-left group"
             >
               <div className="w-9 h-9 rounded-full bg-noir text-white flex items-center justify-center shrink-0 shadow-xs">
-                <Mail className="w-4 h-4 text-[#C5A880]" />
+                <Phone className="w-4 h-4 text-[#C5A880]" />
               </div>
               <div>
-                <div className="text-xs font-bold uppercase tracking-tight">Email Concierge Desk</div>
-                <div className="text-[11px] text-noir/70 font-mono-luxury">flc.finaluchi@gmail.com</div>
+                <div className="text-xs font-bold uppercase tracking-tight">Call the Business Line</div>
+                <div className="text-[11px] text-noir/70 font-mono-luxury">{BRAND.whatsappDisplay}</div>
               </div>
             </a>
           </div>
@@ -125,9 +129,9 @@ export const ContactModal: React.FC<ContactModalProps> = ({
           {isSent ? (
             <div className="p-6 bg-white border border-champagne/40 rounded-xs text-center space-y-3 animate-in zoom-in-95">
               <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" />
-              <h3 className="text-base font-bold uppercase text-noir tracking-tight">Message Dispatched</h3>
+              <h3 className="text-base font-bold uppercase text-noir tracking-tight">Ready to Send on WhatsApp</h3>
               <p className="text-xs text-noir/70 max-w-md mx-auto leading-relaxed">
-                Thank you, <span className="font-semibold text-noir">{name}</span>. Your private inquiry has been assigned to our senior atelier concierge. We have sent a confirmation copy to <span className="font-mono-luxury font-medium">{email}</span>.
+                Thank you, <span className="font-semibold text-noir">{name}</span>. Complete the final send in WhatsApp so the Finaluchi team can receive your request.
               </p>
               <div className="pt-2 flex justify-center gap-3">
                 <button
@@ -170,11 +174,10 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 
                 <div>
                   <label className="text-[10px] font-mono-luxury text-muted uppercase block mb-1">
-                    Email Address *
+                    Email Address (Optional)
                   </label>
                   <input
                     type="email"
-                    required
                     placeholder="client@domain.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -206,11 +209,12 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                     onChange={(e) => setSubject(e.target.value)}
                     className="w-full p-2.5 bg-white border border-border rounded-xs text-xs focus:outline-none focus:border-noir"
                   >
-                    <option value="BESPOKE_INQUIRY">Bespoke 1-of-1 Commission</option>
-                    <option value="ORDER_SUPPORT">Order Tracking & Sizing</option>
-                    <option value="PRESS_MEDIA">Editorial & Press Loan</option>
-                    <option value="PRIVATE_APPOINTMENT">Private Fitting Consultation</option>
-                    <option value="OTHER">General Inquiries</option>
+                    <option value="BESPOKE_INQUIRY">Custom / Bespoke Order</option>
+                    <option value="ASOEBI_EVENT">Asoebi or Event Dress</option>
+                    <option value="BRIDAL">Traditional or White Wedding</option>
+                    <option value="READY_TO_WEAR">Ready-to-Wear Piece</option>
+                    <option value="MENSWEAR">FLC Men</option>
+                    <option value="ORDER_SUPPORT">Existing Order Support</option>
                   </select>
                 </div>
               </div>
@@ -222,7 +226,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                 <textarea
                   required
                   rows={3}
-                  placeholder="Describe your desired garment, event date, measurements, or questions for the atelier..."
+                  placeholder="Tell us the piece or occasion, your event date, preferred size or measurements, and any custom details..."
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   className="w-full p-2.5 bg-white border border-border rounded-xs text-xs focus:outline-none focus:border-noir resize-none"
@@ -231,11 +235,10 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 
               <button
                 type="submit"
-                disabled={isSubmitting}
                 className="w-full py-3 bg-noir text-white text-xs font-bold tracking-loose-couture uppercase hover:bg-neutral-800 transition-all btn-luxury rounded-xs flex items-center justify-center gap-2 shadow-md disabled:opacity-50"
               >
                 <Send className="w-3.5 h-3.5 text-[#C5A880]" />
-                <span>{isSubmitting ? 'DISPATCHING TO CONCIERGE...' : 'TRANSMIT TO PRIVATE CONCIERGE'}</span>
+                <span>CONTINUE ON WHATSAPP</span>
               </button>
             </form>
           )}
@@ -244,7 +247,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
           <div className="pt-3 border-t border-border/70 space-y-3">
             <div className="flex items-center justify-between">
               <div className="text-[10px] font-mono-luxury text-[#A67C4A] uppercase tracking-widest font-semibold">
-                FLAGSHIP ATELIER LOCATIONS & HOURS
+                VISIT & COLLECTION INFORMATION
               </div>
               {onOpenAppointments && (
                 <button
@@ -255,7 +258,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                   }}
                   className="text-[11px] font-sans-luxury font-semibold text-noir hover:text-[#C5A880] uppercase tracking-wider underline underline-offset-2"
                 >
-                  Book Private Fitting ⟶
+                  Request a Consultation ⟶
                 </button>
               )}
             </div>
@@ -265,37 +268,37 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                 <div className="font-bold text-noir flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
                     <MapPin className="w-3.5 h-3.5 text-[#C5A880]" />
-                    <span>Lagos Flagship Atelier</span>
+                    <span>Abuja, Nigeria</span>
                   </div>
-                  <a href="tel:+2348035550192" className="text-[10px] text-muted hover:text-noir flex items-center gap-0.5 font-mono-luxury">
+                  <a href={`tel:+${BRAND.whatsappNumber}`} className="text-[10px] text-muted hover:text-noir flex items-center gap-0.5 font-mono-luxury">
                     <Phone className="w-2.5 h-2.5" /> Call
                   </a>
                 </div>
                 <p className="text-[11px] text-muted leading-relaxed">
-                  Plot 12, Victoria Island Arts Corridor, Lagos, Nigeria
+                  Studio address and fitting availability are confirmed directly when your appointment is arranged.
                 </p>
                 <div className="flex items-center gap-1 text-[10px] text-muted font-mono-luxury pt-1">
                   <Clock className="w-3 h-3" />
-                  <span>Mon – Sat: 10:00 – 19:00 WAT</span>
+                  <span>Contact the team to confirm a suitable time.</span>
                 </div>
               </div>
 
               <div className="space-y-1 p-3 bg-white border border-border/50 rounded-xs">
                 <div className="font-bold text-noir flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-[#C5A880]" />
-                    <span>London Private Suite</span>
+                    <MessageSquare className="w-3.5 h-3.5 text-[#C5A880]" />
+                    <span>Instagram Collections</span>
                   </div>
-                  <a href="tel:+442079460912" className="text-[10px] text-muted hover:text-noir flex items-center gap-0.5 font-mono-luxury">
-                    <Phone className="w-2.5 h-2.5" /> Call
+                  <a href={BRAND.instagramUrl} target="_blank" rel="noreferrer" className="text-[10px] text-muted hover:text-noir font-mono-luxury">
+                    Open
                   </a>
                 </div>
                 <p className="text-[11px] text-muted leading-relaxed">
-                  Old Bond Street, Mayfair, London W1S (By Private Invitation)
+                  Follow {BRAND.instagramHandle}, @flcbridals, @flcmen and @togetherbyflc for current work.
                 </p>
                 <div className="flex items-center gap-1 text-[10px] text-muted font-mono-luxury pt-1">
                   <Clock className="w-3 h-3" />
-                  <span>Tue – Sat: 11:00 – 18:00 GMT</span>
+                  <span>Availability and timelines are confirmed per order.</span>
                 </div>
               </div>
             </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { 
-  User, Sparkles, Calendar, Lock, QrCode, 
+  User, Sparkles, Calendar, QrCode,
   Trash2, Plus, Share2 
 } from 'lucide-react';
 import { Product } from '../../types';
@@ -33,20 +33,6 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
 
   const activeCert = selectedCertSerial ? getCertificateBySerial(selectedCertSerial) : null;
 
-  // Mock encrypted anatomical passport data (Blueprint Section 9.2)
-  const measurements = {
-    bustCm: 88,
-    waistCm: 68,
-    highHipCm: 90,
-    fullHipCm: 96,
-    shoulderWidthCm: 39,
-    napeToWaistCm: 41,
-    inseamCm: 82,
-    armLengthCm: 59,
-    lastCalibratedDate: '2026-06-14',
-    leadArtisan: 'Master Tailor Adebayo',
-  };
-
   const handleShareEdit = (editId: string) => {
     playTactileClick();
     const url = getShareableLink(editId);
@@ -63,13 +49,13 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-[#C5A880] text-xs font-mono-luxury tracking-[0.25em] uppercase font-semibold">
               <User className="w-4 h-4 text-[#C5A880]" />
-              <span>FINALUCHI PRIVATE CLIENT SUITE</span>
+              <span>YOUR FINALUCHI</span>
             </div>
             <h1 className="font-sans-luxury text-3xl sm:text-5xl font-bold tracking-tight text-white uppercase">
-              Client Suite & Digital Wardrobe
+              Saved Pieces & Order Requests
             </h1>
             <p className="text-xs text-white/70 font-light max-w-lg leading-relaxed">
-              Manage your authenticated couture wardrobe, bespoke anatomical measurements passport, and curated capsule edits.
+              Keep favourite looks together, review order records and request a consultation for your next occasion.
             </p>
           </div>
 
@@ -81,7 +67,7 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
             className="w-full md:w-auto px-7 py-3.5 bg-white text-black text-xs font-bold tracking-[0.2em] uppercase hover:bg-neutral-200 transition-all rounded-none flex items-center justify-center gap-2 shrink-0 border border-white"
           >
             <Calendar className="w-4 h-4" />
-            <span>BOOK PRIVATE ATELIER FITTING</span>
+            <span>REQUEST A CUSTOM ORDER</span>
           </button>
         </div>
       </div>
@@ -91,10 +77,10 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
         {/* Navigation Tabs */}
         <div className="flex items-center gap-2 border-b border-black/10 pb-4 mb-8 overflow-x-auto text-xs font-semibold tracking-couture uppercase">
           {[
-            { id: 'WARDROBE', label: `Digital Wardrobe (${certificates.length})` },
-            { id: 'EDITS', label: `My Curated Edits (${savedEdits.length})` },
-            { id: 'PASSPORT', label: 'Bespoke Fit Passport' },
-            { id: 'APPOINTMENTS', label: `Atelier Fittings (${appointments.length})` },
+            { id: 'WARDROBE', label: `Order Records (${certificates.length})` },
+            { id: 'EDITS', label: `Saved Pieces (${savedEdits.length})` },
+            { id: 'PASSPORT', label: 'Measurement Help' },
+            { id: 'APPOINTMENTS', label: `Consultation Requests (${appointments.length})` },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -119,10 +105,10 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="font-sans-luxury text-xl font-bold text-black uppercase tracking-tight">
-                  Authenticated Wardrobe Archive
+                  Your Order Records
                 </h3>
                 <p className="text-xs text-muted font-light">
-                  Garments registered under your name with cryptographic provenance and care certificates.
+                  Saved details for completed website orders appear here.
                 </p>
               </div>
             </div>
@@ -130,8 +116,8 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
             {certificates.length === 0 ? (
               <div className="py-16 text-center bg-[#FAFAFA] border border-black/10 rounded-none space-y-2">
                 <Sparkles className="w-8 h-8 text-[#C5A880] mx-auto" />
-                <h4 className="font-sans-luxury text-base font-semibold uppercase tracking-wide">No Registered Pieces Yet</h4>
-                <p className="text-xs text-muted">Complete an order to generate your first Digital Certificate of Authenticity.</p>
+                <h4 className="font-sans-luxury text-base font-semibold uppercase tracking-wide">No Order Records Yet</h4>
+                <p className="text-xs text-muted">When a website order is completed, its reference and selected details can appear here.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -165,7 +151,7 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
                         className="px-3.5 py-2 bg-[#000000] text-white text-xs font-semibold tracking-couture uppercase rounded-none hover:bg-neutral-800 transition-colors flex items-center gap-1.5"
                       >
                         <QrCode className="w-3.5 h-3.5" />
-                        <span>VIEW CERTIFICATE</span>
+                        <span>VIEW ORDER RECORD</span>
                       </button>
                     </div>
                   </div>
@@ -181,10 +167,10 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="font-sans-luxury text-xl font-bold text-black uppercase tracking-tight">
-                  Curated Capsule Edits
+                  Saved Finaluchi Pieces
                 </h3>
                 <p className="text-xs text-muted font-light">
-                  Custom collections organized for weddings, galas, vacations, or seasonal planning.
+                  Group looks for weddings, celebrations, holidays or future wardrobe plans.
                 </p>
               </div>
 
@@ -199,7 +185,7 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
                 className="px-4 py-2.5 bg-[#000000] text-white text-xs font-semibold tracking-couture uppercase rounded-none hover:bg-neutral-800 transition-colors flex items-center gap-1.5"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>CREATE NEW CAPSULE</span>
+                <span>CREATE A LIST</span>
               </button>
             </div>
 
@@ -277,68 +263,22 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
           </div>
         )}
 
-        {/* Tab Content: FIT PASSPORT (Encrypted Measurements) */}
+        {/* Tab Content: measurement guidance */}
         {activeTab === 'PASSPORT' && (
           <div className="bg-[#FFFFFF] border border-black/10 p-6 sm:p-8 rounded-none space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-black/10 pb-4">
-              <div>
-                <div className="flex items-center gap-2 text-[#C5A880] text-xs font-mono-luxury tracking-[0.25em] uppercase font-semibold">
-                  <Lock className="w-4 h-4 text-[#C5A880]" />
-                  <span>256-BIT ENCRYPTED ANATOMICAL PROFILE</span>
-                </div>
-                <h3 className="font-sans-luxury text-2xl font-bold text-black uppercase tracking-tight">
-                  Bespoke Measurements Passport
-                </h3>
-              </div>
-
-              <span className="text-xs font-mono-luxury text-muted">
-                Calibrated by {measurements.leadArtisan} on {measurements.lastCalibratedDate}
-              </span>
-            </div>
-
-            <p className="text-xs text-muted font-light leading-relaxed max-w-2xl">
-              These verified measurements are used to draft individual paper patterns for all Made-to-Measure orders, ensuring sovereign balance without restriction.
-            </p>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono-luxury">
-              <div className="p-4 bg-[#FAFAFA] border border-black/10 rounded-none">
-                <span className="text-[10px] text-muted uppercase block">Bust Circumference</span>
-                <span className="text-lg font-bold text-black">{measurements.bustCm} cm</span>
-              </div>
-              <div className="p-4 bg-[#FAFAFA] border border-black/10 rounded-none">
-                <span className="text-[10px] text-muted uppercase block">Natural Waist</span>
-                <span className="text-lg font-bold text-black">{measurements.waistCm} cm</span>
-              </div>
-              <div className="p-4 bg-[#FAFAFA] border border-black/10 rounded-none">
-                <span className="text-[10px] text-muted uppercase block">High Hip</span>
-                <span className="text-lg font-bold text-black">{measurements.highHipCm} cm</span>
-              </div>
-              <div className="p-4 bg-[#FAFAFA] border border-black/10 rounded-none">
-                <span className="text-[10px] text-muted uppercase block">Full Hip</span>
-                <span className="text-lg font-bold text-black">{measurements.fullHipCm} cm</span>
-              </div>
-              <div className="p-4 bg-[#FAFAFA] border border-black/10 rounded-none">
-                <span className="text-[10px] text-muted uppercase block">Shoulder Width</span>
-                <span className="text-lg font-bold text-black">{measurements.shoulderWidthCm} cm</span>
-              </div>
-              <div className="p-4 bg-[#FAFAFA] border border-black/10 rounded-none">
-                <span className="text-[10px] text-muted uppercase block">Nape to Waist</span>
-                <span className="text-lg font-bold text-black">{measurements.napeToWaistCm} cm</span>
-              </div>
-              <div className="p-4 bg-[#FAFAFA] border border-black/10 rounded-none">
-                <span className="text-[10px] text-muted uppercase block">Inseam</span>
-                <span className="text-lg font-bold text-black">{measurements.inseamCm} cm</span>
-              </div>
-              <div className="p-4 bg-[#FAFAFA] border border-black/10 rounded-none">
-                <span className="text-[10px] text-muted uppercase block">Arm Length</span>
-                <span className="text-lg font-bold text-black">{measurements.armLengthCm} cm</span>
-              </div>
+            <div className="border-b border-black/10 pb-4 space-y-2">
+              <h3 className="font-sans-luxury text-2xl font-bold text-black uppercase tracking-tight">
+                Confirm Your Measurements
+              </h3>
+              <p className="text-xs text-muted font-light leading-relaxed max-w-2xl">
+                For fitted, corseted, tailored and bridal pieces, ask the Finaluchi team for the measurement method required for your selected design. Do not rely on an old size or estimate.
+              </p>
             </div>
 
             <div className="p-6 bg-[#000000] text-white rounded-none flex flex-col sm:flex-row items-center justify-between gap-4 border border-white/15">
               <div className="text-xs space-y-1">
-                <div className="font-semibold text-[#C5A880] uppercase tracking-couture">Need to Recalibrate?</div>
-                <div className="text-white/80 font-light">Book an in-person fitting session at our Lagos Flagship or schedule a virtual video measurement.</div>
+                <div className="font-semibold text-[#C5A880] uppercase tracking-couture">Need Fit Guidance?</div>
+                <div className="text-white/80 font-light">Request an Abuja fitting or a remote measurement consultation. The time and location are confirmed directly by the team.</div>
               </div>
               <button
                 onClick={() => {
@@ -347,7 +287,7 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
                 }}
                 className="px-5 py-2.5 bg-white text-black text-xs font-bold tracking-couture uppercase rounded-none hover:bg-neutral-200 transition-colors whitespace-nowrap"
               >
-                REQUEST RE-MEASUREMENT
+                REQUEST MEASUREMENT HELP
               </button>
             </div>
           </div>
@@ -359,10 +299,10 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="font-sans-luxury text-xl font-bold text-black uppercase tracking-tight">
-                  Private Atelier Appointments
+                  Consultation Requests
                 </h3>
                 <p className="text-xs text-muted font-light">
-                  Scheduled private fittings, consultations, and VIP previews.
+                  Fitting and custom-order requests created from this website.
                 </p>
               </div>
 
@@ -374,7 +314,7 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
                 className="px-4 py-2.5 bg-[#000000] text-white text-xs font-semibold tracking-couture uppercase rounded-none hover:bg-neutral-800 transition-colors flex items-center gap-1.5"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>BOOK NEW SESSION</span>
+                <span>REQUEST A SESSION</span>
               </button>
             </div>
 
@@ -394,7 +334,7 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
                       {apt.date} at {apt.timeSlot}
                     </h4>
                     <p className="text-xs text-muted font-mono-luxury">
-                      Artisan: {apt.assignedArtisan || 'Master Tailor Adebayo'} • Location: {apt.location || 'Finaluchi Flagship Atelier, Lagos'}
+                      Contact: {apt.assignedArtisan || 'To be confirmed'} • Location: {apt.location || 'To be confirmed by Finaluchi'}
                     </p>
                     {apt.notes && (
                       <p className="text-xs text-black/80 italic pt-1">

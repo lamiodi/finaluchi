@@ -59,16 +59,16 @@ export const PromoModal: React.FC<PromoModalProps> = ({ isOpen, onClose, onExplo
         </div>
 
         <span className="text-[10px] font-mono-luxury text-[#C5A880] uppercase tracking-[0.3em] font-semibold text-center block mb-1">
-          LAGOS FLAGSHIP SALON
+          FINALUCHI COUTURE · ABUJA
         </span>
 
         <h3 className="font-sans-luxury text-2xl font-bold tracking-tight text-[#000000] uppercase text-center leading-tight">
-          Private Client Preview
+          Find Your Occasion Look
         </h3>
 
         <p className="text-xs sm:text-sm text-black/70 font-light text-center mt-3 leading-relaxed">
-          Welcome to the FINALUCHI digital flagship. Join the private client list for priority access
-          to limited atelier drops and invitation-only runway presentations.
+          Explore women&apos;s ready-to-wear and couture, or speak with the team about an asoebi,
+          bridal or made-for-your-event piece.
         </p>
 
         <button
@@ -79,7 +79,7 @@ export const PromoModal: React.FC<PromoModalProps> = ({ isOpen, onClose, onExplo
         </button>
 
         <p className="text-[10px] text-black/50 font-mono-luxury uppercase tracking-widest text-center mt-4">
-          Complimentary white-glove dispatch on all couture orders
+          Confirm availability, delivery date and order terms before payment
         </p>
       </div>
     </div>

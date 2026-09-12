@@ -42,7 +42,7 @@ const SCALE: Partial<Record<number, number>> = {
 const s = (i: number) => SCALE[i] ?? 1;
 
 // array order = stack order, back (z 2) -> front (z 9)
-export const DEFAULT_CARDS: StackSpreadCard[] = [
+const DEFAULT_CARDS: StackSpreadCard[] = [
   // top-left stripes (img08) — sm row 1 left
   {
     item: { src: IMG.stripes, alt: "Colour stripes" },
@@ -122,8 +122,8 @@ export const DEFAULT_CARDS: StackSpreadCard[] = [
 // ---------------------------------------------------------------------------
 
 // Scroll progress where the cluster starts scattering and where it finishes.
-const SCATTER_START = 0.12;
-const SCATTER_END = 0.9;
+const SCATTER_START = 0.06;
+const SCATTER_END = 0.88;
 
 const PARALLAX_X = 2.6;
 const PARALLAX_Y = 2.2;
@@ -141,24 +141,30 @@ const RESPONSIVE = {
     card: null as { w: number; h: number } | null,
   },
   small: {
-    scale: 0.72,
+    scale: 0.75,
     small: true,
-    colX: 22,
-    card: { w: 40, h: 20 },
+    colX: 23,
+    card: { w: 38, h: 26 },
   },
 };
 
 function useResponsive() {
   const [r, setR] = useState(RESPONSIVE.desktop);
   useEffect(() => {
-    // Touch vs. mouse, not raw width: a narrow but mouse-driven frame (21st
-    // preview, split editor) keeps the desktop scatter + pointer parallax;
-    // only real touch devices drop to the stacked column layout.
+    const update = () => {
+      const isTouchOrNarrow =
+        window.matchMedia("(pointer: coarse)").matches ||
+        window.innerWidth < 1024;
+      setR(isTouchOrNarrow ? RESPONSIVE.small : RESPONSIVE.desktop);
+    };
+    update();
+    window.addEventListener("resize", update);
     const mq = window.matchMedia("(pointer: coarse)");
-    const read = () => setR(mq.matches ? RESPONSIVE.small : RESPONSIVE.desktop);
-    read();
-    mq.addEventListener("change", read);
-    return () => mq.removeEventListener("change", read);
+    mq.addEventListener("change", update);
+    return () => {
+      window.removeEventListener("resize", update);
+      mq.removeEventListener("change", update);
+    };
   }, []);
   return r;
 }

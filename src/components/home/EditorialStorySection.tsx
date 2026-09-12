@@ -9,6 +9,7 @@ interface EditorialStorySectionProps {
 
 export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
   onExploreCollection,
+  onExploreAtelier,
   onNavigatePillar,
 }) => {
   const { playTactileClick } = useAudioStore();
@@ -29,7 +30,7 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
         {/* Section Header — clean line, no decoration */}
         <div className="flex items-end justify-between mb-12 sm:mb-16">
           <h2 className="font-sans text-[11px] sm:text-xs font-semibold tracking-[0.2em] text-noir uppercase">
-            New Collections
+            Made for celebrations
           </h2>
 
           <button
@@ -39,7 +40,7 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
             }}
             className="text-[11px] sm:text-xs font-sans font-medium tracking-[0.15em] text-noir/50 hover:text-noir transition-colors uppercase"
           >
-            View All
+            Shop All
           </button>
         </div>
 
@@ -66,18 +67,18 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
             {/* Story */}
             <div className="max-w-sm space-y-5">
               <p className="font-sans text-sm sm:text-[15px] text-noir leading-[1.7] font-normal">
-                A stoical elegance, you might call it. Black asymmetric dresses blowing voluminously in the sovereign wind.
+                Finaluchi Couture is an Abuja-based Nigerian fashion brand creating women&apos;s couture and ready-to-wear for the moments that matter.
               </p>
               <p className="font-sans text-xs sm:text-[13px] text-noir/45 leading-[1.75] font-normal">
-                Oversized hybrids of ceremonial regalia and padded outerwear; double-faced wool crepe jackets and liquid mulberry silks tailored singularly on granite tables.
+                Explore asoebi, event dresses, traditional and white-wedding looks, plus bold collection pieces shaped with corsets, embellishment, sculpted silhouettes, dramatic sleeves and trains.
               </p>
 
               {/* Category Links — quiet, understated */}
               <div className="pt-4 flex flex-wrap gap-x-5 gap-y-2">
                 {[
-                  { label: 'Gala Gowns', pillar: 'DINNER_DRESSES' },
-                  { label: 'Pagoda Jackets', pillar: 'JACKETS' },
-                  { label: 'Palazzo Pants', pillar: 'PANTS' },
+                  { label: 'Event Dresses', pillar: 'DINNER_DRESSES' },
+                  { label: 'Tailored Jackets', pillar: 'JACKETS' },
+                  { label: 'Pants & Palazzo', pillar: 'PANTS' },
                 ].map(({ label, pillar }) => (
                   <button
                     key={pillar}
@@ -89,14 +90,20 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
                 ))}
               </div>
 
-              {/* Testimonial — stripped to essence */}
+              {/* Public creative direction */}
               <div className="pt-6 mt-2 border-t border-black/[0.06]">
-                <p className="text-[13px] italic text-noir/70 leading-relaxed font-light">
-                  "The drape of the mulberry silk is peerless."
+                <p className="text-[13px] text-noir/70 leading-relaxed font-light">
+                  Creative direction by Oluchi Irokanulo, publicly listed as Finaluchi Couture&apos;s Fashion Director and Creative Designer since 2017.
                 </p>
-                <span className="text-[10px] font-sans text-noir/30 uppercase tracking-[0.15em] block mt-2">
-                  Private Client, Lagos
-                </span>
+                <button
+                  onClick={() => {
+                    playTactileClick();
+                    onExploreAtelier();
+                  }}
+                  className="mt-4 text-[10px] sm:text-[11px] font-sans font-semibold tracking-[0.15em] text-noir hover:text-[#A67C4A] transition-colors uppercase underline underline-offset-4"
+                >
+                  Plan a custom look
+                </button>
               </div>
             </div>
 

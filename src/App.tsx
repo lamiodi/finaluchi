@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Toaster } from 'sonner';
 import { MASTER_CATALOG } from './data/catalog';
 import { OccasionType, Product } from './types';
-import { useCartStore } from './stores/cartStore';
 import { useWishlistStore } from './stores/wishlistStore';
 
 // Common Components
@@ -10,11 +9,10 @@ import { AnnouncementBar } from './components/common/AnnouncementBar';
 import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
 import { SearchModal } from './components/common/SearchModal';
-import { Preloader } from './components/common/Preloader';
-import { PromoModal } from './components/common/PromoModal';
 
 // Homepage Components
 import { CampaignHero } from './components/home/CampaignHero';
+import { BrandWorlds } from './components/home/BrandWorlds';
 import { ReadyToWearGrid } from './components/home/ReadyToWearGrid';
 import { EditorialStorySection } from './components/home/EditorialStorySection';
 import { SeparatesShowcase } from './components/home/SeparatesShowcase';
@@ -43,7 +41,7 @@ export const App: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [catalogPillar, setCatalogPillar] = useState<string>('ALL');
   const [catalogOccasion, setCatalogOccasion] = useState<OccasionType | undefined>(undefined);
-  const [trackerOrderNumber, setTrackerOrderNumber] = useState<string>('FC-94820');
+  const [trackerOrderNumber, setTrackerOrderNumber] = useState<string>('');
 
   // Modal States
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
@@ -53,14 +51,12 @@ export const App: React.FC = () => {
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState<boolean>(false);
   const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
   const [isAboutOpen, setIsAboutOpen] = useState<boolean>(false);
-  const [isPromoOpen, setIsPromoOpen] = useState<boolean>(false);
 
   // Paystack checkout transaction context
   const [pendingPaymentOrderId, setPendingPaymentOrderId] = useState<string>('');
   const [pendingPaymentTotalKobo, setPendingPaymentTotalKobo] = useState<number>(0);
   const [pendingPaymentEmail, setPendingPaymentEmail] = useState<string>('');
 
-  const { clearCart } = useCartStore();
   const { savedEdits } = useWishlistStore();
 
   const totalSavedCount = savedEdits.reduce((acc, e) => acc + e.productIds.length, 0);
@@ -69,12 +65,6 @@ export const App: React.FC = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentView, selectedProduct]);
-
-  // Open promo once on initial home visit
-  useEffect(() => {
-    const t = setTimeout(() => setIsPromoOpen(true), 2000);
-    return () => clearTimeout(t);
-  }, []);
 
   // Handlers
   const handleSelectProduct = (product: Product) => {
@@ -94,13 +84,6 @@ export const App: React.FC = () => {
     setPendingPaymentEmail(customerEmail);
     setIsCheckoutOpen(false);
     setIsPaystackOpen(true);
-  };
-
-  const handlePaymentSuccess = (orderNumber: string) => {
-    setIsPaystackOpen(false);
-    clearCart();
-    setTrackerOrderNumber(orderNumber);
-    setCurrentView('TRACKER');
   };
 
   const handleFooterNavigate = (view: string, payload?: any) => {
@@ -158,7 +141,6 @@ export const App: React.FC = () => {
           onOpenSearch={() => setIsSearchOpen(true)}
           onOpenRunway={() => setIsRunwayOpen(true)}
           onOpenClientPortal={() => setCurrentView('CLIENT')}
-          onOpenAdmin={() => setCurrentView('ADMIN')}
           onOpenAppointments={() => setIsAppointmentModalOpen(true)}
           onOpenContact={() => setIsContactOpen(true)}
           onOpenAbout={() => setIsAboutOpen(true)}
@@ -167,7 +149,7 @@ export const App: React.FC = () => {
       </div>
 
       {/* Dynamic Viewport Stage */}
-      <main className="flex-1 overflow-x-hidden w-full max-w-full">
+      <main className="flex-1 overflow-x-clip w-full max-w-full">
         
         {/* VIEW 1: BALENCIAGA LUXURY EDITORIAL HOMEPAGE */}
         {currentView === 'HOME' && (
@@ -179,6 +161,8 @@ export const App: React.FC = () => {
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
             />
+
+            <BrandWorlds />
 
             <OccasionEditsBar onSelectCategory={handleNavigatePillar} onSelectOccasion={handleNavigatePillar} />
 
@@ -228,6 +212,7 @@ export const App: React.FC = () => {
               product={selectedProduct}
               allProducts={MASTER_CATALOG}
               onSelectProduct={handleSelectProduct}
+              onBackToCatalog={() => handleNavigatePillar(selectedProduct.pillar)}
               onBookAppointment={() => setIsAppointmentModalOpen(true)}
             />
           </div>
@@ -271,16 +256,6 @@ export const App: React.FC = () => {
         onOpenAbout={() => setIsAboutOpen(true)}
       />
 
-      {/* Preloader (Home only) */}
-      {currentView === 'HOME' && <Preloader />}
-
-      {/* Promo Modal (Home only) */}
-      <PromoModal
-        isOpen={isPromoOpen}
-        onClose={() => setIsPromoOpen(false)}
-        onExploreCollection={() => handleNavigatePillar('ALL')}
-      />
-
       {/* Slide-over Cart Drawer */}
       <CartDrawer
         onProceedToCheckout={() => setIsCheckoutOpen(true)}
@@ -304,7 +279,6 @@ export const App: React.FC = () => {
         orderId={pendingPaymentOrderId}
         totalKobo={pendingPaymentTotalKobo}
         customerEmail={pendingPaymentEmail}
-        onSuccess={handlePaymentSuccess}
       />
 
       {/* Runway Mode Catwalk Modal */}
