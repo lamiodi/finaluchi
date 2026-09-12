@@ -426,6 +426,14 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   <span>PAY WITH PAYSTACK • {formatKoboToNgn(total)}</span>
                 </button>
 
+                <div className="p-3 bg-[#FAFAFA] border border-black/10 text-[10px] text-black/75 font-mono-luxury space-y-1">
+                  <div className="flex items-center gap-1.5 font-bold text-black uppercase">
+                    <Lock className="w-3 h-3 text-[#C5A880]" />
+                    <span>Traceable Business Transaction:</span>
+                  </div>
+                  <p>All payments are securely handled through Paystack to our verified business entity. An itemized digital invoice and order tracking number are generated upon authorization.</p>
+                </div>
+
                 <p className="text-[10px] text-center text-black/60 font-mono-luxury">
                   Review the final amount, delivery timeline and order terms before authorising payment.
                 </p>

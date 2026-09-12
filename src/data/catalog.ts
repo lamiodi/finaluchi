@@ -11,7 +11,7 @@ export const MASTER_PRODUCTS: Product[] = [
     categoryName: 'Pants',
     headline: 'High-waisted tailored palazzo trousers with knife pleats in pure ivory fluid silk crepe.',
     description: 'Precision-cut tailoring designed to lengthen and contour. Sculpted from heavy 320 GSM double-faced silk crepe with a continuous seamless waistband and sweeping floor-skimming volume.',
-    atelierNotes: 'Tailored over 24 bench hours in the Lagos atelier with hand-blindstitched hems and silk pocket lining.',
+    atelierNotes: 'Tailored over 24 bench hours in our Abuja atelier with hand-blindstitched hems and silk pocket lining.',
     basePriceKobo: 22000000, // ₦220,000
     availability: 'AVAILABLE',
     occasions: ['PRIVATE_DINNER', 'COCKTAIL_SOIREE', 'WEDDING'],
@@ -70,7 +70,7 @@ export const MASTER_PRODUCTS: Product[] = [
     categoryName: 'Jumpsuits',
     headline: 'Asymmetric one-shoulder jumpsuit with gilded hand-embroidered cuff and wide-leg drape.',
     description: 'An commanding statement of contemporary majesty. Built with an internal corset bodice that transitions into a sweeping wide-leg trouser silhouette in Royal Sapphire Blue.',
-    atelierNotes: 'Sleeve cuff features 18k gold bullion metallic thread hand-embroidered by master artisans in Lagos.',
+    atelierNotes: 'Sleeve cuff features 18k gold bullion metallic thread hand-embroidered by master artisans in our Abuja atelier.',
     basePriceKobo: 36000000, // ₦360,000
     availability: 'AVAILABLE',
     occasions: ['GALA_BLACK_TIE', 'RED_CARPET', 'PRIVATE_DINNER'],
@@ -306,7 +306,7 @@ export const MASTER_PRODUCTS: Product[] = [
     categoryName: '2pieces',
     headline: 'Matched two-piece ensemble combining structured off-shoulder bustier with sunburst accordion maxi skirt.',
     description: 'An iconic two-piece couture ensemble in Dusk Carmine. The boned bodice offers structured definition while the sweeping micro-pleated skirt provides breathtaking kinetic volume.',
-    atelierNotes: 'Hand-pleated in Lagos using custom accordion molds. Requires 38 hours of artisan handcrafting.',
+    atelierNotes: 'Hand-pleated in our Abuja atelier using custom accordion molds. Requires 38 hours of artisan handcrafting.',
     basePriceKobo: 26000000, // ₦260,000
     availability: 'AVAILABLE',
     occasions: ['COCKTAIL_SOIREE', 'PRIVATE_DINNER', 'WEDDING'],
@@ -484,7 +484,7 @@ export const MASTER_PRODUCTS: Product[] = [
     categoryName: 'Skirts',
     headline: 'High-waisted knife-pleated floor-sweeping maxi skirt with concealed silk waistband.',
     description: 'An ode to dynamic motion. Cut from 8 meters of hand-pleated silk georgette that expands dramatically with every stride, finished with an invisible side zipper and silk slip.',
-    atelierNotes: 'Pleated by master artisans in Lagos using traditional heated molds.',
+    atelierNotes: 'Pleated by master artisans in our Abuja atelier using traditional heated molds.',
     basePriceKobo: 19500000, // ₦195,000
     availability: 'AVAILABLE',
     occasions: ['COCKTAIL_SOIREE', 'PRIVATE_DINNER', 'WEDDING'],
@@ -658,7 +658,7 @@ export const MASTER_PRODUCTS: Product[] = [
     categoryName: 'Jackets',
     headline: 'High-waisted peplum jacket with architectural pagoda shoulders in Yoruba Indigo wool crepe.',
     description: 'Precision tailoring distilled into pure sovereign form. Double-faced wool crepe with padded architectural pagoda shoulders and razor-sharp waist suppression, creating a commanding hourglass architecture.',
-    atelierNotes: 'Tailored over 36 craft hours in Lagos. Includes custom hand-cast horn buttons and silk-bound interior seams.',
+    atelierNotes: 'Tailored over 36 craft hours in our Abuja atelier. Includes custom hand-cast horn buttons and silk-bound interior seams.',
     basePriceKobo: 31000000, // ₦310,000
     availability: 'AVAILABLE',
     occasions: ['PRIVATE_DINNER', 'COCKTAIL_SOIREE', 'WEDDING'],
@@ -717,7 +717,7 @@ export const MASTER_PRODUCTS: Product[] = [
     categoryName: 'Dinner dresses',
     headline: 'Hand-draped pure mulberry silk with architectural waist contouring and liquid train in Benin Malachite.',
     description: 'A monument to modern African couture. Crafted from heavy 280 GSM mulberry silk satin, this gown balances a sharp sculptural neckline with an uninterrupted fluid drape that responds to the cadence of the wearer.',
-    atelierNotes: 'Constructed over 42 bench hours in the Lagos atelier. Features internal horsehair canvasing and hand-finished French seams.',
+    atelierNotes: 'Constructed over 42 bench hours in our Abuja atelier. Features internal horsehair canvasing and hand-finished French seams.',
     basePriceKobo: 38000000, // ₦380,000
     availability: 'ATELIER_EDITION',
     limitedEditionTotal: 25,

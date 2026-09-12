@@ -213,21 +213,15 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
               THE MOMENT
             </h1>
 
-            {/* Active Garment Spotlight Card */}
-            <div className="max-w-md p-4 rounded-xs bg-black/80 backdrop-blur-md border border-white/20 text-white space-y-1.5 shadow-2xl">
-              <div className="text-xs sm:text-sm font-sans-luxury font-semibold text-white tracking-wide flex items-center justify-between">
-                <span>{slide.lookTitle}</span>
-                <span className="text-[10px] font-mono-luxury text-champagne uppercase tracking-widest font-semibold">
-                  Look 0{currentSlide + 1}
-                </span>
-              </div>
-              <p className="text-[11px] sm:text-xs text-white/85 font-light leading-relaxed">
-                {slide.fabricPurity} — {slide.craftsmanship}.
+            {/* Minimalist Editorial Caption */}
+            <div className="space-y-1 max-w-lg">
+              <p className="text-xs sm:text-sm font-light text-white/85 leading-relaxed font-sans-luxury">
+                <span className="font-semibold text-white uppercase tracking-wider">{slide.lookTitle}</span> — {slide.craftsmanship}.
               </p>
             </div>
 
             {/* CTAs */}
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-1">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-2">
               <button
                 onClick={() => {
                   playTactileClick();
@@ -235,7 +229,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
                 }}
                 className="px-7 sm:px-9 py-3.5 bg-white text-black text-xs font-bold tracking-loose-couture rounded-xs uppercase hover:bg-black hover:text-white hover:border hover:border-white transition-all btn-luxury shadow-2xl flex items-center gap-2"
               >
-                <span>Shop Women&apos;s Collection</span>
+                <span>Shop Collection</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
 
@@ -245,48 +239,42 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
                     playTactileClick();
                     onExploreAtelier();
                   }}
-                  className="px-6 sm:px-8 py-3.5 bg-black/60 backdrop-blur-md text-white text-xs font-semibold tracking-loose-couture rounded-xs uppercase hover:bg-white hover:text-black border border-white/35 transition-all btn-luxury"
+                  className="px-6 sm:px-8 py-3.5 bg-black/50 backdrop-blur-md text-white text-xs font-semibold tracking-loose-couture rounded-xs uppercase hover:bg-white hover:text-black border border-white/30 transition-all btn-luxury"
                 >
-                  Start a Custom Order
+                  Custom Order
                 </button>
               )}
             </div>
           </div>
 
-          {/* Right Column: Collection Specs + Look Navigator & Interactive Thumbnails */}
-          <div className="lg:col-span-5 flex flex-col items-end text-right space-y-4 sm:space-y-5 ml-auto w-full max-w-sm sm:max-w-none">
+          {/* Right Column: Minimalist Look Controls */}
+          <div className="lg:col-span-5 flex flex-col items-end text-right space-y-4 ml-auto w-full max-w-sm sm:max-w-none">
             
-            {/* VOL. 04 / ROYAL INDIGO / 2PIECES, 3PIECES & JACKETS Spec Block
-                Moved to the bottom by 20% (translate-y-[20%]) and strictly right-aligned on mobile & desktop */}
-            <div className="w-full flex flex-col items-end text-right translate-y-[20%] mb-4 sm:mb-6">
-              <div className="p-3 sm:p-4 rounded-xs bg-noir/65 backdrop-blur-md border border-white/20 text-right space-y-1 shadow-xl inline-block max-w-[280px] sm:max-w-none">
-                <div className="font-sans-luxury text-2xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-none drop-shadow-md">
-                  {slide.collectionCode}
-                </div>
-                <div className="text-[10px] sm:text-xs font-mono-luxury tracking-loose-couture text-champagne uppercase font-semibold drop-shadow-sm pt-0.5">
-                  {slide.season}
-                </div>
-                <div className="text-[9px] sm:text-[11px] font-sans-luxury tracking-loose-couture text-white/85 uppercase drop-shadow-sm">
-                  {slide.category}
-                </div>
+            {/* Minimal Look Title & Season Indicator */}
+            <div className="hidden sm:block text-right space-y-0.5">
+              <span className="text-[10px] font-mono-luxury tracking-widest text-[#DFC7AA] uppercase font-semibold">
+                {slide.collectionCode}
+              </span>
+              <div className="text-sm font-sans-luxury font-bold text-white uppercase tracking-wider">
+                {slide.season}
               </div>
             </div>
 
             {/* Slide Arrows & Progress Counter */}
-            <div className="flex items-center gap-3 justify-end w-full pt-2">
+            <div className="flex items-center gap-3 justify-end w-full">
               <button
                 onClick={() => {
                   playTactileClick();
                   prevSlide();
                 }}
-                className="p-2.5 rounded-full bg-noir/60 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-noir transition-all shadow-md"
+                className="p-2 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-black transition-all"
                 aria-label="Previous couture look"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
 
-              <span className="text-xs font-mono-luxury tracking-widest text-white/90 font-medium">
-                0{currentSlide + 1} <span className="text-white/40">/</span> 0{slides.length}
+              <span className="text-xs font-mono-luxury tracking-widest text-white font-medium">
+                0{currentSlide + 1} <span className="text-white/30">/</span> 0{slides.length}
               </span>
 
               <button
@@ -294,15 +282,15 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
                   playTactileClick();
                   nextSlide();
                 }}
-                className="p-2.5 rounded-full bg-noir/60 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-noir transition-all shadow-md"
+                className="p-2 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-black transition-all"
                 aria-label="Next couture look"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Interactive Thumbnail Strip */}
-            <div className="flex items-center justify-end gap-2 p-2 rounded-xs bg-noir/60 backdrop-blur-md border border-white/15 shadow-xl overflow-x-auto max-w-full">
+            {/* Sleek Minimalist Thumbnails */}
+            <div className="flex items-center justify-end gap-2 p-1.5 rounded-xs bg-black/40 backdrop-blur-md border border-white/10 shadow-lg">
               {slides.map((s, idx) => (
                 <button
                   key={`thumb-${s.id}`}
@@ -310,21 +298,18 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
                     playTactileClick();
                     setCurrentSlide(idx);
                   }}
-                  className={`relative w-12 h-16 sm:w-14 sm:h-20 rounded-xs overflow-hidden transition-all duration-300 flex-shrink-0 group ${
+                  className={`relative w-10 h-14 sm:w-12 sm:h-16 rounded-xs overflow-hidden transition-all duration-300 flex-shrink-0 group ${
                     idx === currentSlide
-                      ? 'ring-2 ring-champagne scale-105 shadow-md'
-                      : 'opacity-60 hover:opacity-100'
+                      ? 'ring-1.5 ring-white scale-105 shadow-md'
+                      : 'opacity-50 hover:opacity-100'
                   }`}
                   aria-label={`Select ${s.lookTitle}`}
                 >
                   <img
                     src={s.imageUrl}
                     alt={s.lookTitle}
-                    className="w-full h-full object-cover object-top brightness-[1.02]"
+                    className="w-full h-full object-cover object-top"
                   />
-                  {idx === currentSlide && (
-                    <div className="absolute inset-x-0 bottom-0 h-1 bg-champagne" />
-                  )}
                 </button>
               ))}
             </div>

@@ -240,6 +240,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                 <Send className="w-3.5 h-3.5 text-[#C5A880]" />
                 <span>CONTINUE ON WHATSAPP</span>
               </button>
+
+              <div className="p-3 bg-[#FAFAFA] border border-black/10 rounded-xs text-[10px] font-mono-luxury text-black/75 space-y-1">
+                <span className="font-bold text-black uppercase block">Client Confidence Standard:</span>
+                <p>Every bespoke commission is backed by a written invoice, confirmed delivery date, measurement sign-off, and traceable business payments.</p>
+              </div>
             </form>
           )}
 

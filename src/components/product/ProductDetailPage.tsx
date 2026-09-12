@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Heart, ShoppingBag, Ruler, Sparkles, ChevronDown, ChevronUp, 
-  RotateCw, Share2, Layers, Calendar, MessageCircle
+  RotateCw, Share2, Layers, Calendar, MessageCircle, ShieldCheck, CheckCircle2
 } from 'lucide-react';
 import { Product, ProductColorway } from '../../types';
 import { useCurrencyStore } from '../../stores/currencyStore';
@@ -82,12 +82,18 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const handleWhatsAppInquiry = () => {
     playTactileClick();
     const message = [
-      'Hello Finaluchi Couture, I would like to ask about this piece:',
+      'Hello Finaluchi Couture, I would like to inquire about this piece:',
       product.name,
-      `Colour: ${selectedColorway.color.name}`,
-      `Size: ${isMadeToMeasure ? 'Custom / made to measure' : selectedSize}`,
+      `Colour: ${selectedColorway.color.name} (${selectedColorway.color.code})`,
+      `Size: ${isMadeToMeasure ? 'Custom / Made to Measure' : selectedSize}`,
       `Listed price: ${formatPriceWithDisplay(product.basePriceKobo + (selectedColorway.priceDeltaKobo || 0), displayCurrency)}`,
-      'Please confirm availability, delivery timeline and order terms.',
+      '',
+      'Before proceeding with payment, please confirm:',
+      '1. Itemized written invoice & production schedule',
+      '2. Confirmed delivery date for my location',
+      '3. Measurement confirmation guidance',
+      '4. Alteration allowance & refund policy',
+      '5. Traceable business account details',
     ].join('\n');
     window.open(buildWhatsAppUrl(message), '_blank', 'noopener,noreferrer');
   };
@@ -361,6 +367,39 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               </div>
             </div>
 
+            {/* Buyer Protection & High-Confidence Ordering Protocol */}
+            <div className="p-4 bg-[#FAFAFA] border border-black/15 space-y-2.5">
+              <div className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-[#000000]">
+                <ShieldCheck className="w-4 h-4 text-[#C5A880]" />
+                <span>BUYER PROTECTION & ORDER CLARITY</span>
+              </div>
+              <p className="text-[11px] text-black/70 leading-relaxed font-light">
+                For custom couture and high-value orders, we recommend our 5-point verification standard before payment:
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px] font-mono-luxury text-black/85 pt-1">
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3 h-3 text-[#C5A880] shrink-0" />
+                  Written itemized invoice
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3 h-3 text-[#C5A880] shrink-0" />
+                  Guaranteed delivery date
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3 h-3 text-[#C5A880] shrink-0" />
+                  Measurement sign-off
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3 h-3 text-[#C5A880] shrink-0" />
+                  Clear alteration terms
+                </span>
+                <span className="flex items-center gap-1.5 col-span-1 sm:col-span-2 text-black">
+                  <CheckCircle2 className="w-3 h-3 text-[#C5A880] shrink-0" />
+                  Traceable business account or Paystack payments only
+                </span>
+              </div>
+            </div>
+
             {/* Fabric Intelligence Matrix */}
             <div className="p-5 bg-[#FFFFFF] border border-black/15 space-y-4">
               <div className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-[#000000]">
@@ -443,7 +482,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   onClick={() => toggleAccordion('DETAILS')}
                   className="w-full py-4 flex items-center justify-between font-bold tracking-widest uppercase text-[#000000] hover:text-[#C5A880] transition-colors text-left"
                 >
-                  <span>DESIGN, FIT & DETAILS</span>
+                  <span>DESIGN, FIT & SILHOUETTE</span>
                   {openAccordion === 'DETAILS' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </button>
                 {openAccordion === 'DETAILS' && (
@@ -462,14 +501,16 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   onClick={() => toggleAccordion('SHIPPING')}
                   className="w-full py-4 flex items-center justify-between font-bold tracking-widest uppercase text-[#000000] hover:text-[#C5A880] transition-colors text-left"
                 >
-                  <span>DELIVERY, ALTERATIONS & RETURNS</span>
+                  <span>DELIVERY, ALTERATIONS & REFUND POLICY</span>
                   {openAccordion === 'SHIPPING' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </button>
                 {openAccordion === 'SHIPPING' && (
-                  <div className="pb-4 text-black/75 font-light leading-relaxed space-y-2 animate-in fade-in">
+                  <div className="pb-4 text-black/75 font-light leading-relaxed space-y-2.5 animate-in fade-in">
                     <p>{ORDER_CLARITY_NOTE}</p>
-                    <p><strong>Delivery:</strong> Availability, production time, delivery fees and international shipping options must be confirmed for the selected piece.</p>
-                    <p><strong>Custom orders:</strong> Ask how fittings, alterations, cancellations and refunds apply before production begins.</p>
+                    <p><strong>Itemized Written Invoice:</strong> Every order is backed by an itemized written invoice stating garment specifications, fabric details, confirmed delivery date, and agreed price.</p>
+                    <p><strong>Delivery Timelines:</strong> Production timelines and transit dates are agreed in writing before cutting. Nationwide Nigerian delivery is handled via vetted dispatch/couriers; international orders are fulfilled via express DHL/FedEx.</p>
+                    <p><strong>Fittings & Alterations:</strong> Ready-to-wear pieces may be exchanged within 48 hours in unworn original condition. Custom bespoke garments receive dedicated fitting consultations and complimentary alteration adjustments at our Abuja studio or through guided virtual fitting reviews.</p>
+                    <p><strong>Refund Policy & Traceable Payment:</strong> Once custom fabric cutting and hand-embellishment begin, bespoke commissions are non-refundable as materials are custom-tailored to your measurements. All payments are processed through traceable business accounts or our verified Paystack payment portal.</p>
                   </div>
                 )}
               </div>

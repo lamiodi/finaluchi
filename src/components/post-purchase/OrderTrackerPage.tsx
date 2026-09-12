@@ -31,7 +31,7 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
   const [searchInput, setSearchInput] = useState(initialOrderNumber || '');
   const [isCertOpen, setIsCertOpen] = useState(false);
 
-  const { orders, getOrderByNumber, getCertificateBySerial } = useOrderStore();
+  const { getOrderByNumber, getCertificateBySerial } = useOrderStore();
   const { playTactileClick } = useAudioStore();
 
   const currentOrder = searchInput.trim() ? getOrderByNumber(searchInput.trim()) : undefined;

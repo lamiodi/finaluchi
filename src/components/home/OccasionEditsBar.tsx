@@ -203,10 +203,10 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
               <CheckCircle2 className="w-4 h-4 text-black shrink-0 mt-0.5" />
               <div className="space-y-1">
                 <span className="font-sans-luxury font-bold uppercase tracking-wider text-noir block">
-                  ABUJA-BASED FASHION HOUSE
+                  ORIGINAL ABUJA FASHION HOUSE
                 </span>
                 <p className="text-[11px] text-neutral-600 font-light leading-relaxed">
-                  Finaluchi is a Nigerian design brand creating couture, ready-to-wear and occasion pieces—not simply reselling clothing.
+                  Finaluchi Couture designs and produces original women’s couture, ready-to-wear, asoebi and bridal wear in Abuja, Nigeria—rather than simply reselling clothing.
                 </p>
               </div>
             </div>
@@ -215,10 +215,10 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
               <Compass className="w-4 h-4 text-black shrink-0 mt-0.5" />
               <div className="space-y-1">
                 <span className="font-sans-luxury font-bold uppercase tracking-wider text-noir block">
-                  DESIGNED FOR YOUR MOMENT
+                  GLAMOROUS NIGERIAN OCCASION WEAR
                 </span>
                 <p className="text-[11px] text-neutral-600 font-light leading-relaxed">
-                  For custom orders, share your event date, measurements, preferred silhouette and finishing details before production begins.
+                  Signature sculpted corsetry, hand-laid crystal embellishments, dramatic architectural sleeves and sweeping trains engineered for milestone celebrations.
                 </p>
               </div>
             </div>
@@ -227,10 +227,10 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
               <Sparkles className="w-4 h-4 text-black shrink-0 mt-0.5" />
               <div className="space-y-1">
                 <span className="font-sans-luxury font-bold uppercase tracking-wider text-noir block">
-                  ORDER WITH CLARITY
+                  BUYER PROTECTION PROTOCOL
                 </span>
                 <p className="text-[11px] text-neutral-600 font-light leading-relaxed">
-                  Request a written invoice, confirmed delivery date, alteration terms and return or refund terms before payment.
+                  Request a written invoice, confirmed delivery date, measurement approval, alteration terms and refund policy. Pay securely through traceable business accounts.
                 </p>
               </div>
             </div>

@@ -1,7 +1,15 @@
 import React from 'react';
-import { X, Sparkles, Scissors, Compass, MapPin, Users, MessageCircle } from 'lucide-react';
+import { X, Sparkles, Scissors, Compass, ShieldCheck, CheckCircle2, Award } from 'lucide-react';
 import { useAudioStore } from '../../stores/audioStore';
 import { BRAND } from '../../data/brand';
+
+const InstagramIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </svg>
+);
 
 interface AboutModalProps {
   isOpen: boolean;
@@ -32,7 +40,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({
               <span>FINALUCHI COUTURE · ABUJA</span>
             </div>
             <h2 className="font-sans-luxury text-xl sm:text-2xl font-bold tracking-tight text-white uppercase mt-0.5">
-              Designed for the Moment
+              The Finaluchi Heritage & Vision
             </h2>
           </div>
 
@@ -59,25 +67,25 @@ export const AboutModal: React.FC<AboutModalProps> = ({
               className="w-full h-full object-cover object-[center_35%] brightness-90 contrast-[1.05]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-noir/90 via-noir/30 to-transparent flex flex-col justify-end p-4 sm:p-6 text-white">
-              <span className="text-[10px] font-mono-luxury uppercase tracking-widest text-[#C5A880]">Abuja, Nigeria · Creative direction since 2017</span>
+              <span className="text-[10px] font-mono-luxury uppercase tracking-widest text-[#C5A880]">Abuja, Nigeria · Creative Lead: Oluchi Irokanulo (Since Oct 2017)</span>
               <h3 className="font-sans-luxury text-base sm:text-xl font-bold uppercase tracking-tight text-white mt-0.5">
-                Bold Nigerian Occasion Wear with a Distinct Point of View
+                Bold Nigerian Occasion Wear with an Architectural Silhouette
               </h3>
             </div>
           </div>
 
-          {/* Core Story */}
+          {/* Core Brand Narrative */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs text-noir/80">
             <div className="space-y-3">
               <h4 className="font-bold text-noir uppercase tracking-tight text-sm flex items-center gap-2">
                 <Compass className="w-4 h-4 text-[#A67C4A]" />
-                <span>The Finaluchi Point of View</span>
+                <span>Original Nigerian Occasion Wear</span>
               </h4>
               <p>
-                Finaluchi Couture is an Abuja-based Nigerian fashion brand that designs and produces women&apos;s couture, ready-to-wear, asoebi and event dresses. Its visual signature is bold and glamorous: corsetry, embellishment, sculpted silhouettes, dramatic sleeves and trains.
+                Finaluchi Couture (FLC) is an established Abuja-based fashion house rather than a clothing reseller. We design and hand-tailor women&apos;s haute couture, ready-to-wear, asoebi, event dresses, and both traditional and white wedding gowns.
               </p>
               <p>
-                The wider FLC family also includes bridal collections through @flcbridals, menswear through @flcmen and lifestyle or collection pieces through @togetherbyflc.
+                Our signature aesthetic is unapologetically bold and glamorous: precision corsetry, intricate embellishments, sculpted silhouettes, dramatic sleeves, and sweeping trains built for unforgettable entrance moments.
               </p>
             </div>
 
@@ -87,38 +95,86 @@ export const AboutModal: React.FC<AboutModalProps> = ({
                 <span>Creative Direction</span>
               </h4>
               <p>
-                Oluchi Irokanulo is publicly listed as Fashion Director and Creative Designer at Finaluchi Couture from 2017, connecting the collections through a clear creative voice.
+                Oluchi Irokanulo has served as Fashion Director and Creative Designer at Finaluchi Couture since October 2017, steering the brand&apos;s distinctive structural identity and luxurious drape.
               </p>
               <p>
-                The brand describes itself as “a global fashion brand inspired by the power of togetherness”—an idea reflected across the main line and its specialist collections.
+                Guided by the ethos “a global fashion brand inspired by the power of togetherness,” FLC builds lasting client relationships across Nigeria and the global diaspora.
               </p>
             </div>
           </div>
 
-          {/* Three Pillars of Excellence */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-            <div className="p-4 bg-white border border-border rounded-xs space-y-1.5 shadow-xs">
-              <div className="w-8 h-8 rounded-xs bg-[#000000] text-[#C5A880] flex items-center justify-center">
-                <MapPin className="w-4 h-4" />
-              </div>
-              <div className="font-bold uppercase text-[11px] text-noir tracking-tight">Abuja-Based Design</div>
-              <p className="text-[10px] text-muted leading-relaxed">A Nigerian fashion house creating original occasion, ready-to-wear and custom pieces.</p>
+          {/* Public Track Record & Milestones */}
+          <div className="space-y-3 p-4 sm:p-5 bg-[#FAFAFA] border border-black/10 rounded-xs">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-noir">
+              <Award className="w-4 h-4 text-[#A67C4A]" />
+              <span>Public History & Editorial Features</span>
             </div>
-
-            <div className="p-4 bg-white border border-border rounded-xs space-y-1.5 shadow-xs">
-              <div className="w-8 h-8 rounded-xs bg-[#000000] text-[#C5A880] flex items-center justify-center">
-                <Users className="w-4 h-4" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              <div className="border-l-2 border-[#A67C4A] pl-3 space-y-0.5">
+                <span className="text-[10px] font-mono-luxury font-bold text-black uppercase">BellaNaija AsoEbi Feature (2020)</span>
+                <p className="text-[11px] text-black/70">Celebrated for statement asoebi and grand reception looks with sculptured bustiers.</p>
               </div>
-              <div className="font-bold uppercase text-[11px] text-noir tracking-tight">A Full Occasion Wardrobe</div>
-              <p className="text-[10px] text-muted leading-relaxed">Women&apos;s couture, bridal, menswear and lifestyle collections across the FLC family.</p>
+              <div className="border-l-2 border-[#A67C4A] pl-3 space-y-0.5">
+                <span className="text-[10px] font-mono-luxury font-bold text-black uppercase">Legit.ng Fashion Feature (2022)</span>
+                <p className="text-[11px] text-black/70">Recognised for distinct tailoring cuts, vibrant textiles, and red-carpet glam.</p>
+              </div>
+              <div className="border-l-2 border-[#A67C4A] pl-3 space-y-0.5">
+                <span className="text-[10px] font-mono-luxury font-bold text-black uppercase">Abuja Fairs & Lekki Pop-up</span>
+                <p className="text-[11px] text-black/70">Participated in major Abuja exhibitions and hosted an exclusive Lagos pop-up in Lekki Phase 1.</p>
+              </div>
+              <div className="border-l-2 border-[#A67C4A] pl-3 space-y-0.5">
+                <span className="text-[10px] font-mono-luxury font-bold text-black uppercase">Active Collections (2026)</span>
+                <p className="text-[11px] text-black/70">Active releases and bespoke bridal orders showcased continuously on social and digital channels.</p>
+              </div>
             </div>
+          </div>
 
-            <div className="p-4 bg-white border border-border rounded-xs space-y-1.5 shadow-xs">
-              <div className="w-8 h-8 rounded-xs bg-[#000000] text-[#C5A880] flex items-center justify-center">
-                <MessageCircle className="w-4 h-4" />
-              </div>
-              <div className="font-bold uppercase text-[11px] text-noir tracking-tight">Direct Order Support</div>
-              <p className="text-[10px] text-muted leading-relaxed">Discuss sizing, event dates and custom requirements with the team on WhatsApp.</p>
+          {/* The FLC Brand Family */}
+          <div className="space-y-3">
+            <h4 className="font-bold text-noir uppercase tracking-tight text-sm flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-[#A67C4A]" />
+              <span>The FLC Brand Universes</span>
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+              {BRAND.lines.map((line) => (
+                <a
+                  key={line.handle}
+                  href={line.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="p-3 bg-white border border-black/10 hover:border-black rounded-xs transition-all group block"
+                >
+                  <div className="flex items-center justify-between text-[#A67C4A] mb-1">
+                    <InstagramIcon className="w-3.5 h-3.5" />
+                    <span className="text-[9px] font-mono-luxury uppercase tracking-wider group-hover:text-black">Visit</span>
+                  </div>
+                  <div className="font-bold text-[11px] text-black uppercase">{line.name}</div>
+                  <div className="text-[10px] font-mono-luxury text-black/60">{line.handle}</div>
+                  <p className="text-[10px] text-black/70 mt-1 leading-tight">{line.description}</p>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* 5-Point Buyer Protection & Conversion Protocol */}
+          <div className="p-5 bg-[#000000] text-white border border-white/20 rounded-xs space-y-3 shadow-md">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#C5A880]">
+              <ShieldCheck className="w-4 h-4" />
+              <span>High-Confidence Ordering Protocol</span>
+            </div>
+            <p className="text-[11px] text-white/80 leading-relaxed font-light">
+              To ensure complete transparency and peace of mind before placing your order, we adhere to a 5-point protection standard:
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 text-[11px]">
+              {BRAND.buyerProtectionGuide.map((step) => (
+                <div key={step.step} className="p-2.5 bg-white/5 border border-white/10 rounded-xs space-y-1">
+                  <div className="font-bold text-white flex items-center gap-1.5 uppercase">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#C5A880] shrink-0" />
+                    <span>{step.step}. {step.title}</span>
+                  </div>
+                  <p className="text-[10px] text-white/70 leading-relaxed">{step.detail}</p>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -165,3 +221,4 @@ export const AboutModal: React.FC<AboutModalProps> = ({
     </div>
   );
 };
+

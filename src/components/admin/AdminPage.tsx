@@ -52,7 +52,7 @@ export const AdminPage: React.FC = () => {
               ● S2S Webhook Live
             </span>
             <span className="px-3 py-1 bg-white/10 text-white text-[10px] font-mono-luxury uppercase rounded-none border border-white/20">
-              Lagos Flagship Bench: Active
+              Abuja Flagship Studio: Active
             </span>
           </div>
         </div>
@@ -72,7 +72,7 @@ export const AdminPage: React.FC = () => {
           <div className="bg-[#FFFFFF] p-5 border border-black/10 rounded-none space-y-1">
             <span className="text-[10px] font-mono-luxury text-muted uppercase tracking-wider">Orders in Active Tailoring</span>
             <div className="text-2xl font-bold font-mono-luxury text-black">{activeProductionOrders.length}</div>
-            <span className="text-[10px] text-muted font-mono-luxury">Across 6 Lagos Atelier Benches</span>
+            <span className="text-[10px] text-muted font-mono-luxury">Across Abuja Atelier Benches</span>
           </div>
 
           <div className="bg-[#FFFFFF] p-5 border border-black/10 rounded-none space-y-1">
@@ -248,7 +248,7 @@ export const AdminPage: React.FC = () => {
                     <div className="text-xs text-muted font-mono-luxury">
                       {(apt.appointmentType || apt.serviceType || 'ATELIER_FITTING').replace(/_/g, ' ')} — {apt.date} ({apt.timeSlot})
                     </div>
-                    <div className="text-muted">Location: {apt.location || 'Finaluchi Flagship Atelier, Lagos'}</div>
+                    <div className="text-muted">Location: {apt.location || 'Finaluchi Flagship Studio, Abuja'}</div>
                     {apt.notes && <div className="italic text-black/80">Notes: "{apt.notes}"</div>}
                   </div>
 
