@@ -12,7 +12,6 @@ import { SearchModal } from './components/common/SearchModal';
 
 // Homepage Components
 import { CampaignHero } from './components/home/CampaignHero';
-import { BrandWorlds } from './components/home/BrandWorlds';
 import { ReadyToWearGrid } from './components/home/ReadyToWearGrid';
 import { EditorialStorySection } from './components/home/EditorialStorySection';
 import { SeparatesShowcase } from './components/home/SeparatesShowcase';
@@ -161,8 +160,6 @@ export const App: React.FC = () => {
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
             />
-
-            <BrandWorlds />
 
             <OccasionEditsBar onSelectCategory={handleNavigatePillar} onSelectOccasion={handleNavigatePillar} />
 

@@ -14,6 +14,7 @@ export interface DepartmentCategory {
   conversionHighlight: string;
   startingPriceKobo: number;
   image: string;
+  galleryImages: string[];
   pillarGroup: DepartmentPillarGroup;
   pillarLabel: string;
 }
@@ -32,6 +33,11 @@ export const CATEGORY_DEPARTMENTS: DepartmentCategory[] = [
     conversionHighlight: 'Versatile for black-tie galas, events and modular separates',
     startingPriceKobo: 22000000, // ₦220,000
     image: '/images/fc_luxury_pants.jpg',
+    galleryImages: [
+      '/images/fc_luxury_pants.jpg',
+      '/images/fc_editorial_detail.jpg',
+      '/images/fc_atelier_craft.jpg',
+    ],
     pillarGroup: 'TAILORING',
     pillarLabel: 'Tailoring & Suites',
   },
@@ -47,6 +53,11 @@ export const CATEGORY_DEPARTMENTS: DepartmentCategory[] = [
     conversionHighlight: 'Pairs seamlessly with skirts, palazzo trousers and 3-piece sets',
     startingPriceKobo: 14500000, // ₦145,000
     image: '/images/fc_luxury_shirt.jpg',
+    galleryImages: [
+      '/images/fc_luxury_shirt.jpg',
+      '/images/fc_editorial_detail.jpg',
+      '/images/fc_tailoring_suite.jpg',
+    ],
     pillarGroup: 'TAILORING',
     pillarLabel: 'Tailoring & Suites',
   },
@@ -62,6 +73,11 @@ export const CATEGORY_DEPARTMENTS: DepartmentCategory[] = [
     conversionHighlight: 'Transformative power layering for weddings and evening receptions',
     startingPriceKobo: 29000000, // ₦290,000
     image: '/images/fc_tailoring_suite.jpg',
+    galleryImages: [
+      '/images/fc_tailoring_suite.jpg',
+      '/images/fc_tailored_coat.jpg',
+      '/images/fc_atelier_craft.jpg',
+    ],
     pillarGroup: 'TAILORING',
     pillarLabel: 'Tailoring & Suites',
   },
@@ -77,6 +93,11 @@ export const CATEGORY_DEPARTMENTS: DepartmentCategory[] = [
     conversionHighlight: 'Complete occasion entrance with multiple styling options',
     startingPriceKobo: 31000000, // ₦310,000
     image: '/images/fc_bustier_pleated_skirt.jpg',
+    galleryImages: [
+      '/images/fc_bustier_pleated_skirt.jpg',
+      '/images/fc_resort_solstice.jpg',
+      '/images/fc_editorial_detail.jpg',
+    ],
     pillarGroup: 'TAILORING',
     pillarLabel: 'Tailoring & Suites',
   },
@@ -92,6 +113,12 @@ export const CATEGORY_DEPARTMENTS: DepartmentCategory[] = [
     conversionHighlight: 'Heirloom investment dressing for high-profile milestone occasions',
     startingPriceKobo: 45000000, // ₦450,000
     image: '/images/fc_luxury_threepiece.jpg',
+    galleryImages: [
+      '/images/fc_luxury_threepiece.jpg',
+      '/images/fc_tailored_coat.jpg',
+      '/images/fc_atelier_craft.jpg',
+      '/images/fc_editorial_detail.jpg',
+    ],
     pillarGroup: 'TAILORING',
     pillarLabel: 'Tailoring & Suites',
   },
@@ -109,6 +136,11 @@ export const CATEGORY_DEPARTMENTS: DepartmentCategory[] = [
     conversionHighlight: 'Available in ready-to-wear sizes or custom-made to your measurements',
     startingPriceKobo: 24000000, // ₦240,000
     image: '/images/fc_asymmetric_silk_dress.jpg',
+    galleryImages: [
+      '/images/fc_asymmetric_silk_dress.jpg',
+      '/images/fc_editorial_monument.jpg',
+      '/images/fc_editorial_detail.jpg',
+    ],
     pillarGroup: 'SILKS',
     pillarLabel: 'Silks & Gowns',
   },
@@ -124,6 +156,12 @@ export const CATEGORY_DEPARTMENTS: DepartmentCategory[] = [
     conversionHighlight: 'Signature high-impact gown for brides, asoebi captains and gala honorees',
     startingPriceKobo: 52000000, // ₦520,000
     image: '/images/fc_haute_soiree_gown.jpg',
+    galleryImages: [
+      '/images/fc_haute_soiree_gown.jpg',
+      '/images/fc_lapis_cape_gown.jpg',
+      '/images/fc_organza_cape_gown.jpg',
+      '/images/fc_atelier_craft.jpg',
+    ],
     pillarGroup: 'SILKS',
     pillarLabel: 'Silks & Gowns',
   },
@@ -139,6 +177,11 @@ export const CATEGORY_DEPARTMENTS: DepartmentCategory[] = [
     conversionHighlight: 'Effortlessly transitions from intimate luxury to full evening glamour',
     startingPriceKobo: 28000000, // ₦280,000
     image: '/images/fc_luxury_kimono.jpg',
+    galleryImages: [
+      '/images/fc_luxury_kimono.jpg',
+      '/images/fc_atelier_craft.jpg',
+      '/images/fc_editorial_monument.jpg',
+    ],
     pillarGroup: 'SILKS',
     pillarLabel: 'Silks & Gowns',
   },
@@ -153,7 +196,12 @@ export const CATEGORY_DEPARTMENTS: DepartmentCategory[] = [
     anatomicalFit: 'Contoured high-rise waistband engineered to prevent rolling or slipping',
     conversionHighlight: 'Pairs with architectural shirts, bustiers and tailored jackets',
     startingPriceKobo: 17500000, // ₦175,000
-    image: '/images/fc_bustier_pleated_skirt.jpg',
+    image: '/images/fc_resort_solstice.jpg',
+    galleryImages: [
+      '/images/fc_resort_solstice.jpg',
+      '/images/fc_bustier_pleated_skirt.jpg',
+      '/images/fc_editorial_detail.jpg',
+    ],
     pillarGroup: 'SILKS',
     pillarLabel: 'Silks & Gowns',
   },
@@ -171,6 +219,11 @@ export const CATEGORY_DEPARTMENTS: DepartmentCategory[] = [
     conversionHighlight: 'Modern, high-glamour alternative to traditional gala dresses',
     startingPriceKobo: 36000000, // ₦360,000
     image: '/images/fc_luxury_jumpsuit.jpg',
+    galleryImages: [
+      '/images/fc_luxury_jumpsuit.jpg',
+      '/images/fc_editorial_detail.jpg',
+      '/images/fc_atelier_craft.jpg',
+    ],
     pillarGroup: 'SPECIALTY',
     pillarLabel: 'Sculpted & Resort',
   },
@@ -185,7 +238,12 @@ export const CATEGORY_DEPARTMENTS: DepartmentCategory[] = [
     anatomicalFit: 'Multi-panel anatomical contouring for non-slip postural support',
     conversionHighlight: 'Foundation statement piece for high-waisted trousers and maxi skirts',
     startingPriceKobo: 16000000, // ₦160,000
-    image: '/images/fc_bustier_pleated_skirt.jpg',
+    image: '/images/fc_editorial_detail.jpg',
+    galleryImages: [
+      '/images/fc_editorial_detail.jpg',
+      '/images/fc_bustier_pleated_skirt.jpg',
+      '/images/fc_tailoring_suite.jpg',
+    ],
     pillarGroup: 'SPECIALTY',
     pillarLabel: 'Sculpted & Resort',
   },
@@ -201,6 +259,11 @@ export const CATEGORY_DEPARTMENTS: DepartmentCategory[] = [
     conversionHighlight: 'Chic step-in occasion piece for destination weddings and daytime celebrations',
     startingPriceKobo: 19500000, // ₦195,000
     image: '/images/fc_luxury_playsuit.jpg',
+    galleryImages: [
+      '/images/fc_luxury_playsuit.jpg',
+      '/images/fc_tailored_coat.jpg',
+      '/images/fc_editorial_detail.jpg',
+    ],
     pillarGroup: 'SPECIALTY',
     pillarLabel: 'Sculpted & Resort',
   },
@@ -216,6 +279,11 @@ export const CATEGORY_DEPARTMENTS: DepartmentCategory[] = [
     conversionHighlight: 'Luxury resort wardrobe piece for holiday getaways and yacht parties',
     startingPriceKobo: 12500000, // ₦125,000
     image: '/images/fc_luxury_bikini.jpg',
+    galleryImages: [
+      '/images/fc_luxury_bikini.jpg',
+      '/images/fc_resort_solstice.jpg',
+      '/images/fc_editorial_detail.jpg',
+    ],
     pillarGroup: 'SPECIALTY',
     pillarLabel: 'Sculpted & Resort',
   },

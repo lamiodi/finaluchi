@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { SlidersHorizontal, ArrowUpDown, Check, Heart, X } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { SlidersHorizontal, ArrowUpDown, Check, Heart, X, ArrowRight } from 'lucide-react';
 import { OccasionType, Product } from '../../types';
 import { CATEGORY_DEPARTMENTS, getDepartmentById } from '../../data/categoryContent';
 import { useCurrencyStore } from '../../stores/currencyStore';
@@ -26,10 +26,16 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
   const [sortBy, setSortBy] = useState<'NEWEST' | 'PRICE_ASC' | 'PRICE_DESC' | 'EXCLUSIVITY'>('NEWEST');
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
+  const [activeSpecimenIndex, setActiveSpecimenIndex] = useState<number>(0);
 
   const { displayCurrency } = useCurrencyStore();
   const { savedEdits, toggleProductInEdit } = useWishlistStore();
   const { playTactileClick } = useAudioStore();
+
+  // Reset active specimen when category changes
+  useEffect(() => {
+    setActiveSpecimenIndex(0);
+  }, [selectedPillar]);
 
   const isSaved = (productId: string) => {
     return savedEdits.some((e) => e.productIds.includes(productId));
@@ -64,6 +70,52 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
 
   const activeDept = selectedPillar !== 'ALL' ? getDepartmentById(selectedPillar) : null;
 
+  // Curate visual example images for the active category
+  const specimenImages = useMemo(() => {
+    if (!activeDept) return [];
+    const list: string[] = [];
+    if (activeDept.image) list.push(activeDept.image);
+    if (activeDept.galleryImages && activeDept.galleryImages.length > 0) {
+      activeDept.galleryImages.forEach((img) => {
+        if (!list.includes(img)) list.push(img);
+      });
+    }
+    // Also include product hero or media images for this category if available
+    filteredProducts.forEach((p) => {
+      p.colorways.forEach((cw) => {
+        if (cw.heroImageUrl && !list.includes(cw.heroImageUrl)) list.push(cw.heroImageUrl);
+        cw.mediaGalleryUrls?.forEach((url) => {
+          if (url && !list.includes(url)) list.push(url);
+        });
+      });
+    });
+    // Fallbacks if fewer than 4 images
+    const craftFallbacks = [
+      '/images/fc_tailored_coat.jpg',
+      '/images/fc_atelier_craft.jpg',
+      '/images/fc_editorial_detail.jpg',
+      '/images/fc_editorial_monument.jpg',
+    ];
+    craftFallbacks.forEach((fb) => {
+      if (list.length < 4 && !list.includes(fb)) {
+        list.push(fb);
+      }
+    });
+    return list;
+  }, [activeDept, filteredProducts]);
+
+  const activeSpecimenUrl = specimenImages[activeSpecimenIndex] || activeDept?.image || '/images/fc_luxury_threepiece.jpg';
+
+  const getSpecimenLabel = (idx: number) => {
+    switch (idx) {
+      case 0: return 'Flagship Silhouette';
+      case 1: return 'Atelier Form & Cut';
+      case 2: return 'Artisan Craftsmanship';
+      case 3: return 'Macro Fabric & Stays';
+      default: return `Lookbook Specimen 0${idx + 1}`;
+    }
+  };
+
   const getItemCount = (pillarId: string) => {
     if (pillarId === 'ALL') return products.length;
     return products.filter((p) => p.pillar === pillarId).length;
@@ -74,53 +126,186 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
       
       {/* Top Banner & Editorial Header with Dynamic Category Intelligence */}
       <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 pt-10 sm:pt-14 pb-8 border-b border-black/10">
-        <div className="flex flex-col items-center justify-center text-center space-y-4 mb-8">
+        <div className="mb-8">
           
           {activeDept ? (
-            <div className="space-y-3 max-w-3xl">
-              <span className="text-[10px] font-mono-luxury text-[#A67C4A] uppercase tracking-[0.25em] font-semibold block">
-                Department {activeDept.index} · {activeDept.pillarLabel}
-              </span>
-              <h1 className="font-sans-luxury text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#000000] uppercase">
-                {activeDept.label}{' '}
-                <span className="text-xl sm:text-2xl font-mono-luxury text-black/40 font-light">
-                  [{filteredProducts.length}]
-                </span>
-              </h1>
-              <p className="text-xs sm:text-sm text-black/80 font-light leading-relaxed max-w-2xl mx-auto">
-                {activeDept.description}
-              </p>
+            <div className="w-full">
+              {/* Haute Couture Atelier Dossier — Architectural Split with Visual Examples */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start text-left">
+                
+                {/* Left Column (lg:col-span-7): Editorial Intelligence, Narrative & Specs */}
+                <div className="lg:col-span-7 space-y-6">
+                  
+                  {/* Eyebrow & Provenance Badge */}
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="inline-flex items-center px-2.5 py-1 bg-black text-white text-[10px] font-mono-luxury uppercase tracking-widest rounded-xs">
+                      DEPARTMENT {activeDept.index}
+                    </span>
+                    <span className="text-[11px] font-mono-luxury text-[#A67C4A] uppercase tracking-[0.25em] font-semibold">
+                      {activeDept.pillarLabel}
+                    </span>
+                    <span className="text-black/25">·</span>
+                    <span className="text-[10px] font-mono-luxury text-neutral-500 uppercase tracking-wider">
+                      {activeDept.pillarGroup} PILLAR
+                    </span>
+                  </div>
 
-              {/* Minimalist Category Details */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-5 border-t border-black/10 text-left mt-5">
-                <div className="space-y-1">
-                  <span className="text-[10px] font-mono-luxury text-neutral-400 uppercase tracking-widest block font-medium">
-                    Fabric & Craft
-                  </span>
-                  <p className="text-xs font-sans-luxury text-black font-medium leading-relaxed">
-                    {activeDept.fabricProvenance}
+                  {/* 2-Line Headline & Tagline */}
+                  <div className="space-y-2">
+                    <h1 className="font-sans-luxury text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#000000] uppercase leading-[1.06]">
+                      {activeDept.label}{' '}
+                      <span className="text-xl sm:text-2xl font-mono-luxury text-black/40 font-light align-baseline">
+                        [{filteredProducts.length}]
+                      </span>
+                    </h1>
+                    <p className="text-xs sm:text-sm font-sans-luxury italic text-[#A67C4A] tracking-normal font-normal">
+                      {activeDept.tagline}
+                    </p>
+                  </div>
+
+                  {/* Editorial Narrative */}
+                  <p className="text-xs sm:text-sm text-black/80 font-light leading-relaxed max-w-2xl">
+                    {activeDept.description}
                   </p>
+
+                  {/* 3-Pillar Architectural Specification Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-6 border-t border-black/10">
+                    
+                    {/* Spec 1: Fabric & Craft */}
+                    <div className="p-3.5 bg-[#FAFAFA] border border-black/10 rounded-xs space-y-1.5 hover:border-black transition-colors">
+                      <span className="text-[9px] font-mono-luxury text-[#A67C4A] uppercase tracking-widest block font-semibold">
+                        FABRIC & CRAFT
+                      </span>
+                      <p className="text-xs font-sans-luxury text-black font-medium leading-snug">
+                        {activeDept.fabricProvenance}
+                      </p>
+                    </div>
+
+                    {/* Spec 2: Fit & Silhouette */}
+                    <div className="p-3.5 bg-[#FAFAFA] border border-black/10 rounded-xs space-y-1.5 hover:border-black transition-colors">
+                      <span className="text-[9px] font-mono-luxury text-[#A67C4A] uppercase tracking-widest block font-semibold">
+                        FIT & SILHOUETTE
+                      </span>
+                      <p className="text-xs font-sans-luxury text-black font-medium leading-snug">
+                        {activeDept.anatomicalFit}
+                      </p>
+                    </div>
+
+                    {/* Spec 3: Occasion */}
+                    <div className="p-3.5 bg-[#FAFAFA] border border-black/10 rounded-xs space-y-1.5 hover:border-black transition-colors">
+                      <span className="text-[9px] font-mono-luxury text-[#A67C4A] uppercase tracking-widest block font-semibold">
+                        OCCASION
+                      </span>
+                      <p className="text-xs font-sans-luxury text-black font-medium leading-snug">
+                        {activeDept.conversionHighlight}
+                      </p>
+                    </div>
+
+                  </div>
+
+                  {/* Action Bridge: WhatsApp Bespoke Concierge & Reset */}
+                  <div className="flex flex-wrap items-center gap-3 pt-2">
+                    <a
+                      href={`https://api.whatsapp.com/send/?phone=2348032312961&text=${encodeURIComponent(
+                        `Hello Finaluchi Couture. I am reviewing Department ${activeDept.index} · ${activeDept.label} on your website. I would like to inquire about custom creation, availability and measurement consultation.`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => playTactileClick()}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-black text-white text-[11px] font-sans-luxury font-semibold uppercase tracking-widest hover:bg-neutral-800 transition-all rounded-xs shadow-xs"
+                    >
+                      <span>Inquire Bespoke for {activeDept.label}</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </a>
+                    <button
+                      onClick={() => {
+                        playTactileClick();
+                        setSelectedPillar('ALL');
+                      }}
+                      className="px-4 py-2.5 bg-white text-black/70 hover:text-black text-[11px] font-sans-luxury font-medium uppercase tracking-wider border border-black/15 hover:border-black transition-all rounded-xs"
+                    >
+                      View All Categories
+                    </button>
+                  </div>
+
                 </div>
-                <div className="space-y-1">
-                  <span className="text-[10px] font-mono-luxury text-neutral-400 uppercase tracking-widest block font-medium">
-                    Fit & Silhouette
-                  </span>
-                  <p className="text-xs font-sans-luxury text-black font-medium leading-relaxed">
-                    {activeDept.anatomicalFit}
-                  </p>
+
+                {/* Right Column (lg:col-span-5): Lookbook Visual Examples Gallery */}
+                <div className="lg:col-span-5 w-full flex flex-col items-center">
+                  
+                  {/* Primary Stage Image */}
+                  <div className="relative w-full aspect-[4/5] max-w-[420px] mx-auto bg-[#F5F5F3] border border-black/10 rounded-xs overflow-hidden group shadow-sm">
+                    <img
+                      src={activeSpecimenUrl}
+                      alt={`${activeDept.label} Lookbook Specimen ${activeSpecimenIndex + 1}`}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    />
+                    
+                    {/* Top Status Indicators */}
+                    <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
+                      <span className="px-2 py-0.5 bg-black/80 backdrop-blur-md text-white text-[9px] font-mono-luxury tracking-widest uppercase rounded-xs">
+                        SPECIMEN 0{activeSpecimenIndex + 1} / 0{specimenImages.length}
+                      </span>
+                      <span className="px-2 py-0.5 bg-white/95 backdrop-blur-md text-black text-[9px] font-sans-luxury font-semibold tracking-wider uppercase rounded-xs shadow-xs">
+                        Abuja Atelier
+                      </span>
+                    </div>
+
+                    {/* Scrim Caption: Bottom */}
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent pt-12 pb-3.5 px-4 text-white">
+                      <span className="text-[9px] font-mono-luxury text-white/70 uppercase tracking-widest block">
+                        {getSpecimenLabel(activeSpecimenIndex)}
+                      </span>
+                      <p className="font-sans-luxury text-xs font-bold uppercase tracking-wider mt-0.5">
+                        {activeDept.label} · Archive Specimen
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Thumbnail Selector: Visual Examples Strip */}
+                  <div className="w-full max-w-[420px] mx-auto mt-3">
+                    <div className="flex items-center justify-between pb-1.5 px-0.5">
+                      <span className="text-[10px] font-mono-luxury uppercase tracking-wider text-black/60">
+                        Category Visual Examples [{specimenImages.length}]
+                      </span>
+                      <span className="text-[9px] font-mono-luxury uppercase text-[#A67C4A]">
+                        Click to inspect
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-4 gap-2">
+                      {specimenImages.slice(0, 4).map((imgUrl, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            playTactileClick();
+                            setActiveSpecimenIndex(idx);
+                          }}
+                          className={`relative aspect-[3/4] w-full rounded-xs overflow-hidden border transition-all ${
+                            activeSpecimenIndex === idx
+                              ? 'border-black ring-1 ring-black shadow-xs scale-[1.02]'
+                              : 'border-black/10 opacity-70 hover:opacity-100 hover:border-black/40'
+                          }`}
+                        >
+                          <img
+                            src={imgUrl}
+                            alt={`Visual Example 0${idx + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                          <span className="absolute bottom-1 right-1 px-1 bg-black/75 text-white text-[8px] font-mono-luxury leading-none py-0.5 rounded-2xs">
+                            0{idx + 1}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
                 </div>
-                <div className="space-y-1">
-                  <span className="text-[10px] font-mono-luxury text-neutral-400 uppercase tracking-widest block font-medium">
-                    Occasion
-                  </span>
-                  <p className="text-xs font-sans-luxury text-black font-medium leading-relaxed">
-                    {activeDept.conversionHighlight}
-                  </p>
-                </div>
+
               </div>
             </div>
           ) : (
-            <div className="space-y-3 max-w-3xl">
+            <div className="flex flex-col items-center justify-center text-center space-y-4 max-w-3xl mx-auto">
               <h1 className="font-sans-luxury text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#000000] uppercase">
                 SHOP WOMEN&apos;S COLLECTION{' '}
                 <span className="text-xl sm:text-2xl font-mono-luxury text-black/40 font-light">
