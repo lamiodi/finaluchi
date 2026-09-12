@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ShoppingBag, Search, Sparkles, Menu, X,
-  ChevronDown, Heart, User, Calendar
+  ChevronDown, Heart, User, MessageCircle, ArrowRight
 } from 'lucide-react';
 import { CATEGORY_DEPARTMENTS } from '../../data/categoryContent';
 import { useCartStore } from '../../stores/cartStore';
 import { useAudioStore } from '../../stores/audioStore';
+import { buildWhatsAppUrl } from '../../data/brand';
 
 interface NavbarProps {
   onNavigateHome: () => void;
@@ -32,56 +33,83 @@ export const Navbar: React.FC<NavbarProps> = ({
   totalWishlistCount,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false);
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
   const { items, openDrawer } = useCartStore();
   const { playTactileClick } = useAudioStore();
 
   const totalCartCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
   return (
     <header className="sticky top-0 z-50 bg-[#FFFFFF] border-b border-black/10 font-sans-luxury">
-      <div className="relative max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 py-3.5 sm:py-4 flex items-center justify-between">
+      <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 py-3.5 sm:py-4 flex items-center justify-between">
         
-        {/* Left: Clean Minimal Navigation (Decluttered Luxury) */}
-        <div className="flex items-center gap-6">
+        {/* Left: Mobile Menu Trigger + Search (Mobile) | Desktop Navigation (Desktop) */}
+        <div className="flex items-center gap-2 sm:gap-4 lg:gap-8 flex-1 lg:flex-initial">
+          {/* Mobile Hamburger Button (44px min touch target) */}
           <button
             onClick={() => {
               playTactileClick();
-              setIsMobileMenuOpen(!isMobileMenuOpen);
+              setIsMobileMenuOpen(true);
             }}
-            className="lg:hidden p-1 text-noir hover:text-[#C5A880] transition-colors"
-            aria-label="Toggle Navigation Menu"
+            className="lg:hidden p-2 -ml-2 text-noir hover:text-[#C5A880] transition-colors focus:outline-none"
+            aria-label="Open Navigation Menu"
           >
-            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            <Menu className="w-5 h-5" />
           </button>
 
-          <nav className="hidden lg:flex items-center gap-6 text-xs font-sans-luxury font-medium uppercase tracking-tight text-noir">
+          {/* Mobile Search Button */}
+          <button
+            onClick={() => {
+              playTactileClick();
+              onOpenSearch();
+            }}
+            className="lg:hidden p-2 text-noir hover:text-[#C5A880] transition-colors"
+            aria-label="Search Collection"
+          >
+            <Search className="w-4 h-4" />
+          </button>
+
+          {/* Desktop Nav Links */}
+          <nav className="hidden lg:flex items-center gap-7 text-xs font-sans-luxury font-medium uppercase tracking-wider text-noir">
             
-            {/* Single Unified Collections Trigger with Multi-Column Category Dropdown */}
+            {/* Desktop Collections Dropdown Trigger */}
             <div 
               className="relative"
               onMouseEnter={() => setIsCategoryDropdownOpen(true)}
+              onMouseLeave={() => setIsCategoryDropdownOpen(false)}
             >
               <button
                 onClick={() => {
                   playTactileClick();
                   onNavigatePillar('ALL');
                 }}
-                className="flex items-center gap-1.5 py-1 text-noir hover:text-[#A67C4A] font-semibold transition-colors uppercase tracking-wider"
+                className="flex items-center gap-1.5 py-1 text-noir hover:text-[#A67C4A] font-semibold transition-colors"
               >
                 <span>COLLECTIONS</span>
-                <ChevronDown className={`w-3.5 h-3.5 transform transition-transform text-muted ${isCategoryDropdownOpen ? 'rotate-180 text-noir' : ''}`} />
+                <ChevronDown className={`w-3.5 h-3.5 transform transition-transform duration-200 text-muted ${isCategoryDropdownOpen ? 'rotate-180 text-noir' : ''}`} />
               </button>
 
-              {/* Luxury 3-Pillar Department Directory */}
+              {/* Minimalist Department Directory */}
               {isCategoryDropdownOpen && (
                 <div 
-                  className="absolute left-0 top-full mt-2 w-[720px] bg-white border border-black/15 shadow-2xl rounded-xs p-6 z-50 animate-in fade-in zoom-in-98 duration-200"
-                  onMouseLeave={() => setIsCategoryDropdownOpen(false)}
+                  className="absolute left-0 top-full mt-2 w-[720px] bg-white border border-black/15 shadow-2xl p-7 z-50 animate-in fade-in zoom-in-98 duration-150"
                 >
-                  <div className="flex items-center justify-between pb-3 border-b border-black/10 mb-5">
-                    <span className="text-[10px] font-mono-luxury text-[#A67C4A] uppercase tracking-widest font-semibold">
-                      13 Product Categories · Women&apos;s Collection
+                  <div className="flex items-center justify-between pb-3.5 border-b border-black/10 mb-6">
+                    <span className="text-[10px] font-mono-luxury text-black/50 uppercase tracking-[0.2em] font-medium">
+                      Women&apos;s Haute Couture & Ready-to-Wear
                     </span>
                     <button
                       onClick={() => {
@@ -89,17 +117,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                         onNavigatePillar('ALL');
                         setIsCategoryDropdownOpen(false);
                       }}
-                      className="text-[11px] font-sans-luxury font-bold text-noir hover:underline uppercase tracking-tight"
+                      className="text-[11px] font-sans-luxury font-bold text-noir hover:text-[#A67C4A] transition-colors uppercase tracking-tight flex items-center gap-1"
                     >
-                      Shop All Categories (13) ⟶
+                      <span>View All Creations</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-6 text-xs">
+                  <div className="grid grid-cols-3 gap-8 text-xs">
                     {/* Pillar 1: Tailoring */}
-                    <div className="space-y-3">
-                      <span className="text-[10px] font-mono-luxury text-black/45 uppercase tracking-widest block font-bold border-b border-black/10 pb-1.5">
-                        Tailoring & Suites
+                    <div className="space-y-3.5">
+                      <span className="text-[10px] font-mono-luxury text-black/40 uppercase tracking-[0.2em] block font-semibold border-b border-black/10 pb-2">
+                        Tailoring & Sets
                       </span>
                       <div className="space-y-1">
                         {CATEGORY_DEPARTMENTS.filter((d) => d.pillarGroup === 'TAILORING').map((cat) => (
@@ -110,24 +139,20 @@ export const Navbar: React.FC<NavbarProps> = ({
                               onNavigatePillar(cat.id);
                               setIsCategoryDropdownOpen(false);
                             }}
-                            className="w-full text-left p-1.5 hover:bg-neutral-100 rounded-xs transition-all flex flex-col group"
+                            className="w-full text-left py-1.5 px-2 hover:bg-neutral-100 transition-colors flex items-center justify-between group"
                           >
-                            <div className="flex items-center justify-between">
-                              <span className="font-sans-luxury font-semibold text-noir text-[11px] group-hover:text-black">
-                                <span className="font-mono-luxury text-[9px] text-black/40 mr-1.5">{cat.index}</span>
-                                {cat.label}
-                              </span>
-                              <span className="text-[9px] font-mono-luxury text-black/40">⟶</span>
-                            </div>
-                            <span className="text-[9px] font-mono-luxury text-black/50 ml-4">View category</span>
+                            <span className="font-sans-luxury text-[12px] text-noir/85 group-hover:text-black group-hover:font-semibold">
+                              {cat.label}
+                            </span>
+                            <span className="text-[10px] text-black/30 group-hover:text-black group-hover:translate-x-0.5 transition-all">⟶</span>
                           </button>
                         ))}
                       </div>
                     </div>
 
                     {/* Pillar 2: Silks & Gowns */}
-                    <div className="space-y-3">
-                      <span className="text-[10px] font-mono-luxury text-black/45 uppercase tracking-widest block font-bold border-b border-black/10 pb-1.5">
+                    <div className="space-y-3.5">
+                      <span className="text-[10px] font-mono-luxury text-black/40 uppercase tracking-[0.2em] block font-semibold border-b border-black/10 pb-2">
                         Silks & Gowns
                       </span>
                       <div className="space-y-1">
@@ -139,24 +164,20 @@ export const Navbar: React.FC<NavbarProps> = ({
                               onNavigatePillar(cat.id);
                               setIsCategoryDropdownOpen(false);
                             }}
-                            className="w-full text-left p-1.5 hover:bg-neutral-100 rounded-xs transition-all flex flex-col group"
+                            className="w-full text-left py-1.5 px-2 hover:bg-neutral-100 transition-colors flex items-center justify-between group"
                           >
-                            <div className="flex items-center justify-between">
-                              <span className="font-sans-luxury font-semibold text-noir text-[11px] group-hover:text-black">
-                                <span className="font-mono-luxury text-[9px] text-black/40 mr-1.5">{cat.index}</span>
-                                {cat.label}
-                              </span>
-                              <span className="text-[9px] font-mono-luxury text-black/40">⟶</span>
-                            </div>
-                            <span className="text-[9px] font-mono-luxury text-black/50 ml-4">View category</span>
+                            <span className="font-sans-luxury text-[12px] text-noir/85 group-hover:text-black group-hover:font-semibold">
+                              {cat.label}
+                            </span>
+                            <span className="text-[10px] text-black/30 group-hover:text-black group-hover:translate-x-0.5 transition-all">⟶</span>
                           </button>
                         ))}
                       </div>
                     </div>
 
                     {/* Pillar 3: Sculpted & Resort */}
-                    <div className="space-y-3">
-                      <span className="text-[10px] font-mono-luxury text-black/45 uppercase tracking-widest block font-bold border-b border-black/10 pb-1.5">
+                    <div className="space-y-3.5">
+                      <span className="text-[10px] font-mono-luxury text-black/40 uppercase tracking-[0.2em] block font-semibold border-b border-black/10 pb-2">
                         Sculpted & Resort
                       </span>
                       <div className="space-y-1">
@@ -168,26 +189,22 @@ export const Navbar: React.FC<NavbarProps> = ({
                               onNavigatePillar(cat.id);
                               setIsCategoryDropdownOpen(false);
                             }}
-                            className="w-full text-left p-1.5 hover:bg-neutral-100 rounded-xs transition-all flex flex-col group"
+                            className="w-full text-left py-1.5 px-2 hover:bg-neutral-100 transition-colors flex items-center justify-between group"
                           >
-                            <div className="flex items-center justify-between">
-                              <span className="font-sans-luxury font-semibold text-noir text-[11px] group-hover:text-black">
-                                <span className="font-mono-luxury text-[9px] text-black/40 mr-1.5">{cat.index}</span>
-                                {cat.label}
-                              </span>
-                              <span className="text-[9px] font-mono-luxury text-black/40">⟶</span>
-                            </div>
-                            <span className="text-[9px] font-mono-luxury text-black/50 ml-4">View category</span>
+                            <span className="font-sans-luxury text-[12px] text-noir/85 group-hover:text-black group-hover:font-semibold">
+                              {cat.label}
+                            </span>
+                            <span className="text-[10px] text-black/30 group-hover:text-black group-hover:translate-x-0.5 transition-all">⟶</span>
                           </button>
                         ))}
                       </div>
                     </div>
                   </div>
 
-                  {/* Footnote Bar with Bespoke Trigger */}
-                  <div className="flex items-center justify-between pt-4 mt-4 border-t border-black/10 text-[10px]">
-                    <span className="text-black/60 font-mono-luxury">
-                      Couture, ready-to-wear and event dressing from Abuja
+                  {/* Footnote with Bespoke Inquiries */}
+                  <div className="flex items-center justify-between pt-5 mt-6 border-t border-black/10 text-[11px]">
+                    <span className="text-black/55 font-sans-luxury">
+                      Abuja Flagship Atelier · Custom Bridal & Occasion Dressing
                     </span>
                     <button
                       onClick={() => {
@@ -195,10 +212,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                         setIsCategoryDropdownOpen(false);
                         onOpenAppointments();
                       }}
-                      className="font-bold text-black hover:underline uppercase tracking-wider flex items-center gap-1"
+                      className="font-bold text-noir hover:text-[#A67C4A] transition-colors uppercase tracking-wider flex items-center gap-1.5"
                     >
-                      <span>Request a Custom Order</span>
-                      <span>⟶</span>
+                      <span>Custom Consultation</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
@@ -212,61 +229,61 @@ export const Navbar: React.FC<NavbarProps> = ({
                 const el = document.getElementById('digital-atelier-section');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="hover:text-[#A67C4A] transition-colors py-1 text-muted uppercase tracking-wider font-medium"
+              className="hover:text-[#A67C4A] transition-colors py-1 text-black/70 uppercase tracking-wider"
             >
               CUSTOM ORDERS
             </button>
           </nav>
         </div>
 
-        {/* Center: FINALUCHI Wordmark + Emblem */}
+        {/* Center: FINALUCHI Brand Mark (Fluidly centered, zero collision on mobile) */}
         <div 
-          className="cursor-pointer select-none flex items-center justify-center gap-2 group absolute left-1/2 -translate-x-1/2" 
+          className="cursor-pointer select-none flex items-center justify-center gap-2 group mx-auto px-2"
           onClick={() => {
             playTactileClick();
             onNavigateHome();
           }}
         >
-          <div className="w-8 h-8 sm:w-9 sm:h-9 bg-white p-0.5 border border-black/10 flex items-center justify-center shrink-0 rounded-xs">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 bg-white p-0.5 border border-black/10 flex items-center justify-center shrink-0">
             <img
               src="/FINALUCHIlogo.jpg"
               alt="Finaluchi Emblem"
               className="w-full h-full object-contain"
             />
           </div>
-          <span className="font-sans-luxury text-base sm:text-2xl font-bold tracking-[0.16em] sm:tracking-[0.2em] text-noir uppercase group-hover:opacity-80 transition-opacity">
+          <span className="font-sans-luxury text-sm sm:text-xl font-bold tracking-[0.18em] sm:tracking-[0.2em] text-noir uppercase group-hover:opacity-75 transition-opacity truncate max-w-[130px] sm:max-w-none">
             FINALUCHI
           </span>
         </div>
 
         {/* Right: Actions */}
-        <div className="flex items-center gap-3 sm:gap-4 text-noir">
+        <div className="flex items-center justify-end gap-1.5 sm:gap-3 lg:gap-4 text-noir flex-1 lg:flex-initial">
           
-          {/* Runway Mode Trigger (desktop only; moved to hamburger on mobile) */}
+          {/* Runway Mode Trigger (desktop only) */}
           <button
             onClick={() => {
               playTactileClick();
               onOpenRunway();
             }}
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-noir text-white text-xs font-semibold tracking-loose-couture uppercase rounded-xs hover:bg-neutral-800 transition-colors btn-luxury"
+            className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 bg-noir text-white text-[11px] font-semibold tracking-loose-couture uppercase hover:bg-neutral-800 transition-colors btn-luxury"
           >
-            <Sparkles className="w-3.5 h-3.5 text-[#C5A880] animate-pulse" />
+            <Sparkles className="w-3.5 h-3.5 text-[#C5A880]" />
             <span>RUNWAY</span>
           </button>
 
-          {/* Search Trigger */}
+          {/* Search Trigger (desktop only) */}
           <button
             onClick={() => {
               playTactileClick();
               onOpenSearch();
             }}
-            className="p-1.5 hover:text-[#C5A880] transition-colors"
+            className="hidden lg:block p-1.5 hover:text-[#C5A880] transition-colors"
             aria-label="Search Collection"
           >
             <Search className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
 
-          {/* Private Client Portal Trigger (desktop only) */}
+          {/* Client Portal Trigger (desktop only) */}
           <button
             onClick={() => {
               playTactileClick();
@@ -278,7 +295,24 @@ export const Navbar: React.FC<NavbarProps> = ({
             <User className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
 
-          {/* Concierge Bag Trigger */}
+          {/* Saved / Wishlist */}
+          <button
+            onClick={() => {
+              playTactileClick();
+              onOpenClientPortal();
+            }}
+            className="p-1.5 hover:text-[#C5A880] transition-colors relative"
+            aria-label="Saved Pieces"
+          >
+            <Heart className="w-4 h-4 sm:w-5 sm:h-5" />
+            {totalWishlistCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-noir text-white text-[9px] font-mono-luxury font-bold rounded-full flex items-center justify-center">
+                {totalWishlistCount}
+              </span>
+            )}
+          </button>
+
+          {/* Shopping Bag Trigger */}
           <button
             onClick={() => {
               playTactileClick();
@@ -294,147 +328,201 @@ export const Navbar: React.FC<NavbarProps> = ({
               </span>
             )}
           </button>
-
-          {/* Saved / Wishlist (desktop only) */}
-          <button
-            onClick={() => {
-              playTactileClick();
-              onOpenClientPortal();
-            }}
-            className="hidden sm:block p-1.5 hover:text-[#C5A880] transition-colors relative"
-            aria-label="Saved Pieces"
-          >
-            <Heart className="w-4 h-4" />
-            {totalWishlistCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-noir text-white text-[8px] font-mono-luxury font-bold rounded-full flex items-center justify-center">
-                {totalWishlistCount}
-              </span>
-            )}
-          </button>
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Haute Couture Mobile Slide-Over Drawer Navigation */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden bg-white border-t border-border px-5 py-6 space-y-6 animate-in slide-in-from-top-2 duration-300 shadow-xl max-h-[85vh] overflow-y-auto">
-          
-          <div>
-            <div className="text-[10px] font-mono-luxury text-[#A67C4A] uppercase tracking-widest font-semibold pb-2 border-b border-border/40 mb-3">
-              SHOP CATEGORIES
-            </div>
-            <div className="grid grid-cols-2 gap-2 text-xs font-semibold uppercase tracking-tight text-noir">
+        <div className="fixed inset-0 z-[100] lg:hidden">
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300"
+            onClick={() => setIsMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+
+          {/* Drawer Panel */}
+          <div className="fixed inset-y-0 left-0 w-full max-w-[340px] bg-white text-black shadow-2xl flex flex-col justify-between overflow-hidden animate-in slide-in-from-left duration-300 font-sans-luxury">
+            
+            {/* Drawer Header */}
+            <div className="p-5 border-b border-black/10 flex items-center justify-between">
+              <div 
+                className="flex items-center gap-2 cursor-pointer"
+                onClick={() => {
+                  playTactileClick();
+                  onNavigateHome();
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                <div className="w-6 h-6 bg-white p-0.5 border border-black/10 flex items-center justify-center">
+                  <img src="/FINALUCHIlogo.jpg" alt="Finaluchi" className="w-full h-full object-contain" />
+                </div>
+                <span className="font-sans-luxury text-sm font-bold tracking-[0.2em] text-noir uppercase">
+                  FINALUCHI
+                </span>
+              </div>
+
               <button
                 onClick={() => {
                   playTactileClick();
-                  onNavigatePillar('ALL');
                   setIsMobileMenuOpen(false);
                 }}
-                className="text-left py-2 px-2.5 bg-neutral-100 rounded-xs font-bold col-span-2 flex items-center justify-between"
+                className="p-2 -mr-2 text-black/60 hover:text-black transition-colors"
+                aria-label="Close navigation"
               >
-                <span>ALL CREATIONS</span>
-                <span className="text-xs text-muted">⟶</span>
+                <X className="w-5 h-5" />
               </button>
-              {CATEGORY_DEPARTMENTS.map((cat) => (
+            </div>
+
+            {/* Scrollable Navigation Body */}
+            <div className="flex-1 overflow-y-auto px-5 py-6 space-y-6">
+              
+              {/* Primary Links */}
+              <nav className="space-y-4">
+                
+                {/* Collapsible Categories Section */}
+                <div>
+                  <button
+                    onClick={() => {
+                      playTactileClick();
+                      setIsMobileCategoriesOpen(!isMobileCategoriesOpen);
+                    }}
+                    className="w-full flex items-center justify-between text-base font-bold uppercase tracking-wider text-noir py-1"
+                  >
+                    <span>COLLECTIONS</span>
+                    <ChevronDown className={`w-4 h-4 transform transition-transform duration-200 ${isMobileCategoriesOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {isMobileCategoriesOpen && (
+                    <div className="mt-2.5 ml-2 pl-3 border-l border-black/10 space-y-2 text-xs uppercase tracking-wider animate-in fade-in duration-200">
+                      <button
+                        onClick={() => {
+                          playTactileClick();
+                          onNavigatePillar('ALL');
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="w-full text-left py-1 text-black font-bold flex items-center justify-between"
+                      >
+                        <span>All Collections</span>
+                        <ArrowRight className="w-3 h-3 text-black/40" />
+                      </button>
+
+                      {CATEGORY_DEPARTMENTS.map((cat) => (
+                        <button
+                          key={cat.id}
+                          onClick={() => {
+                            playTactileClick();
+                            onNavigatePillar(cat.id);
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className="w-full text-left py-1 text-black/70 hover:text-black transition-colors flex items-center justify-between"
+                        >
+                          <span>{cat.label}</span>
+                          <span className="text-[10px] text-black/30">⟶</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
                 <button
-                  key={cat.id}
                   onClick={() => {
                     playTactileClick();
-                    onNavigatePillar(cat.id);
+                    onOpenAppointments();
                     setIsMobileMenuOpen(false);
                   }}
-                  className="text-left py-2 px-2.5 hover:bg-neutral-100 rounded-xs transition-colors border border-border/40 flex items-center justify-between"
+                  className="w-full text-left text-base font-bold uppercase tracking-wider text-noir py-1 hover:text-[#A67C4A] transition-colors"
                 >
-                  <span className="truncate">{cat.label}</span>
-                  <span className="text-[10px] text-muted">⟶</span>
+                  CUSTOM ORDERS
                 </button>
-              ))}
+
+                <button
+                  onClick={() => {
+                    playTactileClick();
+                    onOpenRunway();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="w-full flex items-center justify-between text-base font-bold uppercase tracking-wider text-noir py-1 hover:text-[#A67C4A] transition-colors"
+                >
+                  <span>RUNWAY MODE</span>
+                  <Sparkles className="w-4 h-4 text-[#C5A880]" />
+                </button>
+
+                <button
+                  onClick={() => {
+                    playTactileClick();
+                    onOpenClientPortal();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="w-full flex items-center justify-between text-base font-bold uppercase tracking-wider text-noir py-1 hover:text-[#A67C4A] transition-colors"
+                >
+                  <span>SAVED PIECES</span>
+                  <span className="text-xs font-mono-luxury font-bold bg-black text-white px-2 py-0.5 rounded-full">
+                    {totalWishlistCount}
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    playTactileClick();
+                    onOpenClientPortal();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="w-full text-left text-base font-bold uppercase tracking-wider text-noir py-1 hover:text-[#A67C4A] transition-colors"
+                >
+                  CLIENT PORTAL
+                </button>
+
+                {onOpenAbout && (
+                  <button
+                    onClick={() => {
+                      playTactileClick();
+                      onOpenAbout();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full text-left text-sm font-semibold uppercase tracking-wider text-black/65 hover:text-black py-1 transition-colors"
+                  >
+                    ABOUT FINALUCHI
+                  </button>
+                )}
+
+                {onOpenContact && (
+                  <button
+                    onClick={() => {
+                      playTactileClick();
+                      onOpenContact();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full text-left text-sm font-semibold uppercase tracking-wider text-black/65 hover:text-black py-1 transition-colors"
+                  >
+                    CONTACT & ATELIER
+                  </button>
+                )}
+
+              </nav>
+
             </div>
-          </div>
 
-          {/* Mobile Quick Action Buttons */}
-          <div className="space-y-2 pt-2 border-t border-border">
-            {/* Runway Mode on mobile */}
-          <button
-            onClick={() => {
-              playTactileClick();
-              onOpenRunway();
-              setIsMobileMenuOpen(false);
-            }}
-            className="w-full py-2.5 bg-noir text-white text-xs font-bold tracking-loose-couture uppercase rounded-xs flex items-center justify-center gap-2 hover:bg-neutral-800 transition-colors"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-[#C5A880]" />
-            <span>RUNWAY MODE</span>
-          </button>
-
-          <div className="grid grid-cols-2 gap-2">
-            {/* Client portal */}
-            <button
-              onClick={() => {
-                playTactileClick();
-                onOpenClientPortal();
-                setIsMobileMenuOpen(false);
-              }}
-              className="py-2.5 bg-white border border-border text-noir text-xs font-bold tracking-couture uppercase rounded-xs flex items-center justify-center gap-2 hover:bg-noir hover:text-white transition-colors"
-            >
-              <User className="w-3.5 h-3.5" />
-              <span>CLIENT PORTAL</span>
-            </button>
-
-            {/* Wishlist */}
-            <button
-              onClick={() => {
-                playTactileClick();
-                onOpenClientPortal();
-                setIsMobileMenuOpen(false);
-              }}
-              className="py-2.5 bg-white border border-border text-noir text-xs font-bold tracking-couture uppercase rounded-xs flex items-center justify-center gap-2 hover:bg-noir hover:text-white transition-colors"
-            >
-              <Heart className="w-3.5 h-3.5" />
-              <span>SAVED ({totalWishlistCount})</span>
-            </button>
-          </div>
-
-          <button
-            onClick={() => {
-              playTactileClick();
-              onOpenAppointments();
-              setIsMobileMenuOpen(false);
-            }}
-            className="w-full py-2.5 bg-noir text-white text-xs font-bold tracking-couture uppercase rounded-xs flex items-center justify-center gap-2 hover:bg-neutral-800 transition-colors"
-          >
-            <Calendar className="w-3.5 h-3.5" />
-            <span>REQUEST A CUSTOM ORDER</span>
-          </button>
-
-          <div className="grid grid-cols-2 gap-2">
-            {onOpenAbout && (
-              <button
-                onClick={() => {
-                  playTactileClick();
-                  onOpenAbout();
-                  setIsMobileMenuOpen(false);
-                }}
-                className="py-2 bg-white border border-border text-noir text-xs font-semibold uppercase tracking-tight rounded-xs hover:bg-neutral-100 transition-colors text-center"
+            {/* Pinned Bottom Drawer Bar */}
+            <div className="p-5 border-t border-black/10 space-y-3 bg-[#FAFAFA]">
+              <a
+                href={buildWhatsAppUrl('Hello Finaluchi Couture, I would like to inquire about ordering a piece.')}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => playTactileClick()}
+                className="w-full py-3 bg-black text-white text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-neutral-800 transition-colors"
               >
-                ABOUT FINALUCHI
-              </button>
-            )}
+                <MessageCircle className="w-4 h-4" />
+                <span>WhatsApp Concierge</span>
+              </a>
 
-            {onOpenContact && (
-              <button
-                onClick={() => {
-                  playTactileClick();
-                  onOpenContact();
-                  setIsMobileMenuOpen(false);
-                }}
-                className="py-2 bg-white border border-border text-noir text-xs font-semibold uppercase tracking-tight rounded-xs hover:bg-neutral-100 transition-colors text-center"
-              >
-                CONTACT
-              </button>
-            )}
+              <div className="flex items-center justify-between text-[10px] font-mono-luxury text-black/50 uppercase tracking-widest pt-1">
+                <span>Abuja Atelier · Nigeria</span>
+                <span>Est. 2017</span>
+              </div>
+            </div>
+
           </div>
-
-        </div>
         </div>
       )}
     </header>

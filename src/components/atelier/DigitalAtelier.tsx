@@ -34,40 +34,43 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
   };
 
   return (
-    <section className="w-full bg-[#000000] text-white py-20 sm:py-28 relative overflow-hidden">
+    <section className="w-full bg-[#000000] text-white py-20 sm:py-28 relative overflow-hidden font-sans-luxury">
       
-      {/* Background ambient subtle gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.06),transparent_60%)]" />
+      {/* Background ambient gradient */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.05),transparent_60%)]" />
 
       <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
         
-        {/* Section Header (Craft Floor: Heading Leads With Authority) */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 sm:pb-12 border-b border-white/20 mb-8 sm:mb-12">
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 sm:pb-8 border-b border-white/20 mb-8 sm:mb-12">
           <div>
+            <span className="text-[10px] sm:text-xs font-mono-luxury text-[#C5A880] uppercase tracking-[0.25em] font-semibold block mb-1">
+              Atelier Craftsmanship
+            </span>
             <h2 className="font-sans-luxury text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white uppercase">
-              How to Order with Confidence
+              The Bespoke Process
             </h2>
             <p className="text-xs text-white/70 font-light mt-2 max-w-xl">
-              A clearer path from first message to final fitting—for ready-to-wear, occasion and custom pieces.
+              From first consultation and measurement confirmation to toile creation and the final fitting.
             </p>
           </div>
 
           <div className="flex items-center gap-4">
-            <span className="text-xs font-mono-luxury text-champagne uppercase tracking-widest font-semibold">
-              STAGE 0{stage.step}
+            <span className="text-xs font-mono-luxury text-white/60 uppercase tracking-widest">
+              Step 0{stage.step} of 0{ATELIER_STAGES.length}
             </span>
             <div className="flex gap-2">
               <button
                 onClick={handlePrev}
                 className="p-2.5 rounded-full border border-white/20 hover:border-white hover:text-white hover:bg-white/10 transition-colors"
-                aria-label="Previous Atelier Stage"
+                aria-label="Previous Stage"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 onClick={handleNext}
                 className="p-2.5 rounded-full border border-white/20 hover:border-white hover:text-white hover:bg-white/10 transition-colors"
-                aria-label="Next Atelier Stage"
+                aria-label="Next Stage"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -75,7 +78,7 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
           </div>
         </div>
 
-        {/* 6-Stage Minimalist Navigation Tabs */}
+        {/* Minimalist Navigation Steps */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-8 sm:mb-12 border-b border-white/10 pb-4">
           {ATELIER_STAGES.map((stg, idx) => (
             <button
@@ -104,13 +107,13 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
         {/* Stage Content Presentation */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
           
-          {/* Left: Imagery & Macro Zoom Stage */}
-          <div className="lg:col-span-7 relative group overflow-hidden bg-black/40 border border-white/10 shadow-2xl">
+          {/* Left: Imagery Stage */}
+          <div className="lg:col-span-7 relative group overflow-hidden bg-black border border-white/10 shadow-2xl">
             <div className="aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden relative">
               <img
                 src={stage.imageUrl}
                 alt={stage.title}
-                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-103"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
             </div>
@@ -124,7 +127,7 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
               className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 px-3 py-1.5 bg-black/80 backdrop-blur-md border border-white/30 text-white text-[10px] font-mono-luxury tracking-widest uppercase flex items-center gap-1.5 hover:bg-white hover:text-black transition-all"
             >
               <ZoomIn className="w-3.5 h-3.5" />
-              <span>Detail Zoom</span>
+              <span>Inspect Detail</span>
             </button>
 
             <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 text-[10px] sm:text-xs font-mono-luxury text-white/70">
@@ -132,7 +135,7 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
             </div>
           </div>
 
-          {/* Right: Craftsmanship Commentary & Audio Notes */}
+          {/* Right: Craft Commentary */}
           <div className="lg:col-span-5 space-y-6">
             
             <div className="space-y-1.5">
@@ -144,15 +147,15 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
               </h3>
             </div>
 
-            {/* Unboxed Typographic Quote */}
+            {/* Quote */}
             <blockquote className="pl-4 border-l border-[#C5A880] text-xs sm:text-sm text-white/80 italic font-display leading-relaxed">
               &ldquo;{stage.quote}&rdquo;
             </blockquote>
 
-            {/* Stage Technical Detail Checklist */}
+            {/* Details List */}
             <div className="space-y-2.5 pt-2 border-t border-white/10">
               <span className="text-[10px] font-mono-luxury uppercase tracking-wider text-white/50 block">
-                Order Verification Criteria
+                Key Considerations
               </span>
               <ul className="space-y-2">
                 {stage.details.map((detail, i) => (
@@ -170,8 +173,8 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
                 onClick={toggleNote}
                 className="flex items-center justify-between w-full py-2 text-xs font-mono-luxury text-white/60 hover:text-white transition-colors uppercase tracking-wider"
               >
-                <span>Atelier Note</span>
-                <span>{isNoteOpen ? '− Close' : '+ Read Details'}</span>
+                <span>Atelier Commentary</span>
+                <span>{isNoteOpen ? '− Close' : '+ Read Notes'}</span>
               </button>
               
               {isNoteOpen && (
@@ -181,16 +184,16 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
               )}
             </div>
 
-            {/* Schedule Fitting Button */}
+            {/* Action */}
             <div className="pt-2">
               <button
                 onClick={() => {
                   playTactileClick();
                   onBookFitting();
                 }}
-                className="w-full py-4 bg-white text-black text-xs font-sans-luxury font-bold uppercase tracking-[0.2em] hover:bg-neutral-200 transition-all rounded-xs flex items-center justify-center shadow-md"
+                className="w-full py-4 bg-white text-black text-xs font-sans-luxury font-bold uppercase tracking-[0.2em] hover:bg-neutral-200 transition-all flex items-center justify-center"
               >
-                <span>Request Custom Order on WhatsApp</span>
+                <span>Request Custom Consultation</span>
               </button>
             </div>
 
@@ -200,10 +203,10 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
 
       </div>
 
-      {/* Macro Texture Zoom Modal */}
+      {/* Macro Detail Zoom Modal */}
       {isMacroModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-noir/90 backdrop-blur-md">
-          <div className="bg-noir border border-white/20 rounded-none max-w-4xl w-full p-6 relative">
+          <div className="bg-noir border border-white/20 max-w-4xl w-full p-6 relative">
             <button
               onClick={() => setIsMacroModalOpen(false)}
               className="absolute top-4 right-4 p-2 text-white/70 hover:text-white"
@@ -213,15 +216,15 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
             <h4 className="font-sans-luxury text-xl text-white mb-4 uppercase tracking-couture">
               Garment Detail — {stage.title}
             </h4>
-            <div className="aspect-[16/9] w-full overflow-hidden rounded-none bg-black">
+            <div className="aspect-[16/9] w-full overflow-hidden bg-black">
               <img
                 src={stage.macroZoomUrl}
-                alt="Macro texture view"
+                alt="Detail view"
                 className="w-full h-full object-cover scale-150 transform hover:scale-175 transition-transform duration-500 cursor-crosshair"
               />
             </div>
             <p className="text-xs text-white/60 mt-3 font-mono-luxury">
-              Use the product imagery as a reference, then confirm fabric, colour and finishing details with the Finaluchi team.
+              Fabric, texture and finishing specifications confirmed with the Abuja atelier team.
             </p>
           </div>
         </div>

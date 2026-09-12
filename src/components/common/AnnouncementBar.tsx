@@ -40,79 +40,67 @@ export const AnnouncementBar: React.FC<AnnouncementBarProps> = ({
   };
 
   return (
-    <aside aria-label="Announcement & Client Options" className="w-full bg-[#000000] text-white/95 text-[11px] font-sans-luxury py-2 px-4 sm:px-8 lg:px-12 border-b border-white/15 transition-colors">
-      <div className="max-w-[1680px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-1.5 sm:gap-2">
+    <aside aria-label="Announcement Bar" className="w-full bg-[#000000] text-white text-[11px] font-sans-luxury py-2 px-4 sm:px-8 lg:px-12 border-b border-white/15">
+      <div className="max-w-[1680px] mx-auto flex items-center justify-between gap-2">
         
         {/* Left: Language & Currency Selector */}
-        <div className="flex items-center justify-between w-full sm:w-auto gap-3">
-          <div className="flex items-center gap-1.5">
-            <span className="text-white/60">EN /</span>
-            <select
-              value={displayCurrency}
-              onChange={(e) => {
-                playTactileClick();
-                setDisplayCurrency(e.target.value as SupportedDisplayCurrency);
-              }}
-              className="bg-transparent text-white font-medium hover:text-[#C5A880] cursor-pointer focus:outline-none"
-              title="Select display currency"
-            >
-              {currencies.map((c) => (
-                <option key={c} value={c} className="bg-noir text-white">
-                  {c}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Mobile Sound Toggle Shortcut */}
-          <button
-            onClick={() => {
-              toggleSound();
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span className="text-white/50 text-[10px] hidden sm:inline">EN /</span>
+          <select
+            value={displayCurrency}
+            onChange={(e) => {
               playTactileClick();
+              setDisplayCurrency(e.target.value as SupportedDisplayCurrency);
             }}
-            className="sm:hidden flex items-center gap-1 text-white/70 hover:text-white"
-            title="Toggle Ambient Audio"
+            className="bg-transparent text-white font-mono-luxury text-[10px] sm:text-[11px] font-medium hover:text-[#C5A880] cursor-pointer focus:outline-none"
+            title="Select display currency"
           >
-            {isSoundEnabled ? <Volume2 className="w-3 h-3 text-white" /> : <VolumeX className="w-3 h-3" />}
-            <span className="text-[10px]">{isSoundEnabled ? 'AUDIO ON' : 'AUDIO OFF'}</span>
-          </button>
+            {currencies.map((c) => (
+              <option key={c} value={c} className="bg-noir text-white">
+                {c}
+              </option>
+            ))}
+          </select>
         </div>
 
+        {/* Center: Editorial WhatsApp Notice */}
         <a
           href={buildWhatsAppUrl('Hello Finaluchi Couture, I would like help choosing or ordering a piece.')}
           target="_blank"
           rel="noreferrer"
-          className="text-center font-normal text-white/85 hover:text-[#DFC7AA] text-[10px] sm:text-[11px] tracking-wide py-0.5 transition-colors"
+          className="text-center font-normal text-white/80 hover:text-white text-[10px] sm:text-[11px] tracking-wide truncate max-w-[200px] sm:max-w-none transition-colors"
         >
-          Abuja-made occasion wear · Order support on WhatsApp {BRAND.whatsappDisplay}
+          <span className="hidden sm:inline">Abuja Atelier · Bespoke & Occasion Wear · Order Support </span>
+          <span className="sm:hidden">WhatsApp Concierge </span>
+          <span className="font-mono-luxury text-white/90">{BRAND.whatsappDisplay}</span>
         </a>
 
-        {/* Right: Contact & About Links */}
-        <div className="hidden sm:flex items-center gap-4 text-white/70 text-[11px]">
+        {/* Right: Actions & Audio */}
+        <div className="flex items-center gap-3 sm:gap-4 text-white/70 text-[11px] shrink-0">
           <button
             onClick={handleContactClick}
-            className="hover:text-white transition-colors"
+            className="hidden sm:inline hover:text-white transition-colors"
           >
             Contact
           </button>
-          <span>•</span>
+          <span className="hidden sm:inline text-white/30">•</span>
           <button
             onClick={handleAboutClick}
-            className="hover:text-white transition-colors"
+            className="hidden sm:inline hover:text-white transition-colors"
           >
             About
           </button>
-          <span>•</span>
+          <span className="hidden sm:inline text-white/30">•</span>
           <button
             onClick={() => {
               toggleSound();
               playTactileClick();
             }}
-            className="flex items-center gap-1 hover:opacity-80 transition-opacity"
+            className="flex items-center gap-1 hover:text-white transition-colors"
             title="Toggle Ambient Audio"
           >
-            {isSoundEnabled ? <Volume2 className="w-3 h-3 text-white" /> : <VolumeX className="w-3 h-3" />}
-            <span className="text-[10px]">{isSoundEnabled ? 'AUDIO ON' : 'AUDIO OFF'}</span>
+            {isSoundEnabled ? <Volume2 className="w-3.5 h-3.5 text-white" /> : <VolumeX className="w-3.5 h-3.5" />}
+            <span className="text-[9px] sm:text-[10px] font-mono-luxury hidden sm:inline">{isSoundEnabled ? 'AUDIO ON' : 'AUDIO OFF'}</span>
           </button>
         </div>
 

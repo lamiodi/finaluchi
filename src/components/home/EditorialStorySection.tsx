@@ -37,13 +37,13 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
       <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12">
         
         {/* Section Header */}
-        <div className="flex items-end justify-between mb-12 sm:mb-16 pb-4 border-b border-black/10">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12 sm:mb-16 pb-4 border-b border-black/10">
           <div>
             <span className="text-[10px] sm:text-xs font-mono-luxury uppercase tracking-[0.25em] text-[#A67C4A] font-semibold block mb-1">
               Editorial Heritage · Abuja, Nigeria
             </span>
             <h2 className="font-sans-luxury text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-noir uppercase">
-              Designed & Produced for the Nigerian Occasion
+              Designed & Tailored for the Nigerian Occasion
             </h2>
           </div>
 
@@ -52,17 +52,17 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
               playTactileClick();
               onExploreCollection();
             }}
-            className="text-[11px] sm:text-xs font-sans font-semibold tracking-[0.15em] text-noir/60 hover:text-noir transition-colors uppercase flex items-center gap-1.5"
+            className="text-xs font-sans font-semibold tracking-wider text-noir/70 hover:text-noir transition-colors uppercase flex items-center gap-1.5 self-start sm:self-auto"
           >
-            <span>Explore All 13 Categories</span>
-            <span>⟶</span>
+            <span>Explore Collection</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
         {/* Asymmetric Editorial Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
           
-          {/* Left Column: Monumental Portrait (Unobstructed Editorial Focus) */}
+          {/* Left Column: Monumental Portrait */}
           <div
             className="lg:col-span-7 group cursor-pointer"
             onClick={() => onExploreCollection()}
@@ -70,7 +70,7 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
             <div className="aspect-[3/4.2] w-full overflow-hidden bg-neutral-100">
               <img
                 src="/images/fc_editorial_monument.jpg"
-                alt="Finaluchi Couture Monumental Evening Look"
+                alt="Finaluchi Couture Evening Look"
                 className="w-full h-full object-cover object-[center_8%] transition-transform duration-700 ease-out group-hover:scale-[1.02]"
               />
             </div>
@@ -86,23 +86,22 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
             </div>
           </div>
 
-          {/* Right Column: Narrative, Public History & Consultation */}
+          {/* Right Column: Narrative & Heritage */}
           <div className="lg:col-span-5 flex flex-col justify-between h-full gap-8">
             
-            {/* Story & Creative Direction */}
             <div className="space-y-6">
               <p className="font-sans text-sm sm:text-[15px] text-noir leading-[1.8] font-normal">
-                Finaluchi Couture (FLC) is an authentic Abuja-based Nigerian fashion house rather than a clothing reseller. Led creatively by Fashion Director and Creative Designer <strong className="font-semibold text-black">Oluchi Irokanulo</strong> since October 2017, the house designs and crafts original occasion wear for landmark celebrations.
+                Finaluchi Couture (FLC) is an authentic Abuja-based Nigerian fashion house. Led creatively by Fashion Director <strong className="font-semibold text-black">Oluchi Irokanulo</strong> since October 2017, the house designs and crafts original occasion wear for milestone celebrations.
               </p>
               
               <p className="font-sans text-xs sm:text-[13px] text-noir/70 leading-[1.8] font-normal">
-                Our silhouettes balance bold contemporary glamour with meticulous couture construction: internal corsetry, crystal beadwork, architectural sleeves, and sweeping bridal trains—spanning women&apos;s couture, asoebi, event dressing, white and traditional bridal through <span className="font-semibold text-black">@flcbridals</span>, menswear via <span className="font-semibold text-black">@flcmen</span>, and lifestyle separates through <span className="font-semibold text-black">@togetherbyflc</span>.
+                Our silhouettes balance contemporary elegance with meticulous couture construction: internal corsetry, crystal beadwork, sculpted shoulders, and sweeping bridal trains—spanning women&apos;s couture, asoebi, event dressing, and bridal creations.
               </p>
 
-              {/* Minimalist Typographic Timeline (No Boxed Clutter) */}
+              {/* Minimalist Typographic Milestones */}
               <div className="pt-4 border-t border-black/10 space-y-4">
                 <span className="text-[10px] font-mono-luxury uppercase tracking-[0.25em] text-[#8C7A6B] font-semibold block">
-                  Heritage & Public Recognition
+                  Heritage Milestones
                 </span>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -116,21 +115,21 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
                   <div className="space-y-1">
                     <span className="text-xs font-mono-luxury font-bold text-black block tracking-wider">2020 · BELLANAIJA</span>
                     <p className="text-[11px] text-neutral-600 font-light leading-relaxed">
-                      Celebrated in a landmark AsoEbi editorial feature.
+                      Featured in a landmark AsoEbi editorial spotlight.
                     </p>
                   </div>
 
                   <div className="space-y-1">
-                    <span className="text-xs font-mono-luxury font-bold text-black block tracking-wider">2022 · LEGIT.NG</span>
+                    <span className="text-xs font-mono-luxury font-bold text-black block tracking-wider">2022 · PRESS</span>
                     <p className="text-[11px] text-neutral-600 font-light leading-relaxed">
-                      Spotlighted for high-impact celebrity & red-carpet dressing.
+                      Recognized for red-carpet and milestone occasion dressing.
                     </p>
                   </div>
 
                   <div className="space-y-1">
                     <span className="text-xs font-mono-luxury font-bold text-black block tracking-wider">2026 · HORIZONS</span>
                     <p className="text-[11px] text-neutral-600 font-light leading-relaxed">
-                      New bridal & evening collections debuting through July 2026.
+                      Bridal and couture evening collections debuting through the season.
                     </p>
                   </div>
                 </div>
@@ -140,7 +139,7 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
               <div className="pt-4 border-t border-black/10 space-y-3">
                 <button
                   onClick={handleCustomOrderWhatsApp}
-                  className="w-full py-4 bg-black text-white text-xs font-sans-luxury font-bold uppercase tracking-[0.2em] hover:bg-neutral-800 transition-all flex items-center justify-center gap-2.5 rounded-xs shadow-sm"
+                  className="w-full py-4 bg-black text-white text-xs font-sans-luxury font-bold uppercase tracking-[0.2em] hover:bg-neutral-800 transition-all flex items-center justify-center gap-2.5"
                 >
                   <span>Inquire on WhatsApp ({BRAND.whatsappDisplay})</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -161,7 +160,7 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
                   <button
                     key={pillar}
                     onClick={() => handleCategoryJump(pillar)}
-                    className="text-[10px] sm:text-[11px] font-mono-luxury font-medium tracking-[0.15em] text-neutral-500 hover:text-black transition-colors uppercase"
+                    className="text-[11px] font-mono-luxury font-medium tracking-wider text-neutral-500 hover:text-black transition-colors uppercase"
                   >
                     {label} ⟶
                   </button>
@@ -178,7 +177,7 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
               <div className="aspect-[16/9] w-full overflow-hidden bg-neutral-100">
                 <img
                   src="/images/fc_atelier_craft.jpg"
-                  alt="Finaluchi Couture Atelier Craftsmanship in Abuja"
+                  alt="Finaluchi Couture Atelier in Abuja"
                   className="w-full h-full object-cover object-[center_35%] transition-transform duration-700 ease-out group-hover:scale-[1.02]"
                 />
               </div>
