@@ -31,6 +31,7 @@ import { BespokeAppointmentModal } from './components/client/BespokeAppointmentM
 import { ContactModal } from './components/common/ContactModal';
 import { AboutModal } from './components/common/AboutModal';
 import { AdminPage } from './components/admin/AdminPage';
+import { WhatsAppWidget } from './components/common/WhatsAppWidget';
 
 type ViewMode = 'HOME' | 'CATALOG' | 'PRODUCT' | 'TRACKER' | 'CLIENT' | 'ADMIN';
 
@@ -323,6 +324,9 @@ export const App: React.FC = () => {
           handleNavigatePillar('ALL');
         }}
       />
+
+      {/* WhatsApp Floating Concierge Widget */}
+      <WhatsAppWidget />
 
     </div>
   );

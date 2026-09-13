@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { ProductCategory } from '../../types';
 import { useAudioStore } from '../../stores/audioStore';
 import { StackSpreadStage, StackSpreadCard } from '../ui/stack-spread';
@@ -236,48 +236,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     },
   ];
 
-  const carouselRef = React.useRef<HTMLDivElement>(null);
-  const [activeCardIndex, setActiveCardIndex] = React.useState(0);
 
-  const scrollToCard = (index: number) => {
-    playTactileClick();
-    if (!carouselRef.current) return;
-    const cards = carouselRef.current.children;
-    if (cards[index]) {
-      (cards[index] as HTMLElement).scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center',
-      });
-      setActiveCardIndex(index);
-    }
-  };
-
-  const handleScroll = () => {
-    if (!carouselRef.current) return;
-    const container = carouselRef.current;
-    const scrollLeft = container.scrollLeft;
-    const containerWidth = container.offsetWidth;
-    const cardElements = Array.from(container.children) as HTMLElement[];
-    if (cardElements.length === 0) return;
-
-    const centerPos = scrollLeft + containerWidth / 2;
-    let closestIdx = 0;
-    let minDiff = Infinity;
-
-    cardElements.forEach((el, idx) => {
-      const cardCenter = el.offsetLeft + el.offsetWidth / 2;
-      const diff = Math.abs(centerPos - cardCenter);
-      if (diff < minDiff) {
-        minDiff = diff;
-        closestIdx = idx;
-      }
-    });
-
-    if (closestIdx !== activeCardIndex) {
-      setActiveCardIndex(closestIdx);
-    }
-  };
 
   return (
     <div className="w-full bg-[#FFFFFF] border-b border-black/10">
@@ -326,202 +285,46 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
       </div>
 
       {/* =========================================================================
-          MOBILE & TABLET VIEWPORTS (< 1024px): EDITORIAL TOUCH-OPTIMIZED LOOKBOOK
+          MOBILE & TABLET VIEWPORTS (< 1024px): SAME SCATTER EXPERIENCE, 6 CARDS
           ========================================================================= */}
       <div className="block lg:hidden w-full bg-[#FFFFFF]">
-        {/* Mobile Header */}
-        <div className="px-5 pt-12 pb-6 text-center max-w-xl mx-auto space-y-3">
-          <span className="text-[10px] font-mono-luxury uppercase tracking-[0.3em] text-[#8C7A6B] font-semibold block">
-            Atelier Portfolio · 13 Silhouettes
-          </span>
-          <h2 className="font-sans-luxury text-2xl sm:text-3xl font-bold tracking-tight text-noir uppercase leading-tight">
-            Find Your Finaluchi Silhouette
-          </h2>
-          <p className="text-xs text-neutral-600 font-light leading-relaxed tracking-normal px-2">
-            Explore all 13 client-approved categories, crafted with signature corsetry, architectural tailoring, and refined occasion finishing.
-          </p>
-          <div className="pt-2 flex items-center justify-center">
-            <button
-              onClick={() => handleNavigate('ALL')}
-              className="group inline-flex items-center gap-2 px-6 py-2.5 bg-black text-white text-[11px] font-sans-luxury font-semibold uppercase tracking-widest hover:bg-neutral-800 transition-all rounded-xs shadow-sm"
-            >
-              <span>Shop All Categories</span>
-              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-            </button>
-          </div>
-        </div>
-
-        {/* Quick Category Jump Pill Bar */}
-        <div className="px-4 pb-3">
-          <div className="flex items-center justify-between pb-2.5 border-b border-black/10 text-[10px] font-mono-luxury text-neutral-500 uppercase tracking-wider">
-            <span className="text-black font-semibold">
-              {String(activeCardIndex + 1).padStart(2, '0')} / 13
-            </span>
-            <span className="text-neutral-700 font-medium truncate max-w-[200px]">
-              {hauteDeptCards[activeCardIndex]?.item.title}
-            </span>
-          </div>
-
-          <div className="flex items-center gap-1.5 overflow-x-auto pt-3 pb-1 scrollbar-none -mx-4 px-4">
-            {hauteDeptCards.map((card, idx) => {
-              const isActive = activeCardIndex === idx;
-              return (
+        <StackSpreadStage
+          cards={hauteDeptCards.slice(0, 6)}
+          scrollLength={260}
+          bgColor="#FFFFFF"
+          clusterRotation={true}
+          stackScale={0.78}
+          cardRadius={4}
+          textColor="#000000"
+          textFadeStart={0.18}
+          showScrollHint={true}
+          heading={
+            <div className="space-y-2.5 max-w-md mx-auto pointer-events-none px-5">
+              <span className="text-[9px] font-mono-luxury uppercase tracking-[0.3em] text-[#8C7A6B] font-medium block">
+                Atelier Portfolio
+              </span>
+              <h2 className="font-sans-luxury text-2xl sm:text-3xl font-bold tracking-tight text-noir uppercase leading-[1.05]">
+                Find Your Silhouette
+              </h2>
+            </div>
+          }
+          subtitle={
+            <div className="mt-3 max-w-sm mx-auto space-y-4 pointer-events-auto px-5">
+              <p className="text-[11px] text-neutral-600 font-light leading-relaxed tracking-normal">
+                Explore our curated categories — dresses, gowns, tailoring, kimonos, jumpsuits and more.
+              </p>
+              <div className="flex items-center justify-center">
                 <button
-                  key={idx}
-                  onClick={() => scrollToCard(idx)}
-                  className={`shrink-0 px-3 py-1.5 text-[10px] font-sans-luxury uppercase tracking-wider rounded-xs transition-all border ${
-                    isActive
-                      ? 'bg-black text-white border-black font-semibold shadow-xs'
-                      : 'bg-white text-neutral-600 border-black/10 hover:border-black/30 hover:text-black'
-                  }`}
+                  onClick={() => handleNavigate('ALL')}
+                  className="group inline-flex items-center gap-2 px-5 py-2.5 bg-black text-white text-[10px] font-sans-luxury font-semibold uppercase tracking-widest hover:bg-neutral-800 transition-all rounded-xs"
                 >
-                  <span>{card.item.category || card.item.title}</span>
+                  <span>All Categories</span>
+                  <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
                 </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Swipeable Lookbook Cards Carousel */}
-        <div className="relative pt-1 pb-2">
-          <div
-            ref={carouselRef}
-            onScroll={handleScroll}
-            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-none px-5 pt-1 pb-4 items-stretch"
-            style={{ scrollPaddingLeft: '20px', scrollPaddingRight: '20px' }}
-          >
-            {hauteDeptCards.map((card, idx) => (
-              <div
-                key={idx}
-                onClick={() => card.item.onClick?.()}
-                className="w-[84vw] max-w-[340px] shrink-0 snap-center flex flex-col bg-[#FAFAFA] border border-black/10 rounded-xs overflow-hidden shadow-sm relative group cursor-pointer active:scale-[0.99] transition-all"
-              >
-                {/* Visual Packshot Stage */}
-                <div className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-100">
-                  <img
-                    src={card.item.src}
-                    alt={card.item.alt}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                    loading="lazy"
-                  />
-
-                  {/* Top Status Indicators */}
-                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-                    <span className="px-2 py-0.5 bg-black/75 backdrop-blur-md text-white text-[9px] font-mono-luxury font-medium tracking-widest rounded-xs">
-                      {String(idx + 1).padStart(2, '0')} / 13
-                    </span>
-                    <span className="px-2 py-0.5 bg-white/95 backdrop-blur-md text-black text-[9px] font-sans-luxury font-semibold tracking-wider uppercase rounded-xs shadow-xs">
-                      {card.item.category}
-                    </span>
-                  </div>
-
-                  {/* Scrim Caption Stage */}
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent pt-16 pb-4 px-4 text-white">
-                    <h3 className="font-sans-luxury text-base sm:text-lg font-bold uppercase tracking-tight leading-snug">
-                      {card.item.title}
-                    </h3>
-                    <p className="text-[11px] text-white/80 font-light line-clamp-2 mt-1 leading-relaxed">
-                      {card.item.tagline}
-                    </p>
-                    <div className="mt-3 pt-2.5 border-t border-white/20 flex items-center justify-between text-[10px] font-sans-luxury font-semibold uppercase tracking-widest">
-                      <span className="text-white/90">Explore Category</span>
-                      <span className="w-5 h-5 rounded-full bg-white/15 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-colors">
-                        ⟶
-                      </span>
-                    </div>
-                  </div>
-                </div>
               </div>
-            ))}
-          </div>
-
-          {/* Stepper Navigation & Dots */}
-          <div className="flex items-center justify-between px-5 pt-2 pb-6">
-            <div className="flex items-center gap-1.5 overflow-hidden max-w-[200px]">
-              {hauteDeptCards.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => scrollToCard(idx)}
-                  aria-label={`Go to slide ${idx + 1}`}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    activeCardIndex === idx
-                      ? 'w-5 bg-black'
-                      : 'w-1.5 bg-neutral-300 hover:bg-neutral-400'
-                  }`}
-                />
-              ))}
             </div>
-
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => scrollToCard(Math.max(0, activeCardIndex - 1))}
-                disabled={activeCardIndex === 0}
-                className="w-8 h-8 rounded-xs border border-black/10 flex items-center justify-center text-black hover:bg-neutral-100 disabled:opacity-25 disabled:pointer-events-none transition-all"
-                aria-label="Previous Category"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => scrollToCard(Math.min(hauteDeptCards.length - 1, activeCardIndex + 1))}
-                disabled={activeCardIndex === hauteDeptCards.length - 1}
-                className="w-8 h-8 rounded-xs border border-black/10 flex items-center justify-center text-black hover:bg-neutral-100 disabled:opacity-25 disabled:pointer-events-none transition-all"
-                aria-label="Next Category"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* =========================================================================
-          PROVENANCE & BUYER PROTECTION — MINIMALIST EDITORIAL RIBBON
-          ========================================================================= */}
-      <div className="w-full bg-[#FFFFFF] py-14 sm:py-20 border-t border-black/10">
-        <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16">
-            
-            {/* Pillar 01 */}
-            <div className="space-y-2.5 border-t border-black/10 pt-4 md:border-t-0 md:pt-0">
-              <div className="flex items-baseline gap-2">
-                <span className="text-[10px] font-mono-luxury text-[#8C7A6B] font-semibold">01</span>
-                <span className="text-xs font-sans-luxury font-bold uppercase tracking-wider text-black">
-                  Original Abuja Atelier
-                </span>
-              </div>
-              <p className="text-xs text-neutral-600 font-light leading-relaxed">
-                Finaluchi Couture designs and crafts original women’s couture, ready-to-wear, asoebi and bridal wear in Abuja, Nigeria—rather than reselling mass-market fashion.
-              </p>
-            </div>
-
-            {/* Pillar 02 */}
-            <div className="space-y-2.5 border-t border-black/10 pt-4 md:border-t-0 md:pt-0">
-              <div className="flex items-baseline gap-2">
-                <span className="text-[10px] font-mono-luxury text-[#8C7A6B] font-semibold">02</span>
-                <span className="text-xs font-sans-luxury font-bold uppercase tracking-wider text-black">
-                  Nigerian Occasion Craft
-                </span>
-              </div>
-              <p className="text-xs text-neutral-600 font-light leading-relaxed">
-                Signature sculpted corsetry, hand-laid embellishments, architectural sleeve volumes, and dramatic trains engineered for milestone celebrations.
-              </p>
-            </div>
-
-            {/* Pillar 03 */}
-            <div className="space-y-2.5 border-t border-black/10 pt-4 md:border-t-0 md:pt-0">
-              <div className="flex items-baseline gap-2">
-                <span className="text-[10px] font-mono-luxury text-[#8C7A6B] font-semibold">03</span>
-                <span className="text-xs font-sans-luxury font-bold uppercase tracking-wider text-black">
-                  Transparent Buying Protocol
-                </span>
-              </div>
-              <p className="text-xs text-neutral-600 font-light leading-relaxed">
-                Written invoices, guaranteed delivery dates, measurement sign-off, and clear alteration policies. Traceable payments via corporate accounts and Paystack.
-              </p>
-            </div>
-
-          </div>
-        </div>
+          }
+        />
       </div>
 
     </div>
