@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { ProductCategory } from '../../types';
 import { useAudioStore } from '../../stores/audioStore';
@@ -9,11 +9,38 @@ interface OccasionEditsBarProps {
   onSelectOccasion?: (occasion: any) => void;
 }
 
+const MOBILE_STAGE_TARGETS = [
+  { x: -32, y: -1 },
+  { x: 0, y: -1 },
+  { x: 32, y: -1 },
+  { x: -32, y: 1 },
+  { x: 0, y: 1 },
+  { x: 32, y: 1 },
+] as const;
+
+function useDesktopStage() {
+  const query = '(min-width: 1024px)';
+  const [isDesktop, setIsDesktop] = useState(() =>
+    typeof window !== 'undefined' ? window.matchMedia(query).matches : false,
+  );
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    const update = () => setIsDesktop(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+
+  return isDesktop;
+}
+
 export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({ 
   onSelectCategory, 
   onSelectOccasion 
 }) => {
   const { playTactileClick } = useAudioStore();
+  const isDesktopStage = useDesktopStage();
 
   const handleNavigate = (catId: ProductCategory | 'ALL') => {
     playTactileClick();

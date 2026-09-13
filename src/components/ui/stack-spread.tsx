@@ -138,34 +138,58 @@ const RESPONSIVE = {
     scale: null as number | null,
     small: false,
     colX: null as number | null,
-    card: null as { w: number; h: number } | null,
-  },
-  small: {
-    scale: 0.75,
-    small: true,
-    colX: 23,
-    card: { w: 38, h: 26 },
+    rowY: null as number | null,
+    card: null as { width: string; height: string } | null,
   },
 };
 
-function useResponsive() {
-  const [r, setR] = useState(RESPONSIVE.desktop);
+type StackSpreadLayout = "responsive" | "desktop" | "mobile";
+
+function resolveResponsive(layout: StackSpreadLayout) {
+  const hasWindow = typeof window !== "undefined";
+  const isSmall =
+    layout === "mobile" ||
+    (layout === "responsive" && hasWindow && window.innerWidth < 1024);
+
+  if (!isSmall) return RESPONSIVE.desktop;
+
+  const viewportWidth = hasWindow ? window.innerWidth : 390;
+  const viewportHeight = hasWindow ? window.innerHeight : 844;
+  const isShortLandscape = viewportWidth > viewportHeight && viewportHeight <= 520;
+  const minCardWidth = isShortLandscape ? 64 : 78;
+  const cardWidth = Math.max(
+    minCardWidth,
+    Math.min(132, viewportWidth * 0.3, viewportHeight * (isShortLandscape ? 0.18 : 0.22)),
+  );
+  const cardHeight = cardWidth * (4 / 3);
+  const edgeReserve = isShortLandscape ? 36 : 88;
+  const rowY = Math.max(
+    18,
+    ((viewportHeight / 2 - edgeReserve - cardHeight / 2) / viewportHeight) * 100,
+  );
+
+  return {
+    scale: 1,
+    small: true,
+    colX: isShortLandscape ? 31 : 32,
+    rowY,
+    card: {
+      width: `${cardWidth}px`,
+      height: `${cardHeight}px`,
+    },
+  };
+}
+
+function useResponsive(layout: StackSpreadLayout) {
+  const [r, setR] = useState(() => resolveResponsive(layout));
+
   useEffect(() => {
-    const update = () => {
-      const isTouchOrNarrow =
-        window.matchMedia("(pointer: coarse)").matches ||
-        window.innerWidth < 1024;
-      setR(isTouchOrNarrow ? RESPONSIVE.small : RESPONSIVE.desktop);
-    };
+    const update = () => setR(resolveResponsive(layout));
     update();
     window.addEventListener("resize", update);
-    const mq = window.matchMedia("(pointer: coarse)");
-    mq.addEventListener("change", update);
-    return () => {
-      window.removeEventListener("resize", update);
-      mq.removeEventListener("change", update);
-    };
-  }, []);
+    return () => window.removeEventListener("resize", update);
+  }, [layout]);
+
   return r;
 }
 
@@ -244,6 +268,7 @@ function Card({
   scaleMul,
   isSmall,
   colX,
+  rowY,
   fixedCard,
   stackScale,
   cardRadius,
@@ -258,7 +283,8 @@ function Card({
   scaleMul: number | null;
   isSmall: boolean;
   colX: number | null;
-  fixedCard: { w: number; h: number } | null;
+  rowY: number | null;
+  fixedCard: { width: string; height: string } | null;
   /** scale of the cards while clustered, before the scatter */
   stackScale: number;
   /** corner radius on each card, in px (desktop) */
@@ -280,11 +306,16 @@ function Card({
       ? Math.sign(sm.x) * colX
       : sm.x
     : target.x;
-  const endY = sm ? sm.y : target.y;
+  const endY = sm
+    ? rowY != null
+      ? Math.sign(sm.y) * rowY
+      : sm.y
+    : target.y;
   const endRotate = flat || isSmall ? 0 : target.rotate;
 
-  // -50% keeps card centred on its anchor
-  const translate = useTransform(
+  // -50% keeps the card centred on its anchor. Keep every animated property
+  // in one compositor-friendly transform so mobile scrolling stays smooth.
+  const transform = useTransform(
     [progress, pointer.x, pointer.y],
     ([p, px, py]: number[]) => {
       const tx = stackOffset.x + (endX - stackOffset.x) * p;
@@ -292,28 +323,42 @@ function Card({
       const drift = depth * p;
       const dx = tx - px * PARALLAX_X * drift;
       const dy = ty - py * PARALLAX_Y * drift;
-      return `calc(-50% + ${dx}vw) calc(-50% + ${dy}vh)`;
+      const rotation = stackRotate + (endRotate - stackRotate) * p;
+      const cardScale = stackScale + (restScale - stackScale) * p;
+      const verticalUnit = isSmall ? "svh" : "vh";
+      return `translate(calc(-50% + ${dx}vw), calc(-50% + ${dy}${verticalUnit})) rotate(${rotation}deg) scale(${cardScale})`;
     },
   );
-  const rotate = useTransform(progress, [0, 1], [stackRotate, endRotate]);
-  const scale = useTransform(progress, [0, 1], [stackScale, restScale]);
+
+  const cardFace = (
+    <CardFace item={item} cardRadius={cardRadius} compact={isSmall} interactive={Boolean(item.onClick)} />
+  );
 
   return (
     <motion.div
-      onClick={item.onClick}
-      className={`absolute left-1/2 top-1/2 will-change-transform ${
-        item.onClick ? 'cursor-pointer' : ''
-      }`}
+      className="pointer-events-none absolute left-1/2 top-1/2"
       style={{
-        width: `${fixedCard ? fixedCard.w : target.w}vw`,
-        height: `${fixedCard ? fixedCard.h : target.h}vh`,
+        width: fixedCard?.width ?? `${target.w}vw`,
+        height: fixedCard?.height ?? `${target.h}vh`,
         zIndex: card.z ?? 1,
-        translate,
-        rotate,
-        scale,
+        transform,
       }}
     >
-      <CardFace item={item} cardRadius={cardRadius} />
+      {item.onClick ? (
+        <button
+          type="button"
+          onClick={item.onClick}
+          aria-label={`Explore ${item.title ?? item.category ?? item.alt ?? "this category"}`}
+          data-compact={isSmall}
+          className="stack-spread-card group/card pointer-events-auto block h-full w-full cursor-pointer border-0 bg-transparent p-0 text-left btn-luxury focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"
+        >
+          {cardFace}
+        </button>
+      ) : (
+        <div data-compact={isSmall} className="stack-spread-card h-full w-full">
+          {cardFace}
+        </div>
+      )}
     </motion.div>
   );
 }
@@ -321,36 +366,51 @@ function Card({
 function CardFace({
   item,
   cardRadius,
+  compact,
+  interactive,
 }: {
   item: StackSpreadItem;
   cardRadius: number;
+  compact: boolean;
+  interactive: boolean;
 }) {
   return (
     <div
-      className="relative h-full w-full overflow-hidden max-md:rounded-[4vw] group/card border border-black/10 shadow-sm transition-all duration-300 hover:border-black hover:shadow-lg"
+      className="stack-spread-card__face relative h-full w-full overflow-hidden bg-neutral-100"
       style={{ borderRadius: `${cardRadius}px` }}
     >
       <img
         src={item.src}
-        alt={item.alt ?? ""}
+        alt={interactive ? "" : item.alt ?? ""}
         draggable={false}
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-105"
+        loading="lazy"
+        decoding="async"
+        fetchPriority="low"
+        className="stack-spread-card__image absolute inset-0 h-full w-full object-cover"
       />
-      {/* Subtle luxury vignette & info reveal on hover if title exists */}
+      {/* Compact cards keep their identity visible on touch; desktop reveals detail on intent. */}
       {item.title && (
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 sm:p-4 text-white">
-          {item.category && (
-            <span className="text-[9px] uppercase tracking-widest text-neutral-300 font-mono">
-              {item.category}
+        <div className="stack-spread-card__info absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/85 via-black/10 via-55% to-transparent p-2.5 text-white sm:p-4">
+          {compact ? (
+            <span className="line-clamp-2 text-[10px] font-semibold uppercase leading-[1.2] tracking-[0.04em]">
+              {item.title}
             </span>
-          )}
-          <span className="text-xs sm:text-sm font-semibold tracking-tight uppercase">
-            {item.title}
-          </span>
-          {item.tagline && (
-            <span className="text-[10px] text-neutral-300 line-clamp-1 mt-0.5">
-              {item.tagline}
-            </span>
+          ) : (
+            <>
+              {item.category && (
+                <span className="text-[9px] uppercase tracking-widest text-neutral-300 font-mono">
+                  {item.category}
+                </span>
+              )}
+              <span className="text-xs font-semibold uppercase tracking-tight sm:text-sm">
+                {item.title}
+              </span>
+              {item.tagline && (
+                <span className="mt-0.5 line-clamp-1 text-[10px] text-neutral-300">
+                  {item.tagline}
+                </span>
+              )}
+            </>
           )}
         </div>
       )}
@@ -360,6 +420,8 @@ function CardFace({
 
 export interface StackSpreadStageProps {
   cards?: StackSpreadCard[];
+  /** force a layout profile when the parent already owns the breakpoint */
+  layout?: StackSpreadLayout;
   /** scatter scroll distance, in vh */
   scrollLength?: number;
   bgColor?: string;
@@ -385,6 +447,7 @@ export interface StackSpreadStageProps {
 
 export function StackSpreadStage({
   cards = DEFAULT_CARDS,
+  layout = "responsive",
   scrollLength = 350,
   bgColor = "#FFFFFF",
   clusterRotation = true,
@@ -399,8 +462,13 @@ export function StackSpreadStage({
 }: StackSpreadStageProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
-  const { scale: scaleMul, small: isSmall, colX, card: fixedCard } =
-    useResponsive();
+  const {
+    scale: scaleMul,
+    small: isSmall,
+    colX,
+    rowY,
+    card: fixedCard,
+  } = useResponsive(layout);
 
   const { scrollYProgress } = useScroll({
     target: wrapRef,
@@ -408,22 +476,28 @@ export function StackSpreadStage({
   });
 
   // hold, scatter, then settle
-  const progress = useTransform(
+  const animatedProgress = useTransform(
     scrollYProgress,
     [0, SCATTER_START, SCATTER_END, 1],
     [0, 0, 1, 1],
   );
+  const reducedProgress = useMotionValue(1);
+  const progress = reduce === true ? reducedProgress : animatedProgress;
 
   // centre text always fades in on scroll; the scale-in is dropped only when
   // reduced motion is confirmed (`true`), not on the null SSR value.
   const [spread, setSpread] = useState(false);
+  const [copyRevealed, setCopyRevealed] = useState(false);
   useMotionValueEvent(progress, "change", (p) => {
     setSpread((was) => (was ? p > 0.985 : p >= 0.999));
+    const nextCopyRevealed = p >= textFadeStart + 0.28;
+    setCopyRevealed((was) => (was === nextCopyRevealed ? was : nextCopyRevealed));
   });
   const parallaxEnabled = reduce !== true && !isSmall;
   const pointer = usePointerParallax(spread, parallaxEnabled);
 
   const noScale = reduce === true;
+  const copyIsInteractive = reduce === true || copyRevealed;
   const copyOpacity = useTransform(progress, [textFadeStart, textFadeStart + 0.35], [0, 1]);
   const copyScale = useTransform(progress, [textFadeStart, 0.9], [0.85, 1]);
 
@@ -434,12 +508,20 @@ export function StackSpreadStage({
     <section
       ref={wrapRef}
       className="relative w-full"
-      style={{ height: `${scrollLength}vh`, backgroundColor: bgColor }}
+      style={{
+        height: reduce === true ? (isSmall ? "100svh" : "100vh") : `${scrollLength}${isSmall ? "svh" : "vh"}`,
+        backgroundColor: bgColor,
+      }}
     >
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
+      <div
+        className="sticky top-0 w-full overflow-hidden"
+        style={{ height: isSmall ? "100svh" : "100vh" }}
+      >
         {/* centre text */}
         <motion.div
-          className="pointer-events-none absolute inset-0 z-[5] flex flex-col items-center justify-center px-6 text-center max-md:px-8"
+          aria-hidden={!copyIsInteractive}
+          inert={!copyIsInteractive ? true : undefined}
+          className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center px-6 text-center max-md:px-5"
           style={{
             opacity: copyOpacity,
             scale: noScale ? 1 : copyScale,
@@ -470,10 +552,10 @@ export function StackSpreadStage({
         </motion.div>
 
         {/* scattering cards */}
-        <div className="absolute inset-0 z-10 pointer-events-auto">
+        <div className="pointer-events-none absolute inset-0 z-10">
           {cards.map((card, i) => (
             <Card
-              key={i}
+              key={`${card.item.src}-${i}`}
               card={card}
               progress={progress}
               reduce={reduce}
@@ -481,6 +563,7 @@ export function StackSpreadStage({
               scaleMul={scaleMul}
               isSmall={isSmall}
               colX={colX}
+              rowY={rowY}
               fixedCard={fixedCard}
               stackScale={stackScale}
               cardRadius={cardRadius}
@@ -494,10 +577,15 @@ export function StackSpreadStage({
         {children}
 
         {/* scroll hint */}
-        {showScrollHint && (
+        {showScrollHint && reduce !== true && (
           <motion.div
-            className="pointer-events-none absolute inset-x-0 bottom-[3vh] z-20 flex flex-col items-center gap-[0.6vh] text-[0.8vw] font-medium uppercase tracking-[0.2em] max-md:bottom-6 max-md:gap-1 max-md:text-[2.8vw]"
-            style={{ color: textColor, opacity: hintOpacity }}
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 z-30 flex flex-col items-center gap-1.5 text-[0.8vw] font-medium uppercase tracking-[0.2em] max-md:text-[11px]"
+            style={{
+              bottom: isSmall ? "max(1.25rem, env(safe-area-inset-bottom))" : "3vh",
+              color: textColor,
+              opacity: hintOpacity,
+            }}
           >
             <span>Scroll to Explore</span>
             <svg
@@ -509,7 +597,7 @@ export function StackSpreadStage({
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="animate-bounce max-md:h-[4vw] max-md:w-[4vw]"
+              className="stack-spread-hint-icon h-4 w-4"
               aria-hidden="true"
             >
               <path d="m6 9 6 6 6-6" />
