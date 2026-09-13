@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { ProductCategory } from '../../types';
 import { useAudioStore } from '../../stores/audioStore';
@@ -9,38 +9,11 @@ interface OccasionEditsBarProps {
   onSelectOccasion?: (occasion: any) => void;
 }
 
-const MOBILE_STAGE_TARGETS = [
-  { x: -32, y: -1 },
-  { x: 0, y: -1 },
-  { x: 32, y: -1 },
-  { x: -32, y: 1 },
-  { x: 0, y: 1 },
-  { x: 32, y: 1 },
-] as const;
-
-function useDesktopStage() {
-  const query = '(min-width: 1024px)';
-  const [isDesktop, setIsDesktop] = useState(() =>
-    typeof window !== 'undefined' ? window.matchMedia(query).matches : false,
-  );
-
-  useEffect(() => {
-    const media = window.matchMedia(query);
-    const update = () => setIsDesktop(media.matches);
-    update();
-    media.addEventListener('change', update);
-    return () => media.removeEventListener('change', update);
-  }, []);
-
-  return isDesktop;
-}
-
 export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({ 
   onSelectCategory, 
   onSelectOccasion 
 }) => {
   const { playTactileClick } = useAudioStore();
-  const isDesktopStage = useDesktopStage();
 
   const handleNavigate = (catId: ProductCategory | 'ALL') => {
     playTactileClick();
@@ -265,6 +238,108 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
 
 
 
+  // 6 Curated Lookbook Cards for Mobile Viewports:
+  // 3 cards scatter UP (above write-up), 3 cards scatter DOWN (below write-up),
+  // framing the text write-up cleanly in the middle.
+  const mobileDeptCards: StackSpreadCard[] = [
+    // 01. DRESSES (UP - Top Left)
+    {
+      item: {
+        src: '/images/fc_asymmetric_silk_dress.jpg',
+        alt: 'Fluid Silk Column Dresses',
+        title: 'Silk Column Dresses',
+        category: 'Dresses',
+        tagline: 'Bias-cut silk and sculpted contours',
+        onClick: () => handleNavigate('DRESSES'),
+      },
+      stackOffset: { x: -6, y: -6 },
+      stackRotate: -14,
+      target: { x: -28, y: -33, rotate: -6, scale: 0.88, w: 27, h: 16 },
+      targetSm: { x: -28, y: -33, rotate: -6, scale: 0.88, w: 27, h: 16 },
+      z: 2,
+    },
+    // 02. JACKETS (UP - Top Center)
+    {
+      item: {
+        src: '/images/fc_tailoring_suite.jpg',
+        alt: 'Pagoda Jackets & Blazers',
+        title: 'Tailored Jackets',
+        category: 'Tailoring',
+        tagline: 'Pagoda shoulders and structured form',
+        onClick: () => handleNavigate('JACKETS'),
+      },
+      stackOffset: { x: 0, y: -8 },
+      stackRotate: 3,
+      target: { x: 0, y: -36, rotate: 1, scale: 0.88, w: 27, h: 16 },
+      targetSm: { x: 0, y: -36, rotate: 1, scale: 0.88, w: 27, h: 16 },
+      z: 3,
+    },
+    // 03. 2PIECES (UP - Top Right)
+    {
+      item: {
+        src: '/images/fc_bustier_pleated_skirt.jpg',
+        alt: '2-Piece Coordinated Sets',
+        title: '2-Piece Ensembles',
+        category: 'Coordinated Sets',
+        tagline: 'Sunburst pleated skirts and bustiers',
+        onClick: () => handleNavigate('2PIECES'),
+      },
+      stackOffset: { x: 7, y: -5 },
+      stackRotate: 16,
+      target: { x: 28, y: -33, rotate: 6, scale: 0.88, w: 27, h: 16 },
+      targetSm: { x: 28, y: -33, rotate: 6, scale: 0.88, w: 27, h: 16 },
+      z: 4,
+    },
+    // 04. JUMPSUITS (DOWN - Bottom Left)
+    {
+      item: {
+        src: '/images/fc_luxury_jumpsuit.jpg',
+        alt: 'Sculptural Jumpsuits',
+        title: 'Sculptural Jumpsuits',
+        category: 'Jumpsuits',
+        tagline: 'One-piece occasion dressing with corsetry',
+        onClick: () => handleNavigate('JUMPSUITS'),
+      },
+      stackOffset: { x: -7, y: 5 },
+      stackRotate: -8,
+      target: { x: -28, y: 33, rotate: 4, scale: 0.88, w: 27, h: 16 },
+      targetSm: { x: -28, y: 33, rotate: 4, scale: 0.88, w: 27, h: 16 },
+      z: 5,
+    },
+    // 05. KIMONO (DOWN - Bottom Center)
+    {
+      item: {
+        src: '/images/fc_luxury_kimono.jpg',
+        alt: 'Atelier Kimonos & Robes',
+        title: 'Atelier Kimonos',
+        category: 'Kimonos',
+        tagline: 'Liquid silk layers with gilded embroidery',
+        onClick: () => handleNavigate('KIMONO'),
+      },
+      stackOffset: { x: 0, y: 7 },
+      stackRotate: -2,
+      target: { x: 0, y: 36, rotate: -2, scale: 0.88, w: 27, h: 16 },
+      targetSm: { x: 0, y: 36, rotate: -2, scale: 0.88, w: 27, h: 16 },
+      z: 6,
+    },
+    // 06. DINNER_DRESSES / CORSETS (DOWN - Bottom Right)
+    {
+      item: {
+        src: '/images/fc_haute_soiree_gown.jpg',
+        alt: 'Grand Soirée & Gala Gowns',
+        title: 'Gala & Corset Gowns',
+        category: 'Corsetry & Gowns',
+        tagline: 'Sculpted corsetry and dramatic trains',
+        onClick: () => handleNavigate('DINNER_DRESSES'),
+      },
+      stackOffset: { x: 6, y: 4 },
+      stackRotate: 10,
+      target: { x: 28, y: 33, rotate: -5, scale: 0.88, w: 27, h: 16 },
+      targetSm: { x: 28, y: 33, rotate: -5, scale: 0.88, w: 27, h: 16 },
+      z: 7,
+    },
+  ];
+
   return (
     <div className="w-full bg-[#FFFFFF] border-b border-black/10">
       
@@ -312,38 +387,38 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
       </div>
 
       {/* =========================================================================
-          MOBILE & TABLET VIEWPORTS (< 1024px): SAME SCATTER EXPERIENCE, 6 CARDS
+          MOBILE & TABLET VIEWPORTS (< 1024px): SCATTER UP & DOWN, WRITE-UP IN MIDDLE
           ========================================================================= */}
       <div className="block lg:hidden w-full bg-[#FFFFFF]">
         <StackSpreadStage
-          cards={hauteDeptCards.slice(0, 6)}
-          scrollLength={260}
+          cards={mobileDeptCards}
+          scrollLength={250}
           bgColor="#FFFFFF"
           clusterRotation={true}
           stackScale={0.78}
-          cardRadius={4}
+          cardRadius={6}
           textColor="#000000"
-          textFadeStart={0.18}
+          textFadeStart={0.14}
           showScrollHint={true}
           heading={
-            <div className="space-y-2.5 max-w-md mx-auto pointer-events-none px-5">
-              <span className="text-[9px] font-mono-luxury uppercase tracking-[0.3em] text-[#8C7A6B] font-medium block">
+            <div className="space-y-2 max-w-xs mx-auto pointer-events-none px-4">
+              <span className="text-[10px] font-mono-luxury uppercase tracking-[0.28em] text-[#8C7A6B] font-medium block">
                 Atelier Portfolio
               </span>
-              <h2 className="font-sans-luxury text-2xl sm:text-3xl font-bold tracking-tight text-noir uppercase leading-[1.05]">
+              <h2 className="font-sans-luxury text-2xl sm:text-3xl font-bold tracking-tight text-noir uppercase leading-[1.08]">
                 Find Your Silhouette
               </h2>
             </div>
           }
           subtitle={
-            <div className="mt-3 max-w-sm mx-auto space-y-4 pointer-events-auto px-5">
+            <div className="mt-2.5 max-w-xs mx-auto space-y-3.5 pointer-events-auto px-4">
               <p className="text-[11px] text-neutral-600 font-light leading-relaxed tracking-normal">
-                Explore our curated categories — dresses, gowns, tailoring, kimonos, jumpsuits and more.
+                Explore signature couture cuts — fluid gowns, sculpted tailoring, kimonos & occasion separates.
               </p>
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center pt-1">
                 <button
                   onClick={() => handleNavigate('ALL')}
-                  className="group inline-flex items-center gap-2 px-5 py-2.5 bg-black text-white text-[10px] font-sans-luxury font-semibold uppercase tracking-widest hover:bg-neutral-800 transition-all rounded-xs"
+                  className="group inline-flex items-center gap-2 px-6 py-2.5 bg-black text-white text-[10px] font-sans-luxury font-semibold uppercase tracking-widest hover:bg-neutral-800 transition-all rounded-xs shadow-sm"
                 >
                   <span>All Categories</span>
                   <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />

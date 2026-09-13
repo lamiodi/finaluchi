@@ -251,7 +251,14 @@ export interface StackSpreadCard {
   item: StackSpreadItem;
   target: StackSpreadTarget;
   /** final x/y (vw/vh) for tablet + mobile; falls back to `target` */
-  targetSm?: { x: number; y: number };
+  targetSm?: {
+    x: number;
+    y: number;
+    rotate?: number;
+    scale?: number;
+    w?: number;
+    h?: number;
+  };
   /** angle while clustered */
   stackRotate?: number;
   /** offset while clustered (vw/vh) */
@@ -299,19 +306,20 @@ function Card({
   const stackOffset = card.stackOffset ?? { x: 0, y: 0 };
   const restScale = scaleMul ?? target.scale ?? 1;
 
-  // final resting spot: column grid on small screens, scatter on desktop
+  // final resting spot: custom sm target if specified, otherwise fallback to column grid on small screens
   const sm = isSmall && card.targetSm ? card.targetSm : null;
   const endX = sm
-    ? colX != null
-      ? Math.sign(sm.x) * colX
-      : sm.x
+    ? sm.x
+    : isSmall && colX != null
+    ? Math.sign(target.x) * colX
     : target.x;
   const endY = sm
-    ? rowY != null
-      ? Math.sign(sm.y) * rowY
-      : sm.y
+    ? sm.y
+    : isSmall && rowY != null
+    ? Math.sign(target.y) * rowY
     : target.y;
-  const endRotate = flat || isSmall ? 0 : target.rotate;
+  const endRotate = flat ? 0 : isSmall ? (sm?.rotate ?? 0) : target.rotate;
+  const cardRestScale = (isSmall && sm?.scale !== undefined) ? sm.scale : restScale;
 
   // -50% keeps the card centred on its anchor. Keep every animated property
   // in one compositor-friendly transform so mobile scrolling stays smooth.
@@ -324,7 +332,7 @@ function Card({
       const dx = tx - px * PARALLAX_X * drift;
       const dy = ty - py * PARALLAX_Y * drift;
       const rotation = stackRotate + (endRotate - stackRotate) * p;
-      const cardScale = stackScale + (restScale - stackScale) * p;
+      const cardScale = stackScale + (cardRestScale - stackScale) * p;
       const verticalUnit = isSmall ? "svh" : "vh";
       return `translate(calc(-50% + ${dx}vw), calc(-50% + ${dy}${verticalUnit})) rotate(${rotation}deg) scale(${cardScale})`;
     },
@@ -338,8 +346,8 @@ function Card({
     <motion.div
       className="pointer-events-none absolute left-1/2 top-1/2"
       style={{
-        width: fixedCard?.width ?? `${target.w}vw`,
-        height: fixedCard?.height ?? `${target.h}vh`,
+        width: isSmall && sm?.w ? `${sm.w}vw` : fixedCard?.width ?? `${target.w}vw`,
+        height: isSmall && sm?.h ? `${sm.h}svh` : fixedCard?.height ?? `${target.h}vh`,
         zIndex: card.z ?? 1,
         transform,
       }}
