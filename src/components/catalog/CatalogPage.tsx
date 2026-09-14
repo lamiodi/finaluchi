@@ -1,12 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { SlidersHorizontal, ArrowUpDown, Check, Heart, X, ArrowRight } from 'lucide-react';
+import { SlidersHorizontal, ArrowUpDown, Check, X, ArrowRight } from 'lucide-react';
 import { OccasionType, Product } from '../../types';
 import { CATEGORY_DEPARTMENTS, getDepartmentById } from '../../data/categoryContent';
-import { useCurrencyStore } from '../../stores/currencyStore';
-import { useWishlistStore } from '../../stores/wishlistStore';
 import { useAudioStore } from '../../stores/audioStore';
-import { formatPriceWithDisplay } from '../../utils/formatters';
 import { buildWhatsAppUrl } from '../../data/brand';
+import { ProductCard } from '../common/ProductCard';
 
 interface CatalogPageProps {
   products: Product[];
@@ -28,13 +26,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
 
-  const { displayCurrency } = useCurrencyStore();
-  const { savedEdits, toggleProductInEdit } = useWishlistStore();
   const { playTactileClick } = useAudioStore();
-
-  const isSaved = (productId: string) => {
-    return savedEdits.some((e) => e.productIds.includes(productId));
-  };
 
   // Filter & Sort Logic
   const filteredProducts = useMemo(() => {
@@ -355,72 +347,14 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-            {filteredProducts.map((product) => {
-              const defaultColorway = product.colorways.find((c) => c.isDefault) || product.colorways[0];
-              const secondaryImage = defaultColorway.mediaGalleryUrls[1] || defaultColorway.heroImageUrl;
-              const saved = isSaved(product.id);
-
-              return (
-                <div
-                  key={product.id}
-                  onClick={() => {
-                    playTactileClick();
-                    onSelectProduct(product);
-                  }}
-                  className="group flex flex-col cursor-pointer transition-all relative"
-                >
-                  {/* Image Container */}
-                  <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#F7F7F7] mb-3.5 flex items-center justify-center p-3 sm:p-4">
-                    <img
-                      src={defaultColorway.heroImageUrl}
-                      alt={product.name}
-                      className="w-full h-full object-contain group-hover:scale-104 transition-transform duration-700 ease-out"
-                      loading="lazy"
-                    />
-
-                    {secondaryImage && secondaryImage !== defaultColorway.heroImageUrl && (
-                      <img
-                        src={secondaryImage}
-                        alt={`${product.name} angle`}
-                        className="absolute inset-0 w-full h-full object-contain opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out p-3 sm:p-4"
-                        loading="lazy"
-                      />
-                    )}
-
-                    {/* Wishlist Heart */}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        playTactileClick();
-                        toggleProductInEdit('edit-default', product.id);
-                      }}
-                      className={`absolute top-3 right-3 p-1.5 transition-all z-10 ${
-                        saved
-                          ? 'text-black fill-current'
-                          : 'text-black/40 hover:text-black sm:opacity-0 sm:group-hover:opacity-100'
-                      }`}
-                      aria-label="Save to Wishlist"
-                    >
-                      <Heart className={`w-4 h-4 ${saved ? 'fill-current' : ''}`} />
-                    </button>
-                  </div>
-
-                  {/* Metadata */}
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-mono-luxury text-neutral-500 tracking-wider uppercase block">
-                      {product.categoryName} • {product.fabricIntelligence.material.split('&')[0]}
-                    </span>
-                    <h3 className="font-sans-luxury text-xs sm:text-sm font-semibold text-[#000000] tracking-tight group-hover:text-[#A67C4A] transition-colors line-clamp-1 uppercase">
-                      {product.name}
-                    </h3>
-                    <div className="text-xs sm:text-sm font-mono-luxury font-bold text-[#000000] pt-0.5">
-                      {formatPriceWithDisplay(product.basePriceKobo, displayCurrency)}
-                    </div>
-                  </div>
-
-                </div>
-              );
-            })}
+            {filteredProducts.map((product, idx) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onSelectProduct={onSelectProduct}
+                priority={idx < 4}
+              />
+            ))}
           </div>
         )}
 
