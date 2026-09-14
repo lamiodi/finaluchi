@@ -23,18 +23,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const { savedEdits, toggleProductInEdit } = useWishlistStore();
   const { playTactileClick } = useAudioStore();
 
-  const defaultColorway = product.colorways.find((c) => c.isDefault) || product.colorways[0];
-  const [activeColorway, setActiveColorway] = useState<ProductColorway>(defaultColorway);
+  const defaultColorway = product.colorways?.find((c) => c.isDefault) || product.colorways?.[0];
+  const [activeColorway, setActiveColorway] = useState<ProductColorway | undefined>(defaultColorway);
   const [isHovered, setIsHovered] = useState(false);
 
   const isSaved = savedEdits.some((e) => e.productIds.includes(product.id));
 
-  const heroImage = activeColorway?.heroImageUrl || defaultColorway.heroImageUrl;
+  const heroImage = activeColorway?.heroImageUrl || defaultColorway?.heroImageUrl || '';
   const secondaryImage =
     activeColorway?.mediaGalleryUrls?.[1] ||
-    defaultColorway.mediaGalleryUrls?.[1] ||
-    (activeColorway?.heroImageUrl !== defaultColorway.heroImageUrl
-      ? defaultColorway.heroImageUrl
+    defaultColorway?.mediaGalleryUrls?.[1] ||
+    (activeColorway?.heroImageUrl !== defaultColorway?.heroImageUrl
+      ? defaultColorway?.heroImageUrl
       : null);
 
   // Craft Exclusivity Badge
@@ -52,9 +52,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   const badge = getBadge();
-  const primaryMaterial = product.fabricIntelligence?.material
-    ? product.fabricIntelligence.material.split('&')[0].trim()
-    : 'Mulberry Silk';
+  const currentColor = activeColorway?.color || defaultColorway?.color;
 
   return (
     <div
@@ -67,7 +65,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       }}
     >
       {/* Editorial Packshot Stage */}
-      <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#F8F7F5] border border-black/[0.04] mb-3.5 flex items-center justify-center p-3 sm:p-5 transition-shadow duration-500 group-hover:shadow-[0_12px_36px_-10px_rgba(0,0,0,0.08)]">
+      <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#F9F8F6] border border-black/[0.05] mb-3 flex items-center justify-center p-3 sm:p-5 transition-shadow duration-500 group-hover:shadow-[0_12px_36px_-10px_rgba(0,0,0,0.08)]">
         
         {/* Primary Product Image */}
         <img
@@ -131,7 +129,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* Desktop Quick-Inspect Floating Pill (Emerges on Hover) */}
         <div className="absolute bottom-3 inset-x-3 hidden sm:flex items-center justify-between px-3.5 py-2 bg-white/95 backdrop-blur-xl border border-black/10 text-noir shadow-lg opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out z-20 pointer-events-none">
           <span className="text-[10px] font-sans-luxury font-bold uppercase tracking-[0.16em]">
-            Explore Silhouette
+            Explore Piece
           </span>
           <div className="flex items-center gap-1 text-[10px] font-mono-luxury font-semibold text-[#A67C4A]">
             <span>VIEW</span>
@@ -141,59 +139,69 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
       </div>
 
-      {/* Product Metadata & Architectural Typography */}
+      {/* Product Information Section: Product Name and Price with Color Variant beside it only */}
       <div className="space-y-1 px-0.5">
         
-        {/* Eyebrow: Fabric Material + Atelier Provenance */}
-        <div className="flex items-center justify-between gap-2 text-[9px] sm:text-[10px] font-mono-luxury text-neutral-500 uppercase tracking-[0.2em]">
-          <span className="truncate">{primaryMaterial}</span>
-          {product.categoryName && (
-            <span className="shrink-0 text-black/30 hidden sm:inline">· {product.categoryName}</span>
-          )}
-        </div>
-
         {/* Product Name */}
-        <h3 className="text-xs sm:text-sm font-sans-luxury font-semibold uppercase text-noir tracking-tight leading-snug group-hover:text-[#A67C4A] transition-colors line-clamp-1">
+        <h3 className="text-xs sm:text-[13.5px] font-sans-luxury font-semibold uppercase text-noir tracking-[0.02em] leading-snug group-hover:text-[#A67C4A] transition-colors line-clamp-1">
           {product.name}
         </h3>
 
-        {/* Price & Colorways Bar */}
-        <div className="flex items-center justify-between pt-0.5 gap-2">
-          <div className="text-xs sm:text-sm font-mono-luxury text-noir font-bold tracking-tight">
+        {/* Price and Color Variant Beside It */}
+        <div className="flex items-center gap-2 pt-0.5 flex-wrap">
+          {/* Price */}
+          <span className="text-xs sm:text-sm font-mono-luxury text-noir font-bold tracking-tight shrink-0">
             {formatPriceWithDisplay(product.basePriceKobo, displayCurrency)}
-          </div>
+          </span>
 
-          {/* Interactive Colorway Swatch Chips */}
-          {product.colorways && product.colorways.length > 1 && (
+          {/* Subtle separator */}
+          {currentColor && (
+            <span className="text-black/30 text-xs select-none">·</span>
+          )}
+
+          {/* Color Variant Beside Price */}
+          {currentColor && (
             <div
               className="flex items-center gap-1.5"
               onClick={(e) => e.stopPropagation()}
             >
-              {product.colorways.slice(0, 4).map((cw) => {
-                const isActive = activeColorway?.id === cw.id;
-                return (
-                  <button
-                    key={cw.id}
-                    onClick={() => {
-                      playTactileClick();
-                      setActiveColorway(cw);
-                    }}
-                    onMouseEnter={() => setActiveColorway(cw)}
-                    className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border transition-all duration-200 ${
-                      isActive
-                        ? 'ring-1.5 ring-black ring-offset-1 scale-110 border-transparent'
-                        : 'border-black/20 hover:scale-125'
-                    }`}
-                    style={{ backgroundColor: cw.color?.hexCode || '#000000' }}
-                    title={cw.color?.name || 'Colorway'}
-                    aria-label={`Select ${cw.color?.name || 'Colorway'}`}
-                  />
-                );
-              })}
-              {product.colorways.length > 4 && (
-                <span className="text-[8px] font-mono-luxury text-neutral-400">
-                  +{product.colorways.length - 4}
-                </span>
+              {/* Swatch circle */}
+              <span
+                className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border border-black/20 shrink-0 shadow-2xs"
+                style={{ backgroundColor: currentColor.hexCode || '#000000' }}
+                title={currentColor.name}
+              />
+
+              {/* Color name */}
+              <span className="text-[10px] sm:text-[11px] font-mono-luxury text-neutral-600 uppercase tracking-wider truncate max-w-[120px] sm:max-w-[150px]">
+                {currentColor.name}
+              </span>
+
+              {/* If product has additional colorways, show clickable swatch dots */}
+              {product.colorways && product.colorways.length > 1 && (
+                <div className="flex items-center gap-1 ml-1 pl-1.5 border-l border-black/15">
+                  {product.colorways.map((cw) => {
+                    const isSelected = activeColorway?.id === cw.id;
+                    return (
+                      <button
+                        key={cw.id}
+                        onClick={() => {
+                          playTactileClick();
+                          setActiveColorway(cw);
+                        }}
+                        onMouseEnter={() => setActiveColorway(cw)}
+                        className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full border transition-all ${
+                          isSelected
+                            ? 'ring-1.5 ring-black ring-offset-1 scale-125 border-transparent'
+                            : 'border-black/25 opacity-60 hover:opacity-100 hover:scale-125'
+                        }`}
+                        style={{ backgroundColor: cw.color?.hexCode || '#000000' }}
+                        title={`Switch to ${cw.color?.name}`}
+                        aria-label={`Switch to ${cw.color?.name}`}
+                      />
+                    );
+                  })}
+                </div>
               )}
             </div>
           )}

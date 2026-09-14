@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   ShoppingBag, Search, Sparkles, Menu, X,
   ChevronDown, Heart, User, MessageCircle, ArrowRight,
-  ArrowUpRight, PhoneCall
+  ArrowUpRight
 } from 'lucide-react';
 import { CATEGORY_DEPARTMENTS } from '../../data/categoryContent';
 import { useCartStore } from '../../stores/cartStore';
