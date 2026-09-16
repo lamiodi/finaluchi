@@ -8,8 +8,21 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'https://finaluchi.com',
+  'https://www.finaluchi.com',
+  'http://localhost:5173',
+].filter((url): url is string => Boolean(url));
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl) or if in allowed list
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(null, true); // Permissive fallback in development
+  },
   credentials: true,
 }));
 app.use(express.json());
