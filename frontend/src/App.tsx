@@ -8,7 +8,6 @@ import { useWishlistStore } from './stores/wishlistStore';
 import { AnnouncementBar } from './components/common/AnnouncementBar';
 import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
-import { SearchModal } from './components/common/SearchModal';
 import { Preloader } from './components/common/Preloader';
 
 // Homepage Components
@@ -19,21 +18,20 @@ import { SeparatesShowcase } from './components/home/SeparatesShowcase';
 import { OccasionEditsBar } from './components/home/OccasionEditsBar';
 import { DigitalAtelier } from './components/atelier/DigitalAtelier';
 
-// Lazy Loaded Heavy Modals and Views for Optimal Production Performance
+// Lazy Loaded Modals, Pages and Views for Instant Initial Paint & Minimal JS Payload
 const RunwayModeModal = React.lazy(() => import('./components/runway/RunwayModeModal').then(m => ({ default: m.RunwayModeModal })));
 const AdminPage = React.lazy(() => import('./components/admin/AdminPage').then(m => ({ default: m.AdminPage })));
-
-// Page Views
-import { CatalogPage } from './components/catalog/CatalogPage';
-import { ProductDetailPage } from './components/product/ProductDetailPage';
-import { CartDrawer } from './components/checkout/CartDrawer';
-import { CheckoutModal } from './components/checkout/CheckoutModal';
-import { PaystackPaymentModal } from './components/checkout/PaystackPaymentModal';
-import { OrderTrackerPage } from './components/post-purchase/OrderTrackerPage';
-import { ClientPortalPage } from './components/client/ClientPortalPage';
-import { BespokeAppointmentModal } from './components/client/BespokeAppointmentModal';
-import { ContactModal } from './components/common/ContactModal';
-import { AboutModal } from './components/common/AboutModal';
+const CatalogPage = React.lazy(() => import('./components/catalog/CatalogPage').then(m => ({ default: m.CatalogPage })));
+const ProductDetailPage = React.lazy(() => import('./components/product/ProductDetailPage').then(m => ({ default: m.ProductDetailPage })));
+const CartDrawer = React.lazy(() => import('./components/checkout/CartDrawer').then(m => ({ default: m.CartDrawer })));
+const CheckoutModal = React.lazy(() => import('./components/checkout/CheckoutModal').then(m => ({ default: m.CheckoutModal })));
+const PaystackPaymentModal = React.lazy(() => import('./components/checkout/PaystackPaymentModal').then(m => ({ default: m.PaystackPaymentModal })));
+const OrderTrackerPage = React.lazy(() => import('./components/post-purchase/OrderTrackerPage').then(m => ({ default: m.OrderTrackerPage })));
+const ClientPortalPage = React.lazy(() => import('./components/client/ClientPortalPage').then(m => ({ default: m.ClientPortalPage })));
+const BespokeAppointmentModal = React.lazy(() => import('./components/client/BespokeAppointmentModal').then(m => ({ default: m.BespokeAppointmentModal })));
+const ContactModal = React.lazy(() => import('./components/common/ContactModal').then(m => ({ default: m.ContactModal })));
+const AboutModal = React.lazy(() => import('./components/common/AboutModal').then(m => ({ default: m.AboutModal })));
+const SearchModal = React.lazy(() => import('./components/common/SearchModal').then(m => ({ default: m.SearchModal })));
 import { WhatsAppWidget } from './components/common/WhatsAppWidget';
 
 type ViewMode = 'HOME' | 'CATALOG' | 'PRODUCT' | 'TRACKER' | 'CLIENT' | 'ADMIN';
@@ -200,46 +198,54 @@ export const App: React.FC = () => {
         {/* VIEW 2: BOTTEGA DYNAMIC MASONRY CATALOG (PLP) */}
         {currentView === 'CATALOG' && (
           <div className="animate-in fade-in duration-300">
-            <CatalogPage
-              products={MASTER_CATALOG}
-              initialPillar={catalogPillar}
-              initialOccasion={catalogOccasion}
-              onSelectProduct={handleSelectProduct}
-            />
+            <React.Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center font-mono-luxury text-xs text-[#C5A880]">Loading Catalog...</div>}>
+              <CatalogPage
+                products={MASTER_CATALOG}
+                initialPillar={catalogPillar}
+                initialOccasion={catalogOccasion}
+                onSelectProduct={handleSelectProduct}
+              />
+            </React.Suspense>
           </div>
         )}
 
         {/* VIEW 3: PRODUCT DETAIL INTELLIGENCE (PDP) */}
         {currentView === 'PRODUCT' && selectedProduct && (
           <div className="animate-in fade-in duration-300">
-            <ProductDetailPage
-              product={selectedProduct}
-              allProducts={MASTER_CATALOG}
-              onSelectProduct={handleSelectProduct}
-              onBackToCatalog={() => handleNavigatePillar(selectedProduct.pillar)}
-              onBookAppointment={() => setIsAppointmentModalOpen(true)}
-            />
+            <React.Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center font-mono-luxury text-xs text-[#C5A880]">Loading Garment Intelligence...</div>}>
+              <ProductDetailPage
+                product={selectedProduct}
+                allProducts={MASTER_CATALOG}
+                onSelectProduct={handleSelectProduct}
+                onBackToCatalog={() => handleNavigatePillar(selectedProduct.pillar)}
+                onBookAppointment={() => setIsAppointmentModalOpen(true)}
+              />
+            </React.Suspense>
           </div>
         )}
 
         {/* VIEW 4: POST-PURCHASE CRAFT JOURNEY TRACKER */}
         {currentView === 'TRACKER' && (
           <div className="animate-in fade-in duration-300">
-            <OrderTrackerPage
-              initialOrderNumber={trackerOrderNumber}
-              onExploreCatalog={() => setCurrentView('CATALOG')}
-            />
+            <React.Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center font-mono-luxury text-xs text-[#C5A880]">Loading Order Tracker...</div>}>
+              <OrderTrackerPage
+                initialOrderNumber={trackerOrderNumber}
+                onExploreCatalog={() => setCurrentView('CATALOG')}
+              />
+            </React.Suspense>
           </div>
         )}
 
         {/* VIEW 5: PRIVATE CLIENT PORTAL & DIGITAL WARDROBE */}
         {currentView === 'CLIENT' && (
           <div className="animate-in fade-in duration-300">
-            <ClientPortalPage
-              products={MASTER_CATALOG}
-              onSelectProduct={handleSelectProduct}
-              onBookAppointment={() => setIsAppointmentModalOpen(true)}
-            />
+            <React.Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center font-mono-luxury text-xs text-[#C5A880]">Loading Client Portal...</div>}>
+              <ClientPortalPage
+                products={MASTER_CATALOG}
+                onSelectProduct={handleSelectProduct}
+                onBookAppointment={() => setIsAppointmentModalOpen(true)}
+              />
+            </React.Suspense>
           </div>
         )}
 
@@ -262,80 +268,93 @@ export const App: React.FC = () => {
         onOpenAbout={() => setIsAboutOpen(true)}
       />
 
-      {/* Slide-over Cart Drawer */}
-      <CartDrawer
-        onProceedToCheckout={() => setIsCheckoutOpen(true)}
-        onExploreCatalog={() => {
-          setCatalogPillar('ALL');
-          setCurrentView('CATALOG');
-        }}
-      />
+      {/* Lazy Loaded Drawers & Modals with Suspense */}
+      <React.Suspense fallback={null}>
+        {/* Slide-over Cart Drawer */}
+        <CartDrawer
+          onProceedToCheckout={() => setIsCheckoutOpen(true)}
+          onExploreCatalog={() => {
+            setCatalogPillar('ALL');
+            setCurrentView('CATALOG');
+          }}
+        />
 
-      {/* Fast Guest Checkout Modal */}
-      <CheckoutModal
-        isOpen={isCheckoutOpen}
-        onClose={() => setIsCheckoutOpen(false)}
-        onPaymentInitiated={handlePaymentInitiated}
-      />
+        {/* Fast Guest Checkout Modal */}
+        {isCheckoutOpen && (
+          <CheckoutModal
+            isOpen={isCheckoutOpen}
+            onClose={() => setIsCheckoutOpen(false)}
+            onPaymentInitiated={handlePaymentInitiated}
+          />
+        )}
 
-      {/* Paystack Payment Modal */}
-      <PaystackPaymentModal
-        isOpen={isPaystackOpen}
-        onClose={() => setIsPaystackOpen(false)}
-        orderId={pendingPaymentOrderId}
-        totalKobo={pendingPaymentTotalKobo}
-        customerEmail={pendingPaymentEmail}
-      />
+        {/* Paystack Payment Modal */}
+        {isPaystackOpen && (
+          <PaystackPaymentModal
+            isOpen={isPaystackOpen}
+            onClose={() => setIsPaystackOpen(false)}
+            orderId={pendingPaymentOrderId}
+            totalKobo={pendingPaymentTotalKobo}
+            customerEmail={pendingPaymentEmail}
+          />
+        )}
 
-      {/* Runway Mode Catwalk Modal */}
-      {isRunwayOpen && (
-        <React.Suspense fallback={null}>
+        {/* Runway Mode Catwalk Modal */}
+        {isRunwayOpen && (
           <RunwayModeModal
             isOpen={isRunwayOpen}
             onClose={() => setIsRunwayOpen(false)}
             products={MASTER_CATALOG}
             onSelectProduct={handleSelectProduct}
           />
-        </React.Suspense>
-      )}
+        )}
 
-      {/* Live Search Modal */}
-      <SearchModal
-        isOpen={isSearchOpen}
-        onClose={() => setIsSearchOpen(false)}
-        products={MASTER_CATALOG}
-        onSelectProduct={handleSelectProduct}
-      />
+        {/* Live Search Modal */}
+        {isSearchOpen && (
+          <SearchModal
+            isOpen={isSearchOpen}
+            onClose={() => setIsSearchOpen(false)}
+            products={MASTER_CATALOG}
+            onSelectProduct={handleSelectProduct}
+          />
+        )}
 
-      {/* Bespoke Private Appointment Modal */}
-      <BespokeAppointmentModal
-        isOpen={isAppointmentModalOpen}
-        onClose={() => setIsAppointmentModalOpen(false)}
-      />
+        {/* Bespoke Private Appointment Modal */}
+        {isAppointmentModalOpen && (
+          <BespokeAppointmentModal
+            isOpen={isAppointmentModalOpen}
+            onClose={() => setIsAppointmentModalOpen(false)}
+          />
+        )}
 
-      {/* Private Client Concierge / Contact Modal */}
-      <ContactModal
-        isOpen={isContactOpen}
-        onClose={() => setIsContactOpen(false)}
-        onOpenAppointments={() => {
-          setIsContactOpen(false);
-          setIsAppointmentModalOpen(true);
-        }}
-      />
+        {/* Private Client Concierge / Contact Modal */}
+        {isContactOpen && (
+          <ContactModal
+            isOpen={isContactOpen}
+            onClose={() => setIsContactOpen(false)}
+            onOpenAppointments={() => {
+              setIsContactOpen(false);
+              setIsAppointmentModalOpen(true);
+            }}
+          />
+        )}
 
-      {/* Maison Heritage & Craftsmanship / About Modal */}
-      <AboutModal
-        isOpen={isAboutOpen}
-        onClose={() => setIsAboutOpen(false)}
-        onOpenAppointments={() => {
-          setIsAboutOpen(false);
-          setIsAppointmentModalOpen(true);
-        }}
-        onExploreCollections={() => {
-          setIsAboutOpen(false);
-          handleNavigatePillar('ALL');
-        }}
-      />
+        {/* Maison Heritage & Craftsmanship / About Modal */}
+        {isAboutOpen && (
+          <AboutModal
+            isOpen={isAboutOpen}
+            onClose={() => setIsAboutOpen(false)}
+            onOpenAppointments={() => {
+              setIsAboutOpen(false);
+              setIsAppointmentModalOpen(true);
+            }}
+            onExploreCollections={() => {
+              setIsAboutOpen(false);
+              handleNavigatePillar('ALL');
+            }}
+          />
+        )}
+      </React.Suspense>
 
       {/* WhatsApp Floating Concierge Widget */}
       <WhatsAppWidget />

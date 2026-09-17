@@ -75,6 +75,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             secondaryImage && isHovered ? 'scale-105 opacity-0' : 'scale-100 opacity-100'
           }`}
           loading={priority ? 'eager' : 'lazy'}
+          decoding="async"
         />
 
         {/* Secondary Lookbook / Angle Image (Editorial Fade-in) */}
@@ -86,6 +87,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               isHovered ? 'scale-105 opacity-100' : 'scale-100 opacity-0 pointer-events-none'
             }`}
             loading="lazy"
+            decoding="async"
           />
         )}
 

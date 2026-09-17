@@ -59,8 +59,12 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
           <div className="space-y-2">
             <div className="w-14 sm:w-16 h-14 sm:h-16 rounded-full border border-[#C5A880]/80 p-1 mx-auto bg-white shadow-sm flex items-center justify-center overflow-hidden">
               <img
-                src="/FINALUCHIlogo.jpg"
+                src="/FINALUCHIlogo.webp"
                 alt="Finaluchi Seal"
+                width={64}
+                height={64}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-contain"
               />
             </div>

@@ -52,8 +52,12 @@ export const PromoModal: React.FC<PromoModalProps> = ({ isOpen, onClose, onExplo
 
         <div className="flex items-center justify-center mb-6">
           <img
-            src="/FINALUCHIlogo.jpg"
+            src="/FINALUCHIlogo.webp"
             alt="Finaluchi Couture"
+            width={48}
+            height={48}
+            loading="lazy"
+            decoding="async"
             className="h-10 sm:h-12 w-auto object-contain"
           />
         </div>

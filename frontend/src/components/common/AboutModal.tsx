@@ -62,7 +62,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({
           {/* Hero Banner inside About Modal */}
           <div className="relative rounded-xs overflow-hidden aspect-[16/7] sm:aspect-[21/8] bg-noir">
             <img
-              src="/images/fc_atelier_craft.jpg"
+              src="/images/.webp"
               alt="Finaluchi Couture design and garment detail"
               className="w-full h-full object-cover object-[center_35%] brightness-90 contrast-[1.05]"
             />

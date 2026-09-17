@@ -269,7 +269,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         <div className="space-y-2.5">
                           <div className="relative aspect-[4/5] w-full overflow-hidden bg-neutral-200">
                             <img
-                              src={activePreviewDept?.image || '/images/fc_haute_soiree_gown.jpg'}
+                              src={activePreviewDept?.image || '/images/.webp'}
                               alt={activePreviewDept?.label || 'Haute Couture Preview'}
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             />
@@ -364,11 +364,18 @@ export const Navbar: React.FC<NavbarProps> = ({
           }}
         >
           <div className="w-6 h-6 sm:w-7 sm:h-7 bg-white p-0.5 border border-black/15 group-hover:border-[#C5A880] transition-colors flex items-center justify-center shrink-0 shadow-2xs">
-            <img
-              src="/FINALUCHIlogo.jpg"
-              alt="Finaluchi Emblem"
-              className="w-full h-full object-contain"
-            />
+            <picture>
+              <source srcSet="/FINALUCHIlogo-nav.webp" type="image/webp" />
+              <img
+                src="/FINALUCHIlogo-nav.webp"
+                alt="Finaluchi Emblem"
+                width={28}
+                height={28}
+                fetchPriority="high"
+                decoding="async"
+                className="w-full h-full object-contain"
+              />
+            </picture>
           </div>
           <span className="font-sans-luxury text-base sm:text-xl font-bold tracking-[0.24em] sm:tracking-[0.28em] text-noir uppercase group-hover:opacity-80 transition-opacity">
             FINALUCHI
@@ -476,7 +483,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }}
               >
                 <div className="w-6 h-6 bg-white p-0.5 border border-black/15 flex items-center justify-center">
-                  <img src="/FINALUCHIlogo.jpg" alt="Finaluchi" className="w-full h-full object-contain" />
+                  <picture>
+                    <source srcSet="/FINALUCHIlogo-nav.webp" type="image/webp" />
+                    <img
+                      src="/FINALUCHIlogo-nav.webp"
+                      alt="Finaluchi"
+                      width={24}
+                      height={24}
+                      decoding="async"
+                      className="w-full h-full object-contain"
+                    />
+                  </picture>
                 </div>
                 <span className="font-sans-luxury text-sm font-bold tracking-[0.24em] text-noir uppercase block">
                   FINALUCHI

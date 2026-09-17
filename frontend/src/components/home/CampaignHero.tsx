@@ -33,7 +33,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
       category: 'DINNER DRESSES & GOWNS',
       lookTitle: 'Statement Evening Gown',
       craftsmanship: 'Sculpted corsetry with a dramatic train',
-      imageUrl: '/images/fc_haute_soiree_gown.jpg',
+      imageUrl: '/images/fc_haute_soiree_gown.webp',
       objectPositionDesktop: 'center 6%',
       objectPositionMobile: 'center 4%',
       pillar: 'DINNER_DRESSES',
@@ -45,7 +45,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
       category: '2-PIECE & 3-PIECE SETS',
       lookTitle: 'Three-Piece Tailored Set',
       craftsmanship: 'Defined shoulders with wide-leg drape',
-      imageUrl: '/images/fc_luxury_threepiece.jpg',
+      imageUrl: '/images/fc_luxury_threepiece.webp',
       objectPositionDesktop: 'center 5%',
       objectPositionMobile: 'center 3%',
       pillar: '2PIECES',
@@ -57,7 +57,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
       category: 'KIMONOS & DRAPES',
       lookTitle: 'Embellished Kimono Layer',
       craftsmanship: 'Flowing silk sleeves and structured waist',
-      imageUrl: '/images/fc_luxury_kimono.jpg',
+      imageUrl: '/images/fc_luxury_kimono.webp',
       objectPositionDesktop: 'center 6%',
       objectPositionMobile: 'center 4%',
       pillar: 'KIMONO',
@@ -69,7 +69,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
       category: 'ASYMMETRIC SILKS',
       lookTitle: 'Asymmetric Draped Gown',
       craftsmanship: 'Fluid silk georgette with floor sweep',
-      imageUrl: '/images/fc_asymmetric_silk_dress.jpg',
+      imageUrl: '/images/fc_asymmetric_silk_dress.webp',
       objectPositionDesktop: 'center 6%',
       objectPositionMobile: 'center 3%',
       pillar: 'DINNER_DRESSES',
@@ -81,7 +81,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
       category: 'CAPE GOWNS',
       lookTitle: 'Sculpted Bridal Ballgown',
       craftsmanship: 'Structured corset with dimensional layers',
-      imageUrl: '/images/fc_organza_cape_gown.jpg',
+      imageUrl: '/images/fc_organza_cape_gown.webp',
       objectPositionDesktop: 'center 8%',
       objectPositionMobile: 'center 5%',
       pillar: 'GOWNS',
@@ -114,22 +114,20 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
       onMouseLeave={() => setIsPaused(false)}
       aria-label="Campaign Showcase"
     >
-      {/* Background Ambient Imagery */}
-      {slides.map((s, idx) => (
-        <div
-          key={`ambient-${s.id}`}
-          className={`absolute inset-0 transition-opacity duration-1000 ease-out pointer-events-none ${
-            idx === currentSlide ? 'opacity-25' : 'opacity-0'
-          }`}
-        >
-          <img
-            src={s.imageUrl}
-            alt=""
-            aria-hidden="true"
-            className="w-full h-full object-cover blur-2xl scale-110 filter brightness-40"
-          />
-        </div>
-      ))}
+      {/* Background Ambient Imagery - Render only current ambient layer to conserve network */}
+      <div
+        key={`ambient-${slide.id}`}
+        className="absolute inset-0 transition-opacity duration-1000 ease-out pointer-events-none opacity-25"
+      >
+        <img
+          src={slide.imageUrl}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover blur-2xl scale-110 filter brightness-40"
+        />
+      </div>
 
       {/* Main Imagery Stage */}
       <div className="absolute inset-0 flex items-center justify-center">
@@ -150,6 +148,8 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
                 objectPosition: typeof window !== 'undefined' && window.innerWidth < 640 ? s.objectPositionMobile : s.objectPositionDesktop,
               }}
               loading={idx === 0 ? 'eager' : 'lazy'}
+              fetchPriority={idx === 0 ? 'high' : 'auto'}
+              decoding="async"
             />
 
             {/* Subtle Vignettes */}

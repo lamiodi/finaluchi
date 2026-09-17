@@ -37,11 +37,18 @@ export const Footer: React.FC<FooterProps> = ({
           <div className="lg:col-span-5 space-y-4">
             <div className="flex items-center gap-3 sm:gap-4">
               <div className="w-12 sm:w-14 h-12 sm:h-14 bg-white p-1.5 border border-white/40 shadow-xl flex items-center justify-center shrink-0 rounded-xs">
-                <img
-                  src="/FINALUCHIlogo.jpg"
-                  alt="Finaluchi Couture official logo"
-                  className="w-full h-full object-contain"
-                />
+                <picture>
+                  <source srcSet="/FINALUCHIlogo.webp" type="image/webp" />
+                  <img
+                    src="/FINALUCHIlogo.webp"
+                    alt="Finaluchi Couture official logo"
+                    width={56}
+                    height={56}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-contain"
+                  />
+                </picture>
               </div>
               <div>
                 <span className="font-sans-luxury text-lg sm:text-2xl tracking-[0.22em] font-bold text-white uppercase block">

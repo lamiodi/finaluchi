@@ -15,8 +15,34 @@ export default defineConfig({
       'motion/react': 'framer-motion',
     },
   },
+  build: {
+    target: 'es2022',
+    cssCodeSplit: true,
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/framer-motion') || id.includes('node_modules/motion')) {
+            return 'vendor-motion';
+          }
+          if (id.includes('node_modules/lucide-react')) {
+            return 'vendor-icons';
+          }
+          if (
+            id.includes('node_modules/zustand') ||
+            id.includes('node_modules/sonner') ||
+            id.includes('node_modules/clsx') ||
+            id.includes('node_modules/tailwind-merge')
+          ) {
+            return 'vendor-ui';
+          }
+        },
+      },
+    },
+  },
   server: {
     port: 5173,
     host: true,
   },
 });
+
