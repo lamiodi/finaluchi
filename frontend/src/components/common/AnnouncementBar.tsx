@@ -1,8 +1,6 @@
 import React from 'react';
 import { useCurrencyStore } from '../../stores/currencyStore';
 import { SupportedDisplayCurrency } from '../../utils/formatters';
-import { useAudioStore } from '../../stores/audioStore';
-import { Volume2, VolumeX } from 'lucide-react';
 import { BRAND, buildWhatsAppUrl } from '../../data/brand';
 
 interface AnnouncementBarProps {
@@ -17,12 +15,10 @@ export const AnnouncementBar: React.FC<AnnouncementBarProps> = ({
   onOpenAbout,
 }) => {
   const { displayCurrency, setDisplayCurrency } = useCurrencyStore();
-  const { isSoundEnabled, toggleSound, playTactileClick } = useAudioStore();
 
   const currencies: SupportedDisplayCurrency[] = ['NGN', 'USD', 'GBP', 'EUR', 'CAD', 'AED'];
 
   const handleContactClick = () => {
-    playTactileClick();
     if (onOpenContact) {
       onOpenContact();
     } else {
@@ -31,7 +27,6 @@ export const AnnouncementBar: React.FC<AnnouncementBarProps> = ({
   };
 
   const handleAboutClick = () => {
-    playTactileClick();
     if (onOpenAbout) {
       onOpenAbout();
     } else {
@@ -49,7 +44,6 @@ export const AnnouncementBar: React.FC<AnnouncementBarProps> = ({
           <select
             value={displayCurrency}
             onChange={(e) => {
-              playTactileClick();
               setDisplayCurrency(e.target.value as SupportedDisplayCurrency);
             }}
             className="bg-transparent text-white font-mono-luxury text-[10px] sm:text-[11px] font-medium hover:text-[#C5A880] cursor-pointer focus:outline-none"
@@ -75,32 +69,20 @@ export const AnnouncementBar: React.FC<AnnouncementBarProps> = ({
           <span className="font-mono-luxury text-white/90">{BRAND.whatsappDisplay}</span>
         </a>
 
-        {/* Right: Actions & Audio */}
-        <div className="flex items-center gap-3 sm:gap-4 text-white/70 text-[11px] shrink-0">
+        {/* Right: Actions */}
+        <div className="hidden sm:flex items-center gap-3 sm:gap-4 text-white/70 text-[11px] shrink-0">
           <button
             onClick={handleContactClick}
-            className="hidden sm:inline hover:text-white transition-colors"
+            className="hover:text-white transition-colors"
           >
             Contact
           </button>
-          <span className="hidden sm:inline text-white/30">•</span>
+          <span className="text-white/30">•</span>
           <button
             onClick={handleAboutClick}
-            className="hidden sm:inline hover:text-white transition-colors"
+            className="hover:text-white transition-colors"
           >
             About
-          </button>
-          <span className="hidden sm:inline text-white/30">•</span>
-          <button
-            onClick={() => {
-              toggleSound();
-              playTactileClick();
-            }}
-            className="flex items-center gap-1 hover:text-white transition-colors"
-            title="Toggle Ambient Audio"
-          >
-            {isSoundEnabled ? <Volume2 className="w-3.5 h-3.5 text-white" /> : <VolumeX className="w-3.5 h-3.5" />}
-            <span className="text-[9px] sm:text-[10px] font-mono-luxury hidden sm:inline">{isSoundEnabled ? 'AUDIO ON' : 'AUDIO OFF'}</span>
           </button>
         </div>
 

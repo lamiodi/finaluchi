@@ -9,6 +9,7 @@ import { AnnouncementBar } from './components/common/AnnouncementBar';
 import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
 import { SearchModal } from './components/common/SearchModal';
+import { Preloader } from './components/common/Preloader';
 
 // Homepage Components
 import { CampaignHero } from './components/home/CampaignHero';
@@ -113,6 +114,9 @@ export const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#FFFFFF] text-[#000000] flex flex-col justify-between selection:bg-[#000000] selection:text-[#FFFFFF]">
       
+      {/* Maison Introductory Preloader */}
+      <Preloader />
+
       {/* Sonner Toast Notification Center */}
       <Toaster 
         position="top-right" 
