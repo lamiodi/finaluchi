@@ -49,7 +49,7 @@ export const Preloader: React.FC = () => {
           />
         </picture>
         <span className="text-[10px] sm:text-[11px] font-mono-luxury tracking-[0.35em] text-[#C5A880] uppercase font-semibold text-center">
-          FINALUCHI COUTURE • ABUJA
+          FINALUCHI COUTURE
         </span>
         <div className="w-24 h-[1.5px] bg-white/15 overflow-hidden rounded-full mt-2">
           <div

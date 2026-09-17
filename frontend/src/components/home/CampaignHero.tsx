@@ -107,11 +107,38 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
 
   const slide = slides[currentSlide];
 
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const minSwipeDistance = 45;
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    if (distance > minSwipeDistance) {
+      nextSlide();
+    } else if (distance < -minSwipeDistance) {
+      prevSlide();
+    }
+  };
+
   return (
     <section 
-      className="relative w-full h-[85vh] sm:h-[90vh] min-h-[580px] max-h-[960px] bg-[#000000] overflow-hidden select-none"
+      className="relative w-full h-[85vh] sm:h-[90vh] min-h-[580px] max-h-[960px] bg-[#000000] overflow-hidden select-none touch-pan-y"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
       aria-label="Campaign Showcase"
     >
       {/* Background Ambient Imagery - Render only current ambient layer to conserve network */}
@@ -181,7 +208,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
               {slide.category}
             </span>
 
-            <h1 className="font-sans-luxury text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white uppercase leading-[0.94]">
+            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-white uppercase leading-[0.94]">
               DRESS<br />
               THE MOMENT
             </h1>
@@ -190,13 +217,13 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
               <span className="font-semibold text-white uppercase tracking-wider">{slide.lookTitle}</span> — {slide.craftsmanship}.
             </p>
 
-            <div className="flex flex-wrap items-center gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
               <button
                 onClick={() => {
                   playTactileClick();
                   onShopNow();
                 }}
-                className="px-7 sm:px-9 py-3.5 bg-white text-black text-xs font-bold tracking-loose-couture rounded-none uppercase hover:bg-neutral-200 transition-all btn-luxury flex items-center gap-2"
+                className="w-full sm:w-auto px-7 sm:px-9 py-3.5 bg-white text-black text-xs font-bold tracking-loose-couture rounded-none uppercase hover:bg-neutral-200 active:scale-[0.98] transition-all btn-luxury flex items-center justify-center gap-2"
               >
                 <span>Shop Collection</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -208,11 +235,31 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
                     playTactileClick();
                     onExploreAtelier();
                   }}
-                  className="px-6 sm:px-8 py-3.5 bg-black/60 backdrop-blur-md text-white text-xs font-semibold tracking-loose-couture rounded-none uppercase hover:bg-white hover:text-black border border-white/30 transition-all btn-luxury"
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3.5 bg-black/60 backdrop-blur-md text-white text-xs font-semibold tracking-loose-couture rounded-none uppercase hover:bg-white hover:text-black active:scale-[0.98] border border-white/30 transition-all btn-luxury text-center"
                 >
                   Custom Order
                 </button>
               )}
+            </div>
+
+            {/* Minimalist Mobile Progress Segments */}
+            <div className="flex sm:hidden items-center gap-1.5 w-full pt-2">
+              {slides.map((s, idx) => (
+                <div
+                  key={`prog-${s.id}`}
+                  onClick={() => {
+                    playTactileClick();
+                    setCurrentSlide(idx);
+                  }}
+                  className="flex-1 h-[2px] bg-white/20 overflow-hidden cursor-pointer"
+                >
+                  <div
+                    className={`h-full transition-all duration-300 ${
+                      idx === currentSlide ? 'w-full bg-[#C5A880]' : 'w-0'
+                    }`}
+                  />
+                </div>
+              ))}
             </div>
           </div>
 
@@ -226,7 +273,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
                   playTactileClick();
                   prevSlide();
                 }}
-                className="p-2 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-black transition-all"
+                className="p-2.5 sm:p-2 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-black active:scale-90 transition-all"
                 aria-label="Previous slide"
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -241,7 +288,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
                   playTactileClick();
                   nextSlide();
                 }}
-                className="p-2 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-black transition-all"
+                className="p-2.5 sm:p-2 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-black active:scale-90 transition-all"
                 aria-label="Next slide"
               >
                 <ChevronRight className="w-4 h-4" />

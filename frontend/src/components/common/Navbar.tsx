@@ -101,7 +101,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               playTactileClick();
               setIsMobileMenuOpen(true);
             }}
-            className="lg:hidden p-2 -ml-2 text-noir hover:text-[#A67C4A] transition-colors rounded-full hover:bg-neutral-100"
+            className="lg:hidden w-10 h-10 -ml-2 text-noir hover:text-[#A67C4A] transition-colors rounded-full hover:bg-neutral-100 active:bg-neutral-200 flex items-center justify-center shrink-0"
             aria-label="Open Navigation Menu"
           >
             <Menu className="w-5 h-5" />
@@ -113,7 +113,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               playTactileClick();
               onOpenSearch();
             }}
-            className="lg:hidden p-2 text-noir hover:text-[#A67C4A] transition-colors rounded-full hover:bg-neutral-100"
+            className="lg:hidden w-10 h-10 text-noir hover:text-[#A67C4A] transition-colors rounded-full hover:bg-neutral-100 active:bg-neutral-200 flex items-center justify-center shrink-0"
             aria-label="Search Collection"
           >
             <Search className="w-4 h-4" />
@@ -513,19 +513,37 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             {/* Scrollable Navigation Body */}
-            <div className="flex-1 overflow-y-auto px-5 py-6 space-y-6">
+            <div className="flex-1 overflow-y-auto px-5 py-5 space-y-6">
               
+              {/* Quick Mobile Search Card */}
+              <div
+                onClick={() => {
+                  playTactileClick();
+                  setIsMobileMenuOpen(false);
+                  onOpenSearch();
+                }}
+                className="flex items-center justify-between px-3.5 py-3 bg-[#F8F7F5] border border-black/10 text-neutral-500 cursor-pointer active:bg-neutral-200/80 transition-colors group"
+                role="button"
+                tabIndex={0}
+                aria-label="Search Collection"
+              >
+                <span className="text-[11px] font-sans-luxury uppercase tracking-wider text-black/60 group-hover:text-black">
+                  Search Silhouette or Piece...
+                </span>
+                <Search className="w-3.5 h-3.5 text-neutral-500 group-hover:text-black transition-colors" />
+              </div>
+
               {/* Primary Nav Links */}
-              <nav className="space-y-4">
+              <nav className="space-y-1">
                 
                 {/* Collapsible Categories Section */}
-                <div>
+                <div className="border-b border-black/[0.08] pb-1">
                   <button
                     onClick={() => {
                       playTactileClick();
                       setIsMobileCategoriesOpen(!isMobileCategoriesOpen);
                     }}
-                    className="w-full flex items-center justify-between text-sm font-bold uppercase tracking-[0.16em] text-noir py-1.5"
+                    className="w-full flex items-center justify-between min-h-[44px] py-2 text-[15px] font-display font-normal uppercase tracking-[0.12em] text-noir active:text-[#A67C4A] transition-colors"
                   >
                     <span>COLLECTIONS</span>
                     <ChevronDown
@@ -536,17 +554,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </button>
 
                   {isMobileCategoriesOpen && (
-                    <div className="mt-2 ml-2 pl-3 border-l border-black/10 space-y-1.5 text-xs uppercase tracking-wider animate-in fade-in duration-200">
+                    <div className="mt-1 ml-2 pl-3 border-l-2 border-[#C5A880]/40 space-y-1 py-1 text-xs uppercase tracking-wider animate-in fade-in duration-200">
                       <button
                         onClick={() => {
                           playTactileClick();
                           onNavigatePillar('ALL');
                           setIsMobileMenuOpen(false);
                         }}
-                        className="w-full text-left py-1 text-black font-bold flex items-center justify-between"
+                        className="w-full min-h-[38px] text-left py-1 text-black font-bold flex items-center justify-between active:bg-neutral-100/60 px-1"
                       >
                         <span>All Collections</span>
-                        <ArrowRight className="w-3 h-3 text-black/40" />
+                        <ArrowRight className="w-3 h-3 text-[#A67C4A]" />
                       </button>
 
                       {CATEGORY_DEPARTMENTS.map((cat) => (
@@ -557,9 +575,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                             onNavigatePillar(cat.id);
                             setIsMobileMenuOpen(false);
                           }}
-                          className="w-full text-left py-1 text-black/70 hover:text-black transition-colors flex items-center justify-between"
+                          className="w-full min-h-[36px] text-left py-1 text-black/75 hover:text-black active:text-[#A67C4A] transition-colors flex items-center justify-between px-1"
                         >
-                          <span>{cat.label}</span>
+                          <span className="font-sans-luxury text-[11.5px]">{cat.label}</span>
                           <span className="text-[10px] text-black/30">⟶</span>
                         </button>
                       ))}
@@ -573,7 +591,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onOpenAppointments();
                     setIsMobileMenuOpen(false);
                   }}
-                  className="w-full text-left text-sm font-bold uppercase tracking-[0.16em] text-noir py-1.5 hover:text-[#A67C4A] transition-colors flex items-center justify-between"
+                  className="w-full text-left min-h-[44px] py-2 text-[15px] font-display font-normal uppercase tracking-[0.12em] text-noir active:text-[#A67C4A] transition-colors flex items-center justify-between border-b border-black/[0.08]"
                 >
                   <span>BESPOKE APPOINTMENTS</span>
                   <ArrowUpRight className="w-3.5 h-3.5 text-neutral-400" />
@@ -585,7 +603,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onOpenRunway();
                     setIsMobileMenuOpen(false);
                   }}
-                  className="w-full flex items-center justify-between text-sm font-bold uppercase tracking-[0.16em] text-noir py-1.5 hover:text-[#A67C4A] transition-colors"
+                  className="w-full min-h-[44px] py-2 flex items-center justify-between text-[15px] font-display font-normal uppercase tracking-[0.12em] text-noir active:text-[#A67C4A] transition-colors border-b border-black/[0.08]"
                 >
                   <span className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#C5A880]" />
@@ -600,7 +618,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onOpenClientPortal();
                     setIsMobileMenuOpen(false);
                   }}
-                  className="w-full flex items-center justify-between text-sm font-bold uppercase tracking-[0.16em] text-noir py-1.5 hover:text-[#A67C4A] transition-colors"
+                  className="w-full min-h-[44px] py-2 flex items-center justify-between text-[15px] font-display font-normal uppercase tracking-[0.12em] text-noir active:text-[#A67C4A] transition-colors border-b border-black/[0.08]"
                 >
                   <span>SAVED PIECES</span>
                   <span className="text-[10px] font-mono-luxury font-bold bg-black text-white px-2 py-0.5 rounded-full">
@@ -614,49 +632,51 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onOpenClientPortal();
                     setIsMobileMenuOpen(false);
                   }}
-                  className="w-full text-left text-sm font-bold uppercase tracking-[0.16em] text-noir py-1.5 hover:text-[#A67C4A] transition-colors"
+                  className="w-full text-left min-h-[44px] py-2 text-[15px] font-display font-normal uppercase tracking-[0.12em] text-noir active:text-[#A67C4A] transition-colors border-b border-black/[0.08]"
                 >
                   CLIENT PORTAL & ORDERS
                 </button>
 
-                {onOpenAbout && (
-                  <button
-                    onClick={() => {
-                      playTactileClick();
-                      onOpenAbout();
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="w-full text-left text-xs font-semibold uppercase tracking-widest text-black/65 hover:text-black py-1 transition-colors"
-                  >
-                    ABOUT FINALUCHI
-                  </button>
-                )}
+                <div className="pt-3 space-y-1">
+                  {onOpenAbout && (
+                    <button
+                      onClick={() => {
+                        playTactileClick();
+                        onOpenAbout();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full text-left min-h-[36px] text-xs font-sans-luxury font-semibold uppercase tracking-widest text-black/65 active:text-black py-1 transition-colors"
+                    >
+                      ABOUT FINALUCHI
+                    </button>
+                  )}
 
-                {onOpenContact && (
-                  <button
-                    onClick={() => {
-                      playTactileClick();
-                      onOpenContact();
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="w-full text-left text-xs font-semibold uppercase tracking-widest text-black/65 hover:text-black py-1 transition-colors"
-                  >
-                    CONTACT & ATELIER
-                  </button>
-                )}
+                  {onOpenContact && (
+                    <button
+                      onClick={() => {
+                        playTactileClick();
+                        onOpenContact();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full text-left min-h-[36px] text-xs font-sans-luxury font-semibold uppercase tracking-widest text-black/65 active:text-black py-1 transition-colors"
+                    >
+                      CONTACT & ATELIER
+                    </button>
+                  )}
+                </div>
 
               </nav>
 
             </div>
 
-            {/* Pinned Bottom Drawer Concierge Bar */}
-            <div className="p-5 border-t border-black/10 space-y-3 bg-[#F9F8F6]">
+            {/* Pinned Bottom Drawer Concierge Bar with iOS Safe-Area Inset */}
+            <div className="p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] border-t border-black/10 space-y-3 bg-[#F9F8F6]">
               <a
                 href={buildWhatsAppUrl('Hello Finaluchi Couture, I would like to inquire about ordering a piece.')}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playTactileClick()}
-                className="w-full py-3 bg-black text-white text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-neutral-800 transition-colors shadow-xs"
+                className="w-full py-3 bg-black text-white text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-neutral-800 active:scale-[0.98] transition-all shadow-xs"
               >
                 <MessageCircle className="w-4 h-4 text-[#DFC7AA]" />
                 <span>WhatsApp VIP Concierge</span>

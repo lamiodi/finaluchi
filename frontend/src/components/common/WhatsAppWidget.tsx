@@ -26,13 +26,13 @@ export const WhatsAppWidget: React.FC<WhatsAppWidgetProps> = ({
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-[9999] flex flex-col items-end gap-3">
+    <div className="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 pb-[env(safe-area-inset-bottom)] z-[9999] flex flex-col items-end gap-3">
 
       {/* Tooltip / expanded card */}
       <div
         className={`
           bg-white border border-black/10 shadow-xl rounded-xs
-          w-[280px] overflow-hidden
+          w-[280px] max-w-[calc(100vw-32px)] overflow-hidden
           transition-all duration-300 origin-bottom-right
           ${isOpen
             ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto'
@@ -88,10 +88,10 @@ export const WhatsAppWidget: React.FC<WhatsAppWidgetProps> = ({
         onClick={() => setIsOpen(!isOpen)}
         aria-label={isOpen ? 'Close WhatsApp chat' : 'Open WhatsApp chat'}
         className={`
-          group relative w-14 h-14 rounded-full
+          group relative w-12 h-12 sm:w-14 sm:h-14 rounded-full
           flex items-center justify-center
           shadow-lg hover:shadow-xl
-          transition-all duration-300
+          transition-all duration-300 active:scale-95
           ${isOpen ? 'bg-black rotate-0' : 'bg-black hover:bg-neutral-800'}
         `}
       >

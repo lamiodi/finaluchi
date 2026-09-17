@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Product } from '../../types';
 import { useAudioStore } from '../../stores/audioStore';
 import { ProductCard } from '../common/ProductCard';
@@ -68,10 +68,10 @@ export const ReadyToWearGrid: React.FC<ReadyToWearGridProps> = ({
           </div>
 
           {/* Right: Quick Category Filter Pills + View All */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
             
-            {/* Minimalist Tab Pills */}
-            <div className="flex items-center gap-1 p-1 bg-[#F9F8F6] border border-black/10 text-[10px] font-sans-luxury font-semibold uppercase tracking-wider">
+            {/* Minimalist Tab Pills (Touch-friendly scroll on mobile) */}
+            <div className="flex items-center gap-1 p-1 bg-[#F9F8F6] border border-black/10 text-[10px] font-sans-luxury font-semibold uppercase tracking-wider overflow-x-auto no-scrollbar scroll-smooth">
               {[
                 { id: 'ALL', label: 'All Curated' },
                 { id: 'TAILORING', label: 'Tailoring' },
@@ -84,7 +84,7 @@ export const ReadyToWearGrid: React.FC<ReadyToWearGridProps> = ({
                     playTactileClick();
                     setActiveTab(tab.id as FilterTab);
                   }}
-                  className={`px-2.5 py-1.5 transition-all duration-200 ${
+                  className={`px-3 py-2 sm:px-2.5 sm:py-1.5 whitespace-nowrap shrink-0 transition-all duration-200 active:scale-95 ${
                     activeTab === tab.id
                       ? 'bg-black text-white shadow-xs'
                       : 'text-black/60 hover:text-black hover:bg-white/60'
@@ -101,7 +101,7 @@ export const ReadyToWearGrid: React.FC<ReadyToWearGridProps> = ({
                 playTactileClick();
                 onSeeMore();
               }}
-              className="group flex items-center gap-2 px-4 py-2 text-xs font-sans-luxury font-bold tracking-[0.15em] text-noir hover:text-[#A67C4A] transition-all uppercase border border-black/15 hover:border-black"
+              className="group flex items-center justify-center gap-2 px-4 py-2.5 sm:py-2 text-xs font-sans-luxury font-bold tracking-[0.15em] text-noir hover:text-[#A67C4A] transition-all uppercase border border-black/15 hover:border-black active:scale-[0.98]"
             >
               <span>View Full Archive</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-[#A67C4A]" />
@@ -111,7 +111,7 @@ export const ReadyToWearGrid: React.FC<ReadyToWearGridProps> = ({
         </div>
 
         {/* 4-Column Product Grid (2-col on mobile) */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
           {displayProducts.map((product, idx) => (
             <ProductCard
               key={product.id}
@@ -120,22 +120,6 @@ export const ReadyToWearGrid: React.FC<ReadyToWearGridProps> = ({
               priority={idx < 2}
             />
           ))}
-        </div>
-
-        {/* Section Footnote: Maison Assurance */}
-        <div className="mt-12 sm:mt-16 pt-6 border-t border-black/[0.08] grid grid-cols-1 sm:grid-cols-3 gap-4 text-center text-[10px] sm:text-[11px] font-mono-luxury uppercase tracking-[0.2em] text-black/50">
-          <div className="flex items-center justify-center gap-2">
-            <Sparkles className="w-3 h-3 text-[#C5A880]" />
-            <span>Complimentary Bespoke Alterations</span>
-          </div>
-          <div className="flex items-center justify-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-black/20" />
-            <span>Signature Keepsake Box Packaging</span>
-          </div>
-          <div className="flex items-center justify-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-black/20" />
-            <span>Worldwide Express VIP Dispatch</span>
-          </div>
         </div>
 
       </div>

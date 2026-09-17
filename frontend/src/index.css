@@ -35,7 +35,7 @@
 
   --font-display: 'Antic Didone', serif;
   --font-heading: 'Antic Didone', serif;
-  --font-sans: 'Antic', sans-serif;
+  --font-sans: 'DM Sans', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
@@ -94,11 +94,11 @@
     --swatch-shadow-active: 0 4px 14px rgba(13, 13, 13, 0.25);
     --swatch-disabled-slash: rgba(13, 13, 13, 0.4);
     
-    /* --- TYPOGRAPHY FAMILIES: Antic Didone (Headings) & Antic (Body) --- */
+    /* --- TYPOGRAPHY FAMILIES: Antic Didone (Headings) & DM Sans (Body) --- */
     --font-display: 'Antic Didone', serif;
     --font-serif-heading: 'Antic Didone', serif;
     --font-heading: 'Antic Didone', serif;
-    --font-sans: 'Antic', sans-serif;
+    --font-sans: 'DM Sans', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
 
     /* --- MOTION TOKENS (Emil Kowalski Design Engineering) --- */
@@ -143,9 +143,16 @@
   font-style: normal;
 }
 
-/* Antic: CSS class */
+/* DM Sans: CSS classes */
+.dm-sans-regular {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Backward compatibility class */
 .antic-regular {
-  font-family: "Antic", sans-serif;
+  font-family: "DM Sans", sans-serif;
   font-weight: 400;
   font-style: normal;
 }
@@ -164,7 +171,7 @@
 }
 
 .font-sans-luxury {
-  font-family: "Antic", sans-serif;
+  font-family: "DM Sans", sans-serif;
 }
 
 .font-mono-luxury {

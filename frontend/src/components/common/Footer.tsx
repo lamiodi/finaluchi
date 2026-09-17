@@ -3,14 +3,6 @@ import { ArrowRight, CheckCircle2, MessageCircle, Sparkles } from 'lucide-react'
 import { BRAND, ORDER_CLARITY_NOTE, buildWhatsAppUrl } from '../../data/brand';
 import { useAudioStore } from '../../stores/audioStore';
 
-const InstagramIcon: React.FC<{ className?: string }> = ({ className }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-  </svg>
-);
-
 interface FooterProps {
   onNavigate: (view: string, payload?: any) => void;
   onOpenAppointments: () => void;
@@ -109,7 +101,7 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 py-10 sm:py-12 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-12 py-10 sm:py-12 text-xs">
           <div className="space-y-3">
             <h5 className="font-bold tracking-loose-couture uppercase">Shop Women</h5>
             <ul className="space-y-2 text-white/75">
@@ -130,19 +122,6 @@ export const Footer: React.FC<FooterProps> = ({
               <li><button onClick={() => onNavigate('client')} className="hover:text-white text-left">Saved Pieces</button></li>
               <li><button onClick={onOpenContact} className="hover:text-white text-left">Contact Finaluchi</button></li>
               <li><button onClick={() => onNavigate('atelier')} className="hover:text-white flex items-center gap-1.5 text-left"><Sparkles className="w-3 h-3 text-[#C5A880]" /> How Custom Orders Work</button></li>
-            </ul>
-          </div>
-
-          <div className="space-y-3">
-            <h5 className="font-bold tracking-loose-couture uppercase">FLC Collections</h5>
-            <ul className="space-y-2.5 text-white/75">
-              {BRAND.lines.map((line) => (
-                <li key={line.handle}>
-                  <a href={line.url} target="_blank" rel="noreferrer" className="hover:text-white inline-flex items-center gap-1.5">
-                    <InstagramIcon className="w-3 h-3 text-[#C5A880]" /> {line.handle}
-                  </a>
-                </li>
-              ))}
             </ul>
           </div>
 

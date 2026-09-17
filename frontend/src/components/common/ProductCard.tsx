@@ -56,7 +56,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <div
-      className={`group flex flex-col cursor-pointer transition-all duration-300 relative select-none ${className}`}
+      className={`group flex flex-col cursor-pointer transition-all duration-300 relative select-none active:scale-[0.99] ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => {
@@ -114,10 +114,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             playTactileClick();
             toggleProductInEdit('edit-default', product.id);
           }}
-          className={`absolute top-2.5 right-2.5 sm:top-3 sm:right-3 p-2 rounded-full backdrop-blur-md transition-all duration-200 z-20 ${
+          className={`absolute top-2.5 right-2.5 sm:top-3 sm:right-3 w-9 h-9 sm:w-8 sm:h-8 flex items-center justify-center rounded-full backdrop-blur-md transition-all duration-200 z-20 active:scale-90 ${
             isSaved
               ? 'bg-black text-[#C5A880] border border-black shadow-sm scale-105'
-              : 'bg-white/80 text-black/60 hover:text-black hover:bg-white border border-black/10 sm:opacity-0 sm:group-hover:opacity-100 hover:scale-110 active:scale-95'
+              : 'bg-white/85 text-black/70 hover:text-black hover:bg-white border border-black/10 sm:opacity-0 sm:group-hover:opacity-100 hover:scale-110'
           }`}
           aria-label={isSaved ? 'Remove from Saved Pieces' : 'Save to Pieces'}
         >

@@ -16,7 +16,7 @@ export const BrandWorlds: React.FC = () => {
             <span className="text-[10px] sm:text-[11px] font-mono-luxury uppercase tracking-[0.25em] text-[#C5A880] font-medium block">
               House Portfolio · Abuja
             </span>
-            <h2 className="font-sans-luxury text-3xl sm:text-5xl font-bold tracking-tight uppercase leading-[1.02] text-white">
+            <h2 className="font-display text-3xl sm:text-5xl font-bold tracking-tight uppercase leading-[1.02] text-white">
               One House. Every Moment of the Occasion.
             </h2>
           </div>
@@ -40,7 +40,7 @@ export const BrandWorlds: React.FC = () => {
               target="_blank"
               rel="noreferrer"
               onClick={() => playTactileClick()}
-              className="group py-6 lg:px-6 first:pl-0 border-b sm:border-b-0 lg:border-l first:border-l-0 border-white/15 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#C5A880] transition-all"
+              className="group py-6 lg:px-6 first:pl-0 border-b sm:border-b-0 lg:border-l first:border-l-0 border-white/15 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#C5A880] active:bg-white/[0.04] active:scale-[0.99] transition-all"
               aria-label={`Open ${line.name} on Instagram (${line.handle})`}
             >
               <div className="flex items-start justify-between gap-4">
