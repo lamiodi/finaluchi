@@ -18,7 +18,10 @@ import { EditorialStorySection } from './components/home/EditorialStorySection';
 import { SeparatesShowcase } from './components/home/SeparatesShowcase';
 import { OccasionEditsBar } from './components/home/OccasionEditsBar';
 import { DigitalAtelier } from './components/atelier/DigitalAtelier';
-import { RunwayModeModal } from './components/runway/RunwayModeModal';
+
+// Lazy Loaded Heavy Modals and Views for Optimal Production Performance
+const RunwayModeModal = React.lazy(() => import('./components/runway/RunwayModeModal').then(m => ({ default: m.RunwayModeModal })));
+const AdminPage = React.lazy(() => import('./components/admin/AdminPage').then(m => ({ default: m.AdminPage })));
 
 // Page Views
 import { CatalogPage } from './components/catalog/CatalogPage';
@@ -31,7 +34,6 @@ import { ClientPortalPage } from './components/client/ClientPortalPage';
 import { BespokeAppointmentModal } from './components/client/BespokeAppointmentModal';
 import { ContactModal } from './components/common/ContactModal';
 import { AboutModal } from './components/common/AboutModal';
-import { AdminPage } from './components/admin/AdminPage';
 import { WhatsAppWidget } from './components/common/WhatsAppWidget';
 
 type ViewMode = 'HOME' | 'CATALOG' | 'PRODUCT' | 'TRACKER' | 'CLIENT' | 'ADMIN';
@@ -244,7 +246,9 @@ export const App: React.FC = () => {
         {/* VIEW 6: ATELIER OPERATIONS DESK & CRM */}
         {currentView === 'ADMIN' && (
           <div className="animate-in fade-in duration-300">
-            <AdminPage />
+            <React.Suspense fallback={<div className="min-h-screen bg-black text-white p-8 flex items-center justify-center font-mono-luxury text-xs">Loading Atelier Ops...</div>}>
+              <AdminPage />
+            </React.Suspense>
           </div>
         )}
 
@@ -284,12 +288,16 @@ export const App: React.FC = () => {
       />
 
       {/* Runway Mode Catwalk Modal */}
-      <RunwayModeModal
-        isOpen={isRunwayOpen}
-        onClose={() => setIsRunwayOpen(false)}
-        products={MASTER_CATALOG}
-        onSelectProduct={handleSelectProduct}
-      />
+      {isRunwayOpen && (
+        <React.Suspense fallback={null}>
+          <RunwayModeModal
+            isOpen={isRunwayOpen}
+            onClose={() => setIsRunwayOpen(false)}
+            products={MASTER_CATALOG}
+            onSelectProduct={handleSelectProduct}
+          />
+        </React.Suspense>
+      )}
 
       {/* Live Search Modal */}
       <SearchModal

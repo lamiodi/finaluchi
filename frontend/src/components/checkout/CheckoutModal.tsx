@@ -416,26 +416,26 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
               </div>
 
-              {/* Paystack Submit Button */}
+              {/* Order Confirmation & Concierge Action */}
               <div className="space-y-3 pt-4 border-t border-black/10">
                 <button
                   type="submit"
                   className="w-full py-4.5 bg-[#000000] text-[#FFFFFF] text-xs font-bold tracking-[0.25em] uppercase hover:bg-neutral-900 border border-[#000000] transition-all flex items-center justify-center gap-2"
                 >
                   <CreditCard className="w-4 h-4 text-white" />
-                  <span>PAY WITH PAYSTACK • {formatKoboToNgn(total)}</span>
+                  <span>CONFIRM ORDER & REQUEST INVOICE • {formatKoboToNgn(total)}</span>
                 </button>
 
                 <div className="p-3 bg-[#FAFAFA] border border-black/10 text-[10px] text-black/75 font-mono-luxury space-y-1">
                   <div className="flex items-center gap-1.5 font-bold text-black uppercase">
                     <Lock className="w-3 h-3 text-[#C5A880]" />
-                    <span>Traceable Business Transaction:</span>
+                    <span>Authoritative Atelier Verification:</span>
                   </div>
-                  <p>All payments are securely handled through Paystack to our verified business entity. An itemized digital invoice and order tracking number are generated upon authorization.</p>
+                  <p>Your piece specifications, custom sizing, and guaranteed completion date are reviewed directly by our Abuja atelier. An official itemized invoice and traceable payment instructions are provided upon confirmation.</p>
                 </div>
 
                 <p className="text-[10px] text-center text-black/60 font-mono-luxury">
-                  Review the final amount, delivery timeline and order terms before authorising payment.
+                  Review your delivery timeline, measurements and order terms before finalising with our concierge.
                 </p>
               </div>
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertCircle, CheckCircle2, MessageCircle, X } from 'lucide-react';
+import { Sparkles, CheckCircle2, MessageCircle, X } from 'lucide-react';
 import { BRAND, ORDER_CLARITY_NOTE, buildWhatsAppUrl } from '../../data/brand';
 import { useAudioStore } from '../../stores/audioStore';
 import { formatKoboToNgn } from '../../utils/formatters';
@@ -71,12 +71,12 @@ export const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
             </div>
           </div>
 
-          <div className="p-4 bg-amber-50 border border-amber-300 text-amber-950 flex items-start gap-3">
-            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+          <div className="p-4 bg-[#FBF9F5] border border-[#C5A880]/40 text-[#2B2319] flex items-start gap-3">
+            <Sparkles className="w-4 h-4 text-[#C5A880] shrink-0 mt-0.5" />
             <div className="space-y-1">
-              <h3 className="text-xs font-bold uppercase tracking-wide">Payment handoff</h3>
-              <p className="text-[11px] leading-relaxed">
-                Live online payment has not been connected on this storefront. Do not enter card or bank details here. Continue on WhatsApp to receive and verify the business invoice and payment instructions.
+              <h3 className="text-xs font-bold uppercase tracking-wide text-noir">Atelier Concierge Verification</h3>
+              <p className="text-[11px] leading-relaxed text-black/75">
+                Every Finaluchi creation is hand-tailored to order. Continue on WhatsApp to receive your official itemized invoice, review sizing specifications, and complete payment via verified corporate channels.
               </p>
             </div>
           </div>
@@ -97,7 +97,7 @@ export const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
             className="w-full py-4 bg-[#000000] text-[#FFFFFF] text-xs font-bold tracking-[0.2em] uppercase hover:bg-neutral-900 border border-[#000000] transition-all flex items-center justify-center gap-2"
           >
             <MessageCircle className="w-4 h-4" />
-            Continue on WhatsApp
+            Continue to WhatsApp Concierge
           </button>
 
           <p className="text-[10px] text-center text-black/50 font-mono-luxury">

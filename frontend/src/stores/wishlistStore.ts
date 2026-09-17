@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { SavedEdit } from '../types';
 
 interface WishlistState {
@@ -12,7 +13,9 @@ interface WishlistState {
   getShareableLink: (editId: string) => string;
 }
 
-export const useWishlistStore = create<WishlistState>((set, get) => ({
+export const useWishlistStore = create<WishlistState>()(
+  persist(
+    (set, get) => ({
   savedEdits: [
     {
       id: 'edit-default',
@@ -86,4 +89,10 @@ export const useWishlistStore = create<WishlistState>((set, get) => ({
     const edit = get().savedEdits.find((e) => e.id === editId);
     return edit ? `https://finaluchi.com/edit/${edit.shareToken}` : 'https://finaluchi.com';
   },
-}));
+    }),
+    {
+      name: 'finaluchi_wishlist_storage',
+    }
+  )
+);
+

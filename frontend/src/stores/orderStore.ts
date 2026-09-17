@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { Appointment, AuditLogEntry, DigitalCertificate, Order, OrderItemSnapshot, ShippingAddress } from '../types';
 import { useCartStore } from './cartStore';
 import { generateCertificateSerialNumber, generateOrderNumber } from '../utils/formatters';
@@ -34,7 +35,9 @@ interface OrderState {
   getCertificateBySerial: (serial: string) => DigitalCertificate | undefined;
 }
 
-export const useOrderStore = create<OrderState>((set, get) => ({
+export const useOrderStore = create<OrderState>()(
+  persist(
+    (set, get) => ({
   orders: false ? [
     {
       id: 'ord-fc-sample-01',
@@ -369,4 +372,16 @@ export const useOrderStore = create<OrderState>((set, get) => ({
   getCertificateBySerial: (serial) => {
     return get().certificates.find((c) => c.serialNumber.toUpperCase() === serial.toUpperCase());
   },
-}));
+    }),
+    {
+      name: 'finaluchi_orders_storage',
+      partialize: (state) => ({
+        orders: state.orders,
+        certificates: state.certificates,
+        appointments: state.appointments,
+        auditLogs: state.auditLogs,
+      }),
+    }
+  )
+);
+

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { CartItem, PackagingOption, Product, ProductColorway } from '../types';
 
 export const PACKAGING_OPTIONS: PackagingOption[] = [
@@ -50,7 +51,9 @@ interface CartState {
   getTotalKobo: (countryCode?: string) => number;
 }
 
-export const useCartStore = create<CartState>((set, get) => ({
+export const useCartStore = create<CartState>()(
+  persist(
+    (set, get) => ({
   items: [],
   isDrawerOpen: false,
   packagingType: 'SIGNATURE_BOX',
@@ -157,4 +160,16 @@ export const useCartStore = create<CartState>((set, get) => ({
       get().getTaxKobo(countryCode)
     );
   },
-}));
+    }),
+    {
+      name: 'finaluchi_cart_storage',
+      partialize: (state) => ({
+        items: state.items,
+        packagingType: state.packagingType,
+        isGift: state.isGift,
+        giftMessage: state.giftMessage,
+      }),
+    }
+  )
+);
+
