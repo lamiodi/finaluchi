@@ -69,7 +69,7 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
           >
             <div className="aspect-[3/4.2] w-full overflow-hidden bg-neutral-100">
               <img
-                src="/images/.webp"
+                src="/images/fc_editorial_monument.webp"
                 alt="Finaluchi Couture Evening Look"
                 className="w-full h-full object-cover object-[center_8%] transition-transform duration-700 ease-out group-hover:scale-[1.02]"
               />
@@ -176,7 +176,7 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
             >
               <div className="aspect-[16/9] w-full overflow-hidden bg-neutral-100">
                 <img
-                  src="/images/.webp"
+                  src="/images/fc_atelier_craft.webp"
                   alt="Finaluchi Couture Atelier in Abuja"
                   className="w-full h-full object-cover object-[center_35%] transition-transform duration-700 ease-out group-hover:scale-[1.02]"
                 />

@@ -66,13 +66,17 @@ export const useCartStore = create<CartState>()(
 
   addToCart: (product, colorway, size, quantity = 1, isMadeToMeasure = false, customMeasurements) => {
     const existingIndex = get().items.findIndex(
-      (item) => item.productId === product.id && item.colorway.id === colorway.id && item.size === size
+      (item) => item.productId === product.id && item.colorway.id === colorway.id && item.size === size && item.isMadeToMeasure === isMadeToMeasure
     );
 
     const now = Date.now();
     const expiresAt = now + 15 * 60 * 1000; // 15-minute reservation hold
 
-    const unitPriceKobo = product.basePriceKobo + (colorway.priceDeltaKobo || 0);
+    const mtmVariant = isMadeToMeasure
+      ? product.variants?.find((v) => v.size === 'MADE_TO_MEASURE' || v.sizeLabel === 'MADE_TO_MEASURE')
+      : undefined;
+    const mtmDeltaKobo = mtmVariant?.priceDeltaKobo || 0;
+    const unitPriceKobo = product.basePriceKobo + (colorway.priceDeltaKobo || 0) + mtmDeltaKobo;
 
     if (existingIndex > -1) {
       const updated = [...get().items];

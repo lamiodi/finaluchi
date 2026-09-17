@@ -29,7 +29,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 01. DRESSES
     {
       item: {
-        src: '/images/.webp',
+        src: '/images/fc_asymmetric_silk_dress.webp',
         alt: 'Fluid Silk Column Dresses',
         title: 'Silk Column Dresses',
         category: 'Dresses',
@@ -45,7 +45,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 02. DINNER_DRESSES
     {
       item: {
-        src: '/images/.webp',
+        src: '/images/fc_haute_soiree_gown.webp',
         alt: 'Grand Soirée & Gala Gowns',
         title: 'Event & Gala Gowns',
         category: 'Dinner Dresses',
@@ -61,7 +61,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 03. JACKETS
     {
       item: {
-        src: '/images/.webp',
+        src: '/images/fc_tailoring_suite.webp',
         alt: 'Pagoda Jackets & Blazers',
         title: 'Tailored Jackets',
         category: 'Jackets & Blazers',
@@ -77,7 +77,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 04. 3PIECES
     {
       item: {
-        src: '/images/.webp',
+        src: '/images/fc_luxury_threepiece.webp',
         alt: '3-Piece Tailoring',
         title: '3-Piece Sets',
         category: 'Tailoring & Suites',
@@ -93,7 +93,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 05. 2PIECES
     {
       item: {
-        src: '/images/.webp',
+        src: '/images/fc_bustier_pleated_skirt.webp',
         alt: '2-Piece Coordinated Sets',
         title: '2-Piece Ensembles',
         category: 'Coordinated Sets',
@@ -109,7 +109,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 06. KIMONO
     {
       item: {
-        src: '/images/.webp',
+        src: '/images/fc_luxury_kimono.webp',
         alt: 'Atelier Kimonos & Robes',
         title: 'Atelier Kimonos',
         category: 'Kimonos & Robes',
@@ -125,7 +125,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 07. JUMPSUITS
     {
       item: {
-        src: '/images/.webp',
+        src: '/images/fc_luxury_jumpsuit.webp',
         alt: 'Sculptural Jumpsuits',
         title: 'Sculptural Jumpsuits',
         category: 'Jumpsuits',
@@ -141,7 +141,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 08. PANTS
     {
       item: {
-        src: '/images/.webp',
+        src: '/images/fc_luxury_pants.webp',
         alt: 'Pants & Palazzo',
         title: 'Palazzo Trousers',
         category: 'Pants & Palazzo',
@@ -157,7 +157,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 09. SHIRTS
     {
       item: {
-        src: '/images/.webp',
+        src: '/images/fc_luxury_shirt.webp',
         alt: 'Architectural Shirting',
         title: 'Architectural Shirts',
         category: 'Shirts',
@@ -173,7 +173,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 10. SKIRTS
     {
       item: {
-        src: '/images/.webp',
+        src: '/images/fc_resort_solstice.webp',
         alt: 'Sunburst & Pleated Skirts',
         title: 'Sunburst Skirts',
         category: 'Skirts',
@@ -189,7 +189,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 11. TOPS
     {
       item: {
-        src: '/images/.webp',
+        src: '/images/fc_editorial_detail.webp',
         alt: 'Tops & Sculpted Bustiers',
         title: 'Tops & Bustiers',
         category: 'Tops',
@@ -205,7 +205,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 12. PLAYSUIT
     {
       item: {
-        src: '/images/.webp',
+        src: '/images/fc_luxury_playsuit.webp',
         alt: 'Tailored Playsuits',
         title: 'Couture Playsuits',
         category: 'Playsuits',
@@ -221,7 +221,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 13. BIKINI
     {
       item: {
-        src: '/images/.webp',
+        src: '/images/fc_luxury_bikini.webp',
         alt: 'Bikini & Resort',
         title: 'Bikini & Resort',
         category: 'Bikini & Resort',
@@ -236,8 +236,6 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     },
   ];
 
-
-
   // 6 Curated Lookbook Cards for Mobile Viewports:
   // 3 cards scatter UP (above write-up), 3 cards scatter DOWN (below write-up),
   // framing the text write-up cleanly in the middle.
@@ -245,7 +243,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 01. DRESSES (UP - Top Left)
     {
       item: {
-        src: '/images/.webp',
+        src: '/images/fc_asymmetric_silk_dress.webp',
         alt: 'Fluid Silk Column Dresses',
         title: 'Silk Column Dresses',
         category: 'Dresses',
@@ -261,7 +259,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 02. JACKETS (UP - Top Center)
     {
       item: {
-        src: '/images/.webp',
+        src: '/images/fc_tailoring_suite.webp',
         alt: 'Pagoda Jackets & Blazers',
         title: 'Tailored Jackets',
         category: 'Tailoring',
@@ -277,7 +275,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 03. 2PIECES (UP - Top Right)
     {
       item: {
-        src: '/images/.webp',
+        src: '/images/fc_bustier_pleated_skirt.webp',
         alt: '2-Piece Coordinated Sets',
         title: '2-Piece Ensembles',
         category: 'Coordinated Sets',
@@ -293,7 +291,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 04. JUMPSUITS (DOWN - Bottom Left)
     {
       item: {
-        src: '/images/.webp',
+        src: '/images/fc_luxury_jumpsuit.webp',
         alt: 'Sculptural Jumpsuits',
         title: 'Sculptural Jumpsuits',
         category: 'Jumpsuits',
@@ -309,7 +307,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 05. KIMONO (DOWN - Bottom Center)
     {
       item: {
-        src: '/images/.webp',
+        src: '/images/fc_luxury_kimono.webp',
         alt: 'Atelier Kimonos & Robes',
         title: 'Atelier Kimonos',
         category: 'Kimonos',
@@ -325,7 +323,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 06. DINNER_DRESSES / CORSETS (DOWN - Bottom Right)
     {
       item: {
-        src: '/images/.webp',
+        src: '/images/fc_haute_soiree_gown.webp',
         alt: 'Grand Soirée & Gala Gowns',
         title: 'Gala & Corset Gowns',
         category: 'Corsetry & Gowns',

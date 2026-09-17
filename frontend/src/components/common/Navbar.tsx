@@ -269,7 +269,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         <div className="space-y-2.5">
                           <div className="relative aspect-[4/5] w-full overflow-hidden bg-neutral-200">
                             <img
-                              src={activePreviewDept?.image || '/images/.webp'}
+                              src={activePreviewDept?.image || '/images/fc_haute_soiree_gown.webp'}
                               alt={activePreviewDept?.label || 'Haute Couture Preview'}
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             />
