@@ -33,9 +33,9 @@
   --color-cloth-sunstone-amber: #D97724;
   --color-cloth-dusk-carmine: #722F37;
 
-  --font-display: 'Cormorant Garamond', 'Cinzel', Georgia, serif;
-  --font-heading: 'Cinzel', 'Cormorant Garamond', serif;
-  --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+  --font-display: 'Antic Didone', serif;
+  --font-heading: 'Antic Didone', serif;
+  --font-sans: 'Antic', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
@@ -94,10 +94,11 @@
     --swatch-shadow-active: 0 4px 14px rgba(13, 13, 13, 0.25);
     --swatch-disabled-slash: rgba(13, 13, 13, 0.4);
     
-    /* --- TYPOGRAPHY FAMILIES --- */
-    --font-display: 'Cormorant Garamond', 'Cinzel', Georgia, serif;
-    --font-serif-heading: 'Cinzel', 'Cormorant Garamond', serif;
-    --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+    /* --- TYPOGRAPHY FAMILIES: Antic Didone (Headings) & Antic (Body) --- */
+    --font-display: 'Antic Didone', serif;
+    --font-serif-heading: 'Antic Didone', serif;
+    --font-heading: 'Antic Didone', serif;
+    --font-sans: 'Antic', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
 
     /* --- MOTION TOKENS (Emil Kowalski Design Engineering) --- */
@@ -122,23 +123,48 @@
   }
 
   body {
+    font-family: var(--font-sans);
     background-color: var(--color-alabaster);
     color: var(--color-noir);
     overflow-x: clip;
   }
+
+  /* Antic Didone for all Heading elements */
+  h1, h2, h3, h4, h5, h6,
+  h1.font-sans-luxury, h2.font-sans-luxury, h3.font-sans-luxury, h4.font-sans-luxury, h5.font-sans-luxury, h6.font-sans-luxury {
+    font-family: "Antic Didone", serif;
+  }
+}
+
+/* Antic Didone: CSS class */
+.antic-didone-regular {
+  font-family: "Antic Didone", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Antic: CSS class */
+.antic-regular {
+  font-family: "Antic", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 /* Typography Utility Classes */
 .font-display {
-  font-family: var(--font-display);
+  font-family: "Antic Didone", serif;
 }
 
 .font-heading {
-  font-family: var(--font-serif-heading);
+  font-family: "Antic Didone", serif;
+}
+
+.font-serif-heading {
+  font-family: "Antic Didone", serif;
 }
 
 .font-sans-luxury {
-  font-family: var(--font-sans);
+  font-family: "Antic", sans-serif;
 }
 
 .font-mono-luxury {
