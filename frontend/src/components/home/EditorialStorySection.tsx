@@ -2,6 +2,7 @@ import React from 'react';
 import { useAudioStore } from '../../stores/audioStore';
 import { ArrowRight } from 'lucide-react';
 import { BRAND, buildWhatsAppUrl } from '../../data/brand';
+import { onImageError } from '../../utils/images';
 
 interface EditorialStorySectionProps {
   onExploreCollection: () => void;
@@ -69,19 +70,20 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
           >
             <div className="aspect-[3/4.2] w-full overflow-hidden bg-neutral-100">
               <img
-                src="/images/fc_editorial_monument.webp"
-                alt="Finaluchi Couture Evening Look"
+                src="/images/campaign/editorial-gold-mini.jpeg"
+                alt="Finaluchi occasion look, photographed on the client"
+                onError={onImageError}
                 className="w-full h-full object-cover object-[center_8%] transition-transform duration-700 ease-out group-hover:scale-[1.02]"
               />
             </div>
-            
+
             {/* Minimal Editorial Caption */}
             <div className="mt-3.5 flex items-baseline justify-between text-xs font-mono-luxury border-b border-black/10 pb-2">
               <span className="font-semibold text-black uppercase tracking-wider">
-                Monumental Evening Silhouette
+                Occasion Gold, Shot on Client
               </span>
               <span className="text-neutral-500 text-[11px]">
-                Hand-cut in Abuja Atelier
+                Abuja, Nigeria
               </span>
             </div>
           </div>
@@ -152,10 +154,11 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
               {/* Category Quick Jumps */}
               <div className="pt-4 flex flex-wrap gap-x-5 gap-y-2 border-t border-black/10 text-xs">
                 {[
-                  { label: 'Dinner Dresses', pillar: 'DINNER_DRESSES' },
+                  { label: 'Dresses', pillar: 'DRESSES' },
+                  { label: 'Jumpsuits', pillar: 'JUMPSUITS' },
+                  { label: 'Tops', pillar: 'TOPS' },
+                  { label: 'Skirts', pillar: 'SKIRTS' },
                   { label: '2-Piece Sets', pillar: '2PIECES' },
-                  { label: 'Kimonos & Robes', pillar: 'KIMONO' },
-                  { label: 'Tailored Jackets', pillar: 'JACKETS' },
                 ].map(({ label, pillar }) => (
                   <button
                     key={pillar}
@@ -176,13 +179,14 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
             >
               <div className="aspect-[16/9] w-full overflow-hidden bg-neutral-100">
                 <img
-                  src="/images/fc_atelier_craft.webp"
-                  alt="Finaluchi Couture Atelier in Abuja"
+                  src="/images/campaign/craft-flatlay.jpeg"
+                  alt="Finaluchi pieces laid out with accessories"
+                  onError={onImageError}
                   className="w-full h-full object-cover object-[center_35%] transition-transform duration-700 ease-out group-hover:scale-[1.02]"
                 />
               </div>
               <div className="mt-2 text-[10px] font-mono-luxury text-neutral-500 uppercase tracking-widest">
-                Abuja Flagship Craft Floor
+                From the Studio Floor
               </div>
             </div>
 

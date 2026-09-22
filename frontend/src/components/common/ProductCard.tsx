@@ -5,6 +5,7 @@ import { useCurrencyStore } from '../../stores/currencyStore';
 import { useWishlistStore } from '../../stores/wishlistStore';
 import { useAudioStore } from '../../stores/audioStore';
 import { formatPriceWithDisplay } from '../../utils/formatters';
+import { onImageError } from '../../utils/images';
 
 interface ProductCardProps {
   product: Product;
@@ -71,6 +72,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <img
           src={heroImage}
           alt={product.name}
+          onError={onImageError}
           className={`w-full h-full object-contain transition-all duration-700 ease-out will-change-transform ${
             secondaryImage && isHovered ? 'scale-105 opacity-0' : 'scale-100 opacity-100'
           }`}
@@ -83,6 +85,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <img
             src={secondaryImage}
             alt={`${product.name} alternate view`}
+            onError={onImageError}
             className={`absolute inset-0 w-full h-full object-contain p-3 sm:p-5 transition-all duration-700 ease-out ${
               isHovered ? 'scale-105 opacity-100' : 'scale-100 opacity-0 pointer-events-none'
             }`}

@@ -214,6 +214,7 @@ export const App: React.FC = () => {
           <div className="animate-in fade-in duration-300">
             <React.Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center font-mono-luxury text-xs text-[#C5A880]">Loading Garment Intelligence...</div>}>
               <ProductDetailPage
+                key={selectedProduct.id}
                 product={selectedProduct}
                 allProducts={MASTER_CATALOG}
                 onSelectProduct={handleSelectProduct}

@@ -67,7 +67,7 @@ export const useOrderStore = create<OrderState>()(
           skuSnapshot: 'FC-HS-2026-MAL-MTM',
           unitPriceKobo: 38000000,
           quantity: 1,
-          heroImageUrl: '/images/fc_haute_soiree_gown.webp',
+          heroImageUrl: '/images/products/rossa-dress/rossa-1.jpeg',
         },
       ],
       subtotalKobo: 38000000,

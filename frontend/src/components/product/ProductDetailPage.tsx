@@ -9,6 +9,7 @@ import { useCartStore } from '../../stores/cartStore';
 import { useWishlistStore } from '../../stores/wishlistStore';
 import { useAudioStore } from '../../stores/audioStore';
 import { formatPriceWithDisplay } from '../../utils/formatters';
+import { onImageError } from '../../utils/images';
 import { SizeGuideModal } from '../common/SizeGuideModal';
 import { toast } from 'sonner';
 import { ORDER_CLARITY_NOTE, buildWhatsAppUrl } from '../../data/brand';
@@ -21,6 +22,16 @@ interface ProductDetailPageProps {
   onBookAppointment: () => void;
 }
 
+// Sizes come from the product's own variants (e.g. UK 6–18, S–L);
+// the lettered scale is only a fallback for products without variants.
+const sizeOptionsFor = (product: Product): string[] => {
+  const sizes = (product.variants || [])
+    .filter((v) => v.size !== 'MADE_TO_MEASURE' && v.sizeLabel !== 'MADE_TO_MEASURE')
+    .map((v) => v.sizeLabel || v.size || '')
+    .filter(Boolean);
+  return sizes.length > 0 ? sizes : ['XXS', 'XS', 'S', 'M', 'L', 'XL'];
+};
+
 export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   product,
   allProducts,
@@ -31,7 +42,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const [selectedColorway, setSelectedColorway] = useState<ProductColorway>(
     product.colorways.find((c) => c.isDefault) || product.colorways[0]
   );
-  const [selectedSize, setSelectedSize] = useState<string>('M');
+  const [selectedSize, setSelectedSize] = useState<string>(() => sizeOptionsFor(product)[0] || 'M');
   const [isMadeToMeasure, setIsMadeToMeasure] = useState<boolean>(false);
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState<boolean>(false);
   const [is360Active, setIs360Active] = useState<boolean>(false);
@@ -159,6 +170,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 <img
                   src={frames[rotationFrameIndex] || selectedColorway.heroImageUrl}
                   alt={`${product.name} 360 view`}
+                  onError={onImageError}
                   className="w-full h-full object-cover object-top pointer-events-none"
                 />
                 <div className="absolute bottom-4 px-3 py-1.5 bg-[#000000] text-[#FFFFFF] text-[10px] font-mono-luxury tracking-widest uppercase">
@@ -173,6 +185,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     <img
                       src={imgUrl}
                       alt={`${product.name} - Angle ${i + 1}`}
+                      onError={onImageError}
                       className="w-full h-full object-contain group-hover:scale-102 transition-transform duration-700 ease-out p-4"
                     />
                   </div>
@@ -293,7 +306,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               </div>
 
               <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                {['XXS', 'XS', 'S', 'M', 'L', 'XL'].map((s) => (
+                {sizeOptionsFor(product).map((s) => (
                   <button
                     key={s}
                     onClick={() => {
@@ -472,6 +485,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   <img
                     src={rec.colorways[0].heroImageUrl}
                     alt={rec.name}
+                    onError={onImageError}
                     className="w-full h-full object-contain group-hover:scale-104 transition-transform duration-700 ease-out"
                   />
                 </div>

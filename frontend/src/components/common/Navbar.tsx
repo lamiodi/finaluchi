@@ -8,6 +8,7 @@ import { CATEGORY_DEPARTMENTS } from '../../data/categoryContent';
 import { useCartStore } from '../../stores/cartStore';
 import { useAudioStore } from '../../stores/audioStore';
 import { buildWhatsAppUrl } from '../../data/brand';
+import { onImageError } from '../../utils/images';
 
 interface NavbarProps {
   onNavigateHome: () => void;
@@ -176,16 +177,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                     </button>
                   </div>
 
-                  {/* 4-Column Layout: 3 Pillar Lists + 1 Visual Editorial Spotlight */}
-                  <div className="grid grid-cols-12 gap-6 text-xs">
-                    
-                    {/* Column 1: Tailoring & Sets (3 cols) */}
-                    <div className="col-span-3 space-y-3">
+                  {/* 2-Column Layout: Category List + Visual Editorial Spotlight */}
+                  <div className="grid grid-cols-12 gap-8 text-xs">
+
+                    {/* Column 1: The Capsule (5 cols) */}
+                    <div className="col-span-5 space-y-3">
                       <span className="text-[10px] font-mono-luxury text-black/40 uppercase tracking-[0.2em] block font-semibold border-b border-black/10 pb-2">
-                        Tailoring & Sets
+                        Ready-to-Wear · The Capsule
                       </span>
                       <div className="space-y-0.5">
-                        {CATEGORY_DEPARTMENTS.filter((d) => d.pillarGroup === 'TAILORING').map((cat) => (
+                        {CATEGORY_DEPARTMENTS.map((cat) => (
                           <button
                             key={cat.id}
                             onClick={() => {
@@ -207,70 +208,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                       </div>
                     </div>
 
-                    {/* Column 2: Silks & Gowns (3 cols) */}
-                    <div className="col-span-3 space-y-3">
-                      <span className="text-[10px] font-mono-luxury text-black/40 uppercase tracking-[0.2em] block font-semibold border-b border-black/10 pb-2">
-                        Silks & Gowns
-                      </span>
-                      <div className="space-y-0.5">
-                        {CATEGORY_DEPARTMENTS.filter((d) => d.pillarGroup === 'SILKS').map((cat) => (
-                          <button
-                            key={cat.id}
-                            onClick={() => {
-                              playTactileClick();
-                              onNavigatePillar(cat.id);
-                              setIsCategoryDropdownOpen(false);
-                            }}
-                            onMouseEnter={() => setHoveredPillar(cat.id)}
-                            className="w-full text-left py-1.5 px-2 hover:bg-[#F9F8F6] transition-colors flex items-center justify-between group rounded-none"
-                          >
-                            <span className="font-sans-luxury text-[12px] text-noir/80 group-hover:text-black group-hover:font-semibold">
-                              {cat.label}
-                            </span>
-                            <span className="text-[10px] text-black/20 group-hover:text-[#A67C4A] group-hover:translate-x-0.5 transition-all">
-                              ⟶
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Column 3: Sculpted & Resort (3 cols) */}
-                    <div className="col-span-3 space-y-3">
-                      <span className="text-[10px] font-mono-luxury text-black/40 uppercase tracking-[0.2em] block font-semibold border-b border-black/10 pb-2">
-                        Sculpted & Resort
-                      </span>
-                      <div className="space-y-0.5">
-                        {CATEGORY_DEPARTMENTS.filter((d) => d.pillarGroup === 'SPECIALTY').map((cat) => (
-                          <button
-                            key={cat.id}
-                            onClick={() => {
-                              playTactileClick();
-                              onNavigatePillar(cat.id);
-                              setIsCategoryDropdownOpen(false);
-                            }}
-                            onMouseEnter={() => setHoveredPillar(cat.id)}
-                            className="w-full text-left py-1.5 px-2 hover:bg-[#F9F8F6] transition-colors flex items-center justify-between group rounded-none"
-                          >
-                            <span className="font-sans-luxury text-[12px] text-noir/80 group-hover:text-black group-hover:font-semibold">
-                              {cat.label}
-                            </span>
-                            <span className="text-[10px] text-black/20 group-hover:text-[#A67C4A] group-hover:translate-x-0.5 transition-all">
-                              ⟶
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Column 4: Editorial Spotlight Card (3 cols) */}
-                    <div className="col-span-3">
+                    {/* Column 2: Editorial Spotlight Card (7 cols) */}
+                    <div className="col-span-7">
                       <div className="bg-[#F8F7F5] border border-black/10 p-3 h-full flex flex-col justify-between group">
                         <div className="space-y-2.5">
-                          <div className="relative aspect-[4/5] w-full overflow-hidden bg-neutral-200">
+                          <div className="relative aspect-[16/10] w-full overflow-hidden bg-neutral-200">
                             <img
-                              src={activePreviewDept?.image || '/images/fc_haute_soiree_gown.webp'}
-                              alt={activePreviewDept?.label || 'Haute Couture Preview'}
+                              src={activePreviewDept?.image || '/images/products/rossa-dress/rossa-1.jpeg'}
+                              alt={activePreviewDept?.label || 'Finaluchi Preview'}
+                              onError={onImageError}
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             />
                             <div className="absolute top-2 left-2 bg-black/80 backdrop-blur-xs text-white text-[8px] font-mono-luxury px-1.5 py-0.5 uppercase tracking-widest">
@@ -279,10 +225,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                           </div>
                           <div>
                             <span className="text-[9px] font-mono-luxury text-[#A67C4A] uppercase tracking-wider block">
-                              {activePreviewDept?.pillarLabel || 'Maison Edit'}
+                              {activePreviewDept?.pillarLabel || 'Ready-to-Wear'}
                             </span>
                             <h4 className="font-sans-luxury text-xs font-bold uppercase text-noir tracking-tight">
-                              {activePreviewDept?.label || 'Sovereign Collection'}
+                              {activePreviewDept?.label || 'The Capsule'}
                             </h4>
                           </div>
                         </div>

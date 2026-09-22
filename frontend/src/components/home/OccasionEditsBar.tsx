@@ -9,9 +9,9 @@ interface OccasionEditsBarProps {
   onSelectOccasion?: (occasion: any) => void;
 }
 
-export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({ 
-  onSelectCategory, 
-  onSelectOccasion 
+export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
+  onSelectCategory,
+  onSelectOccasion
 }) => {
   const { playTactileClick } = useAudioStore();
 
@@ -24,16 +24,16 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     }
   };
 
-  // All 13 Client-Approved Haute Couture Lookbook Cards for the StackSpread Scatter Scroll
-  const hauteDeptCards: StackSpreadCard[] = [
-    // 01. DRESSES
+  // The five photographed pieces of the live capsule.
+  const capsuleCards: StackSpreadCard[] = [
+    // 01. DRESSES — The Rossa
     {
       item: {
-        src: '/images/fc_asymmetric_silk_dress.webp',
-        alt: 'Fluid Silk Column Dresses',
-        title: 'Silk Column Dresses',
+        src: '/images/products/rossa-dress/rossa-1.jpeg',
+        alt: 'The Rossa Dress',
+        title: 'The Rossa Dress',
         category: 'Dresses',
-        tagline: 'Bias-cut silk and sculpted contours for milestone celebrations',
+        tagline: 'House leopard, shoulder rosette, asymmetric hem — sizes 6–16',
         onClick: () => handleNavigate('DRESSES'),
       },
       stackOffset: { x: -8, y: -10 },
@@ -42,15 +42,15 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
       targetSm: { x: -22, y: -44 },
       z: 2,
     },
-    // 02. DINNER_DRESSES
+    // 02. JUMPSUITS — The Cleo
     {
       item: {
-        src: '/images/fc_haute_soiree_gown.webp',
-        alt: 'Grand Soirée & Gala Gowns',
-        title: 'Event & Gala Gowns',
-        category: 'Dinner Dresses',
-        tagline: 'Corsetry, hand-laid embellishments and sweeping trains',
-        onClick: () => handleNavigate('DINNER_DRESSES'),
+        src: '/images/products/cleo-capri-jumpsuit/cleo-1.jpeg',
+        alt: 'Cleo Capri Jumpsuit',
+        title: 'Cleo Capri Jumpsuit',
+        category: 'Jumpsuits',
+        tagline: 'Plunging halter with the leopard sash — sizes 6–14',
+        onClick: () => handleNavigate('JUMPSUITS'),
       },
       stackOffset: { x: 12, y: -12 },
       stackRotate: 18,
@@ -58,295 +58,65 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
       targetSm: { x: 22, y: -44 },
       z: 3,
     },
-    // 03. JACKETS
+    // 03. TOPS — Dahlia Tank
     {
       item: {
-        src: '/images/fc_tailoring_suite.webp',
-        alt: 'Pagoda Jackets & Blazers',
-        title: 'Tailored Jackets',
-        category: 'Jackets & Blazers',
-        tagline: 'Pagoda shoulders, peplum definition and structured form',
-        onClick: () => handleNavigate('JACKETS'),
+        src: '/images/products/dahlia-tank-top/dahlia-4.jpeg',
+        alt: 'Dahlia Tank Top',
+        title: 'Dahlia Tank Top',
+        category: 'Tops',
+        tagline: 'Ribbed crop with the leopard teardrop — S–L',
+        onClick: () => handleNavigate('TOPS'),
       },
       stackOffset: { x: -14, y: 2 },
       stackRotate: -6,
       target: { x: -17, y: -34, rotate: 1, scale: 0.88, w: 15, h: 26 },
-      targetSm: { x: -22, y: -30 },
+      targetSm: { x: -22, y: 15 },
       z: 4,
     },
-    // 04. 3PIECES
+    // 04. SKIRTS — Dahlia Skirt
     {
       item: {
-        src: '/images/fc_luxury_threepiece.webp',
-        alt: '3-Piece Tailoring',
-        title: '3-Piece Sets',
-        category: 'Tailoring & Suites',
-        tagline: 'Fully canvassed blazers, bustiers and palazzo trousers',
-        onClick: () => handleNavigate('3PIECES'),
+        src: '/images/products/dahlia-skirt/dahlia-1.jpeg',
+        alt: 'Dahlia Skirt',
+        title: 'Dahlia Skirt',
+        category: 'Skirts',
+        tagline: '3D rosettes in deep house wine — sizes 6–18',
+        onClick: () => handleNavigate('SKIRTS'),
       },
       stackOffset: { x: 2, y: -8 },
       stackRotate: -2,
       target: { x: 17, y: -34, rotate: -1, scale: 0.88, w: 15, h: 26 },
-      targetSm: { x: 22, y: -30 },
+      targetSm: { x: 22, y: 15 },
       z: 5,
     },
-    // 05. 2PIECES
+    // 05. 2PIECES — Leonie
     {
       item: {
-        src: '/images/fc_bustier_pleated_skirt.webp',
-        alt: '2-Piece Coordinated Sets',
-        title: '2-Piece Ensembles',
-        category: 'Coordinated Sets',
-        tagline: 'Sunburst pleated skirts, bustiers and cropped tailoring',
+        src: '/images/products/leonie-capri-lounge-2-piece/leonie-3.jpeg',
+        alt: 'Leonie Capri Lounge 2 Piece',
+        title: 'Leonie Lounge Set',
+        category: '2 Pieces',
+        tagline: 'Leopard jersey with red ribbon ties — sizes 10–16',
         onClick: () => handleNavigate('2PIECES'),
       },
       stackOffset: { x: 16, y: 4 },
       stackRotate: 8,
-      target: { x: -38, y: -6, rotate: -3, scale: 0.88, w: 15, h: 26 },
-      targetSm: { x: -22, y: -15 },
-      z: 6,
-    },
-    // 06. KIMONO
-    {
-      item: {
-        src: '/images/fc_luxury_kimono.webp',
-        alt: 'Atelier Kimonos & Robes',
-        title: 'Atelier Kimonos',
-        category: 'Kimonos & Robes',
-        tagline: 'Floor-sweeping liquid silk layers with gilded embroidery',
-        onClick: () => handleNavigate('KIMONO'),
-      },
-      stackOffset: { x: -6, y: 10 },
-      stackRotate: 5,
-      target: { x: 38, y: -6, rotate: 2, scale: 0.88, w: 15, h: 26 },
-      targetSm: { x: 22, y: -15 },
-      z: 7,
-    },
-    // 07. JUMPSUITS
-    {
-      item: {
-        src: '/images/fc_luxury_jumpsuit.webp',
-        alt: 'Sculptural Jumpsuits',
-        title: 'Sculptural Jumpsuits',
-        category: 'Jumpsuits',
-        tagline: 'One-piece occasion dressing with internal boned corsetry',
-        onClick: () => handleNavigate('JUMPSUITS'),
-      },
-      stackOffset: { x: 6, y: 8 },
-      stackRotate: 3,
-      target: { x: -37, y: 15, rotate: 1, scale: 0.88, w: 15, h: 26 },
-      targetSm: { x: -22, y: 15 },
-      z: 8,
-    },
-    // 08. PANTS
-    {
-      item: {
-        src: '/images/fc_luxury_pants.webp',
-        alt: 'Pants & Palazzo',
-        title: 'Palazzo Trousers',
-        category: 'Pants & Palazzo',
-        tagline: 'High-waisted fluid columns designed to elongate the silhouette',
-        onClick: () => handleNavigate('PANTS'),
-      },
-      stackOffset: { x: 18, y: 12 },
-      stackRotate: -8,
-      target: { x: 37, y: 15, rotate: -2, scale: 0.88, w: 15, h: 26 },
-      targetSm: { x: 22, y: 15 },
-      z: 9,
-    },
-    // 09. SHIRTS
-    {
-      item: {
-        src: '/images/fc_luxury_shirt.webp',
-        alt: 'Architectural Shirting',
-        title: 'Architectural Shirts',
-        category: 'Shirts',
-        tagline: 'Crisp poplin, exaggerated cuffs and sculptural collars',
-        onClick: () => handleNavigate('SHIRTS'),
-      },
-      stackOffset: { x: -10, y: -4 },
-      stackRotate: -12,
-      target: { x: -32, y: 34, rotate: -2, scale: 0.86, w: 15, h: 26 },
-      targetSm: { x: -22, y: 30 },
-      z: 10,
-    },
-    // 10. SKIRTS
-    {
-      item: {
-        src: '/images/fc_resort_solstice.webp',
-        alt: 'Sunburst & Pleated Skirts',
-        title: 'Sunburst Skirts',
-        category: 'Skirts',
-        tagline: 'Knife-pleated floor-sweeping movement with clean weighted hems',
-        onClick: () => handleNavigate('SKIRTS'),
-      },
-      stackOffset: { x: 8, y: -6 },
-      stackRotate: 12,
-      target: { x: -16, y: 36, rotate: 1, scale: 0.86, w: 15, h: 26 },
-      targetSm: { x: 22, y: 30 },
-      z: 11,
-    },
-    // 11. TOPS
-    {
-      item: {
-        src: '/images/fc_editorial_detail.webp',
-        alt: 'Tops & Sculpted Bustiers',
-        title: 'Tops & Bustiers',
-        category: 'Tops',
-        tagline: 'Internal boned bustiers and asymmetric draped necklines',
-        onClick: () => handleNavigate('TOPS'),
-      },
-      stackOffset: { x: -4, y: 6 },
-      stackRotate: -4,
-      target: { x: 0, y: 37, rotate: -1, scale: 0.86, w: 15, h: 26 },
-      targetSm: { x: -22, y: 44 },
-      z: 12,
-    },
-    // 12. PLAYSUIT
-    {
-      item: {
-        src: '/images/fc_luxury_playsuit.webp',
-        alt: 'Tailored Playsuits',
-        title: 'Couture Playsuits',
-        category: 'Playsuits',
-        tagline: 'Peaked lapels, silk satin and cinched obi sash precision',
-        onClick: () => handleNavigate('PLAYSUIT'),
-      },
-      stackOffset: { x: 10, y: 14 },
-      stackRotate: 7,
-      target: { x: 16, y: 36, rotate: 2, scale: 0.86, w: 15, h: 26 },
-      targetSm: { x: 22, y: 44 },
-      z: 13,
-    },
-    // 13. BIKINI
-    {
-      item: {
-        src: '/images/fc_luxury_bikini.webp',
-        alt: 'Bikini & Resort',
-        title: 'Bikini & Resort',
-        category: 'Bikini & Resort',
-        tagline: 'Sculpting Italian metallic microfibers and matching silk wraps',
-        onClick: () => handleNavigate('BIKINI'),
-      },
-      stackOffset: { x: 0, y: 0 },
-      stackRotate: 0,
-      target: { x: 32, y: 34, rotate: -1, scale: 0.86, w: 15, h: 26 },
+      target: { x: 0, y: 37, rotate: -1, scale: 0.88, w: 15, h: 26 },
       targetSm: { x: 0, y: 56 },
-      z: 14,
-    },
-  ];
-
-  // 6 Curated Lookbook Cards for Mobile Viewports:
-  // 3 cards scatter UP (above write-up), 3 cards scatter DOWN (below write-up),
-  // framing the text write-up cleanly in the middle.
-  const mobileDeptCards: StackSpreadCard[] = [
-    // 01. DRESSES (UP - Top Left)
-    {
-      item: {
-        src: '/images/fc_asymmetric_silk_dress.webp',
-        alt: 'Fluid Silk Column Dresses',
-        title: 'Silk Column Dresses',
-        category: 'Dresses',
-        tagline: 'Bias-cut silk and sculpted contours',
-        onClick: () => handleNavigate('DRESSES'),
-      },
-      stackOffset: { x: -6, y: -6 },
-      stackRotate: -14,
-      target: { x: -28, y: -33, rotate: -6, scale: 0.88, w: 27, h: 16 },
-      targetSm: { x: -28, y: -33, rotate: -6, scale: 0.88, w: 27, h: 16 },
-      z: 2,
-    },
-    // 02. JACKETS (UP - Top Center)
-    {
-      item: {
-        src: '/images/fc_tailoring_suite.webp',
-        alt: 'Pagoda Jackets & Blazers',
-        title: 'Tailored Jackets',
-        category: 'Tailoring',
-        tagline: 'Pagoda shoulders and structured form',
-        onClick: () => handleNavigate('JACKETS'),
-      },
-      stackOffset: { x: 0, y: -8 },
-      stackRotate: 3,
-      target: { x: 0, y: -36, rotate: 1, scale: 0.88, w: 27, h: 16 },
-      targetSm: { x: 0, y: -36, rotate: 1, scale: 0.88, w: 27, h: 16 },
-      z: 3,
-    },
-    // 03. 2PIECES (UP - Top Right)
-    {
-      item: {
-        src: '/images/fc_bustier_pleated_skirt.webp',
-        alt: '2-Piece Coordinated Sets',
-        title: '2-Piece Ensembles',
-        category: 'Coordinated Sets',
-        tagline: 'Sunburst pleated skirts and bustiers',
-        onClick: () => handleNavigate('2PIECES'),
-      },
-      stackOffset: { x: 7, y: -5 },
-      stackRotate: 16,
-      target: { x: 28, y: -33, rotate: 6, scale: 0.88, w: 27, h: 16 },
-      targetSm: { x: 28, y: -33, rotate: 6, scale: 0.88, w: 27, h: 16 },
-      z: 4,
-    },
-    // 04. JUMPSUITS (DOWN - Bottom Left)
-    {
-      item: {
-        src: '/images/fc_luxury_jumpsuit.webp',
-        alt: 'Sculptural Jumpsuits',
-        title: 'Sculptural Jumpsuits',
-        category: 'Jumpsuits',
-        tagline: 'One-piece occasion dressing with corsetry',
-        onClick: () => handleNavigate('JUMPSUITS'),
-      },
-      stackOffset: { x: -7, y: 5 },
-      stackRotate: -8,
-      target: { x: -28, y: 33, rotate: 4, scale: 0.88, w: 27, h: 16 },
-      targetSm: { x: -28, y: 33, rotate: 4, scale: 0.88, w: 27, h: 16 },
-      z: 5,
-    },
-    // 05. KIMONO (DOWN - Bottom Center)
-    {
-      item: {
-        src: '/images/fc_luxury_kimono.webp',
-        alt: 'Atelier Kimonos & Robes',
-        title: 'Atelier Kimonos',
-        category: 'Kimonos',
-        tagline: 'Liquid silk layers with gilded embroidery',
-        onClick: () => handleNavigate('KIMONO'),
-      },
-      stackOffset: { x: 0, y: 7 },
-      stackRotate: -2,
-      target: { x: 0, y: 36, rotate: -2, scale: 0.88, w: 27, h: 16 },
-      targetSm: { x: 0, y: 36, rotate: -2, scale: 0.88, w: 27, h: 16 },
       z: 6,
-    },
-    // 06. DINNER_DRESSES / CORSETS (DOWN - Bottom Right)
-    {
-      item: {
-        src: '/images/fc_haute_soiree_gown.webp',
-        alt: 'Grand Soirée & Gala Gowns',
-        title: 'Gala & Corset Gowns',
-        category: 'Corsetry & Gowns',
-        tagline: 'Sculpted corsetry and dramatic trains',
-        onClick: () => handleNavigate('DINNER_DRESSES'),
-      },
-      stackOffset: { x: 6, y: 4 },
-      stackRotate: 10,
-      target: { x: 28, y: 33, rotate: -5, scale: 0.88, w: 27, h: 16 },
-      targetSm: { x: 28, y: 33, rotate: -5, scale: 0.88, w: 27, h: 16 },
-      z: 7,
     },
   ];
 
   return (
     <div className="w-full bg-[#FFFFFF] border-b border-black/10">
-      
+
       {/* =========================================================================
           DESKTOP & LARGE VIEWPORTS: CINEMATIC SCROLL-TO-EXPLORE SCATTER STAGE
           ========================================================================= */}
       <div className="hidden lg:block">
         <StackSpreadStage
-          cards={hauteDeptCards}
+          cards={capsuleCards}
           scrollLength={320}
           bgColor="#FFFFFF"
           clusterRotation={true}
@@ -358,24 +128,24 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
           heading={
             <div className="space-y-3 max-w-4xl mx-auto pointer-events-none px-4">
               <span className="text-[10px] sm:text-[11px] font-mono-luxury uppercase tracking-[0.3em] text-[#8C7A6B] font-medium block">
-                Atelier Portfolio · 13 Silhouettes
+                The Capsule · Five Pieces
               </span>
               <h2 className="font-sans-luxury text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-noir uppercase leading-[1.02]">
-                Find Your Finaluchi Silhouette
+                Find Your Finaluchi Piece
               </h2>
             </div>
           }
           subtitle={
             <div className="mt-4 max-w-2xl mx-auto space-y-5 pointer-events-auto px-4">
               <p className="text-xs sm:text-sm text-neutral-600 font-light leading-relaxed tracking-normal">
-                Explore all 13 client-approved categories, from dresses and coordinated sets to tailoring, kimonos, jumpsuits and resort pieces.
+                Five ready-to-wear pieces — dresses, jumpsuits, tops, skirts and lounge sets — photographed on the Finaluchi client.
               </p>
               <div className="pt-2 flex items-center justify-center gap-3">
                 <button
                   onClick={() => handleNavigate('ALL')}
                   className="group inline-flex items-center gap-2.5 px-7 py-3 bg-black text-white text-[11px] font-sans-luxury font-semibold uppercase tracking-widest hover:bg-neutral-800 transition-all rounded-xs shadow-sm hover:gap-3.5"
                 >
-                  <span>Shop All Categories</span>
+                  <span>Shop the Capsule</span>
                   <ArrowRight className="w-3.5 h-3.5 transition-transform" />
                 </button>
               </div>
@@ -385,11 +155,11 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
       </div>
 
       {/* =========================================================================
-          MOBILE & TABLET VIEWPORTS (< 1024px): SCATTER UP & DOWN, WRITE-UP IN MIDDLE
+          MOBILE & TABLET VIEWPORTS (< 1024px)
           ========================================================================= */}
       <div className="block lg:hidden w-full bg-[#FFFFFF]">
         <StackSpreadStage
-          cards={mobileDeptCards}
+          cards={capsuleCards}
           scrollLength={250}
           bgColor="#FFFFFF"
           clusterRotation={true}
@@ -401,24 +171,24 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
           heading={
             <div className="space-y-2 max-w-xs mx-auto pointer-events-none px-4">
               <span className="text-[10px] font-mono-luxury uppercase tracking-[0.28em] text-[#8C7A6B] font-medium block">
-                Atelier Portfolio
+                The Capsule
               </span>
               <h2 className="font-sans-luxury text-2xl sm:text-3xl font-bold tracking-tight text-noir uppercase leading-[1.08]">
-                Find Your Silhouette
+                Find Your Piece
               </h2>
             </div>
           }
           subtitle={
             <div className="mt-2.5 max-w-xs mx-auto space-y-3.5 pointer-events-auto px-4">
               <p className="text-[11px] text-neutral-600 font-light leading-relaxed tracking-normal">
-                Explore signature couture cuts — fluid gowns, sculpted tailoring, kimonos & occasion separates.
+                Five ready-to-wear pieces, photographed on the Finaluchi client.
               </p>
               <div className="flex items-center justify-center pt-1">
                 <button
                   onClick={() => handleNavigate('ALL')}
                   className="group inline-flex items-center gap-2 px-6 py-2.5 bg-black text-white text-[10px] font-sans-luxury font-semibold uppercase tracking-widest hover:bg-neutral-800 transition-all rounded-xs shadow-sm"
                 >
-                  <span>All Categories</span>
+                  <span>Shop the Capsule</span>
                   <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
                 </button>
               </div>
