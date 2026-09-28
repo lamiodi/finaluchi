@@ -3,6 +3,7 @@ import { X, ShieldCheck, QrCode, Download } from 'lucide-react';
 import { DigitalCertificate } from '../../types';
 import { useAudioStore } from '../../stores/audioStore';
 import { toast } from 'sonner';
+import { useModalA11y } from '../../lib/useModalA11y';
 
 interface CertificateModalProps {
   isOpen: boolean;
@@ -16,6 +17,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
   certificate,
 }) => {
   const { playTactileClick } = useAudioStore();
+  const panelRef = useModalA11y<HTMLDivElement>({ onClose, isOpen });
 
   if (!isOpen) return null;
 
@@ -32,8 +34,15 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
   const displayDate = certificate.issueDate || certificate.registrationDate;
 
   return (
-    <div className="fixed inset-0 z-[850] flex items-center justify-center p-3 sm:p-4 bg-[#000000]/80 backdrop-blur-md animate-in fade-in duration-200 font-sans-luxury">
-      <div className="bg-[#FFFFFF] text-[#000000] w-full max-w-2xl border-2 border-black/20 shadow-2xl overflow-hidden p-6 sm:p-10 md:p-12 relative max-h-[92vh] overflow-y-auto">
+    <div className="fixed inset-0 z-[850] flex items-center justify-center p-3 sm:p-4 bg-noir/80 backdrop-blur-md animate-in fade-in duration-200 font-sans-luxury">
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="certificate-title"
+        tabIndex={-1}
+        className="bg-white text-noir w-full max-w-2xl border-2 border-black/20 shadow-2xl overflow-hidden p-6 sm:p-10 md:p-12 relative max-h-[92vh] overflow-y-auto outline-none"
+      >
         
         {/* Close Button */}
         <button
@@ -41,14 +50,14 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
             playTactileClick();
             onClose();
           }}
-          className="absolute top-4 right-4 p-2 text-black/50 hover:text-[#000000] transition-colors"
+          className="absolute top-4 right-4 p-2 text-muted hover:text-noir transition-colors"
           aria-label="Close Certificate"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Certificate Framing Details */}
-        <div className="border border-black/20 p-6 sm:p-10 md:p-12 bg-[#FFFFFF] relative text-center space-y-6">
+        <div className="border border-black/20 p-6 sm:p-10 md:p-12 bg-white relative text-center space-y-6">
           
           {/* Subtle watermarked monogram in center */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5">
@@ -57,7 +66,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
 
           {/* Header Monogram & Title */}
           <div className="space-y-2">
-            <div className="w-14 sm:w-16 h-14 sm:h-16 rounded-full border border-[#C5A880]/80 p-1 mx-auto bg-white shadow-sm flex items-center justify-center overflow-hidden">
+            <div className="w-14 sm:w-16 h-14 sm:h-16 rounded-full border border-champagne/80 p-1 mx-auto bg-white shadow-sm flex items-center justify-center overflow-hidden">
               <img
                 src="/FINALUCHIlogo.webp"
                 alt="Finaluchi Seal"
@@ -68,10 +77,10 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                 className="w-full h-full object-contain"
               />
             </div>
-            <span className="text-[9px] sm:text-[10px] font-mono-luxury text-[#A67C4A] uppercase tracking-[0.25em] sm:tracking-[0.3em] block font-semibold">
+            <span className="text-[9px] sm:text-[10px] font-mono-luxury text-bronze-deep uppercase tracking-[0.25em] sm:tracking-[0.3em] block font-semibold">
               FINALUCHI COUTURE • ABUJA, NIGERIA
             </span>
-            <h2 className="font-display text-xl sm:text-3xl md:text-4xl font-bold tracking-tight text-noir uppercase">
+            <h2 id="certificate-title" className="font-display text-xl sm:text-3xl md:text-4xl font-bold tracking-tight text-noir uppercase">
               Garment Order Record
             </h2>
             <p className="text-[11px] sm:text-xs text-muted font-light max-w-md mx-auto">
@@ -95,7 +104,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
             </div>
             <div>
               <span className="text-[9px] text-muted uppercase block">Unique Serial Reference</span>
-              <span className="font-bold text-[#A67C4A]">{certificate.serialNumber}</span>
+              <span className="font-bold text-bronze-deep">{certificate.serialNumber}</span>
             </div>
             <div>
               <span className="text-[9px] text-muted uppercase block">Registered Owner</span>
@@ -133,7 +142,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                 </span>
                 <button
                   onClick={handleCopyVerification}
-                  className="text-[#A67C4A] hover:text-noir underline mt-1 block font-medium"
+                  className="text-bronze-deep hover:text-noir underline mt-1 block font-medium"
                 >
                   Copy Record Link
                 </button>
@@ -147,7 +156,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 mt-4 sm:mt-6">
           <div className="flex items-center gap-1.5 text-xs text-muted font-mono-luxury">
-            <ShieldCheck className="w-4 h-4 text-[#A67C4A]" />
+            <ShieldCheck className="w-4 h-4 text-bronze" />
             <span>Keep this record with your invoice and care guidance</span>
           </div>
 

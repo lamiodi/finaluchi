@@ -23,7 +23,7 @@ export const Footer: React.FC<FooterProps> = ({
   );
 
   return (
-    <footer className="bg-[#000000] text-white pt-14 sm:pt-16 pb-12 border-t border-white/15 font-sans-luxury relative z-10">
+    <footer className="bg-noir text-white pt-14 sm:pt-16 pb-12 border-t border-white/15 font-sans-luxury relative z-10">
       <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 pb-12 sm:pb-16 border-b border-white/15">
           <div className="lg:col-span-5 space-y-4">
@@ -46,7 +46,7 @@ export const Footer: React.FC<FooterProps> = ({
                 <span className="font-sans-luxury text-lg sm:text-2xl tracking-[0.22em] font-bold text-white uppercase block">
                   FINALUCHI COUTURE
                 </span>
-                <p className="text-[9px] sm:text-[10px] tracking-[0.3em] text-[#C5A880] uppercase font-mono-luxury mt-0.5 font-medium">
+                <p className="text-[9px] sm:text-[10px] tracking-[0.3em] text-champagne uppercase font-mono-luxury mt-0.5 font-medium">
                   Abuja, Nigeria · Couture & Ready-to-Wear
                 </p>
               </div>
@@ -59,16 +59,16 @@ export const Footer: React.FC<FooterProps> = ({
 
             <button
               onClick={onOpenAbout}
-              className="hover:text-[#DFC7AA] transition-colors underline underline-offset-4 text-xs text-left"
+              className="hover:text-champagne-light transition-colors underline underline-offset-4 text-xs text-left"
             >
               Meet Finaluchi and its creative direction ⟶
             </button>
           </div>
 
           <div className="lg:col-span-3 space-y-4">
-            <h4 className="text-xs font-bold tracking-loose-couture uppercase text-white">
+            <h2 className="text-xs font-bold tracking-loose-couture uppercase text-white">
               Plan Your Order
-            </h4>
+            </h2>
             <p className="text-xs text-white/70 font-light leading-relaxed">
               Share the piece you like, your event date, preferred size or measurements and any
               custom details. The team can confirm what is possible before you pay.
@@ -78,7 +78,7 @@ export const Footer: React.FC<FooterProps> = ({
               target="_blank"
               rel="noreferrer"
               onClick={() => playTactileClick()}
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-white text-black text-xs font-bold tracking-widest uppercase hover:bg-[#DFC7AA] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-white text-black text-xs font-bold tracking-widest uppercase hover:bg-champagne-light transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
               <MessageCircle className="w-4 h-4" />
               WhatsApp {BRAND.whatsappDisplay}
@@ -86,14 +86,14 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
 
           <div className="lg:col-span-4 space-y-4">
-            <h4 className="text-xs font-bold tracking-loose-couture uppercase text-white">
+            <h2 className="text-xs font-bold tracking-loose-couture uppercase text-white">
               Before You Pay
-            </h4>
+            </h2>
             <p className="text-xs text-white/70 font-light leading-relaxed">{ORDER_CLARITY_NOTE}</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-white/80">
               {['Written invoice', 'Confirmed event & delivery date', 'Measurement approval', 'Alteration & refund terms'].map((item) => (
                 <span key={item} className="flex items-start gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#C5A880] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-champagne shrink-0 mt-0.5" />
                   {item}
                 </span>
               ))}
@@ -103,7 +103,7 @@ export const Footer: React.FC<FooterProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-12 py-10 sm:py-12 text-xs">
           <div className="space-y-3">
-            <h5 className="font-bold tracking-loose-couture uppercase">Shop Women</h5>
+            <h3 className="font-bold tracking-loose-couture uppercase">Shop Women</h3>
             <ul className="space-y-2 text-white/75">
               <li><button onClick={() => onNavigate('catalog', { pillar: 'DINNER_DRESSES' })} className="hover:text-white text-left">Dinner Dresses & Gowns</button></li>
               <li><button onClick={() => onNavigate('catalog', { pillar: 'DRESSES' })} className="hover:text-white text-left">Dresses & Playsuits</button></li>
@@ -115,18 +115,18 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
 
           <div className="space-y-3">
-            <h5 className="font-bold tracking-loose-couture uppercase">Order Support</h5>
+            <h3 className="font-bold tracking-loose-couture uppercase">Order Support</h3>
             <ul className="space-y-2.5 text-white/75">
               <li><button onClick={onOpenAppointments} className="hover:text-white text-left">Request a Custom Order</button></li>
               <li><button onClick={() => onNavigate('tracker')} className="hover:text-white text-left">Track an Order</button></li>
               <li><button onClick={() => onNavigate('client')} className="hover:text-white text-left">Saved Pieces</button></li>
               <li><button onClick={onOpenContact} className="hover:text-white text-left">Contact Finaluchi</button></li>
-              <li><button onClick={() => onNavigate('atelier')} className="hover:text-white flex items-center gap-1.5 text-left"><Sparkles className="w-3 h-3 text-[#C5A880]" /> How Custom Orders Work</button></li>
+              <li><button onClick={() => onNavigate('atelier')} className="hover:text-white flex items-center gap-1.5 text-left"><Sparkles className="w-3 h-3 text-champagne" /> How Custom Orders Work</button></li>
             </ul>
           </div>
 
           <div className="space-y-3">
-            <h5 className="font-bold tracking-loose-couture uppercase">Based in Abuja</h5>
+            <h3 className="font-bold tracking-loose-couture uppercase">Based in Abuja</h3>
             <p className="text-white/75 leading-relaxed font-light">
               Finaluchi Couture is based in Abuja, Nigeria. Studio address, fitting availability,
               delivery timelines and collection arrangements are confirmed directly with the team.
@@ -135,7 +135,7 @@ export const Footer: React.FC<FooterProps> = ({
               href={BRAND.instagramUrl}
               target="_blank"
               rel="noreferrer"
-              className="text-[#DFC7AA] hover:text-white inline-flex items-center gap-1.5"
+              className="text-champagne-light hover:text-white inline-flex items-center gap-1.5"
             >
               View current work <ArrowRight className="w-3.5 h-3.5" />
             </a>

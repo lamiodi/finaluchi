@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { useAudioStore } from '../../stores/audioStore';
+import { useReducedMotion } from 'motion/react';
+import { buildWebPSrcSet, webpVariant } from '../../utils/images';
 
 interface CampaignHeroProps {
   onShopNow: () => void;
@@ -24,6 +26,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const { playTactileClick } = useAudioStore();
+  const prefersReduced = useReducedMotion();
 
   const slides: HeroSlide[] = [
     {
@@ -86,7 +89,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
 
   // Autoplay with pause on hover
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || prefersReduced) return;
     const timer = setInterval(() => {
       nextSlide();
     }, 6500);
@@ -121,8 +124,10 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
 
   return (
     <section 
-      className="relative w-full h-[85vh] sm:h-[90vh] min-h-[580px] max-h-[960px] bg-[#000000] overflow-hidden select-none touch-pan-y"
+      className="relative w-full h-[85vh] sm:h-[90vh] min-h-[580px] max-h-[960px] bg-noir overflow-hidden select-none touch-pan-y"
+      onFocus={() => setIsPaused(true)}
       onMouseEnter={() => setIsPaused(true)}
+      onBlur={() => setIsPaused(false)}
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
@@ -135,7 +140,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
         className="absolute inset-0 transition-opacity duration-1000 ease-out pointer-events-none opacity-25"
       >
         <img
-          src={slide.imageUrl}
+          src={webpVariant(slide.imageUrl)}
           alt=""
           aria-hidden="true"
           loading="lazy"
@@ -157,6 +162,8 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
           >
             <img
               src={s.imageUrl}
+              srcSet={buildWebPSrcSet(s.imageUrl)}
+              sizes="100vw"
               alt={s.lookTitle}
               className="w-full h-full object-cover brightness-[1.01] contrast-[1.04]"
               style={{
@@ -192,7 +199,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
           
           {/* Left: Wide Heading & Actions */}
           <div className="lg:col-span-8 space-y-4 sm:space-y-5 max-w-4xl">
-            <span className="text-xs font-mono-luxury tracking-[0.25em] text-[#C5A880] uppercase font-semibold block">
+            <span className="text-xs font-mono-luxury tracking-[0.25em] text-champagne uppercase font-semibold block">
               {slide.category}
             </span>
 
@@ -239,11 +246,11 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
                     playTactileClick();
                     setCurrentSlide(idx);
                   }}
-                  className="flex-1 h-[2px] bg-white/20 overflow-hidden cursor-pointer"
+                  className="relative flex-1 h-[2px] bg-white/20 cursor-pointer before:content-[''] before:absolute before:-inset-y-4 before:inset-x-0"
                 >
                   <div
                     className={`h-full transition-all duration-300 ${
-                      idx === currentSlide ? 'w-full bg-[#C5A880]' : 'w-0'
+                      idx === currentSlide ? 'w-full bg-champagne' : 'w-0'
                     }`}
                   />
                 </div>
@@ -300,8 +307,10 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
                   aria-label={`Select ${s.lookTitle}`}
                 >
                   <img
-                    src={s.imageUrl}
+                    src={webpVariant(s.imageUrl, 480)}
                     alt={s.lookTitle}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover object-top"
                   />
                 </button>
@@ -321,7 +330,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
                 playTactileClick();
                 setCurrentSlide(i);
               }}
-              className={`h-0.5 transition-all duration-300 ${
+              className={`relative h-0.5 transition-all duration-300 before:content-[''] before:absolute before:-inset-y-3.5 before:-inset-x-1.5 ${
                 i === currentSlide ? 'w-8 bg-white' : 'w-2 bg-white/30 hover:bg-white/60'
               }`}
               aria-label={`Go to slide ${i + 1}`}

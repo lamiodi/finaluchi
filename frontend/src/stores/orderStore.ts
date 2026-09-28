@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 import { Appointment, AuditLogEntry, DigitalCertificate, Order, OrderItemSnapshot, ShippingAddress } from '../types';
 import { useCartStore } from './cartStore';
 import { generateCertificateSerialNumber, generateOrderNumber } from '../utils/formatters';
+import { markOrderPaid, submitAppointment, submitOrder } from '../lib/api';
 
 interface OrderState {
   orders: Order[];
@@ -29,10 +30,12 @@ interface OrderState {
   bookAppointment: (data: Omit<Appointment, 'id' | 'status'>) => Appointment;
   
   getOrderByNumber: (orderNumber: string) => Order | undefined;
-  
+
   getOrderByToken: (token: string) => Order | undefined;
-  
+
   getCertificateBySerial: (serial: string) => DigitalCertificate | undefined;
+
+  mergeRemoteOrder: (order: Order) => void;
 }
 
 export const useOrderStore = create<OrderState>()(
@@ -225,6 +228,10 @@ export const useOrderStore = create<OrderState>()(
       ]
     }));
 
+    // Persist to the atelier backend (confirmation email + studio notification)
+    // whenever it is configured; local storage remains the offline fallback.
+    void submitOrder(newOrder);
+
     return newOrder;
   },
 
@@ -291,6 +298,10 @@ export const useOrderStore = create<OrderState>()(
     });
 
     useCartStore.getState().clearCart();
+
+    // Notify the backend so the atelier ledger and confirmation email fire.
+    void markOrderPaid(targetOrder?.orderNumber || orderId, gatewayReference);
+
     return targetOrder || get().orders[0];
   },
 
@@ -358,6 +369,10 @@ export const useOrderStore = create<OrderState>()(
         ...state.auditLogs,
       ]
     }));
+
+    // Persist to the atelier backend (confirmation email + studio notification).
+    void submitAppointment(newApt);
+
     return newApt;
   },
 
@@ -371,6 +386,19 @@ export const useOrderStore = create<OrderState>()(
 
   getCertificateBySerial: (serial) => {
     return get().certificates.find((c) => c.serialNumber.toUpperCase() === serial.toUpperCase());
+  },
+
+  // Fold an order fetched from the atelier backend (cross-device tracking)
+  // into local state, preferring the freshest production stage.
+  mergeRemoteOrder: (order) => {
+    set((state) => {
+      const idx = state.orders.findIndex((o) => o.orderNumber === order.orderNumber);
+      if (idx === -1) return { orders: [order, ...state.orders] };
+      const merged = { ...state.orders[idx], ...order };
+      const orders = [...state.orders];
+      orders[idx] = merged;
+      return { orders };
+    });
   },
     }),
     {

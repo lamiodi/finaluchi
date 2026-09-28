@@ -3,6 +3,7 @@ import { X, MessageSquare, Phone, MapPin, Send, Clock, Sparkles, CheckCircle2 } 
 import { toast } from 'sonner';
 import { useAudioStore } from '../../stores/audioStore';
 import { BRAND, buildWhatsAppUrl } from '../../data/brand';
+import { useModalA11y } from '../../lib/useModalA11y';
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
   const [isSent, setIsSent] = useState(false);
 
   const { playTactileClick, playSuccessChime } = useAudioStore();
+  const panelRef = useModalA11y<HTMLDivElement>({ onClose, isOpen });
 
   if (!isOpen) return null;
 
@@ -65,16 +67,23 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-[850] flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200 font-sans-luxury">
-      <div className="bg-[#FFFFFF] text-noir w-full max-w-2xl border border-black/15 rounded-xs shadow-2xl overflow-hidden max-h-[92vh] flex flex-col">
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="contact-title"
+        tabIndex={-1}
+        className="bg-white text-noir w-full max-w-2xl border border-black/15 rounded-xs shadow-2xl overflow-hidden max-h-[92vh] flex flex-col outline-none"
+      >
         
         {/* Header */}
-        <div className="p-5 sm:p-6 bg-[#000000] text-white border-b border-white/10 flex items-center justify-between shrink-0">
+        <div className="p-5 sm:p-6 bg-noir text-white border-b border-white/10 flex items-center justify-between shrink-0">
           <div>
-            <div className="flex items-center gap-2 text-[#C5A880] text-xs font-mono-luxury tracking-loose-couture uppercase">
+            <div className="flex items-center gap-2 text-champagne text-xs font-mono-luxury tracking-loose-couture uppercase">
               <Sparkles className="w-3.5 h-3.5" />
               <span>FINALUCHI ORDER SUPPORT</span>
             </div>
-            <h2 className="font-sans-luxury text-xl sm:text-2xl font-bold tracking-tight text-white uppercase mt-0.5">
+            <h2 id="contact-title" className="font-sans-luxury text-xl sm:text-2xl font-bold tracking-tight text-white uppercase mt-0.5">
               Let&apos;s Plan Your Look
             </h2>
           </div>
@@ -116,7 +125,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
               className="p-3.5 bg-noir/5 border border-noir/15 hover:border-noir/40 hover:bg-noir/10 text-noir rounded-xs flex items-center gap-3 transition-all text-left group"
             >
               <div className="w-9 h-9 rounded-full bg-noir text-white flex items-center justify-center shrink-0 shadow-xs">
-                <Phone className="w-4 h-4 text-[#C5A880]" />
+                <Phone className="w-4 h-4 text-champagne" />
               </div>
               <div>
                 <div className="text-xs font-bold uppercase tracking-tight">Call the Business Line</div>
@@ -159,11 +168,12 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[10px] font-mono-luxury text-muted uppercase block mb-1">
+                  <label htmlFor="contact-name" className="text-[10px] font-mono-luxury text-muted uppercase block mb-1">
                     Your Name *
                   </label>
                   <input
                     type="text"
+                    id="contact-name"
                     required
                     placeholder="e.g. Chinelo Adebayo"
                     value={name}
@@ -173,11 +183,12 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-mono-luxury text-muted uppercase block mb-1">
+                  <label htmlFor="contact-email" className="text-[10px] font-mono-luxury text-muted uppercase block mb-1">
                     Email Address (Optional)
                   </label>
                   <input
                     type="email"
+                    id="contact-email"
                     placeholder="client@domain.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -188,11 +199,12 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[10px] font-mono-luxury text-muted uppercase block mb-1">
+                  <label htmlFor="contact-phone" className="text-[10px] font-mono-luxury text-muted uppercase block mb-1">
                     Phone / WhatsApp Number
                   </label>
                   <input
                     type="tel"
+                    id="contact-phone"
                     placeholder="+234 800 000 0000"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
@@ -201,10 +213,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-mono-luxury text-muted uppercase block mb-1">
+                  <label htmlFor="contact-subject" className="text-[10px] font-mono-luxury text-muted uppercase block mb-1">
                     Inquiry Subject
                   </label>
                   <select
+                    id="contact-subject"
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
                     className="w-full p-2.5 bg-white border border-border rounded-xs text-xs focus:outline-none focus:border-noir"
@@ -220,11 +233,12 @@ export const ContactModal: React.FC<ContactModalProps> = ({
               </div>
 
               <div>
-                <label className="text-[10px] font-mono-luxury text-muted uppercase block mb-1">
+                <label htmlFor="contact-message" className="text-[10px] font-mono-luxury text-muted uppercase block mb-1">
                   Message *
                 </label>
                 <textarea
                   required
+                  id="contact-message"
                   rows={3}
                   placeholder="Tell us the piece or occasion, your event date, preferred size or measurements, and any custom details..."
                   value={message}
@@ -237,11 +251,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                 type="submit"
                 className="w-full py-3 bg-noir text-white text-xs font-bold tracking-loose-couture uppercase hover:bg-neutral-800 transition-all btn-luxury rounded-xs flex items-center justify-center gap-2 shadow-md disabled:opacity-50"
               >
-                <Send className="w-3.5 h-3.5 text-[#C5A880]" />
+                <Send className="w-3.5 h-3.5 text-champagne" />
                 <span>CONTINUE ON WHATSAPP</span>
               </button>
 
-              <div className="p-3 bg-[#FAFAFA] border border-black/10 rounded-xs text-[10px] font-mono-luxury text-black/75 space-y-1">
+              <div className="p-3 bg-alabaster-subtle border border-black/10 rounded-xs text-[10px] font-mono-luxury text-black/75 space-y-1">
                 <span className="font-bold text-black uppercase block">Client Confidence Standard:</span>
                 <p>Every bespoke commission is backed by a written invoice, confirmed delivery date, measurement sign-off, and traceable business payments.</p>
               </div>
@@ -251,7 +265,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
           {/* Atelier Physical Locations */}
           <div className="pt-3 border-t border-border/70 space-y-3">
             <div className="flex items-center justify-between">
-              <div className="text-[10px] font-mono-luxury text-[#A67C4A] uppercase tracking-widest font-semibold">
+              <div className="text-[10px] font-mono-luxury text-bronze uppercase tracking-widest font-semibold">
                 VISIT & COLLECTION INFORMATION
               </div>
               {onOpenAppointments && (
@@ -261,7 +275,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                     playTactileClick();
                     onOpenAppointments();
                   }}
-                  className="text-[11px] font-sans-luxury font-semibold text-noir hover:text-[#C5A880] uppercase tracking-wider underline underline-offset-2"
+                  className="text-[11px] font-sans-luxury font-semibold text-noir hover:text-champagne uppercase tracking-wider underline underline-offset-2"
                 >
                   Request a Consultation ⟶
                 </button>
@@ -272,7 +286,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
               <div className="space-y-1 p-3 bg-white border border-border/50 rounded-xs">
                 <div className="font-bold text-noir flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-[#C5A880]" />
+                    <MapPin className="w-3.5 h-3.5 text-champagne" />
                     <span>Abuja, Nigeria</span>
                   </div>
                   <a href={`tel:+${BRAND.whatsappNumber}`} className="text-[10px] text-muted hover:text-noir flex items-center gap-0.5 font-mono-luxury">
@@ -291,7 +305,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
               <div className="space-y-1 p-3 bg-white border border-border/50 rounded-xs">
                 <div className="font-bold text-noir flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
-                    <MessageSquare className="w-3.5 h-3.5 text-[#C5A880]" />
+                    <MessageSquare className="w-3.5 h-3.5 text-champagne" />
                     <span>Instagram Collections</span>
                   </div>
                   <a href={BRAND.instagramUrl} target="_blank" rel="noreferrer" className="text-[10px] text-muted hover:text-noir font-mono-luxury">

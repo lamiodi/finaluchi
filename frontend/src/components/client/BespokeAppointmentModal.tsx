@@ -4,6 +4,7 @@ import { useOrderStore } from '../../stores/orderStore';
 import { useAudioStore } from '../../stores/audioStore';
 import { toast } from 'sonner';
 import { buildWhatsAppUrl } from '../../data/brand';
+import { useModalA11y } from '../../lib/useModalA11y';
 
 const getTomorrowDate = () => {
   const date = new Date();
@@ -30,6 +31,7 @@ export const BespokeAppointmentModal: React.FC<BespokeAppointmentModalProps> = (
 
   const { bookAppointment } = useOrderStore();
   const { playTactileClick, playSuccessChime } = useAudioStore();
+  const panelRef = useModalA11y<HTMLDivElement>({ onClose, isOpen });
 
   if (!isOpen) return null;
 
@@ -80,17 +82,24 @@ export const BespokeAppointmentModal: React.FC<BespokeAppointmentModalProps> = (
   };
 
   return (
-    <div className="fixed inset-0 z-[800] flex items-center justify-center p-3 sm:p-4 bg-[#000000]/80 backdrop-blur-md animate-in fade-in duration-200 font-sans-luxury">
-      <div className="bg-[#FFFFFF] text-[#000000] w-full max-w-xl border border-black/20 shadow-2xl overflow-hidden max-h-[92vh] overflow-y-auto">
+    <div className="fixed inset-0 z-[800] flex items-center justify-center p-3 sm:p-4 bg-noir/80 backdrop-blur-md animate-in fade-in duration-200 font-sans-luxury">
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="appointment-title"
+        tabIndex={-1}
+        className="bg-white text-noir w-full max-w-xl border border-black/20 shadow-2xl overflow-hidden max-h-[92vh] overflow-y-auto outline-none"
+      >
         
         {/* Header */}
-        <div className="p-5 sm:p-6 bg-[#000000] text-[#FFFFFF] border-b border-white/10 flex items-center justify-between">
+        <div className="p-5 sm:p-6 bg-noir text-white border-b border-white/10 flex items-center justify-between">
           <div>
-            <div className="flex items-center gap-2 text-[#C5A880] text-xs font-mono-luxury tracking-widest uppercase">
+            <div className="flex items-center gap-2 text-champagne text-xs font-mono-luxury tracking-widest uppercase">
               <Sparkles className="w-3.5 h-3.5" />
               <span>CUSTOM ORDER CONSULTATION</span>
             </div>
-            <h2 className="font-sans-luxury text-xl sm:text-2xl font-bold tracking-tight text-white uppercase mt-1">
+            <h2 id="appointment-title" className="font-sans-luxury text-xl sm:text-2xl font-bold tracking-tight text-white uppercase mt-1">
               Plan Your Finaluchi Look
             </h2>
           </div>
@@ -101,17 +110,18 @@ export const BespokeAppointmentModal: React.FC<BespokeAppointmentModalProps> = (
               onClose();
             }}
             className="p-1.5 text-white/60 hover:text-white"
+            aria-label="Close Consultation Form"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-5 text-xs bg-[#FFFFFF]">
+        <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-5 text-xs bg-white">
           
           {/* Appointment Type */}
           <div className="space-y-2.5">
-            <label className="font-bold tracking-widest uppercase text-[#000000] block">
+            <label className="font-bold tracking-widest uppercase text-noir block">
               CONSULTATION FORMAT:
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
@@ -123,18 +133,19 @@ export const BespokeAppointmentModal: React.FC<BespokeAppointmentModalProps> = (
                 <button
                   key={t.id}
                   type="button"
+                  aria-pressed={appointmentType === t.id}
                   onClick={() => {
                     playTactileClick();
                     setAppointmentType(t.id);
                   }}
                   className={`p-3.5 text-left border transition-all ${
                     appointmentType === t.id
-                      ? 'border-[#000000] bg-[#000000] text-[#FFFFFF] font-bold'
-                      : 'border-black/15 bg-[#FFFFFF] text-black/70 hover:border-[#000000]'
+                      ? 'border-noir bg-noir text-white font-bold'
+                      : 'border-black/15 bg-white text-black/70 hover:border-noir'
                   }`}
                 >
-                  <div className={`text-xs font-semibold uppercase ${appointmentType === t.id ? 'text-white' : 'text-[#000000]'}`}>{t.label}</div>
-                  <div className={`text-[10px] mt-0.5 ${appointmentType === t.id ? 'text-white/70' : 'text-black/50'}`}>{t.sub}</div>
+                  <div className={`text-xs font-semibold uppercase ${appointmentType === t.id ? 'text-white' : 'text-noir'}`}>{t.label}</div>
+                  <div className={`text-[10px] mt-0.5 ${appointmentType === t.id ? 'text-white/70' : 'text-muted'}`}>{t.sub}</div>
                 </button>
               ))}
             </div>
@@ -143,27 +154,29 @@ export const BespokeAppointmentModal: React.FC<BespokeAppointmentModalProps> = (
           {/* Date & Time Slot */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">
+              <label htmlFor="appt-date" className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">
                 Preferred Date
               </label>
               <input
                 type="date"
+                id="appt-date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 min={getTomorrowDate()}
-                className="w-full p-3 bg-[#FFFFFF] border border-black/20 text-xs font-mono-luxury focus:outline-none focus:border-[#000000]"
+                className="w-full p-3 bg-white border border-black/20 text-xs font-mono-luxury focus:outline-none focus:border-noir"
                 required
               />
             </div>
 
             <div>
-              <label className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">
+              <label htmlFor="appt-time" className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">
                 Time Slot
               </label>
               <select
+                id="appt-time"
                 value={timeSlot}
                 onChange={(e) => setTimeSlot(e.target.value)}
-                className="w-full p-3 bg-[#FFFFFF] border border-black/20 text-xs focus:outline-none focus:border-[#000000]"
+                className="w-full p-3 bg-white border border-black/20 text-xs focus:outline-none focus:border-noir"
               >
                 <option value="Morning">Morning</option>
                 <option value="Afternoon">Afternoon</option>
@@ -175,58 +188,62 @@ export const BespokeAppointmentModal: React.FC<BespokeAppointmentModalProps> = (
           {/* Client Details */}
           <div className="space-y-3 pt-3 border-t border-black/10">
             <div>
-              <label className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">
+              <label htmlFor="appt-name" className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">
                 Full Name *
               </label>
               <input
                 type="text"
+                id="appt-name"
                 placeholder="e.g. Amara Okafor"
                 value={clientName}
                 onChange={(e) => setClientName(e.target.value)}
                 required
-                className="w-full p-3 bg-[#FFFFFF] border border-black/20 text-xs focus:outline-none focus:border-[#000000]"
+                className="w-full p-3 bg-white border border-black/20 text-xs focus:outline-none focus:border-noir"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">
+                <label htmlFor="appt-email" className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">
                   Email Address (Optional)
                 </label>
                 <input
                   type="email"
+                  id="appt-email"
                   placeholder="client@domain.com"
                   value={clientEmail}
                   onChange={(e) => setClientEmail(e.target.value)}
-                  className="w-full p-3 bg-[#FFFFFF] border border-black/20 text-xs focus:outline-none focus:border-[#000000]"
+                  className="w-full p-3 bg-white border border-black/20 text-xs focus:outline-none focus:border-noir"
                 />
               </div>
 
               <div>
-                <label className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">
+                <label htmlFor="appt-phone" className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">
                   Phone / WhatsApp Number *
                 </label>
                 <input
                   type="tel"
+                  id="appt-phone"
                   placeholder="+234 803 000 0000"
                   value={clientPhone}
                   onChange={(e) => setClientPhone(e.target.value)}
                   required
-                  className="w-full p-3 bg-[#FFFFFF] border border-black/20 text-xs font-mono-luxury focus:outline-none focus:border-[#000000]"
+                  className="w-full p-3 bg-white border border-black/20 text-xs font-mono-luxury focus:outline-none focus:border-noir"
                 />
               </div>
             </div>
 
             <div>
-              <label className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">
+              <label htmlFor="appt-notes" className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">
                 Occasion / Dressing Notes (Optional)
               </label>
               <textarea
+                id="appt-notes"
                 placeholder="Mention your event date, the piece or category you like, colour, sizing and any custom details..."
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={2}
-                className="w-full p-3 bg-[#FFFFFF] border border-black/20 text-xs focus:outline-none focus:border-[#000000]"
+                className="w-full p-3 bg-white border border-black/20 text-xs focus:outline-none focus:border-noir"
               />
             </div>
           </div>
@@ -234,13 +251,13 @@ export const BespokeAppointmentModal: React.FC<BespokeAppointmentModalProps> = (
           {/* Submit */}
           <button
             type="submit"
-            className="w-full py-4 bg-[#000000] text-[#FFFFFF] text-xs font-bold tracking-[0.25em] uppercase hover:bg-neutral-900 border border-[#000000] transition-all flex items-center justify-center gap-2 shadow-sm"
+            className="w-full py-4 bg-noir text-white text-xs font-bold tracking-[0.25em] uppercase hover:bg-neutral-900 border border-noir transition-all flex items-center justify-center gap-2 shadow-sm"
           >
             <Calendar className="w-4 h-4 text-white" />
             <span>CONTINUE REQUEST ON WHATSAPP</span>
           </button>
 
-          <p className="text-[10px] text-center text-black/50 font-mono-luxury">
+          <p className="text-[10px] text-center text-muted font-mono-luxury">
             Your preferred time is a request until the Finaluchi team confirms it on WhatsApp.
           </p>
 

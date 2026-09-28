@@ -32,13 +32,13 @@ export const AdminPage: React.FC = () => {
   };
 
   return (
-    <div className="w-full bg-[#FFFFFF] min-h-screen text-[#000000] font-sans-luxury pb-24">
+    <div className="w-full bg-white min-h-screen text-noir font-sans-luxury pb-24">
       
       {/* Admin Top Header */}
-      <div className="bg-[#000000] text-white py-10 px-4 sm:px-8 lg:px-12 border-b border-white/15">
+      <div className="bg-noir text-white py-10 px-4 sm:px-8 lg:px-12 border-b border-white/15">
         <div className="max-w-[1680px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-[#C5A880] text-xs font-mono-luxury tracking-[0.25em] uppercase font-semibold">
+            <div className="flex items-center gap-2 text-champagne text-xs font-mono-luxury tracking-[0.25em] uppercase font-semibold">
               <Lock className="w-3.5 h-3.5" />
               <span>FINALUCHI ATELIER OPS DESK • ENTERPRISE CRM</span>
             </div>
@@ -63,25 +63,25 @@ export const AdminPage: React.FC = () => {
         {/* KPI Metric Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           
-          <div className="bg-[#FFFFFF] p-5 border border-black/10 rounded-none space-y-1">
+          <div className="bg-white p-5 border border-black/10 rounded-none space-y-1">
             <span className="text-[10px] font-mono-luxury text-muted uppercase tracking-wider">Gross Paid Revenue (NGN)</span>
             <div className="text-2xl font-bold font-mono-luxury text-black">{formatKoboToNgn(totalRevenueKobo)}</div>
             <span className="text-[10px] text-emerald-700 font-mono-luxury">100% Integer Minor Units Reconciled</span>
           </div>
 
-          <div className="bg-[#FFFFFF] p-5 border border-black/10 rounded-none space-y-1">
+          <div className="bg-white p-5 border border-black/10 rounded-none space-y-1">
             <span className="text-[10px] font-mono-luxury text-muted uppercase tracking-wider">Orders in Active Tailoring</span>
             <div className="text-2xl font-bold font-mono-luxury text-black">{activeProductionOrders.length}</div>
             <span className="text-[10px] text-muted font-mono-luxury">Across Abuja Atelier Benches</span>
           </div>
 
-          <div className="bg-[#FFFFFF] p-5 border border-black/10 rounded-none space-y-1">
+          <div className="bg-white p-5 border border-black/10 rounded-none space-y-1">
             <span className="text-[10px] font-mono-luxury text-muted uppercase tracking-wider">Bespoke Client Appointments</span>
             <div className="text-2xl font-bold font-mono-luxury text-black">{appointments.length}</div>
             <span className="text-[10px] text-muted font-mono-luxury">Master Tailor Adebayo Assigned</span>
           </div>
 
-          <div className="bg-[#FFFFFF] p-5 border border-black/10 rounded-none space-y-1">
+          <div className="bg-white p-5 border border-black/10 rounded-none space-y-1">
             <span className="text-[10px] font-mono-luxury text-muted uppercase tracking-wider">Security Audit Log Events</span>
             <div className="text-2xl font-bold font-mono-luxury text-black">{auditLogs.length}</div>
             <span className="text-[10px] text-emerald-700 font-mono-luxury">0 Unresolved Integrity Breaches</span>
@@ -105,8 +105,8 @@ export const AdminPage: React.FC = () => {
               }}
               className={`px-4 py-2.5 rounded-none whitespace-nowrap transition-colors border ${
                 activeTab === tab.id
-                  ? 'bg-[#000000] text-white border-black font-bold'
-                  : 'bg-[#FAFAFA] text-black/70 hover:text-black border-black/10'
+                  ? 'bg-noir text-white border-black font-bold'
+                  : 'bg-alabaster-subtle text-black/70 hover:text-black border-black/10'
               }`}
             >
               {tab.label}
@@ -116,7 +116,7 @@ export const AdminPage: React.FC = () => {
 
         {/* Tab 1: LIVE PRODUCTION DESK */}
         {activeTab === 'PRODUCTION' && (
-          <div className="bg-[#FFFFFF] border border-black/10 rounded-none p-6 space-y-6">
+          <div className="bg-white border border-black/10 rounded-none p-6 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h3 className="font-sans-luxury text-xl font-bold text-black uppercase tracking-tight">
@@ -160,7 +160,7 @@ export const AdminPage: React.FC = () => {
                       <button
                         onClick={() => handleAdvanceStage(order.id, order.atelierCurrentStageIndex)}
                         disabled={order.atelierCurrentStageIndex >= 6}
-                        className="px-3.5 py-2 bg-[#000000] text-white text-xs font-semibold tracking-couture uppercase rounded-none hover:bg-neutral-800 disabled:opacity-40 transition-colors flex items-center gap-1"
+                        className="px-3.5 py-2 bg-noir text-white text-xs font-semibold tracking-couture uppercase rounded-none hover:bg-neutral-800 disabled:opacity-40 transition-colors flex items-center gap-1"
                       >
                         <span>ADVANCE STAGE</span>
                         <ChevronRight className="w-3 h-3" />
@@ -169,7 +169,7 @@ export const AdminPage: React.FC = () => {
                   </div>
 
                   {/* Garment Items in this Order */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-[#FAFAFA] border border-black/5 p-3 rounded-none text-xs">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-alabaster-subtle border border-black/5 p-3 rounded-none text-xs">
                     {order.items.map((item) => (
                       <div key={item.id} className="flex items-center gap-2">
                         <img
@@ -194,13 +194,13 @@ export const AdminPage: React.FC = () => {
 
         {/* Tab 2: PAYSTACK GATEWAY LEDGER */}
         {activeTab === 'PAYSTACK' && (
-          <div className="bg-[#FFFFFF] border border-black/10 rounded-none p-6 space-y-4">
+          <div className="bg-white border border-black/10 rounded-none p-6 space-y-4">
             <h3 className="font-sans-luxury text-xl font-bold text-black uppercase tracking-tight">
               Paystack S2S Transaction Log
             </h3>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-mono-luxury">
-                <thead className="bg-[#FAFAFA] border-b border-black/10 text-muted uppercase">
+                <thead className="bg-alabaster-subtle border-b border-black/10 text-muted uppercase">
                   <tr>
                     <th className="p-3">Order Number</th>
                     <th className="p-3">Gateway Reference</th>
@@ -212,7 +212,7 @@ export const AdminPage: React.FC = () => {
                 </thead>
                 <tbody className="divide-y divide-black/10">
                   {orders.map((ord) => (
-                    <tr key={ord.id} className="hover:bg-[#FAFAFA] transition-colors">
+                    <tr key={ord.id} className="hover:bg-alabaster-subtle transition-colors">
                       <td className="p-3 font-semibold text-black">{ord.orderNumber}</td>
                       <td className="p-3 text-muted">{ord.gatewayReference || 'FC_PSTK_LOCAL'}</td>
                       <td className="p-3 font-bold text-black">{formatKoboToNgn(ord.totalKobo)}</td>
@@ -233,13 +233,13 @@ export const AdminPage: React.FC = () => {
 
         {/* Tab 3: CLIENT APPOINTMENTS */}
         {activeTab === 'CRM' && (
-          <div className="bg-[#FFFFFF] border border-black/10 rounded-none p-6 space-y-4">
+          <div className="bg-white border border-black/10 rounded-none p-6 space-y-4">
             <h3 className="font-sans-luxury text-xl font-bold text-black uppercase tracking-tight">
               Client Appointments & Consultations
             </h3>
             <div className="space-y-4">
               {appointments.map((apt) => (
-                <div key={apt.id} className="p-4 bg-[#FAFAFA] border border-black/10 rounded-none flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
+                <div key={apt.id} className="p-4 bg-alabaster-subtle border border-black/10 rounded-none flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-black">{apt.clientName || apt.guestName}</span>
@@ -253,7 +253,7 @@ export const AdminPage: React.FC = () => {
                   </div>
 
                   <div className="text-right font-mono-luxury">
-                    <span className="px-2 py-0.5 bg-[#000000] text-white rounded-none uppercase text-[10px]">
+                    <span className="px-2 py-0.5 bg-noir text-white rounded-none uppercase text-[10px]">
                       {apt.status}
                     </span>
                     <div className="text-[10px] text-muted mt-1">Lead: {apt.assignedArtisan || 'Master Tailor Adebayo'}</div>
@@ -266,13 +266,13 @@ export const AdminPage: React.FC = () => {
 
         {/* Tab 4: SECURITY AUDIT LOGS */}
         {activeTab === 'AUDIT' && (
-          <div className="bg-[#FFFFFF] border border-black/10 rounded-none p-6 space-y-4">
+          <div className="bg-white border border-black/10 rounded-none p-6 space-y-4">
             <h3 className="font-sans-luxury text-xl font-bold text-black uppercase tracking-tight">
               Enterprise Security Audit Trail (Section 13.1)
             </h3>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-mono-luxury">
-                <thead className="bg-[#FAFAFA] border-b border-black/10 text-muted uppercase">
+                <thead className="bg-alabaster-subtle border-b border-black/10 text-muted uppercase">
                   <tr>
                     <th className="p-3">Timestamp</th>
                     <th className="p-3">Actor / Principal</th>
@@ -284,7 +284,7 @@ export const AdminPage: React.FC = () => {
                 </thead>
                 <tbody className="divide-y divide-black/10">
                   {auditLogs.map((log) => (
-                    <tr key={log.id} className="hover:bg-[#FAFAFA] transition-colors">
+                    <tr key={log.id} className="hover:bg-alabaster-subtle transition-colors">
                       <td className="p-3 text-muted">{log.timestamp}</td>
                       <td className="p-3 font-semibold text-black">{log.actor || log.actorRole}</td>
                       <td className="p-3 text-black font-semibold">{log.action}</td>

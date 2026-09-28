@@ -19,7 +19,7 @@ export const SeparatesShowcase: React.FC<SeparatesShowcaseProps> = ({
   const separatesProducts = products.slice(4, 8);
 
   return (
-    <section className="w-full bg-[#FFFFFF] py-16 sm:py-24 border-b border-black/10">
+    <section className="w-full bg-white py-16 sm:py-24 border-b border-black/10">
       <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12">
         
         {/* Section Header */}
@@ -38,7 +38,7 @@ export const SeparatesShowcase: React.FC<SeparatesShowcaseProps> = ({
               playTactileClick();
               onSeeMore('2PIECES');
             }}
-            className="group flex items-center gap-1.5 text-xs font-sans-luxury font-semibold tracking-wider text-noir hover:text-[#A67C4A] transition-colors uppercase"
+            className="group flex items-center gap-1.5 text-xs font-sans-luxury font-semibold tracking-wider text-noir hover:text-bronze transition-colors uppercase"
           >
             <span>Explore Sets</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />

@@ -9,6 +9,7 @@ import { useCartStore } from '../../stores/cartStore';
 import { useAudioStore } from '../../stores/audioStore';
 import { buildWhatsAppUrl } from '../../data/brand';
 import { onImageError } from '../../utils/images';
+import { useModalA11y } from '../../lib/useModalA11y';
 
 interface NavbarProps {
   onNavigateHome: () => void;
@@ -75,6 +76,12 @@ export const Navbar: React.FC<NavbarProps> = ({
     };
   }, [isMobileMenuOpen]);
 
+  // Drawer behavior: Escape to close, focus moved in and restored, Tab trap
+  const menuPanelRef = useModalA11y<HTMLDivElement>({
+    onClose: () => setIsMobileMenuOpen(false),
+    isOpen: isMobileMenuOpen,
+  });
+
   // Active preview image in mega menu
   const activePreviewDept = hoveredPillar
     ? CATEGORY_DEPARTMENTS.find((d) => d.id === hoveredPillar)
@@ -102,7 +109,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               playTactileClick();
               setIsMobileMenuOpen(true);
             }}
-            className="lg:hidden w-10 h-10 -ml-2 text-noir hover:text-[#A67C4A] transition-colors rounded-full hover:bg-neutral-100 active:bg-neutral-200 flex items-center justify-center shrink-0"
+            className="lg:hidden w-10 h-10 -ml-2 text-noir hover:text-bronze transition-colors rounded-full hover:bg-neutral-100 active:bg-neutral-200 flex items-center justify-center shrink-0"
             aria-label="Open Navigation Menu"
           >
             <Menu className="w-5 h-5" />
@@ -114,7 +121,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               playTactileClick();
               onOpenSearch();
             }}
-            className="lg:hidden w-10 h-10 text-noir hover:text-[#A67C4A] transition-colors rounded-full hover:bg-neutral-100 active:bg-neutral-200 flex items-center justify-center shrink-0"
+            className="lg:hidden w-10 h-10 text-noir hover:text-bronze transition-colors rounded-full hover:bg-neutral-100 active:bg-neutral-200 flex items-center justify-center shrink-0"
             aria-label="Search Collection"
           >
             <Search className="w-4 h-4" />
@@ -131,21 +138,38 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setIsCategoryDropdownOpen(false);
                 setHoveredPillar(null);
               }}
+              onBlur={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                  setIsCategoryDropdownOpen(false);
+                  setHoveredPillar(null);
+                }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') {
+                  setIsCategoryDropdownOpen(false);
+                  setHoveredPillar(null);
+                }
+              }}
             >
               <button
+                onFocus={(e) => {
+                  if (e.target.matches(':focus-visible')) setIsCategoryDropdownOpen(true);
+                }}
+                aria-haspopup="true"
+                aria-expanded={isCategoryDropdownOpen}
                 onClick={() => {
                   playTactileClick();
                   if (onNavigateCatalog) onNavigateCatalog();
                   else onNavigatePillar('ALL');
                 }}
                 className={`group flex items-center gap-1.5 py-1.5 transition-colors ${
-                  isCategoryDropdownOpen ? 'text-[#A67C4A] font-bold' : 'text-noir hover:text-[#A67C4A]'
+                  isCategoryDropdownOpen ? 'text-bronze font-bold' : 'text-noir hover:text-bronze'
                 }`}
               >
                 <span>COLLECTIONS</span>
                 <ChevronDown
                   className={`w-3.5 h-3.5 transform transition-transform duration-200 ${
-                    isCategoryDropdownOpen ? 'rotate-180 text-[#A67C4A]' : 'text-neutral-400 group-hover:text-noir'
+                    isCategoryDropdownOpen ? 'rotate-180 text-bronze' : 'text-neutral-500 group-hover:text-noir'
                   }`}
                 />
               </button>
@@ -158,7 +182,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   {/* Mega Menu Eyebrow Header */}
                   <div className="flex items-center justify-between pb-3.5 border-b border-black/10 mb-6">
                     <div className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#C5A880]" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-champagne" />
                       <span className="text-[10px] font-mono-luxury text-black/60 uppercase tracking-[0.22em] font-medium">
                         The Maison Archive · Women&apos;s Haute Couture
                       </span>
@@ -170,10 +194,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                         onNavigatePillar('ALL');
                         setIsCategoryDropdownOpen(false);
                       }}
-                      className="text-[11px] font-sans-luxury font-bold text-noir hover:text-[#A67C4A] transition-colors uppercase tracking-wider flex items-center gap-1 group"
+                      className="text-[11px] font-sans-luxury font-bold text-noir hover:text-bronze transition-colors uppercase tracking-wider flex items-center gap-1 group"
                     >
                       <span>Explore All Creations</span>
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-[#A67C4A]" />
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-bronze" />
                     </button>
                   </div>
 
@@ -182,7 +206,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                     {/* Column 1: The Capsule (5 cols) */}
                     <div className="col-span-5 space-y-3">
-                      <span className="text-[10px] font-mono-luxury text-black/40 uppercase tracking-[0.2em] block font-semibold border-b border-black/10 pb-2">
+                      <span className="text-[10px] font-mono-luxury text-muted uppercase tracking-[0.2em] block font-semibold border-b border-black/10 pb-2">
                         Ready-to-Wear · The Capsule
                       </span>
                       <div className="space-y-0.5">
@@ -200,7 +224,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                             <span className="font-sans-luxury text-[12px] text-noir/80 group-hover:text-black group-hover:font-semibold">
                               {cat.label}
                             </span>
-                            <span className="text-[10px] text-black/20 group-hover:text-[#A67C4A] group-hover:translate-x-0.5 transition-all">
+                            <span className="text-[10px] text-black/20 group-hover:text-bronze group-hover:translate-x-0.5 transition-all">
                               ⟶
                             </span>
                           </button>
@@ -224,7 +248,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                             </div>
                           </div>
                           <div>
-                            <span className="text-[9px] font-mono-luxury text-[#A67C4A] uppercase tracking-wider block">
+                            <span className="text-[9px] font-mono-luxury text-bronze uppercase tracking-wider block">
                               {activePreviewDept?.pillarLabel || 'Ready-to-Wear'}
                             </span>
                             <h4 className="font-sans-luxury text-xs font-bold uppercase text-noir tracking-tight">
@@ -262,10 +286,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                         setIsCategoryDropdownOpen(false);
                         onOpenAppointments();
                       }}
-                      className="font-bold text-noir hover:text-[#A67C4A] transition-colors uppercase tracking-wider flex items-center gap-1.5 group"
+                      className="font-bold text-noir hover:text-bronze transition-colors uppercase tracking-wider flex items-center gap-1.5 group"
                     >
                       <span>Private Consultation</span>
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-[#A67C4A]" />
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-bronze" />
                     </button>
                   </div>
                 </div>
@@ -280,7 +304,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
                 else onOpenAppointments();
               }}
-              className="py-1.5 hover:text-[#A67C4A] transition-colors text-black/75 hover:text-black"
+              className="py-1.5 hover:text-bronze transition-colors text-black/75 hover:text-black"
             >
               BESPOKE ORDERS
             </button>
@@ -302,14 +326,15 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Center: FINALUCHI Brand Crest & Signature Mark */}
-        <div
+        <button
+          type="button"
           className="cursor-pointer select-none flex items-center justify-center gap-2 sm:gap-2.5 group mx-auto px-2"
           onClick={() => {
             playTactileClick();
             onNavigateHome();
           }}
         >
-          <div className="w-6 h-6 sm:w-7 sm:h-7 bg-white p-0.5 border border-black/15 group-hover:border-[#C5A880] transition-colors flex items-center justify-center shrink-0 shadow-2xs">
+          <div className="w-6 h-6 sm:w-7 sm:h-7 bg-white p-0.5 border border-black/15 group-hover:border-champagne transition-colors flex items-center justify-center shrink-0 shadow-2xs">
             <picture>
               <source srcSet="/FINALUCHIlogo-nav.webp" type="image/webp" />
               <img
@@ -326,11 +351,17 @@ export const Navbar: React.FC<NavbarProps> = ({
           <span className="font-sans-luxury text-base sm:text-xl font-bold tracking-[0.24em] sm:tracking-[0.28em] text-noir uppercase group-hover:opacity-80 transition-opacity">
             FINALUCHI
           </span>
-        </div>
+        </button>
 
         {/* Right: Actions Dock */}
         <div className="flex items-center justify-end gap-1.5 sm:gap-2.5 lg:gap-3.5 text-noir flex-1 lg:flex-initial">
-          
+
+          {/* Screen-reader announcements when bag & saved-piece counts change */}
+          <span role="status" aria-live="polite" className="sr-only">
+            {totalCartCount} {totalCartCount === 1 ? 'piece' : 'pieces'} in your bag,{' '}
+            {totalWishlistCount} {totalWishlistCount === 1 ? 'piece' : 'pieces'} saved.
+          </span>
+
           {/* Runway Mode Trigger (Desktop only) */}
           <button
             onClick={() => {
@@ -339,8 +370,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             }}
             className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 bg-black text-white text-[10px] font-sans-luxury font-bold tracking-[0.2em] uppercase hover:bg-neutral-900 transition-all rounded-none border border-black/20 shadow-xs hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#DFC7AA] animate-pulse" />
-            <Sparkles className="w-3 h-3 text-[#DFC7AA]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-champagne-light animate-pulse" />
+            <Sparkles className="w-3 h-3 text-champagne-light" />
             <span>RUNWAY</span>
           </button>
 
@@ -350,7 +381,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               playTactileClick();
               onOpenSearch();
             }}
-            className="hidden lg:flex p-2 hover:bg-neutral-100 rounded-full hover:text-[#A67C4A] transition-all"
+            className="hidden lg:flex p-2 hover:bg-neutral-100 rounded-full hover:text-bronze transition-all"
             aria-label="Search Collection"
           >
             <Search className="w-4 h-4" />
@@ -362,7 +393,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               playTactileClick();
               onOpenClientPortal();
             }}
-            className="hidden sm:flex p-2 hover:bg-neutral-100 rounded-full hover:text-[#A67C4A] transition-all relative"
+            className="hidden sm:flex p-2 hover:bg-neutral-100 rounded-full hover:text-bronze transition-all relative"
             aria-label="Client Portal"
           >
             <User className="w-4 h-4" />
@@ -374,12 +405,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               playTactileClick();
               onOpenClientPortal();
             }}
-            className="p-2 hover:bg-neutral-100 rounded-full hover:text-[#A67C4A] transition-all relative"
-            aria-label="Saved Pieces"
+            className="p-2 hover:bg-neutral-100 rounded-full hover:text-bronze transition-all relative"
+            aria-label={`Saved Pieces, ${totalWishlistCount} saved`}
           >
             <Heart className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
             {totalWishlistCount > 0 && (
-              <span className="absolute 0.5 top-0.5 right-0.5 min-w-[16px] h-4 bg-black text-white text-[8.5px] font-mono-luxury font-bold rounded-full flex items-center justify-center px-1 ring-1 ring-white">
+              <span className="absolute top-0.5 right-0.5 min-w-[16px] h-4 bg-black text-white text-[8.5px] font-mono-luxury font-bold rounded-full flex items-center justify-center px-1 ring-1 ring-white">
                 {totalWishlistCount}
               </span>
             )}
@@ -391,12 +422,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               playTactileClick();
               openDrawer();
             }}
-            className="p-2 hover:bg-neutral-100 rounded-full hover:text-[#A67C4A] transition-all relative"
-            aria-label="Shopping Bag"
+            className="p-2 hover:bg-neutral-100 rounded-full hover:text-bronze transition-all relative"
+            aria-label={`Shopping Bag, ${totalCartCount} pieces`}
           >
             <ShoppingBag className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
             {totalCartCount > 0 && (
-              <span className="absolute 0.5 top-0.5 right-0.5 min-w-[16px] h-4 bg-black text-white text-[8.5px] font-mono-luxury font-bold rounded-full flex items-center justify-center px-1 ring-1 ring-white">
+              <span className="absolute top-0.5 right-0.5 min-w-[16px] h-4 bg-black text-white text-[8.5px] font-mono-luxury font-bold rounded-full flex items-center justify-center px-1 ring-1 ring-white">
                 {totalCartCount}
               </span>
             )}
@@ -416,7 +447,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           />
 
           {/* Drawer Panel */}
-          <div className="fixed inset-y-0 left-0 w-full max-w-[340px] bg-white text-black shadow-2xl flex flex-col justify-between overflow-hidden animate-in slide-in-from-left duration-300 font-sans-luxury">
+          <div
+            ref={menuPanelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation menu"
+            tabIndex={-1}
+            className="fixed inset-y-0 left-0 w-full max-w-[340px] bg-white text-black shadow-2xl flex flex-col justify-between overflow-hidden animate-in slide-in-from-left duration-300 font-sans-luxury outline-none"
+          >
             
             {/* Drawer Header */}
             <div className="p-5 border-b border-black/10 flex items-center justify-between bg-white">
@@ -426,6 +464,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                   playTactileClick();
                   onNavigateHome();
                   setIsMobileMenuOpen(false);
+                }}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    playTactileClick();
+                    onNavigateHome();
+                    setIsMobileMenuOpen(false);
+                  }
                 }}
               >
                 <div className="w-6 h-6 bg-white p-0.5 border border-black/15 flex items-center justify-center">
@@ -468,6 +516,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                   setIsMobileMenuOpen(false);
                   onOpenSearch();
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    playTactileClick();
+                    setIsMobileMenuOpen(false);
+                    onOpenSearch();
+                  }
+                }}
                 className="flex items-center justify-between px-3.5 py-3 bg-[#F8F7F5] border border-black/10 text-neutral-500 cursor-pointer active:bg-neutral-200/80 transition-colors group"
                 role="button"
                 tabIndex={0}
@@ -489,18 +545,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                       playTactileClick();
                       setIsMobileCategoriesOpen(!isMobileCategoriesOpen);
                     }}
-                    className="w-full flex items-center justify-between min-h-[44px] py-2 text-[15px] font-display font-normal uppercase tracking-[0.12em] text-noir active:text-[#A67C4A] transition-colors"
+                    className="w-full flex items-center justify-between min-h-[44px] py-2 text-[15px] font-display font-normal uppercase tracking-[0.12em] text-noir active:text-bronze transition-colors"
                   >
                     <span>COLLECTIONS</span>
                     <ChevronDown
                       className={`w-4 h-4 transform transition-transform duration-200 ${
-                        isMobileCategoriesOpen ? 'rotate-180 text-[#A67C4A]' : 'text-neutral-400'
+                        isMobileCategoriesOpen ? 'rotate-180 text-bronze' : 'text-neutral-500'
                       }`}
                     />
                   </button>
 
                   {isMobileCategoriesOpen && (
-                    <div className="mt-1 ml-2 pl-3 border-l-2 border-[#C5A880]/40 space-y-1 py-1 text-xs uppercase tracking-wider animate-in fade-in duration-200">
+                    <div className="mt-1 ml-2 pl-3 border-l-2 border-champagne/40 space-y-1 py-1 text-xs uppercase tracking-wider animate-in fade-in duration-200">
                       <button
                         onClick={() => {
                           playTactileClick();
@@ -510,7 +566,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         className="w-full min-h-[38px] text-left py-1 text-black font-bold flex items-center justify-between active:bg-neutral-100/60 px-1"
                       >
                         <span>All Collections</span>
-                        <ArrowRight className="w-3 h-3 text-[#A67C4A]" />
+                        <ArrowRight className="w-3 h-3 text-bronze" />
                       </button>
 
                       {CATEGORY_DEPARTMENTS.map((cat) => (
@@ -521,7 +577,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                             onNavigatePillar(cat.id);
                             setIsMobileMenuOpen(false);
                           }}
-                          className="w-full min-h-[36px] text-left py-1 text-black/75 hover:text-black active:text-[#A67C4A] transition-colors flex items-center justify-between px-1"
+                          className="w-full min-h-[36px] text-left py-1 text-black/75 hover:text-black active:text-bronze transition-colors flex items-center justify-between px-1"
                         >
                           <span className="font-sans-luxury text-[11.5px]">{cat.label}</span>
                           <span className="text-[10px] text-black/30">⟶</span>
@@ -537,10 +593,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onOpenAppointments();
                     setIsMobileMenuOpen(false);
                   }}
-                  className="w-full text-left min-h-[44px] py-2 text-[15px] font-display font-normal uppercase tracking-[0.12em] text-noir active:text-[#A67C4A] transition-colors flex items-center justify-between border-b border-black/[0.08]"
+                  className="w-full text-left min-h-[44px] py-2 text-[15px] font-display font-normal uppercase tracking-[0.12em] text-noir active:text-bronze transition-colors flex items-center justify-between border-b border-black/[0.08]"
                 >
                   <span>BESPOKE APPOINTMENTS</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-neutral-400" />
+                  <ArrowUpRight className="w-3.5 h-3.5 text-neutral-500" />
                 </button>
 
                 <button
@@ -549,13 +605,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onOpenRunway();
                     setIsMobileMenuOpen(false);
                   }}
-                  className="w-full min-h-[44px] py-2 flex items-center justify-between text-[15px] font-display font-normal uppercase tracking-[0.12em] text-noir active:text-[#A67C4A] transition-colors border-b border-black/[0.08]"
+                  className="w-full min-h-[44px] py-2 flex items-center justify-between text-[15px] font-display font-normal uppercase tracking-[0.12em] text-noir active:text-bronze transition-colors border-b border-black/[0.08]"
                 >
                   <span className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#C5A880]" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-champagne" />
                     <span>RUNWAY MODE</span>
                   </span>
-                  <Sparkles className="w-4 h-4 text-[#C5A880]" />
+                  <Sparkles className="w-4 h-4 text-champagne" />
                 </button>
 
                 <button
@@ -564,7 +620,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onOpenClientPortal();
                     setIsMobileMenuOpen(false);
                   }}
-                  className="w-full min-h-[44px] py-2 flex items-center justify-between text-[15px] font-display font-normal uppercase tracking-[0.12em] text-noir active:text-[#A67C4A] transition-colors border-b border-black/[0.08]"
+                  className="w-full min-h-[44px] py-2 flex items-center justify-between text-[15px] font-display font-normal uppercase tracking-[0.12em] text-noir active:text-bronze transition-colors border-b border-black/[0.08]"
                 >
                   <span>SAVED PIECES</span>
                   <span className="text-[10px] font-mono-luxury font-bold bg-black text-white px-2 py-0.5 rounded-full">
@@ -578,7 +634,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onOpenClientPortal();
                     setIsMobileMenuOpen(false);
                   }}
-                  className="w-full text-left min-h-[44px] py-2 text-[15px] font-display font-normal uppercase tracking-[0.12em] text-noir active:text-[#A67C4A] transition-colors border-b border-black/[0.08]"
+                  className="w-full text-left min-h-[44px] py-2 text-[15px] font-display font-normal uppercase tracking-[0.12em] text-noir active:text-bronze transition-colors border-b border-black/[0.08]"
                 >
                   CLIENT PORTAL & ORDERS
                 </button>
@@ -624,11 +680,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => playTactileClick()}
                 className="w-full py-3 bg-black text-white text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-neutral-800 active:scale-[0.98] transition-all shadow-xs"
               >
-                <MessageCircle className="w-4 h-4 text-[#DFC7AA]" />
+                <MessageCircle className="w-4 h-4 text-champagne-light" />
                 <span>WhatsApp VIP Concierge</span>
               </a>
 
-              <div className="flex items-center justify-between text-[9px] font-mono-luxury text-black/50 uppercase tracking-widest pt-1">
+              <div className="flex items-center justify-between text-[9px] font-mono-luxury text-muted uppercase tracking-widest pt-1">
                 <span>Abuja Atelier · Nigeria</span>
                 <span>Est. 2017</span>
               </div>

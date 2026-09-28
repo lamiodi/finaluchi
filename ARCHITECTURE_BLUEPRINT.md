@@ -59,13 +59,13 @@ To ensure visual harmony, all components strictly adhere to global design tokens
 ```css
 :root {
   /* --- 2.1 INTERFACE & CANVAS COLOR SYSTEM --- */
-  --color-alabaster: #FAF9F6;       /* Primary canvas background */
-  --color-alabaster-subtle: #F3F1EC;/* Alternate section background */
-  --color-noir: #0D0D0D;            /* Primary typography & deep elements */
-  --color-noir-pure: #050505;       /* Video overlays & cinematic backdrops */
-  --color-oyster: #E6E1DA;          /* Surfaces, cards, subtle borders */
-  --color-champagne: #0D0D0D;       /* Monochrome noir accent (aligned to official B/W logo) */
-  --color-champagne-light: #3A3A3A; /* Monochrome hover accent */
+  --color-alabaster: #FFFFFF;       /* Primary canvas background (matches src/index.css) */
+  --color-alabaster-subtle: #FAFAFA;/* Alternate section background (matches src/index.css) */
+  --color-noir: #000000;            /* Primary typography & deep elements (matches src/index.css) */
+  --color-noir-pure: #000000;       /* Video overlays & cinematic backdrops (matches src/index.css) */
+  --color-oyster: #F4F4F4;          /* Surfaces, cards, subtle borders (matches src/index.css) */
+  --color-champagne: #C5A880;       /* Luminous couture champagne accent (matches src/index.css) */
+  --color-champagne-light: #DFC7AA; /* Luminous warm champagne hover accent (matches src/index.css) */
   --color-muted: #6F6A64;           /* Secondary copy, captions, timestamps */
   --color-border: #E5E4E1;          /* Subtle dividing rules */
   --color-white: #FFFFFF;           /* Elevated panels & modals */

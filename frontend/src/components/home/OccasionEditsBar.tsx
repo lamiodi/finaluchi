@@ -109,7 +109,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
   ];
 
   return (
-    <div className="w-full bg-[#FFFFFF] border-b border-black/10">
+    <div className="w-full bg-white border-b border-black/10">
 
       {/* =========================================================================
           DESKTOP & LARGE VIEWPORTS: CINEMATIC SCROLL-TO-EXPLORE SCATTER STAGE
@@ -127,7 +127,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
           showScrollHint={true}
           heading={
             <div className="space-y-3 max-w-4xl mx-auto pointer-events-none px-4">
-              <span className="text-[10px] sm:text-[11px] font-mono-luxury uppercase tracking-[0.3em] text-[#8C7A6B] font-medium block">
+              <span className="text-[10px] sm:text-[11px] font-mono-luxury uppercase tracking-[0.3em] text-taupe font-medium block">
                 The Capsule · Five Pieces
               </span>
               <h2 className="font-sans-luxury text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-noir uppercase leading-[1.02]">
@@ -157,7 +157,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
       {/* =========================================================================
           MOBILE & TABLET VIEWPORTS (< 1024px)
           ========================================================================= */}
-      <div className="block lg:hidden w-full bg-[#FFFFFF]">
+      <div className="block lg:hidden w-full bg-white">
         <StackSpreadStage
           cards={capsuleCards}
           scrollLength={250}
@@ -170,7 +170,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
           showScrollHint={true}
           heading={
             <div className="space-y-2 max-w-xs mx-auto pointer-events-none px-4">
-              <span className="text-[10px] font-mono-luxury uppercase tracking-[0.28em] text-[#8C7A6B] font-medium block">
+              <span className="text-[10px] font-mono-luxury uppercase tracking-[0.28em] text-taupe font-medium block">
                 The Capsule
               </span>
               <h2 className="font-sans-luxury text-2xl sm:text-3xl font-bold tracking-tight text-noir uppercase leading-[1.08]">

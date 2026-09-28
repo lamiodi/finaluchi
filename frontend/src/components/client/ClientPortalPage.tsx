@@ -41,14 +41,14 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
   };
 
   return (
-    <div className="w-full bg-[#FFFFFF] min-h-screen text-[#000000] font-sans-luxury pb-24">
+    <div className="w-full bg-white min-h-screen text-noir font-sans-luxury pb-24">
       
       {/* Top Banner */}
-      <div className="bg-[#000000] text-white py-12 sm:py-14 px-4 sm:px-8 lg:px-12 border-b border-white/15">
+      <div className="bg-noir text-white py-12 sm:py-14 px-4 sm:px-8 lg:px-12 border-b border-white/15">
         <div className="max-w-[1680px] mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-[#C5A880] text-xs font-mono-luxury tracking-[0.25em] uppercase font-semibold">
-              <User className="w-4 h-4 text-[#C5A880]" />
+            <div className="flex items-center gap-2 text-champagne text-xs font-mono-luxury tracking-[0.25em] uppercase font-semibold">
+              <User className="w-4 h-4 text-champagne" />
               <span>YOUR FINALUCHI</span>
             </div>
             <h1 className="font-sans-luxury text-3xl sm:text-5xl font-bold tracking-tight text-white uppercase">
@@ -90,8 +90,8 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
               }}
               className={`px-4 py-2.5 rounded-none whitespace-nowrap transition-colors border ${
                 activeTab === tab.id
-                  ? 'bg-[#000000] text-white border-[#000000] font-bold'
-                  : 'bg-[#FAFAFA] text-black/70 hover:text-black border-black/10'
+                  ? 'bg-noir text-white border-noir font-bold'
+                  : 'bg-alabaster-subtle text-black/70 hover:text-black border-black/10'
               }`}
             >
               {tab.label}
@@ -114,8 +114,8 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
             </div>
 
             {certificates.length === 0 ? (
-              <div className="py-16 text-center bg-[#FAFAFA] border border-black/10 rounded-none space-y-2">
-                <Sparkles className="w-8 h-8 text-[#C5A880] mx-auto" />
+              <div className="py-16 text-center bg-alabaster-subtle border border-black/10 rounded-none space-y-2">
+                <Sparkles className="w-8 h-8 text-bronze mx-auto" />
                 <h4 className="font-sans-luxury text-base font-semibold uppercase tracking-wide">No Order Records Yet</h4>
                 <p className="text-xs text-muted">When a website order is completed, its reference and selected details can appear here.</p>
               </div>
@@ -124,10 +124,10 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
                 {certificates.map((cert) => (
                   <div
                     key={cert.serialNumber}
-                    className="bg-[#FFFFFF] border border-black/10 hover:border-black rounded-none p-6 space-y-4 flex flex-col justify-between transition-colors"
+                    className="bg-white border border-black/10 hover:border-black rounded-none p-6 space-y-4 flex flex-col justify-between transition-colors"
                   >
                     <div className="space-y-2">
-                      <div className="flex items-center justify-between text-[10px] font-mono-luxury text-[#C5A880] uppercase tracking-wider">
+                      <div className="flex items-center justify-between text-[10px] font-mono-luxury text-bronze-deep uppercase tracking-wider">
                         <span>{cert.collectionName || cert.collection}</span>
                         <span className="font-bold text-black">{cert.serialNumber}</span>
                       </div>
@@ -148,7 +148,7 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
                           playTactileClick();
                           setSelectedCertSerial(cert.serialNumber);
                         }}
-                        className="px-3.5 py-2 bg-[#000000] text-white text-xs font-semibold tracking-couture uppercase rounded-none hover:bg-neutral-800 transition-colors flex items-center gap-1.5"
+                        className="px-3.5 py-2 bg-noir text-white text-xs font-semibold tracking-couture uppercase rounded-none hover:bg-neutral-800 transition-colors flex items-center gap-1.5"
                       >
                         <QrCode className="w-3.5 h-3.5" />
                         <span>VIEW ORDER RECORD</span>
@@ -182,7 +182,7 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
                     toast.success(`Capsule "${title}" created.`);
                   }
                 }}
-                className="px-4 py-2.5 bg-[#000000] text-white text-xs font-semibold tracking-couture uppercase rounded-none hover:bg-neutral-800 transition-colors flex items-center gap-1.5"
+                className="px-4 py-2.5 bg-noir text-white text-xs font-semibold tracking-couture uppercase rounded-none hover:bg-neutral-800 transition-colors flex items-center gap-1.5"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>CREATE A LIST</span>
@@ -194,7 +194,7 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
                 const editProducts = products.filter((p) => edit.productIds.includes(p.id));
 
                 return (
-                  <div key={edit.id} className="bg-[#FFFFFF] border border-black/10 p-6 rounded-none space-y-4">
+                  <div key={edit.id} className="bg-white border border-black/10 p-6 rounded-none space-y-4">
                     <div className="flex items-center justify-between border-b border-black/10 pb-3">
                       <div>
                         <h4 className="font-sans-luxury text-lg font-bold text-black uppercase tracking-tight">
@@ -206,7 +206,7 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => handleShareEdit(edit.id)}
-                          className="px-3 py-1.5 bg-[#FAFAFA] text-black text-xs font-semibold tracking-couture uppercase rounded-none hover:bg-black hover:text-white transition-colors border border-black/10 flex items-center gap-1"
+                          className="px-3 py-1.5 bg-alabaster-subtle text-black text-xs font-semibold tracking-couture uppercase rounded-none hover:bg-black hover:text-white transition-colors border border-black/10 flex items-center gap-1"
                         >
                           <Share2 className="w-3.5 h-3.5" />
                           <span>SHARE EDIT</span>
@@ -233,11 +233,21 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
                         {editProducts.map((p) => (
                           <div
                             key={p.id}
+                            role="button"
+                            tabIndex={0}
+                            aria-label={`View ${p.name}`}
                             onClick={() => {
                               playTactileClick();
                               onSelectProduct(p);
                             }}
-                            className="group cursor-pointer bg-[#FAFAFA] border border-black/10 hover:border-black rounded-none p-3 transition-colors"
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                playTactileClick();
+                                onSelectProduct(p);
+                              }
+                            }}
+                            className="group cursor-pointer bg-alabaster-subtle border border-black/10 hover:border-black rounded-none p-3 transition-colors"
                           >
                             <div className="aspect-[3/4] w-full overflow-hidden bg-neutral-100 rounded-none mb-2">
                               <img
@@ -246,7 +256,7 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                               />
                             </div>
-                            <h5 className="font-sans-luxury text-xs font-semibold text-black line-clamp-1 group-hover:text-[#C5A880]">
+                            <h5 className="font-sans-luxury text-xs font-semibold text-black line-clamp-1 group-hover:text-bronze-deep">
                               {p.name}
                             </h5>
                             <span className="text-[11px] font-mono-luxury font-semibold text-black block mt-0.5">
@@ -265,7 +275,7 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
 
         {/* Tab Content: measurement guidance */}
         {activeTab === 'PASSPORT' && (
-          <div className="bg-[#FFFFFF] border border-black/10 p-6 sm:p-8 rounded-none space-y-6">
+          <div className="bg-white border border-black/10 p-6 sm:p-8 rounded-none space-y-6">
             <div className="border-b border-black/10 pb-4 space-y-2">
               <h3 className="font-sans-luxury text-2xl font-bold text-black uppercase tracking-tight">
                 Confirm Your Measurements
@@ -275,9 +285,9 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
               </p>
             </div>
 
-            <div className="p-6 bg-[#000000] text-white rounded-none flex flex-col sm:flex-row items-center justify-between gap-4 border border-white/15">
+            <div className="p-6 bg-noir text-white rounded-none flex flex-col sm:flex-row items-center justify-between gap-4 border border-white/15">
               <div className="text-xs space-y-1">
-                <div className="font-semibold text-[#C5A880] uppercase tracking-couture">Need Fit Guidance?</div>
+                <div className="font-semibold text-champagne uppercase tracking-couture">Need Fit Guidance?</div>
                 <div className="text-white/80 font-light">Request an Abuja fitting or a remote measurement consultation. The time and location are confirmed directly by the team.</div>
               </div>
               <button
@@ -311,7 +321,7 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
                   playTactileClick();
                   onBookAppointment();
                 }}
-                className="px-4 py-2.5 bg-[#000000] text-white text-xs font-semibold tracking-couture uppercase rounded-none hover:bg-neutral-800 transition-colors flex items-center gap-1.5"
+                className="px-4 py-2.5 bg-noir text-white text-xs font-semibold tracking-couture uppercase rounded-none hover:bg-neutral-800 transition-colors flex items-center gap-1.5"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>REQUEST A SESSION</span>
@@ -320,10 +330,10 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({
 
             <div className="space-y-4">
               {appointments.map((apt) => (
-                <div key={apt.id} className="bg-[#FFFFFF] border border-black/10 p-6 rounded-none flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div key={apt.id} className="bg-white border border-black/10 p-6 rounded-none flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono-luxury text-[#C5A880] uppercase font-bold tracking-wider">
+                      <span className="text-xs font-mono-luxury text-bronze-deep uppercase font-bold tracking-wider">
                         {(apt.appointmentType || apt.serviceType || 'ATELIER_FITTING').replace(/_/g, ' ')}
                       </span>
                       <span className="px-2 py-0.5 bg-black/5 text-black text-[10px] font-mono-luxury font-semibold uppercase rounded-none border border-black/10">

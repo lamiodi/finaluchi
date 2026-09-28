@@ -7,13 +7,13 @@ export const BrandWorlds: React.FC = () => {
   const { playTactileClick } = useAudioStore();
 
   return (
-    <section className="w-full bg-[#000000] text-white border-y border-white/15">
+    <section className="w-full bg-noir text-white border-y border-white/15">
       <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 py-12 sm:py-16">
         
         {/* Header Strip */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-end pb-8 border-b border-white/15">
           <div className="lg:col-span-7 space-y-2">
-            <span className="text-[10px] sm:text-[11px] font-mono-luxury uppercase tracking-[0.25em] text-[#C5A880] font-medium block">
+            <span className="text-[10px] sm:text-[11px] font-mono-luxury uppercase tracking-[0.25em] text-champagne font-medium block">
               House Portfolio · Abuja
             </span>
             <h2 className="font-display text-3xl sm:text-5xl font-bold tracking-tight uppercase leading-[1.02] text-white">
@@ -40,22 +40,22 @@ export const BrandWorlds: React.FC = () => {
               target="_blank"
               rel="noreferrer"
               onClick={() => playTactileClick()}
-              className="group py-6 lg:px-6 first:pl-0 border-b sm:border-b-0 lg:border-l first:border-l-0 border-white/15 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#C5A880] active:bg-white/[0.04] active:scale-[0.99] transition-all"
+              className="group py-6 lg:px-6 first:pl-0 border-b sm:border-b-0 lg:border-l first:border-l-0 border-white/15 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-champagne active:bg-white/[0.04] active:scale-[0.99] transition-all"
               aria-label={`Open ${line.name} on Instagram (${line.handle})`}
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-2">
-                  <h3 className="text-sm font-bold uppercase tracking-wide group-hover:text-[#DFC7AA] transition-colors">
+                  <h3 className="text-sm font-bold uppercase tracking-wide group-hover:text-champagne-light transition-colors">
                     {line.name}
                   </h3>
                   <p className="text-xs text-white/65 leading-relaxed max-w-[32ch] font-light">
                     {line.description}
                   </p>
-                  <span className="text-[11px] font-mono-luxury uppercase tracking-widest text-[#DFC7AA] block pt-1 font-semibold group-hover:underline underline-offset-4">
+                  <span className="text-[11px] font-mono-luxury uppercase tracking-widest text-champagne-light block pt-1 font-semibold group-hover:underline underline-offset-4">
                     {line.handle} ⟶
                   </span>
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
+                <ArrowUpRight className="w-4 h-4 text-white/60 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
               </div>
             </a>
           ))}

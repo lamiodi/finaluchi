@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ChevronRight, ChevronLeft, ZoomIn, X } from 'lucide-react';
 import { ATELIER_STAGES } from '../../data/atelierStages';
 import { useAudioStore } from '../../stores/audioStore';
+import { useModalA11y } from '../../lib/useModalA11y';
 
 interface DigitalAtelierProps {
   onBookFitting: () => void;
@@ -13,6 +14,10 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
   const [isNoteOpen, setIsNoteOpen] = useState(false);
   
   const { playTactileClick } = useAudioStore();
+  const macroPanelRef = useModalA11y<HTMLDivElement>({
+    onClose: () => setIsMacroModalOpen(false),
+    isOpen: isMacroModalOpen,
+  });
 
   const stage = ATELIER_STAGES[activeStageIndex];
 
@@ -34,7 +39,7 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
   };
 
   return (
-    <section className="w-full bg-[#000000] text-white py-20 sm:py-28 relative overflow-hidden font-sans-luxury">
+    <section className="w-full bg-noir text-white py-20 sm:py-28 relative overflow-hidden font-sans-luxury">
       
       {/* Background ambient gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.05),transparent_60%)]" />
@@ -44,7 +49,7 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 sm:pb-8 border-b border-white/20 mb-8 sm:mb-12">
           <div>
-            <span className="text-[10px] sm:text-xs font-mono-luxury text-[#C5A880] uppercase tracking-[0.25em] font-semibold block mb-1">
+            <span className="text-[10px] sm:text-xs font-mono-luxury text-champagne uppercase tracking-[0.25em] font-semibold block mb-1">
               Atelier Craftsmanship
             </span>
             <h2 className="font-sans-luxury text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white uppercase">
@@ -91,10 +96,10 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
               className={`text-left pb-3 transition-all border-b-2 ${
                 idx === activeStageIndex
                   ? 'border-white text-white font-medium'
-                  : 'border-transparent text-white/40 hover:text-white/80'
+                  : 'border-transparent text-white/60 hover:text-white/80'
               }`}
             >
-              <span className="text-[10px] font-mono-luxury block mb-1 text-[#C5A880]">
+              <span className="text-[10px] font-mono-luxury block mb-1 text-champagne">
                 0{idx + 1}
               </span>
               <span className="text-xs font-sans-luxury line-clamp-1">
@@ -139,7 +144,7 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
           <div className="lg:col-span-5 space-y-6">
             
             <div className="space-y-1.5">
-              <span className="text-[10px] font-mono-luxury text-[#C5A880] uppercase tracking-[0.25em] font-medium block">
+              <span className="text-[10px] font-mono-luxury text-champagne uppercase tracking-[0.25em] font-medium block">
                 {stage.subtitle}
               </span>
               <h3 className="font-sans-luxury text-2xl sm:text-4xl font-bold text-white leading-tight">
@@ -148,7 +153,7 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
             </div>
 
             {/* Quote */}
-            <blockquote className="pl-4 border-l border-[#C5A880] text-xs sm:text-sm text-white/80 italic font-display leading-relaxed">
+            <blockquote className="pl-4 border-l border-champagne text-xs sm:text-sm text-white/80 italic font-display leading-relaxed">
               &ldquo;{stage.quote}&rdquo;
             </blockquote>
 
@@ -160,7 +165,7 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
               <ul className="space-y-2">
                 {stage.details.map((detail, i) => (
                   <li key={i} className="flex items-start gap-2.5 text-xs text-white/80 font-light">
-                    <span className="text-[#C5A880] text-[10px] font-mono-luxury mt-0.5">•</span>
+                    <span className="text-champagne text-[10px] font-mono-luxury mt-0.5">•</span>
                     <span>{detail}</span>
                   </li>
                 ))}
@@ -206,10 +211,18 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
       {/* Macro Detail Zoom Modal */}
       {isMacroModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-noir/90 backdrop-blur-md">
-          <div className="bg-noir border border-white/20 max-w-4xl w-full p-6 relative">
+          <div
+            ref={macroPanelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Garment detail — ${stage.title}`}
+            tabIndex={-1}
+            className="bg-noir border border-white/20 max-w-4xl w-full p-6 relative outline-none"
+          >
             <button
               onClick={() => setIsMacroModalOpen(false)}
               className="absolute top-4 right-4 p-2 text-white/70 hover:text-white"
+              aria-label="Close Detail View"
             >
               <X className="w-5 h-5" />
             </button>

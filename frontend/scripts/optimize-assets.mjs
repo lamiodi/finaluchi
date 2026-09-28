@@ -7,9 +7,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const publicDir = path.resolve(__dirname, '../public');
 const imagesDir = path.resolve(publicDir, 'images');
+// Brand-crest source file kept out of the deploy path (public/) — it only
+// feeds the generated webp marks below.
+const sourceLogo = path.resolve(__dirname, 'assets/FINALUCHIlogo.jpg');
 
 async function optimizeLogos() {
-  const sourceLogo = path.join(publicDir, 'FINALUCHIlogo.jpg');
   if (!fs.existsSync(sourceLogo)) {
     console.error('Source logo not found at:', sourceLogo);
     return;
@@ -81,32 +83,48 @@ async function optimizeLogos() {
 
 async function optimizeImages() {
   if (!fs.existsSync(imagesDir)) return;
-  console.log('\n--- Converting public/images to WebP ---');
+  console.log('\n--- Converting public/images to WebP (full size + 480w/640w variants) ---');
 
-  const files = fs.readdirSync(imagesDir).filter(f => f.endsWith('.jpg') || f.endsWith('.jpeg'));
+  const jpegFiles = [];
+  const walk = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (/\.(jpg|jpeg)$/i.test(entry.name)) jpegFiles.push(full);
+    }
+  };
+  walk(imagesDir);
+
   let totalOrigBytes = 0;
   let totalWebpBytes = 0;
+  const SIZES = [
+    { suffix: '-480w', width: 480 },
+    { suffix: '-640w', width: 640 },
+    { suffix: '', width: 1920 },
+  ];
 
-  for (const file of files) {
-    const origPath = path.join(imagesDir, file);
-    const webpName = file.replace(/\.(jpg|jpeg)$/i, '.webp');
-    const webpPath = path.join(imagesDir, webpName);
-
+  for (const origPath of jpegFiles) {
     const origStat = fs.statSync(origPath);
     totalOrigBytes += origStat.size;
+    let lastBytes = 0;
 
-    // Convert to webp with high quality and max 1920 width
-    await sharp(origPath)
-      .resize(1920, 1920, { fit: 'inside', withoutEnlargement: true })
-      .webp({ quality: 84, effort: 4 })
-      .toFile(webpPath);
+    for (const { suffix, width } of SIZES) {
+      const outPath = origPath.replace(/\.(jpg|jpeg)$/i, `${suffix}.webp`);
+      await sharp(origPath)
+        .resize(width, width, { fit: 'inside', withoutEnlargement: true })
+        .webp({ quality: 84, effort: 4 })
+        .toFile(outPath);
+      lastBytes = fs.statSync(outPath).size;
+      totalWebpBytes += lastBytes;
+    }
 
-    const webpStat = fs.statSync(webpPath);
-    totalWebpBytes += webpStat.size;
-    console.log(`Converted ${file}: ${(origStat.size / 1024).toFixed(0)} KB -> ${(webpStat.size / 1024).toFixed(0)} KB WebP`);
+    console.log(
+      `${path.relative(imagesDir, origPath)}: ${(origStat.size / 1024).toFixed(0)} KB -> ` +
+      `${(lastBytes / 1024).toFixed(0)} KB WebP (+480w/640w variants)`
+    );
   }
 
-  console.log(`\nImages summary: ${(totalOrigBytes / (1024 * 1024)).toFixed(2)} MB -> ${(totalWebpBytes / (1024 * 1024)).toFixed(2)} MB WebP (${((1 - totalWebpBytes / totalOrigBytes) * 100).toFixed(1)}% reduction)`);
+  console.log(`\nImages summary: ${(totalOrigBytes / (1024 * 1024)).toFixed(2)} MB JPEG -> ${(totalWebpBytes / (1024 * 1024)).toFixed(2)} MB WebP across ${jpegFiles.length} sources`);
 }
 
 async function main() {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import { useAudioStore } from '../../stores/audioStore';
+import { useModalA11y } from '../../lib/useModalA11y';
 
 interface PromoModalProps {
   isOpen: boolean;
@@ -11,6 +12,7 @@ interface PromoModalProps {
 export const PromoModal: React.FC<PromoModalProps> = ({ isOpen, onClose, onExploreCollection }) => {
   const [visible, setVisible] = useState(false);
   const { playTactileClick } = useAudioStore();
+  const panelRef = useModalA11y<HTMLDivElement>({ onClose, isOpen });
 
   useEffect(() => {
     if (isOpen) {
@@ -30,11 +32,16 @@ export const PromoModal: React.FC<PromoModalProps> = ({ isOpen, onClose, onExplo
 
   return (
     <div
-      className="fixed inset-0 z-[90] flex items-center justify-center p-4 bg-[#000000]/80 backdrop-blur-md animate-in fade-in duration-300"
+      className="fixed inset-0 z-[90] flex items-center justify-center p-4 bg-noir/80 backdrop-blur-md animate-in fade-in duration-300"
       onClick={onClose}
     >
       <div
-        className={`bg-[#FFFFFF] text-[#000000] border border-black/20 max-w-md w-full p-8 sm:p-10 relative shadow-2xl transition-all duration-300 ${
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="promo-title"
+        tabIndex={-1}
+        className={`bg-white text-noir border border-black/20 max-w-md w-full p-8 sm:p-10 relative shadow-2xl transition-all duration-300 outline-none ${
           visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
         }`}
         onClick={(e) => e.stopPropagation()}
@@ -44,7 +51,7 @@ export const PromoModal: React.FC<PromoModalProps> = ({ isOpen, onClose, onExplo
             playTactileClick();
             onClose();
           }}
-          className="absolute top-4 right-4 p-2 text-black/40 hover:text-[#000000] transition-colors"
+          className="absolute top-4 right-4 p-2 text-muted hover:text-noir transition-colors"
           aria-label="Close"
         >
           <X className="w-4 h-4" />
@@ -62,11 +69,11 @@ export const PromoModal: React.FC<PromoModalProps> = ({ isOpen, onClose, onExplo
           />
         </div>
 
-        <span className="text-[10px] font-mono-luxury text-[#C5A880] uppercase tracking-[0.3em] font-semibold text-center block mb-1">
+        <span className="text-[10px] font-mono-luxury text-champagne uppercase tracking-[0.3em] font-semibold text-center block mb-1">
           FINALUCHI COUTURE · ABUJA
         </span>
 
-        <h3 className="font-sans-luxury text-2xl font-bold tracking-tight text-[#000000] uppercase text-center leading-tight">
+        <h3 id="promo-title" className="font-sans-luxury text-2xl font-bold tracking-tight text-noir uppercase text-center leading-tight">
           Find Your Occasion Look
         </h3>
 
@@ -77,12 +84,12 @@ export const PromoModal: React.FC<PromoModalProps> = ({ isOpen, onClose, onExplo
 
         <button
           onClick={handleExplore}
-          className="mt-8 w-full py-4 bg-[#000000] text-[#FFFFFF] text-xs font-bold tracking-[0.25em] uppercase hover:bg-neutral-900 border border-[#000000] transition-all"
+          className="mt-8 w-full py-4 bg-noir text-white text-xs font-bold tracking-[0.25em] uppercase hover:bg-neutral-900 border border-noir transition-all"
         >
           Explore the New Collection
         </button>
 
-        <p className="text-[10px] text-black/50 font-mono-luxury uppercase tracking-widest text-center mt-4">
+        <p className="text-[10px] text-muted font-mono-luxury uppercase tracking-widest text-center mt-4">
           Confirm availability, delivery date and order terms before payment
         </p>
       </div>

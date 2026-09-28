@@ -5,7 +5,7 @@ import { useCurrencyStore } from '../../stores/currencyStore';
 import { useWishlistStore } from '../../stores/wishlistStore';
 import { useAudioStore } from '../../stores/audioStore';
 import { formatPriceWithDisplay } from '../../utils/formatters';
-import { onImageError } from '../../utils/images';
+import { onImageError, buildWebPSrcSet } from '../../utils/images';
 
 interface ProductCardProps {
   product: Product;
@@ -60,10 +60,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       className={`group flex flex-col cursor-pointer transition-all duration-300 relative select-none active:scale-[0.99] ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={() => {
-        playTactileClick();
-        onSelectProduct(product);
-      }}
     >
       {/* Editorial Packshot Stage */}
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#F9F8F6] border border-black/[0.05] mb-3 flex items-center justify-center p-3 sm:p-5 transition-shadow duration-500 group-hover:shadow-[0_12px_36px_-10px_rgba(0,0,0,0.08)]">
@@ -71,6 +67,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* Primary Product Image */}
         <img
           src={heroImage}
+          srcSet={buildWebPSrcSet(heroImage)}
+          sizes="(min-width: 1024px) 22vw, 46vw"
           alt={product.name}
           onError={onImageError}
           className={`w-full h-full object-contain transition-all duration-700 ease-out will-change-transform ${
@@ -84,6 +82,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {secondaryImage && (
           <img
             src={secondaryImage}
+            srcSet={buildWebPSrcSet(secondaryImage)}
+            sizes="(min-width: 1024px) 22vw, 46vw"
             alt={`${product.name} alternate view`}
             onError={onImageError}
             className={`absolute inset-0 w-full h-full object-contain p-3 sm:p-5 transition-all duration-700 ease-out ${
@@ -100,11 +100,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <span
               className={`inline-flex items-center gap-1 px-2 py-0.5 text-[8px] sm:text-[9px] font-mono-luxury font-semibold uppercase tracking-[0.2em] backdrop-blur-md border ${
                 badge.highlight
-                  ? 'bg-black/90 text-[#DFC7AA] border-[#C5A880]/40 shadow-xs'
+                  ? 'bg-black/90 text-champagne-light border-champagne/40 shadow-xs'
                   : 'bg-white/90 text-black/85 border-black/10'
               }`}
             >
-              {badge.highlight && <Sparkles className="w-2.5 h-2.5 text-[#C5A880]" />}
+              {badge.highlight && <Sparkles className="w-2.5 h-2.5 text-champagne" />}
               <span>{badge.label}</span>
             </span>
           </div>
@@ -119,14 +119,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           }}
           className={`absolute top-2.5 right-2.5 sm:top-3 sm:right-3 w-9 h-9 sm:w-8 sm:h-8 flex items-center justify-center rounded-full backdrop-blur-md transition-all duration-200 z-20 active:scale-90 ${
             isSaved
-              ? 'bg-black text-[#C5A880] border border-black shadow-sm scale-105'
+              ? 'bg-black text-champagne border border-black shadow-sm scale-105'
               : 'bg-white/85 text-black/70 hover:text-black hover:bg-white border border-black/10 sm:opacity-0 sm:group-hover:opacity-100 hover:scale-110'
           }`}
           aria-label={isSaved ? 'Remove from Saved Pieces' : 'Save to Pieces'}
         >
           <Heart
             className={`w-3.5 h-3.5 transition-colors ${
-              isSaved ? 'fill-current text-[#C5A880]' : ''
+              isSaved ? 'fill-current text-champagne' : ''
             }`}
           />
         </button>
@@ -136,7 +136,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <span className="text-[10px] font-sans-luxury font-bold uppercase tracking-[0.16em]">
             Explore Piece
           </span>
-          <div className="flex items-center gap-1 text-[10px] font-mono-luxury font-semibold text-[#A67C4A]">
+          <div className="flex items-center gap-1 text-[10px] font-mono-luxury font-semibold text-bronze-deep">
             <span>VIEW</span>
             <ArrowUpRight className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </div>
@@ -148,7 +148,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       <div className="space-y-1 px-0.5">
         
         {/* Product Name */}
-        <h3 className="text-xs sm:text-[13.5px] font-sans-luxury font-semibold uppercase text-noir tracking-[0.02em] leading-snug group-hover:text-[#A67C4A] transition-colors line-clamp-1">
+        <h3 className="text-xs sm:text-[13.5px] font-sans-luxury font-semibold uppercase text-noir tracking-[0.02em] leading-snug group-hover:text-bronze transition-colors line-clamp-1">
           {product.name}
         </h3>
 
@@ -167,7 +167,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           {/* Color Variant Beside Price */}
           {currentColor && (
             <div
-              className="flex items-center gap-1.5"
+              className="relative z-20 flex items-center gap-1.5"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Swatch circle */}
@@ -195,7 +195,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                           setActiveColorway(cw);
                         }}
                         onMouseEnter={() => setActiveColorway(cw)}
-                        className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full border transition-all ${
+                        className={`w-3.5 h-3.5 sm:w-2.5 sm:h-2.5 rounded-full border transition-all relative before:content-[''] before:absolute before:-inset-2 ${
                           isSelected
                             ? 'ring-1.5 ring-black ring-offset-1 scale-125 border-transparent'
                             : 'border-black/25 opacity-60 hover:opacity-100 hover:scale-125'
@@ -213,6 +213,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
       </div>
+
+      {/* Full-card view target — keeps the card keyboard-reachable while the
+          swatch and wishlist controls stay layered above it (z-20). */}
+      <button
+        type="button"
+        onClick={() => {
+          playTactileClick();
+          onSelectProduct(product);
+        }}
+        aria-label={`View ${product.name}`}
+        className="absolute inset-0 z-10 bg-transparent focus-visible:outline-1 focus-visible:outline-offset-[-1px] focus-visible:outline-black"
+      />
     </div>
   );
 };

@@ -5,7 +5,9 @@ import { useCurrencyStore } from '../../stores/currencyStore';
 import { useCartStore } from '../../stores/cartStore';
 import { useAudioStore } from '../../stores/audioStore';
 import { formatPriceWithDisplay } from '../../utils/formatters';
+import { buildWebPSrcSet, webpVariant } from '../../utils/images';
 import { toast } from 'sonner';
+import { useModalA11y } from '../../lib/useModalA11y';
 
 interface RunwayModeModalProps {
   isOpen: boolean;
@@ -29,13 +31,13 @@ export const RunwayModeModal: React.FC<RunwayModeModalProps> = ({
   const currentProduct = runwayLooks[currentLookIndex] || products[0];
   const defaultColorway = currentProduct?.colorways[0];
 
+  const panelRef = useModalA11y<HTMLDivElement>({ onClose, isOpen });
+
   useEffect(() => {
     if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      } else if (e.key === 'ArrowRight') {
+      if (e.key === 'ArrowRight') {
         playRunwayWhoosh();
         setCurrentLookIndex((prev) => (prev + 1) % runwayLooks.length);
       } else if (e.key === 'ArrowLeft') {
@@ -46,7 +48,7 @@ export const RunwayModeModal: React.FC<RunwayModeModalProps> = ({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, runwayLooks.length, onClose, playRunwayWhoosh]);
+  }, [isOpen, runwayLooks.length, playRunwayWhoosh]);
 
   if (!isOpen || !currentProduct) return null;
 
@@ -57,16 +59,23 @@ export const RunwayModeModal: React.FC<RunwayModeModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[800] bg-[#000000] text-white flex flex-col justify-between p-3 sm:p-8 animate-in fade-in duration-300">
+    <div
+      ref={panelRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Finaluchi Runway"
+      tabIndex={-1}
+      className="fixed inset-0 z-[800] bg-noir text-white flex flex-col justify-between p-3 sm:p-8 animate-in fade-in duration-300 outline-none"
+    >
       
       {/* Top Header Bar */}
       <div className="flex items-center justify-between z-20">
         <div className="flex items-center gap-2 sm:gap-3">
-          <Sparkles className="w-4 h-4 text-[#C5A880] animate-pulse shrink-0" />
+          <Sparkles className="w-4 h-4 text-champagne animate-pulse shrink-0" />
           <span className="font-sans-luxury text-sm sm:text-lg tracking-[0.2em] sm:tracking-[0.25em] text-white uppercase font-bold">
             FINALUCHI RUNWAY
           </span>
-          <span className="hidden sm:inline-block text-[10px] font-mono-luxury text-[#C5A880] border border-[#C5A880]/40 px-2 py-0.5 rounded-xs">
+          <span className="hidden sm:inline-block text-[10px] font-mono-luxury text-champagne border border-champagne/40 px-2 py-0.5 rounded-xs">
             AUTUMN / WINTER 2026
           </span>
         </div>
@@ -104,9 +113,11 @@ export const RunwayModeModal: React.FC<RunwayModeModalProps> = ({
         </button>
 
         {/* Model Lookbook Display */}
-        <div className="relative h-full max-h-[82vh] aspect-[3/4.5] bg-noir rounded-xs overflow-hidden shadow-2xl border border-white/10 flex items-center justify-center">
+        <div className="relative h-full max-h-[82vh] max-w-full aspect-[3/4.5] bg-noir rounded-xs overflow-hidden shadow-2xl border border-white/10 flex items-center justify-center">
           <img
             src={defaultColorway.heroImageUrl}
+            srcSet={buildWebPSrcSet(defaultColorway.heroImageUrl)}
+            sizes="(min-width: 640px) 461px, 92vw"
             alt={currentProduct.name}
             className="w-full h-full object-cover object-top animate-in zoom-in-95 duration-500"
           />
@@ -114,7 +125,7 @@ export const RunwayModeModal: React.FC<RunwayModeModalProps> = ({
           
           {/* Piece Overlay Card */}
           <div className="absolute bottom-3 sm:bottom-6 left-3 sm:left-6 right-3 sm:right-6 p-4 sm:p-6 bg-noir/90 backdrop-blur-md border border-white/20 rounded-xs space-y-2 sm:space-y-3">
-            <div className="flex items-center justify-between text-[11px] sm:text-xs font-mono-luxury text-[#C5A880] uppercase">
+            <div className="flex items-center justify-between text-[11px] sm:text-xs font-mono-luxury text-champagne uppercase">
               <span>LOOK 0{currentLookIndex + 1} OF 0{runwayLooks.length}</span>
               <span>{currentProduct.pillar.replace('_', ' ')}</span>
             </div>
@@ -179,7 +190,7 @@ export const RunwayModeModal: React.FC<RunwayModeModalProps> = ({
             }`}
           >
             <img
-              src={look.colorways[0].heroImageUrl}
+              src={webpVariant(look.colorways[0].heroImageUrl, 480)}
               alt={look.name}
               className="w-full h-full object-cover"
             />

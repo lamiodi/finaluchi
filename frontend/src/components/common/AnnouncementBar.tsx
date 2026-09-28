@@ -35,7 +35,7 @@ export const AnnouncementBar: React.FC<AnnouncementBarProps> = ({
   };
 
   return (
-    <aside aria-label="Announcement Bar" className="w-full bg-[#000000] text-white text-[11px] font-sans-luxury py-2 px-4 sm:px-8 lg:px-12 border-b border-white/15">
+    <aside aria-label="Announcement Bar" className="w-full bg-noir text-white text-[11px] font-sans-luxury py-2 px-4 sm:px-8 lg:px-12 border-b border-white/15">
       <div className="max-w-[1680px] mx-auto flex items-center justify-between gap-2">
         
         {/* Left: Language & Currency Selector */}
@@ -46,7 +46,7 @@ export const AnnouncementBar: React.FC<AnnouncementBarProps> = ({
             onChange={(e) => {
               setDisplayCurrency(e.target.value as SupportedDisplayCurrency);
             }}
-            className="bg-transparent text-white font-mono-luxury text-[10px] sm:text-[11px] font-medium hover:text-[#C5A880] cursor-pointer focus:outline-none"
+            className="bg-transparent text-white font-mono-luxury text-[10px] sm:text-[11px] font-medium hover:text-champagne cursor-pointer focus:outline-none focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-white/60"
             title="Select display currency"
           >
             {currencies.map((c) => (

@@ -4,6 +4,7 @@ import { OccasionType, Product } from '../../types';
 import { CATEGORY_DEPARTMENTS, getDepartmentById } from '../../data/categoryContent';
 import { useAudioStore } from '../../stores/audioStore';
 import { buildWhatsAppUrl } from '../../data/brand';
+import { buildWebPSrcSet } from '../../utils/images';
 import { ProductCard } from '../common/ProductCard';
 
 interface CatalogPageProps {
@@ -63,7 +64,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
   };
 
   return (
-    <div className="w-full bg-[#FFFFFF] min-h-screen pb-24 text-[#000000] font-sans-luxury">
+    <div className="w-full bg-white min-h-screen pb-24 text-noir font-sans-luxury">
       
       {/* Top Banner: Minimalist Editorial Header */}
       <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 pt-8 sm:pt-14 pb-8 border-b border-black/10">
@@ -72,18 +73,18 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
             {/* Left Column: Category Narrative */}
             <div className="lg:col-span-8 space-y-4 text-left">
-              <div className="flex items-center gap-2 text-[10px] sm:text-xs font-mono-luxury uppercase tracking-[0.25em] text-[#A67C4A]">
+              <div className="flex items-center gap-2 text-[10px] sm:text-xs font-mono-luxury uppercase tracking-[0.25em] text-bronze-deep">
                 <span>{activeDept.pillarLabel}</span>
                 <span>·</span>
                 <span>{activeDept.pillarGroup}</span>
               </div>
 
-              <h1 className="font-sans-luxury text-3xl sm:text-5xl font-bold tracking-tight text-[#000000] uppercase">
+              <h1 className="font-sans-luxury text-3xl sm:text-5xl font-bold tracking-tight text-noir uppercase">
                 {activeDept.label}
               </h1>
 
               {activeDept.tagline && (
-                <p className="text-xs sm:text-sm font-display italic text-[#A67C4A] tracking-normal">
+                <p className="text-xs sm:text-sm font-display italic text-bronze-deep tracking-normal">
                   &ldquo;{activeDept.tagline}&rdquo;
                 </p>
               )}
@@ -125,7 +126,11 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
                 <div className="aspect-[4/5] w-full max-w-[340px] ml-auto overflow-hidden bg-neutral-100">
                   <img
                     src={activeDept.image}
+                    srcSet={buildWebPSrcSet(activeDept.image)}
+                    sizes="(min-width: 1024px) 340px, 0px"
                     alt={activeDept.label}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -137,7 +142,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
             <span className="text-[10px] sm:text-xs font-mono-luxury uppercase tracking-[0.25em] text-neutral-500">
               The Archive
             </span>
-            <h1 className="font-sans-luxury text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#000000] uppercase">
+            <h1 className="font-sans-luxury text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-noir uppercase">
               WOMEN&apos;S COLLECTION
             </h1>
             <p className="text-xs sm:text-sm text-black/70 max-w-xl font-light leading-relaxed">
@@ -158,8 +163,8 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
               }}
               className={`px-3.5 py-2 text-[11px] uppercase tracking-wider whitespace-nowrap transition-all duration-200 border shrink-0 ${
                 selectedPillar === 'ALL'
-                  ? 'bg-[#000000] text-[#FFFFFF] border-[#000000] font-semibold'
-                  : 'bg-[#FFFFFF] text-black/70 border-black/15 hover:border-black hover:text-[#000000]'
+                  ? 'bg-noir text-white border-noir font-semibold'
+                  : 'bg-white text-black/70 border-black/15 hover:border-black hover:text-noir'
               }`}
             >
               All [{getItemCount('ALL')}]
@@ -176,8 +181,8 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
                   }}
                   className={`px-3.5 py-2 text-[11px] uppercase tracking-wider whitespace-nowrap transition-all duration-200 border shrink-0 ${
                     selectedPillar === cat.id
-                      ? 'bg-[#000000] text-[#FFFFFF] border-[#000000] font-semibold'
-                      : 'bg-[#FFFFFF] text-black/70 border-black/15 hover:border-black hover:text-[#000000]'
+                      ? 'bg-noir text-white border-noir font-semibold'
+                      : 'bg-white text-black/70 border-black/15 hover:border-black hover:text-noir'
                   }`}
                 >
                   {cat.label} [{count}]
@@ -195,8 +200,8 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
               }}
               className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold tracking-widest uppercase transition-all border ${
                 isFilterDrawerOpen || selectedOccasion !== 'ALL' || selectedColorFamily !== 'ALL'
-                  ? 'bg-[#000000] text-[#FFFFFF] border-[#000000]'
-                  : 'bg-[#FFFFFF] text-[#000000] border-black/15 hover:border-black'
+                  ? 'bg-noir text-white border-noir'
+                  : 'bg-white text-noir border-black/15 hover:border-black'
               }`}
             >
               <SlidersHorizontal className="w-3.5 h-3.5" />
@@ -210,14 +215,14 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
                   playTactileClick();
                   setIsSortDropdownOpen(!isSortDropdownOpen);
                 }}
-                className="flex items-center gap-2 px-4 py-2 bg-[#FFFFFF] border border-black/15 hover:border-black text-[#000000] text-xs font-semibold tracking-widest uppercase transition-all"
+                className="flex items-center gap-2 px-4 py-2 bg-white border border-black/15 hover:border-black text-noir text-xs font-semibold tracking-widest uppercase transition-all"
               >
                 <ArrowUpDown className="w-3.5 h-3.5" />
                 <span>SORT</span>
               </button>
 
               {isSortDropdownOpen && (
-                <div className="absolute right-0 top-full mt-2 w-56 bg-[#FFFFFF] border border-black/20 shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95">
+                <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-black/20 shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95">
                   <div className="space-y-1 text-xs">
                     {[
                       { id: 'NEWEST', label: 'Newest Arrivals' },
@@ -233,11 +238,11 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
                           setIsSortDropdownOpen(false);
                         }}
                         className={`w-full text-left px-3 py-2 flex items-center justify-between transition-colors ${
-                          sortBy === opt.id ? 'bg-[#000000] text-[#FFFFFF] font-semibold' : 'hover:bg-neutral-100 text-[#000000]'
+                          sortBy === opt.id ? 'bg-noir text-white font-semibold' : 'hover:bg-neutral-100 text-noir'
                         }`}
                       >
                         <span>{opt.label}</span>
-                        {sortBy === opt.id && <Check className="w-3.5 h-3.5 text-[#C5A880]" />}
+                        {sortBy === opt.id && <Check className="w-3.5 h-3.5 text-bronze" />}
                       </button>
                     ))}
                   </div>
@@ -251,10 +256,10 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
 
         {/* Collapsible Filter Panel */}
         {isFilterDrawerOpen && (
-          <div className="mt-6 p-6 bg-[#FFFFFF] border border-black/15 grid grid-cols-1 md:grid-cols-3 gap-6 animate-in slide-in-from-top-2 duration-200">
+          <div className="mt-6 p-6 bg-white border border-black/15 grid grid-cols-1 md:grid-cols-3 gap-6 animate-in slide-in-from-top-2 duration-200">
             {/* Occasion Filter */}
             <div className="space-y-3">
-              <span className="text-[10px] font-mono-luxury text-[#C5A880] uppercase tracking-[0.2em] font-semibold block">
+              <span className="text-[10px] font-mono-luxury text-bronze-deep uppercase tracking-[0.2em] font-semibold block">
                 Occasion
               </span>
               <div className="flex flex-wrap gap-2 text-xs">
@@ -267,8 +272,8 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
                     }}
                     className={`px-3 py-1.5 text-[11px] uppercase tracking-wider transition-colors border ${
                       selectedOccasion === occ
-                        ? 'bg-[#000000] text-[#FFFFFF] border-[#000000] font-semibold'
-                        : 'bg-[#FFFFFF] text-black/70 border-black/15 hover:border-black hover:text-[#000000]'
+                        ? 'bg-noir text-white border-noir font-semibold'
+                        : 'bg-white text-black/70 border-black/15 hover:border-black hover:text-noir'
                     }`}
                   >
                     {occ === 'ALL' ? 'All Occasions' : occ.replace('_', ' ')}
@@ -279,7 +284,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
 
             {/* Color Family Filter */}
             <div className="space-y-3">
-              <span className="text-[10px] font-mono-luxury text-[#C5A880] uppercase tracking-[0.2em] font-semibold block">
+              <span className="text-[10px] font-mono-luxury text-bronze-deep uppercase tracking-[0.2em] font-semibold block">
                 Colour Palette
               </span>
               <div className="flex flex-wrap gap-2 text-xs">
@@ -292,8 +297,8 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
                     }}
                     className={`px-3 py-1.5 text-[11px] uppercase tracking-wider transition-colors border ${
                       selectedColorFamily === fam
-                        ? 'bg-[#000000] text-[#FFFFFF] border-[#000000] font-semibold'
-                        : 'bg-[#FFFFFF] text-black/70 border-black/15 hover:border-black hover:text-[#000000]'
+                        ? 'bg-noir text-white border-noir font-semibold'
+                        : 'bg-white text-black/70 border-black/15 hover:border-black hover:text-noir'
                     }`}
                   >
                     {fam === 'ALL' ? 'All Palettes' : fam.replace('_', ' ')}
@@ -312,7 +317,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
                   setSelectedColorFamily('ALL');
                   setSortBy('NEWEST');
                 }}
-                className="px-5 py-2.5 bg-[#FFFFFF] border border-[#000000] text-xs text-[#000000] font-semibold tracking-widest uppercase hover:bg-[#000000] hover:text-[#FFFFFF] transition-all flex items-center gap-2"
+                className="px-5 py-2.5 bg-white border border-noir text-xs text-noir font-semibold tracking-widest uppercase hover:bg-noir hover:text-white transition-all flex items-center gap-2"
               >
                 <X className="w-3.5 h-3.5" />
                 <span>RESET FILTERS</span>
@@ -328,9 +333,9 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
         
         {filteredProducts.length === 0 ? (
           <div className="py-24 text-center space-y-4">
-            <h3 className="font-sans-luxury text-2xl sm:text-3xl text-[#000000] uppercase font-semibold">
+            <h2 className="font-sans-luxury text-2xl sm:text-3xl text-noir uppercase font-semibold">
               No pieces match these criteria.
-            </h3>
+            </h2>
             <p className="text-xs sm:text-sm text-black/60 font-light max-w-md mx-auto">
               Reset filters to explore all pieces in our collection.
             </p>
@@ -340,7 +345,7 @@ export const CatalogPage: React.FC<CatalogPageProps> = ({
                 setSelectedOccasion('ALL');
                 setSelectedColorFamily('ALL');
               }}
-              className="px-6 py-3 bg-[#000000] text-[#FFFFFF] text-xs uppercase tracking-widest font-semibold hover:bg-neutral-800 transition-all"
+              className="px-6 py-3 bg-noir text-white text-xs uppercase tracking-widest font-semibold hover:bg-neutral-800 transition-all"
             >
               SHOW ALL CREATIONS
             </button>

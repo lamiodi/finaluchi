@@ -14,17 +14,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variants = {
       default:
-        'bg-[#000000] text-[#FFFFFF] hover:bg-neutral-900 border border-[#000000]',
+        'bg-noir text-white hover:bg-neutral-900 border border-noir',
       noir:
-        'bg-[#000000] text-[#FFFFFF] hover:bg-neutral-900 border border-[#000000]',
+        'bg-noir text-white hover:bg-neutral-900 border border-noir',
       outline:
-        'border border-black/20 bg-[#FFFFFF] text-[#000000] hover:bg-[#000000] hover:text-[#FFFFFF] hover:border-[#000000]',
+        'border border-black/20 bg-white text-noir hover:bg-noir hover:text-white hover:border-noir',
       ghost:
-        'hover:bg-black/5 text-[#000000]',
+        'hover:bg-black/5 text-noir',
       champagne:
-        'bg-[#000000] text-[#FFFFFF] hover:bg-neutral-900 border border-[#C5A880]/60 hover:border-[#C5A880]',
+        'bg-noir text-white hover:bg-neutral-900 border border-champagne/60 hover:border-champagne',
       link:
-        'text-[#000000] underline-offset-4 hover:underline p-0 h-auto',
+        'text-noir underline-offset-4 hover:underline p-0 h-auto',
     };
 
     const sizes = {

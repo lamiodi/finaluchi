@@ -48,14 +48,14 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
   };
 
   return (
-    <div className="w-full bg-[#FFFFFF] min-h-screen text-[#000000] font-sans-luxury pb-24">
+    <div className="w-full bg-white min-h-screen text-noir font-sans-luxury pb-24">
       
       {/* Top Banner */}
-      <div className="bg-[#000000] text-[#FFFFFF] py-12 sm:py-16 px-4 sm:px-8 lg:px-12 border-b border-white/10">
+      <div className="bg-noir text-white py-12 sm:py-16 px-4 sm:px-8 lg:px-12 border-b border-white/10">
         <div className="max-w-[1680px] mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-3">
-            <div className="flex items-center gap-2 text-[#C5A880] text-xs font-mono-luxury tracking-widest uppercase font-semibold">
-              <Package className="w-4 h-4 text-[#C5A880]" />
+            <div className="flex items-center gap-2 text-champagne text-xs font-mono-luxury tracking-widest uppercase font-semibold">
+              <Package className="w-4 h-4 text-champagne" />
               <span>ORDER UPDATES</span>
             </div>
             <h1 className="font-sans-luxury text-3xl sm:text-5xl font-bold tracking-tight text-white uppercase">
@@ -74,12 +74,13 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value.toUpperCase())}
                 placeholder="Order Number (e.g. FC-94820)"
-                className="bg-white/10 border border-white/20 px-4 py-3 text-xs text-white font-mono-luxury uppercase focus:outline-none focus:border-[#C5A880] w-full sm:w-64"
+                aria-label="Order Number"
+                className="bg-white/10 border border-white/20 px-4 py-3 text-xs text-white font-mono-luxury uppercase focus:outline-none focus:border-champagne w-full sm:w-64"
               />
             </div>
             <button
               type="submit"
-              className="px-6 py-3 bg-[#FFFFFF] text-[#000000] text-xs font-bold tracking-widest uppercase hover:bg-neutral-200 transition-all flex items-center justify-center gap-1.5 shrink-0"
+              className="px-6 py-3 bg-white text-noir text-xs font-bold tracking-widest uppercase hover:bg-neutral-200 transition-all flex items-center justify-center gap-1.5 shrink-0"
             >
               <Search className="w-3.5 h-3.5" />
               <span>TRACK</span>
@@ -95,20 +96,20 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
             
             {/* Left: 7-Stage Creation Progress Journey */}
-            <div className="lg:col-span-8 bg-[#FFFFFF] p-6 sm:p-10 border border-black/10 space-y-8 rounded-none">
+            <div className="lg:col-span-8 bg-white p-6 sm:p-10 border border-black/10 space-y-8 rounded-none">
               
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-black/10">
                 <div>
-                  <span className="text-[10px] font-mono-luxury text-[#C5A880] uppercase tracking-widest block mb-1 font-semibold">
+                  <span className="text-[10px] font-mono-luxury text-champagne uppercase tracking-widest block mb-1 font-semibold">
                     ORDER DETAILS
                   </span>
-                  <h2 className="font-sans-luxury text-2xl sm:text-3xl font-bold text-[#000000] uppercase tracking-tight">
+                  <h2 className="font-sans-luxury text-2xl sm:text-3xl font-bold text-noir uppercase tracking-tight">
                     ORDER #{currentOrder.orderNumber}
                   </h2>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <span className="px-3.5 py-1.5 bg-[#000000] text-[#FFFFFF] text-xs font-mono-luxury font-semibold uppercase tracking-wider rounded-none">
+                  <span className="px-3.5 py-1.5 bg-noir text-white text-xs font-mono-luxury font-semibold uppercase tracking-wider rounded-none">
                     STATUS: {currentOrder.orderStatus.replace('_', ' ')}
                   </span>
                   <span className="text-xs text-black/60 font-mono-luxury">
@@ -135,9 +136,9 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
                         <div
                           className={`absolute -left-6 top-0.5 w-5 h-5 rounded-none border flex items-center justify-center transition-all ${
                             isCompleted
-                              ? 'bg-[#000000] border-[#000000] text-white'
+                              ? 'bg-noir border-noir text-white'
                               : isCurrent
-                              ? 'bg-[#C5A880] border-[#000000] text-[#000000] animate-pulse scale-110 shadow-sm'
+                              ? 'bg-champagne border-noir text-noir animate-pulse scale-110 shadow-sm'
                               : 'bg-white border-black/20 text-transparent'
                           }`}
                         >
@@ -151,14 +152,14 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
                         {/* Stage Content */}
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-mono-luxury font-bold text-[#C5A880] uppercase">
+                            <span className="text-[10px] font-mono-luxury font-bold text-champagne uppercase">
                               STAGE 0{idx + 1}
                             </span>
                             <span className={`text-xs font-semibold tracking-couture uppercase ${isCurrent ? 'text-black font-bold' : isCompleted ? 'text-black/85' : 'text-muted'}`}>
                               {stg.title}
                             </span>
                             {isCurrent && (
-                              <span className="px-2 py-0.5 bg-[#000000] text-white text-[9px] font-mono-luxury tracking-couture rounded-none uppercase">
+                              <span className="px-2 py-0.5 bg-noir text-white text-[9px] font-mono-luxury tracking-couture rounded-none uppercase">
                                 CURRENT STAGE
                               </span>
                             )}
@@ -176,9 +177,9 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
 
               {/* Digital Certificate CTA */}
               {certificate && (
-                <div className="p-6 bg-[#000000] text-white rounded-none border border-white/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="p-6 bg-noir text-white rounded-none border border-white/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div className="space-y-1">
-                    <div className="flex items-center gap-2 text-[#C5A880] text-xs font-semibold tracking-couture uppercase">
+                    <div className="flex items-center gap-2 text-champagne text-xs font-semibold tracking-couture uppercase">
                       <QrCode className="w-4 h-4" />
                     <span>ORDER RECORD</span>
                     </div>
@@ -205,7 +206,7 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
             <div className="lg:col-span-4 space-y-6">
               
               {/* Order Items Snapshot */}
-              <div className="bg-[#FFFFFF] p-6 border border-black/10 rounded-none space-y-4">
+              <div className="bg-white p-6 border border-black/10 rounded-none space-y-4">
                 <h3 className="text-xs font-semibold tracking-loose-couture uppercase text-black border-b border-black/10 pb-2">
                   PIECES IN THIS ORDER
                 </h3>
@@ -262,7 +263,7 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
               </div>
 
               {/* Delivery Details */}
-              <div className="bg-[#FFFFFF] p-6 border border-black/10 rounded-none space-y-3 text-xs">
+              <div className="bg-white p-6 border border-black/10 rounded-none space-y-3 text-xs">
                 <h3 className="font-semibold tracking-loose-couture uppercase text-black border-b border-black/10 pb-2">
                   DELIVERY DESTINATION
                 </h3>
@@ -274,8 +275,8 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
                   <div className="pt-1 font-mono-luxury text-black">{currentOrder.shippingAddress.phone}</div>
                 </div>
 
-                <div className="p-3 bg-[#FAFAFA] border border-black/10 rounded-none text-[11px] font-mono-luxury text-muted flex items-center gap-2">
-                  <Lock className="w-3.5 h-3.5 text-[#C5A880]" />
+                <div className="p-3 bg-alabaster-subtle border border-black/10 rounded-none text-[11px] font-mono-luxury text-muted flex items-center gap-2">
+                  <Lock className="w-3.5 h-3.5 text-champagne" />
                   <span>Payment status: {currentOrder.paymentStatus.replace(/_/g, ' ')}</span>
                 </div>
               </div>
@@ -287,7 +288,7 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
         </div>
       ) : (
         <div className="max-w-2xl mx-auto px-4 sm:px-8 py-20 text-center space-y-5">
-          <Package className="w-10 h-10 text-[#C5A880] mx-auto" />
+          <Package className="w-10 h-10 text-champagne mx-auto" />
           <div className="space-y-2">
             <h2 className="font-sans-luxury text-2xl sm:text-3xl font-bold uppercase">Enter your order number</h2>
             <p className="text-xs sm:text-sm text-black/60 leading-relaxed">

@@ -2,7 +2,7 @@ import React from 'react';
 import { useAudioStore } from '../../stores/audioStore';
 import { ArrowRight } from 'lucide-react';
 import { BRAND, buildWhatsAppUrl } from '../../data/brand';
-import { onImageError } from '../../utils/images';
+import { onImageError, buildWebPSrcSet } from '../../utils/images';
 
 interface EditorialStorySectionProps {
   onExploreCollection: () => void;
@@ -40,7 +40,7 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12 sm:mb-16 pb-4 border-b border-black/10">
           <div>
-            <span className="text-[10px] sm:text-xs font-mono-luxury uppercase tracking-[0.25em] text-[#A67C4A] font-semibold block mb-1">
+            <span className="text-[10px] sm:text-xs font-mono-luxury uppercase tracking-[0.25em] text-bronze-deep font-semibold block mb-1">
               Editorial Heritage · Abuja, Nigeria
             </span>
             <h2 className="font-sans-luxury text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-noir uppercase">
@@ -66,11 +66,22 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
           {/* Left Column: Monumental Portrait */}
           <div
             className="lg:col-span-7 group cursor-pointer"
+            role="button"
+            tabIndex={0}
+            aria-label="Explore the collection"
             onClick={() => onExploreCollection()}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onExploreCollection();
+              }
+            }}
           >
             <div className="aspect-[3/4.2] w-full overflow-hidden bg-neutral-100">
               <img
                 src="/images/campaign/editorial-gold-mini.jpeg"
+                srcSet={buildWebPSrcSet('/images/campaign/editorial-gold-mini.jpeg')}
+                sizes="(min-width: 1024px) 55vw, 92vw"
                 alt="Finaluchi occasion look, photographed on the client"
                 onError={onImageError}
                 className="w-full h-full object-cover object-[center_8%] transition-transform duration-700 ease-out group-hover:scale-[1.02]"
@@ -102,7 +113,7 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
 
               {/* Minimalist Typographic Milestones */}
               <div className="pt-4 border-t border-black/10 space-y-4">
-                <span className="text-[10px] font-mono-luxury uppercase tracking-[0.25em] text-[#8C7A6B] font-semibold block">
+                <span className="text-[10px] font-mono-luxury uppercase tracking-[0.25em] text-taupe font-semibold block">
                   Heritage Milestones
                 </span>
 
@@ -175,11 +186,22 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
             {/* Secondary Image: Atelier Floor */}
             <div
               className="overflow-hidden group cursor-pointer mt-2"
+              role="button"
+              tabIndex={0}
+              aria-label="Explore the atelier"
               onClick={() => onExploreAtelier()}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onExploreAtelier();
+                }
+              }}
             >
               <div className="aspect-[16/9] w-full overflow-hidden bg-neutral-100">
                 <img
                   src="/images/campaign/craft-flatlay.jpeg"
+                  srcSet={buildWebPSrcSet('/images/campaign/craft-flatlay.jpeg')}
+                  sizes="(min-width: 1024px) 38vw, 92vw"
                   alt="Finaluchi pieces laid out with accessories"
                   onError={onImageError}
                   className="w-full h-full object-cover object-[center_35%] transition-transform duration-700 ease-out group-hover:scale-[1.02]"

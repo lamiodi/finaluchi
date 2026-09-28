@@ -3,6 +3,8 @@ import { Toaster } from 'sonner';
 import { MASTER_CATALOG } from './data/catalog';
 import { OccasionType, Product } from './types';
 import { useWishlistStore } from './stores/wishlistStore';
+import { PolicyId } from './data/policies';
+import { scrollToTop, scrollToElement } from './utils/motion';
 
 // Common Components
 import { AnnouncementBar } from './components/common/AnnouncementBar';
@@ -32,9 +34,27 @@ const BespokeAppointmentModal = React.lazy(() => import('./components/client/Bes
 const ContactModal = React.lazy(() => import('./components/common/ContactModal').then(m => ({ default: m.ContactModal })));
 const AboutModal = React.lazy(() => import('./components/common/AboutModal').then(m => ({ default: m.AboutModal })));
 const SearchModal = React.lazy(() => import('./components/common/SearchModal').then(m => ({ default: m.SearchModal })));
+const LegalPage = React.lazy(() => import('./components/common/LegalPage').then(m => ({ default: m.LegalPage })));
+const FaqPage = React.lazy(() => import('./components/common/FaqPage').then(m => ({ default: m.FaqPage })));
 import { WhatsAppWidget } from './components/common/WhatsAppWidget';
 
-type ViewMode = 'HOME' | 'CATALOG' | 'PRODUCT' | 'TRACKER' | 'CLIENT' | 'ADMIN';
+type ViewMode = 'HOME' | 'CATALOG' | 'PRODUCT' | 'TRACKER' | 'CLIENT' | 'ADMIN' | 'LEGAL' | 'FAQ';
+
+// Hash deep links (shareable, e.g. https://finaluchi.com/#/privacy)
+function hashToRoute(hash: string): { view: ViewMode; policy: PolicyId } | null {
+  const h = hash.replace(/^#\/?/, '').toLowerCase();
+  switch (h) {
+    case 'privacy': return { view: 'LEGAL', policy: 'privacy' };
+    case 'terms': return { view: 'LEGAL', policy: 'terms' };
+    case 'returns': return { view: 'LEGAL', policy: 'returns' };
+    case 'shipping': return { view: 'LEGAL', policy: 'shipping' };
+    case 'faq': return { view: 'FAQ', policy: 'privacy' };
+    case 'tracker': return { view: 'TRACKER', policy: 'privacy' };
+    case 'admin': return { view: 'ADMIN', policy: 'privacy' };
+    case 'client': return { view: 'CLIENT', policy: 'privacy' };
+    default: return null;
+  }
+}
 
 export const App: React.FC = () => {
   // Routing State
@@ -43,6 +63,7 @@ export const App: React.FC = () => {
   const [catalogPillar, setCatalogPillar] = useState<string>('ALL');
   const [catalogOccasion, setCatalogOccasion] = useState<OccasionType | undefined>(undefined);
   const [trackerOrderNumber, setTrackerOrderNumber] = useState<string>('');
+  const [legalPolicy, setLegalPolicy] = useState<PolicyId>('privacy');
 
   // Modal States
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
@@ -64,8 +85,46 @@ export const App: React.FC = () => {
 
   // Scroll to top on view changes
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollToTop();
   }, [currentView, selectedProduct]);
+
+  // Deep link on first load (e.g. /#/privacy from an email or Paystack review)
+  useEffect(() => {
+    const route = hashToRoute(window.location.hash);
+    if (route) {
+      setCurrentView(route.view);
+      if (route.view === 'LEGAL') setLegalPolicy(route.policy);
+    }
+  }, []);
+
+  // Keep the URL hash in sync with the active view without polluting history
+  useEffect(() => {
+    const next =
+      currentView === 'LEGAL' ? `#/${legalPolicy}` :
+      currentView === 'FAQ' ? '#/faq' :
+      currentView === 'TRACKER' ? '#/tracker' :
+      currentView === 'ADMIN' ? '#/admin' :
+      currentView === 'CLIENT' ? '#/client' :
+      '#/';
+    if (window.location.hash === next) return;
+    if (next === '#/' && window.location.hash === '') return;
+    history.replaceState(null, '', next === '#/' ? `${window.location.pathname}${window.location.search}` : next);
+  }, [currentView, legalPolicy]);
+
+  // Back/forward navigation between hash routes
+  useEffect(() => {
+    const onHashChange = () => {
+      const route = hashToRoute(window.location.hash);
+      if (route) {
+        setCurrentView(route.view);
+        if (route.view === 'LEGAL') setLegalPolicy(route.policy);
+      } else {
+        setCurrentView('HOME');
+      }
+    };
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
 
   // Handlers
   const handleSelectProduct = (product: Product) => {
@@ -87,6 +146,11 @@ export const App: React.FC = () => {
     setIsPaystackOpen(true);
   };
 
+  const handleOpenPolicy = (policy: PolicyId) => {
+    setLegalPolicy(policy);
+    setCurrentView('LEGAL');
+  };
+
   const handleFooterNavigate = (view: string, payload?: any) => {
     if (view === 'tracker') {
       if (payload?.querySerial) {
@@ -98,32 +162,41 @@ export const App: React.FC = () => {
       setCurrentView('CATALOG');
     } else if (view === 'atelier') {
       setCurrentView('HOME');
-      setTimeout(() => {
-        const el = document.getElementById('digital-atelier-section');
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
+      setTimeout(() => scrollToElement('digital-atelier-section'), 100);
     } else if (view === 'client') {
       setCurrentView('CLIENT');
     } else if (view === 'admin') {
       setCurrentView('ADMIN');
+    } else if (view === 'legal') {
+      handleOpenPolicy((payload?.policy as PolicyId) || 'privacy');
+    } else if (view === 'faq') {
+      setCurrentView('FAQ');
     } else {
       setCurrentView('HOME');
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#FFFFFF] text-[#000000] flex flex-col justify-between selection:bg-[#000000] selection:text-[#FFFFFF]">
-      
+    <div className="min-h-screen bg-white text-noir flex flex-col justify-between selection:bg-noir selection:text-white">
+
+      {/* Keyboard users jump straight past announcement bar + navigation */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[99999] focus:bg-noir focus:text-white focus:px-4 focus:py-2.5 focus:text-[11px] focus:font-mono-luxury focus:uppercase focus:tracking-widest"
+      >
+        Skip to Content
+      </a>
+
       {/* Maison Introductory Preloader */}
       <Preloader />
 
       {/* Sonner Toast Notification Center */}
-      <Toaster 
-        position="top-right" 
-        richColors 
+      <Toaster
+        position="top-right"
+        richColors
         toastOptions={{
           style: {
-            fontFamily: 'Plus Jakarta Sans, sans-serif',
+            fontFamily: "'DM Sans', sans-serif",
             borderRadius: '0px',
             border: '1px solid rgba(0, 0, 0, 0.2)',
           }
@@ -153,7 +226,7 @@ export const App: React.FC = () => {
       </div>
 
       {/* Dynamic Viewport Stage */}
-      <main className="flex-1 overflow-x-clip w-full max-w-full">
+      <main id="main-content" tabIndex={-1} className="flex-1 overflow-x-clip w-full max-w-full outline-none">
         
         {/* VIEW 1: BALENCIAGA LUXURY EDITORIAL HOMEPAGE */}
         {currentView === 'HOME' && (
@@ -198,7 +271,7 @@ export const App: React.FC = () => {
         {/* VIEW 2: BOTTEGA DYNAMIC MASONRY CATALOG (PLP) */}
         {currentView === 'CATALOG' && (
           <div className="animate-in fade-in duration-300">
-            <React.Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center font-mono-luxury text-xs text-[#C5A880]">Loading Catalog...</div>}>
+            <React.Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center font-mono-luxury text-xs text-bronze-deep">Loading Catalog...</div>}>
               <CatalogPage
                 products={MASTER_CATALOG}
                 initialPillar={catalogPillar}
@@ -212,7 +285,7 @@ export const App: React.FC = () => {
         {/* VIEW 3: PRODUCT DETAIL INTELLIGENCE (PDP) */}
         {currentView === 'PRODUCT' && selectedProduct && (
           <div className="animate-in fade-in duration-300">
-            <React.Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center font-mono-luxury text-xs text-[#C5A880]">Loading Garment Intelligence...</div>}>
+            <React.Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center font-mono-luxury text-xs text-bronze-deep">Loading Garment Intelligence...</div>}>
               <ProductDetailPage
                 key={selectedProduct.id}
                 product={selectedProduct}
@@ -228,7 +301,7 @@ export const App: React.FC = () => {
         {/* VIEW 4: POST-PURCHASE CRAFT JOURNEY TRACKER */}
         {currentView === 'TRACKER' && (
           <div className="animate-in fade-in duration-300">
-            <React.Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center font-mono-luxury text-xs text-[#C5A880]">Loading Order Tracker...</div>}>
+            <React.Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center font-mono-luxury text-xs text-bronze-deep">Loading Order Tracker...</div>}>
               <OrderTrackerPage
                 initialOrderNumber={trackerOrderNumber}
                 onExploreCatalog={() => setCurrentView('CATALOG')}
@@ -240,7 +313,7 @@ export const App: React.FC = () => {
         {/* VIEW 5: PRIVATE CLIENT PORTAL & DIGITAL WARDROBE */}
         {currentView === 'CLIENT' && (
           <div className="animate-in fade-in duration-300">
-            <React.Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center font-mono-luxury text-xs text-[#C5A880]">Loading Client Portal...</div>}>
+            <React.Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center font-mono-luxury text-xs text-bronze-deep">Loading Client Portal...</div>}>
               <ClientPortalPage
                 products={MASTER_CATALOG}
                 onSelectProduct={handleSelectProduct}
@@ -255,6 +328,29 @@ export const App: React.FC = () => {
           <div className="animate-in fade-in duration-300">
             <React.Suspense fallback={<div className="min-h-screen bg-black text-white p-8 flex items-center justify-center font-mono-luxury text-xs">Loading Atelier Ops...</div>}>
               <AdminPage />
+            </React.Suspense>
+          </div>
+        )}
+
+        {/* VIEW 7: LEGAL & COMPLIANCE PAGES (NDPR / Terms / Returns / Shipping) */}
+        {currentView === 'LEGAL' && (
+          <div className="animate-in fade-in duration-300">
+            <React.Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center font-mono-luxury text-xs text-bronze-deep">Loading Policy...</div>}>
+              <LegalPage
+                policyId={legalPolicy}
+                onSelectPolicy={handleOpenPolicy}
+                onOpenFaq={() => setCurrentView('FAQ')}
+                onBackHome={() => setCurrentView('HOME')}
+              />
+            </React.Suspense>
+          </div>
+        )}
+
+        {/* VIEW 8: FREQUENTLY ASKED QUESTIONS */}
+        {currentView === 'FAQ' && (
+          <div className="animate-in fade-in duration-300">
+            <React.Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center font-mono-luxury text-xs text-bronze-deep">Loading FAQ...</div>}>
+              <FaqPage onBackHome={() => setCurrentView('HOME')} />
             </React.Suspense>
           </div>
         )}

@@ -9,7 +9,7 @@ import { useCartStore } from '../../stores/cartStore';
 import { useWishlistStore } from '../../stores/wishlistStore';
 import { useAudioStore } from '../../stores/audioStore';
 import { formatPriceWithDisplay } from '../../utils/formatters';
-import { onImageError } from '../../utils/images';
+import { onImageError, buildWebPSrcSet } from '../../utils/images';
 import { SizeGuideModal } from '../common/SizeGuideModal';
 import { toast } from 'sonner';
 import { ORDER_CLARITY_NOTE, buildWhatsAppUrl } from '../../data/brand';
@@ -119,15 +119,15 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     .slice(0, 4);
 
   return (
-    <div className="w-full bg-[#FFFFFF] min-h-screen text-[#000000] font-sans-luxury pb-24">
+    <div className="w-full bg-white min-h-screen text-noir font-sans-luxury pb-24">
       
       {/* Breadcrumb Navigation */}
-      <div className="max-w-[1680px] mx-auto px-4 sm:px-8 py-4 text-[11px] text-black/50 tracking-[0.2em] uppercase flex items-center gap-2 border-b border-black/10">
-        <button onClick={onBackToCatalog} className="hover:text-[#000000] transition-colors">Collections</button>
+      <div className="max-w-[1680px] mx-auto px-4 sm:px-8 py-4 text-[11px] text-muted tracking-[0.2em] uppercase flex items-center gap-2 border-b border-black/10">
+        <button onClick={onBackToCatalog} className="hover:text-noir transition-colors">Collections</button>
         <span>/</span>
         <span>{product.pillar.replace('_', ' ')}</span>
         <span>/</span>
-        <span className="text-[#000000] font-semibold line-clamp-1">{product.name}</span>
+        <span className="text-noir font-semibold line-clamp-1">{product.name}</span>
       </div>
 
       {/* Main Split Layout Grid */}
@@ -139,9 +139,9 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             
             {/* 360 Rotation Toggle Bar */}
             {product.has360Rotation && (
-              <div className="flex items-center justify-between p-3 bg-[#FFFFFF] border border-black/15 mb-2">
-                <div className="flex items-center gap-2 text-xs font-semibold tracking-wider uppercase text-[#000000]">
-                  <RotateCw className="w-3.5 h-3.5 text-[#C5A880]" />
+              <div className="flex items-center justify-between p-3 bg-white border border-black/15 mb-2">
+                <div className="flex items-center gap-2 text-xs font-semibold tracking-wider uppercase text-noir">
+                  <RotateCw className="w-3.5 h-3.5 text-bronze" />
                   <span>Interactive 360° View</span>
                 </div>
                 <button
@@ -150,7 +150,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     setIs360Active(!is360Active);
                   }}
                   className={`px-3 py-1.5 text-xs font-semibold tracking-wider uppercase transition-colors border ${
-                    is360Active ? 'bg-[#000000] text-[#FFFFFF] border-[#000000]' : 'bg-[#FFFFFF] text-[#000000] border-black/20 hover:border-[#000000]'
+                    is360Active ? 'bg-noir text-white border-noir' : 'bg-white text-noir border-black/20 hover:border-noir'
                   }`}
                 >
                   {is360Active ? 'Exit 360° View' : 'Drag to Rotate'}
@@ -165,7 +165,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 onMouseMove={handleMouseMove360}
                 onMouseUp={handleMouseUp360}
                 onMouseLeave={handleMouseUp360}
-                className="aspect-[3/4] w-full bg-[#FAFAFA] border border-black/15 overflow-hidden cursor-ew-resize relative flex items-center justify-center select-none"
+                className="aspect-[3/4] w-full bg-alabaster-subtle border border-black/15 overflow-hidden cursor-ew-resize relative flex items-center justify-center select-none"
               >
                 <img
                   src={frames[rotationFrameIndex] || selectedColorway.heroImageUrl}
@@ -173,7 +173,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   onError={onImageError}
                   className="w-full h-full object-cover object-top pointer-events-none"
                 />
-                <div className="absolute bottom-4 px-3 py-1.5 bg-[#000000] text-[#FFFFFF] text-[10px] font-mono-luxury tracking-widest uppercase">
+                <div className="absolute bottom-4 px-3 py-1.5 bg-noir text-white text-[10px] font-mono-luxury tracking-widest uppercase">
                   Angle {rotationFrameIndex + 1} / {frames.length} • Drag horizontally
                 </div>
               </div>
@@ -184,6 +184,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   <div key={i} className="aspect-[3/4.2] w-full bg-[#F7F7F7] overflow-hidden group">
                     <img
                       src={imgUrl}
+                      srcSet={buildWebPSrcSet(imgUrl)}
+                      sizes="(min-width: 1024px) 50vw, 92vw"
                       alt={`${product.name} - Angle ${i + 1}`}
                       onError={onImageError}
                       className="w-full h-full object-contain group-hover:scale-102 transition-transform duration-700 ease-out p-4"
@@ -212,7 +214,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                       toggleProductInEdit('edit-default', product.id);
                     }}
                     className={`p-2.5 border transition-colors ${
-                      isSaved ? 'bg-[#000000] text-[#FFFFFF] border-[#000000]' : 'border-black/15 text-[#000000] hover:border-[#000000]'
+                      isSaved ? 'bg-noir text-white border-noir' : 'border-black/15 text-noir hover:border-noir'
                     }`}
                     title="Save Piece"
                   >
@@ -223,7 +225,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                       navigator.clipboard.writeText(window.location.href);
                       toast.success('Piece share link copied to clipboard.');
                     }}
-                    className="p-2.5 border border-black/15 text-[#000000] hover:border-[#000000] transition-colors"
+                    className="p-2.5 border border-black/15 text-noir hover:border-noir transition-colors"
                     title="Share Piece"
                   >
                     <Share2 className="w-4 h-4" />
@@ -231,7 +233,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 </div>
               </div>
 
-              <h1 className="font-sans-luxury text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#000000] uppercase leading-tight">
+              <h1 className="font-sans-luxury text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-noir uppercase leading-tight">
                 {product.name}
               </h1>
 
@@ -241,7 +243,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
               {/* Price Display */}
               <div className="pt-2">
-                <span className="text-2xl sm:text-3xl font-mono-luxury font-bold text-[#000000]">
+                <span className="text-2xl sm:text-3xl font-mono-luxury font-bold text-noir">
                   {formatPriceWithDisplay(product.basePriceKobo + (selectedColorway.priceDeltaKobo || 0), displayCurrency)}
                 </span>
                 <span className="text-[10px] text-neutral-500 font-mono-luxury block mt-1 tracking-wider uppercase">
@@ -253,8 +255,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             {/* Interactive Cloth Swatches */}
             <div className="space-y-3">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-semibold text-[#000000] tracking-widest uppercase">
-                  COLOUR: <span className="text-[#8C7A6B] font-mono-luxury">{selectedColorway.color.name}</span>
+                <span className="font-semibold text-noir tracking-widest uppercase">
+                  COLOUR: <span className="text-taupe font-mono-luxury">{selectedColorway.color.name}</span>
                 </span>
                 {selectedColorway.isMadeToOrder && (
                   <span className="text-[10px] font-mono-luxury text-neutral-500 uppercase font-medium tracking-wider">
@@ -290,7 +292,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             {/* Size Selector */}
             <div className="space-y-3 pt-2">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-semibold text-[#000000] tracking-widest uppercase">
+                <span className="font-semibold text-noir tracking-widest uppercase">
                   SELECT SIZE:
                 </span>
                 <button
@@ -298,7 +300,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     playTactileClick();
                     setIsSizeGuideOpen(true);
                   }}
-                  className="flex items-center gap-1.5 text-black hover:text-[#8C7A6B] underline underline-offset-4 tracking-wider uppercase text-[11px] font-semibold transition-colors"
+                  className="flex items-center gap-1.5 text-black hover:text-taupe underline underline-offset-4 tracking-wider uppercase text-[11px] font-semibold transition-colors"
                 >
                   <Ruler className="w-3.5 h-3.5" />
                   <span>Size & Measurement Guide</span>
@@ -316,8 +318,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     }}
                     className={`py-3 text-xs font-mono-luxury font-semibold border transition-all ${
                       selectedSize === s && !isMadeToMeasure
-                        ? 'bg-[#000000] text-[#FFFFFF] border-[#000000]'
-                        : 'bg-[#FFFFFF] text-[#000000] border-black/15 hover:border-[#000000]'
+                        ? 'bg-noir text-white border-noir'
+                        : 'bg-white text-noir border-black/15 hover:border-noir'
                     }`}
                   >
                     {s}
@@ -333,8 +335,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     }}
                     className={`col-span-3 sm:col-span-6 py-3.5 text-xs font-semibold tracking-widest uppercase border transition-all flex items-center justify-center gap-2 ${
                       isMadeToMeasure
-                        ? 'bg-[#000000] text-[#FFFFFF] border-[#000000] font-bold'
-                        : 'bg-[#FFFFFF] text-[#000000] border-black/30 hover:bg-[#000000] hover:text-[#FFFFFF]'
+                        ? 'bg-noir text-white border-noir font-bold'
+                        : 'bg-white text-noir border-black/30 hover:bg-noir hover:text-white'
                     }`}
                   >
                     <span>CUSTOM / MADE TO MEASURE</span>
@@ -347,7 +349,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             <div className="pt-3 space-y-3">
               <button
                 onClick={handleAddToCart}
-                className="w-full py-4 sm:py-5 bg-[#000000] text-[#FFFFFF] text-xs font-bold tracking-[0.25em] uppercase hover:bg-neutral-900 border border-[#000000] transition-all flex items-center justify-center gap-3 shadow-sm"
+                className="w-full py-4 sm:py-5 bg-noir text-white text-xs font-bold tracking-[0.25em] uppercase hover:bg-neutral-900 border border-noir transition-all flex items-center justify-center gap-3 shadow-sm"
               >
                 <ShoppingBag className="w-4 h-4 text-white" />
                 <span>ADD TO BAG</span>
@@ -355,7 +357,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
               <button
                 onClick={handleWhatsAppInquiry}
-                className="w-full py-3.5 bg-[#FFFFFF] text-[#000000] text-xs font-bold tracking-[0.2em] uppercase border border-[#000000] hover:bg-[#000000] hover:text-white transition-all flex items-center justify-center gap-2"
+                className="w-full py-3.5 bg-white text-noir text-xs font-bold tracking-[0.2em] uppercase border border-noir hover:bg-noir hover:text-white transition-all flex items-center justify-center gap-2"
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>ASK ABOUT THIS PIECE ON WHATSAPP</span>
@@ -368,7 +370,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     playTactileClick();
                     onBookAppointment();
                   }}
-                  className="text-[#000000] font-semibold underline underline-offset-2 flex items-center gap-1.5 hover:text-[#8C7A6B] transition-colors"
+                  className="text-noir font-semibold underline underline-offset-2 flex items-center gap-1.5 hover:text-taupe transition-colors"
                 >
                   <Calendar className="w-3.5 h-3.5" />
                   <span>Request a Fitting</span>
@@ -389,11 +391,11 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
               <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
                 <div>
-                  <span className="text-[10px] font-mono-luxury text-neutral-400 block uppercase tracking-wider">Material</span>
+                  <span className="text-[10px] font-mono-luxury text-neutral-500 block uppercase tracking-wider">Material</span>
                   <span className="font-medium text-black">{product.fabricIntelligence.material}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] font-mono-luxury text-neutral-400 block uppercase tracking-wider">Composition</span>
+                  <span className="text-[10px] font-mono-luxury text-neutral-500 block uppercase tracking-wider">Composition</span>
                   <span className="font-medium text-black">{product.fabricIntelligence.composition}</span>
                 </div>
               </div>
@@ -405,7 +407,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               <div>
                 <button
                   onClick={() => toggleAccordion('DETAILS')}
-                  className="w-full py-3.5 flex items-center justify-between font-bold tracking-widest uppercase text-[#000000] hover:text-[#C5A880] transition-colors text-left"
+                  className="w-full py-3.5 flex items-center justify-between font-bold tracking-widest uppercase text-noir hover:text-champagne transition-colors text-left"
                 >
                   <span>DESIGN & FIT DETAILS</span>
                   {openAccordion === 'DETAILS' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -413,7 +415,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 {openAccordion === 'DETAILS' && (
                   <div className="pb-4 text-black/75 font-light leading-relaxed space-y-2 animate-in fade-in">
                     <p>{product.description}</p>
-                    <p className="font-mono-luxury text-[#000000] text-[11px] pt-1">
+                    <p className="font-mono-luxury text-noir text-[11px] pt-1">
                       {product.atelierNotes}
                     </p>
                   </div>
@@ -424,7 +426,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               <div>
                 <button
                   onClick={() => toggleAccordion('SHIPPING')}
-                  className="w-full py-3.5 flex items-center justify-between font-bold tracking-widest uppercase text-[#000000] hover:text-[#C5A880] transition-colors text-left"
+                  className="w-full py-3.5 flex items-center justify-between font-bold tracking-widest uppercase text-noir hover:text-champagne transition-colors text-left"
                 >
                   <span>DELIVERY & ALTERATIONS</span>
                   {openAccordion === 'SHIPPING' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -443,7 +445,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               <div>
                 <button
                   onClick={() => toggleAccordion('CARE')}
-                  className="w-full py-3.5 flex items-center justify-between font-bold tracking-widest uppercase text-[#000000] hover:text-[#C5A880] transition-colors text-left"
+                  className="w-full py-3.5 flex items-center justify-between font-bold tracking-widest uppercase text-noir hover:text-champagne transition-colors text-left"
                 >
                   <span>CARE INSTRUCTIONS</span>
                   {openAccordion === 'CARE' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -466,7 +468,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             <span className="text-[10px] font-mono-luxury text-neutral-500 uppercase tracking-[0.25em]">
               Editorial Curation
             </span>
-            <h2 className="font-sans-luxury text-2xl sm:text-3xl font-bold tracking-tight text-[#000000] uppercase">
+            <h2 className="font-sans-luxury text-2xl sm:text-3xl font-bold tracking-tight text-noir uppercase">
               More Finaluchi Pieces
             </h2>
           </div>
@@ -475,25 +477,37 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             {recommendations.map((rec) => (
               <div
                 key={rec.id}
+                role="button"
+                tabIndex={0}
+                aria-label={`View ${rec.name}`}
                 onClick={() => {
                   playTactileClick();
                   onSelectProduct(rec);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    playTactileClick();
+                    onSelectProduct(rec);
+                  }
                 }}
                 className="group cursor-pointer flex flex-col transition-all"
               >
                 <div className="aspect-[3/4] w-full overflow-hidden bg-[#F7F7F7] mb-3 p-3 flex items-center justify-center">
                   <img
                     src={rec.colorways[0].heroImageUrl}
+                    srcSet={buildWebPSrcSet(rec.colorways[0].heroImageUrl)}
+                    sizes="(min-width: 1024px) 22vw, 46vw"
                     alt={rec.name}
                     onError={onImageError}
                     className="w-full h-full object-contain group-hover:scale-104 transition-transform duration-700 ease-out"
                   />
                 </div>
                 <div className="space-y-1">
-                  <h4 className="text-xs sm:text-sm font-sans-luxury font-semibold uppercase text-[#000000] group-hover:text-[#A67C4A] transition-colors line-clamp-1">
+                  <h3 className="text-xs sm:text-sm font-sans-luxury font-semibold uppercase text-noir group-hover:text-bronze transition-colors line-clamp-1">
                     {rec.name}
-                  </h4>
-                  <div className="text-xs sm:text-sm font-mono-luxury text-[#000000] font-bold">
+                  </h3>
+                  <div className="text-xs sm:text-sm font-mono-luxury text-noir font-bold">
                     {formatPriceWithDisplay(rec.basePriceKobo, displayCurrency)}
                   </div>
                 </div>

@@ -18,7 +18,7 @@ export const ReadyToWearGrid: React.FC<ReadyToWearGridProps> = ({
   const { playTactileClick } = useAudioStore();
 
   return (
-    <section className="w-full bg-[#FFFFFF] py-16 sm:py-24 border-b border-black/[0.08]">
+    <section className="w-full bg-white py-16 sm:py-24 border-b border-black/[0.08]">
       <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12">
 
         {/* Section Header */}
@@ -26,8 +26,8 @@ export const ReadyToWearGrid: React.FC<ReadyToWearGridProps> = ({
 
           <div className="space-y-2 max-w-2xl">
             <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C5A880]" />
-              <span className="text-[10px] sm:text-xs font-mono-luxury uppercase tracking-[0.26em] text-[#A67C4A] font-semibold">
+              <span className="w-1.5 h-1.5 rounded-full bg-champagne" />
+              <span className="text-[10px] sm:text-xs font-mono-luxury uppercase tracking-[0.26em] text-bronze font-semibold">
                 Maison Curation · Ready-to-Wear
               </span>
             </div>
@@ -48,10 +48,10 @@ export const ReadyToWearGrid: React.FC<ReadyToWearGridProps> = ({
                 playTactileClick();
                 onSeeMore();
               }}
-              className="group flex items-center justify-center gap-2 px-4 py-2.5 sm:py-2 text-xs font-sans-luxury font-bold tracking-[0.15em] text-noir hover:text-[#A67C4A] transition-all uppercase border border-black/15 hover:border-black active:scale-[0.98]"
+              className="group flex items-center justify-center gap-2 px-4 py-2.5 sm:py-2 text-xs font-sans-luxury font-bold tracking-[0.15em] text-noir hover:text-bronze transition-all uppercase border border-black/15 hover:border-black active:scale-[0.98]"
             >
               <span>Shop the Capsule</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-[#A67C4A]" />
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-bronze" />
             </button>
           </div>
 

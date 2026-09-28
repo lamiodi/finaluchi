@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Ruler, Sparkles } from 'lucide-react';
 import { useAudioStore } from '../../stores/audioStore';
+import { useModalA11y } from '../../lib/useModalA11y';
 
 interface SizeGuideModalProps {
   isOpen: boolean;
@@ -15,6 +16,7 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
 }) => {
   const [unit, setUnit] = useState<'CM' | 'IN'>('CM');
   const { playTactileClick } = useAudioStore();
+  const panelRef = useModalA11y<HTMLDivElement>({ onClose, isOpen });
 
   if (!isOpen) return null;
 
@@ -39,8 +41,15 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
   const currentTable = unit === 'CM' ? sizeTableCM : sizeTableIN;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#000000]/80 backdrop-blur-md animate-in fade-in duration-200 font-sans-luxury">
-      <div className="bg-[#FFFFFF] text-[#000000] w-full max-w-2xl border border-black/20 shadow-2xl p-6 sm:p-10 relative max-h-[92vh] overflow-y-auto">
+    <div className="fixed inset-0 z-[600] flex items-center justify-center p-3 sm:p-4 bg-noir/80 backdrop-blur-md animate-in fade-in duration-200 font-sans-luxury">
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="size-guide-title"
+        tabIndex={-1}
+        className="bg-white text-noir w-full max-w-2xl border border-black/20 shadow-2xl p-6 sm:p-10 relative max-h-[92vh] overflow-y-auto outline-none"
+      >
         
         {/* Close Button */}
         <button
@@ -48,20 +57,20 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
             playTactileClick();
             onClose();
           }}
-          className="absolute top-4 right-4 p-2 text-black/50 hover:text-[#000000] transition-colors"
+          className="absolute top-4 right-4 p-2 text-muted hover:text-noir transition-colors"
           aria-label="Close Size Guide"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Title */}
-        <div className="flex items-center gap-2 text-[#C5A880] mb-1.5">
+        <div className="flex items-center gap-2 text-champagne mb-1.5">
           <Ruler className="w-4 h-4" />
           <span className="text-[10px] sm:text-[11px] font-mono-luxury tracking-[0.25em] uppercase font-semibold">
             SIZE GUIDANCE
           </span>
         </div>
-        <h3 className="font-sans-luxury text-2xl sm:text-3xl font-bold tracking-tight text-[#000000] uppercase mb-2">
+        <h3 id="size-guide-title" className="font-sans-luxury text-2xl sm:text-3xl font-bold tracking-tight text-noir uppercase mb-2">
           Size & Measurement Guide
         </h3>
         <p className="text-xs sm:text-sm text-black/70 leading-relaxed mb-6 font-light">
@@ -70,7 +79,7 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
 
         {/* Unit Toggle */}
         <div className="flex items-center justify-between border-b border-black/10 pb-3 mb-5">
-          <span className="text-xs font-bold tracking-widest uppercase text-[#000000]">
+          <span className="text-xs font-bold tracking-widest uppercase text-noir">
             INTERNATIONAL SIZE CHART
           </span>
           <div className="flex gap-1 border border-black/20 p-0.5 text-xs">
@@ -79,7 +88,8 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
                 playTactileClick();
                 setUnit('CM');
               }}
-              className={`px-3 py-1 font-semibold transition-colors ${unit === 'CM' ? 'bg-[#000000] text-[#FFFFFF]' : 'text-black/60 hover:text-[#000000]'}`}
+              aria-pressed={unit === 'CM'}
+              className={`px-3 py-1 font-semibold transition-colors ${unit === 'CM' ? 'bg-noir text-white' : 'text-black/60 hover:text-noir'}`}
             >
               CM
             </button>
@@ -88,7 +98,8 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
                 playTactileClick();
                 setUnit('IN');
               }}
-              className={`px-3 py-1 font-semibold transition-colors ${unit === 'IN' ? 'bg-[#000000] text-[#FFFFFF]' : 'text-black/60 hover:text-[#000000]'}`}
+              aria-pressed={unit === 'IN'}
+              className={`px-3 py-1 font-semibold transition-colors ${unit === 'IN' ? 'bg-noir text-white' : 'text-black/60 hover:text-noir'}`}
             >
               INCHES
             </button>
@@ -112,7 +123,7 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
             <tbody className="divide-y divide-black/10 font-mono-luxury text-xs">
               {currentTable.map((row) => (
                 <tr key={row.size} className="hover:bg-black/5 transition-colors">
-                  <td className="py-3 px-2 font-bold font-sans-luxury text-[#000000]">{row.size}</td>
+                  <td className="py-3 px-2 font-bold font-sans-luxury text-noir">{row.size}</td>
                   <td className="py-3 px-2 text-black/60">{row.uk}</td>
                   <td className="py-3 px-2 text-black/60">{row.us}</td>
                   <td className="py-3 px-2">{row.bust}</td>
@@ -126,10 +137,10 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
         </div>
 
         {/* Made-to-Measure Bespoke Option */}
-        <div className="mt-8 p-5 bg-[#FAFAFA] border border-black/15 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="mt-8 p-5 bg-alabaster-subtle border border-black/15 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <div className="flex items-center gap-2 text-xs font-bold text-[#000000] tracking-widest uppercase">
-              <Sparkles className="w-3.5 h-3.5 text-[#C5A880]" />
+            <div className="flex items-center gap-2 text-xs font-bold text-noir tracking-widest uppercase">
+              <Sparkles className="w-3.5 h-3.5 text-champagne" />
               <span>CUSTOM / MADE-TO-MEASURE FIT</span>
             </div>
             <p className="text-xs text-black/65 font-light">
@@ -143,7 +154,7 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
                 onSelectMadeToMeasure();
                 onClose();
               }}
-              className="px-5 py-3 bg-[#000000] text-[#FFFFFF] text-xs font-bold tracking-widest uppercase whitespace-nowrap hover:bg-neutral-900 border border-[#000000] transition-all"
+              className="px-5 py-3 bg-noir text-white text-xs font-bold tracking-widest uppercase whitespace-nowrap hover:bg-neutral-900 border border-noir transition-all"
             >
               CHOOSE CUSTOM FIT
             </button>
