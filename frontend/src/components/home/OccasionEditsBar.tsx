@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { ProductCategory } from '../../types';
 import { useAudioStore } from '../../stores/audioStore';
-import { StackSpreadStage, StackSpreadCard } from '../ui/stack-spread';
+import { HaloReel, type HaloReelItem } from '../ui/halo-reel';
 
 interface OccasionEditsBarProps {
   onSelectCategory?: (category: ProductCategory) => void;
@@ -24,179 +24,83 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     }
   };
 
-  // The five photographed pieces of the live capsule.
-  const capsuleCards: StackSpreadCard[] = [
-    // 01. DRESSES — The Rossa
+  // The five photographed pieces of the live capsule — the reel repeats them
+  // around the ring; repeats are marked decorative inside HaloReel.
+  const capsuleItems: HaloReelItem[] = [
     {
-      item: {
-        src: '/images/products/rossa-dress/rossa-1-640w.webp',
-        alt: 'The Rossa Dress',
-        title: 'The Rossa Dress',
-        category: 'Dresses',
-        tagline: 'House leopard, shoulder rosette, asymmetric hem — sizes 6–16',
-        onClick: () => handleNavigate('DRESSES'),
-      },
-      stackOffset: { x: -8, y: -10 },
-      stackRotate: -16,
-      target: { x: -35, y: -32, rotate: -2, scale: 0.9, w: 16, h: 28 },
-      targetSm: { x: -23, y: -37, w: 26, h: 19 },
-      z: 2,
+      src: '/images/products/rossa-dress/rossa-1-640w.webp',
+      alt: 'The Rossa Dress — house leopard print with shoulder rosette',
     },
-    // 02. JUMPSUITS — The Cleo
     {
-      item: {
-        src: '/images/products/cleo-capri-jumpsuit/cleo-1-640w.webp',
-        alt: 'Cleo Capri Jumpsuit',
-        title: 'Cleo Capri Jumpsuit',
-        category: 'Jumpsuits',
-        tagline: 'Plunging halter with the leopard sash — sizes 6–14',
-        onClick: () => handleNavigate('JUMPSUITS'),
-      },
-      stackOffset: { x: 12, y: -12 },
-      stackRotate: 18,
-      target: { x: 35, y: -30, rotate: 2, scale: 0.92, w: 16, h: 29 },
-      targetSm: { x: 23, y: -37, w: 26, h: 19 },
-      z: 3,
+      src: '/images/products/cleo-capri-jumpsuit/cleo-1-640w.webp',
+      alt: 'Cleo Capri Jumpsuit — plunging halter with leopard sash',
     },
-    // 03. TOPS — Dahlia Tank
     {
-      item: {
-        src: '/images/products/dahlia-tank-top/dahlia-4-640w.webp',
-        alt: 'Dahlia Tank Top',
-        title: 'Dahlia Tank Top',
-        category: 'Tops',
-        tagline: 'Ribbed crop with the leopard teardrop — S–L',
-        onClick: () => handleNavigate('TOPS'),
-      },
-      stackOffset: { x: -14, y: 2 },
-      stackRotate: -6,
-      target: { x: -17, y: -34, rotate: 1, scale: 0.88, w: 15, h: 26 },
-      targetSm: { x: -31, y: 37, w: 26, h: 19 },
-      z: 4,
+      src: '/images/products/dahlia-tank-top/dahlia-4-640w.webp',
+      alt: 'Dahlia Tank Top — ribbed crop with leopard teardrop',
     },
-    // 04. SKIRTS — Dahlia Skirt
     {
-      item: {
-        src: '/images/products/dahlia-skirt/dahlia-1-640w.webp',
-        alt: 'Dahlia Skirt',
-        title: 'Dahlia Skirt',
-        category: 'Skirts',
-        tagline: '3D rosettes in deep house wine — sizes 6–18',
-        onClick: () => handleNavigate('SKIRTS'),
-      },
-      stackOffset: { x: 2, y: -8 },
-      stackRotate: -2,
-      target: { x: 17, y: -34, rotate: -1, scale: 0.88, w: 15, h: 26 },
-      targetSm: { x: 0, y: 37, w: 26, h: 19 },
-      z: 5,
+      src: '/images/products/dahlia-skirt/dahlia-1-640w.webp',
+      alt: 'Dahlia Skirt — hand-mounted 3D rosettes in house wine',
     },
-    // 05. 2PIECES — Leonie
     {
-      item: {
-        src: '/images/products/leonie-capri-lounge-2-piece/leonie-3-640w.webp',
-        alt: 'Leonie Capri Lounge 2 Piece',
-        title: 'Leonie Lounge Set',
-        category: '2 Pieces',
-        tagline: 'Leopard jersey with red ribbon ties — sizes 10–16',
-        onClick: () => handleNavigate('2PIECES'),
-      },
-      stackOffset: { x: 16, y: 4 },
-      stackRotate: 8,
-      target: { x: 0, y: 37, rotate: -1, scale: 0.88, w: 15, h: 26 },
-      targetSm: { x: 31, y: 37, w: 26, h: 19 },
-      z: 6,
+      src: '/images/products/leonie-capri-lounge-2-piece/leonie-3-640w.webp',
+      alt: 'Leonie Capri Lounge 2 Piece — leopard jersey with red ribbon ties',
     },
   ];
 
   return (
-    <div className="w-full bg-white border-b border-black/10">
+    <section className="w-full bg-white border-b border-black/10">
 
-      {/* =========================================================================
-          DESKTOP & LARGE VIEWPORTS: CINEMATIC SCROLL-TO-EXPLORE SCATTER STAGE
-          ========================================================================= */}
-      <div className="hidden lg:block">
-        <StackSpreadStage
-          cards={capsuleCards}
-          scrollLength={320}
-          bgColor="#FFFFFF"
-          clusterRotation={true}
-          stackScale={0.82}
-          cardRadius={6}
-          textColor="#000000"
-          textFadeStart={0.20}
-          showScrollHint={true}
-          heading={
-            <div className="space-y-3 max-w-4xl mx-auto pointer-events-none px-4">
-              <span className="text-[10px] sm:text-[11px] font-mono-luxury uppercase tracking-[0.3em] text-taupe font-medium block">
-                The Capsule · Five Pieces
-              </span>
-              <h2 className="font-sans-luxury text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-noir uppercase leading-[1.02]">
-                Find Your Finaluchi Piece
-              </h2>
-            </div>
-          }
-          subtitle={
-            <div className="mt-4 max-w-2xl mx-auto space-y-5 pointer-events-auto px-4">
-              <p className="text-xs sm:text-sm text-neutral-600 font-light leading-relaxed tracking-normal">
-                Five ready-to-wear pieces — dresses, jumpsuits, tops, skirts and lounge sets — photographed on the Finaluchi client.
-              </p>
-              <div className="pt-2 flex items-center justify-center gap-3">
-                <button
-                  onClick={() => handleNavigate('ALL')}
-                  className="group inline-flex items-center gap-2.5 px-7 py-3 bg-black text-white text-[11px] font-sans-luxury font-semibold uppercase tracking-widest hover:bg-neutral-800 transition-all rounded-xs shadow-sm hover:gap-3.5"
-                >
-                  <span>Shop the Capsule</span>
-                  <ArrowRight className="w-3.5 h-3.5 transition-transform" />
-                </button>
-              </div>
-            </div>
-          }
-        />
+      {/* Section Header */}
+      <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 pt-16 sm:pt-24 pb-8 sm:pb-12">
+        <div className="flex flex-col items-center text-center gap-4 max-w-2xl mx-auto">
+          <span className="text-[10px] sm:text-[11px] font-mono-luxury uppercase tracking-[0.3em] text-taupe font-medium block">
+            The Capsule · Five Pieces
+          </span>
+          <h2 className="font-sans-luxury text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-noir uppercase leading-[1.02]">
+            Find Your Finaluchi Piece
+          </h2>
+          <p className="text-xs sm:text-sm text-neutral-600 font-light leading-relaxed tracking-normal">
+            Five ready-to-wear pieces — dresses, jumpsuits, tops, skirts and lounge sets — photographed on the Finaluchi client.
+          </p>
+          <div className="pt-2">
+            <button
+              onClick={() => handleNavigate('ALL')}
+              className="group inline-flex items-center gap-2.5 px-7 py-3 bg-black text-white text-[11px] font-sans-luxury font-semibold uppercase tracking-widest hover:bg-neutral-800 transition-all rounded-xs shadow-sm hover:gap-3.5"
+            >
+              <span>Shop the Capsule</span>
+              <ArrowRight className="w-3.5 h-3.5 transition-transform" />
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* =========================================================================
-          MOBILE & TABLET VIEWPORTS (< 1024px)
-          ========================================================================= */}
-      <div className="block lg:hidden w-full bg-white">
-        <StackSpreadStage
-          cards={capsuleCards}
-          scrollLength={250}
-          bgColor="#FFFFFF"
-          clusterRotation={true}
-          stackScale={0.78}
-          cardRadius={6}
-          textColor="#000000"
-          textFadeStart={0.14}
-          showScrollHint={true}
-          heading={
-            <div className="space-y-2 max-w-xs mx-auto pointer-events-none px-4">
-              <span className="text-[10px] font-mono-luxury uppercase tracking-[0.28em] text-taupe font-medium block">
-                The Capsule
-              </span>
-              <h2 className="font-sans-luxury text-2xl sm:text-3xl font-bold tracking-tight text-noir uppercase leading-[1.08]">
-                Find Your Piece
-              </h2>
-            </div>
-          }
-          subtitle={
-            <div className="mt-2.5 max-w-xs mx-auto space-y-3.5 pointer-events-auto px-4">
-              <p className="text-[11px] text-neutral-600 font-light leading-relaxed tracking-normal">
-                Five ready-to-wear pieces, photographed on the Finaluchi client.
-              </p>
-              <div className="flex items-center justify-center pt-1">
-                <button
-                  onClick={() => handleNavigate('ALL')}
-                  className="group inline-flex items-center gap-2 px-6 py-2.5 bg-black text-white text-[10px] font-sans-luxury font-semibold uppercase tracking-widest hover:bg-neutral-800 transition-all rounded-xs shadow-sm"
-                >
-                  <span>Shop the Capsule</span>
-                  <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
-                </button>
-              </div>
-            </div>
-          }
-        />
-      </div>
+      {/* Halo Reel — five pieces orbiting the house wordmark. Drag, swipe or
+          use arrow keys to turn the ring; it also turns on its own. */}
+      <HaloReel
+        items={capsuleItems}
+        aria-label="The Finaluchi capsule — five ready-to-wear pieces"
+        cardWidth={150}
+        cardHeight={205}
+        radiusXRatio={0.58}
+        holdDuration={1600}
+        stepDuration={800}
+        centerLabel={
+          // The ring nearly fills a phone-width stage, leaving no room to park
+          // the wordmark — it only appears once there is space for it (md+).
+          <div className="hidden md:block space-y-3">
+            <span className="block font-sans-luxury text-2xl sm:text-4xl font-bold uppercase tracking-[0.06em] text-noir leading-none">
+              Finaluchi
+            </span>
+            <span className="block text-[9px] sm:text-[10px] font-mono-luxury uppercase tracking-[0.34em] text-taupe">
+              Ready-to-Wear Capsule
+            </span>
+          </div>
+        }
+        className="h-[440px] sm:h-[520px] lg:h-[600px]"
+      />
 
-    </div>
+    </section>
   );
 };
