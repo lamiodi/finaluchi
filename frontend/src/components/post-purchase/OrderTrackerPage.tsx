@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import { 
   CheckCircle2, QrCode, Sparkles, Package,
-  Scissors, Truck, UserCheck, Search, Lock, MessageCircle
+  Scissors, Truck, UserCheck, Search, Lock, MessageCircle, Loader2
 } from 'lucide-react';
 import { useOrderStore } from '../../stores/orderStore';
 import { useAudioStore } from '../../stores/audioStore';
@@ -9,6 +9,7 @@ import { formatKoboToNgn } from '../../utils/formatters';
 import { CertificateModal } from './CertificateModal';
 import { toast } from 'sonner';
 import { BRAND, buildWhatsAppUrl } from '../../data/brand';
+import { isApiConfigured, trackOrder } from '../../lib/api';
 
 interface OrderTrackerPageProps {
   initialOrderNumber?: string;
@@ -29,9 +30,11 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
   initialOrderNumber,
 }) => {
   const [searchInput, setSearchInput] = useState(initialOrderNumber || '');
+  const [emailInput, setEmailInput] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
   const [isCertOpen, setIsCertOpen] = useState(false);
 
-  const { getOrderByNumber, getCertificateBySerial } = useOrderStore();
+  const { getOrderByNumber, getCertificateBySerial, mergeRemoteOrder } = useOrderStore();
   const { playTactileClick } = useAudioStore();
 
   const currentOrder = searchInput.trim() ? getOrderByNumber(searchInput.trim()) : undefined;
@@ -39,11 +42,42 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
     ? getCertificateBySerial(currentOrder.certificateSerialNumber)
     : undefined;
 
-  const handleSearch = (e: React.FormEvent) => {
+  // Order number + checkout email lets the atelier API resolve the order on any
+  // device; without an email (or when the API is unreachable) this browser's
+  // local order history is the fallback.
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     playTactileClick();
-    if (!getOrderByNumber(searchInput)) {
-      toast.error(`Order ${searchInput} not found. Please check order number.`);
+
+    const orderNumber = searchInput.trim().toUpperCase();
+    if (!orderNumber) {
+      toast.error('Enter your order number (e.g. FC-94820).');
+      return;
+    }
+
+    let order = getOrderByNumber(orderNumber);
+    const email = emailInput.trim();
+
+    if (email && isApiConfigured) {
+      setIsSearching(true);
+      const remote = await trackOrder(orderNumber, email);
+      setIsSearching(false);
+      if (remote) {
+        mergeRemoteOrder(remote);
+        order = remote;
+        toast.success(`Order ${orderNumber} found.`);
+      } else if (!order) {
+        toast.error('No order found for that number and email combination. Check both, or contact the atelier on WhatsApp.');
+        return;
+      }
+    }
+
+    if (!order) {
+      toast.error(
+        email || !isApiConfigured
+          ? `Order ${orderNumber} not found on this device. Add the email used at checkout to search across devices.`
+          : `Order ${orderNumber} not found. Please check the order number.`
+      );
     }
   };
 
@@ -66,9 +100,9 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
             </p>
           </div>
 
-          {/* Search by Order Number Form */}
-          <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2.5 w-full sm:w-auto">
-            <div className="relative flex-1 sm:flex-initial">
+          {/* Search by Order Number (+ checkout email for cross-device lookup) */}
+          <form onSubmit={handleSearch} className="flex flex-col gap-2.5 w-full sm:w-auto">
+            <div className="relative flex flex-col sm:flex-row gap-2.5">
               <input
                 type="text"
                 value={searchInput}
@@ -77,14 +111,35 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
                 aria-label="Order Number"
                 className="bg-white/10 border border-white/20 px-4 py-3 text-xs text-white font-mono-luxury uppercase focus:outline-none focus:border-champagne w-full sm:w-64"
               />
+              <input
+                type="email"
+                value={emailInput}
+                onChange={(e) => setEmailInput(e.target.value)}
+                placeholder="Email used at checkout (optional)"
+                aria-label="Email used at checkout"
+                className="bg-white/10 border border-white/20 px-4 py-3 text-xs text-white focus:outline-none focus:border-champagne w-full sm:w-72"
+              />
             </div>
             <button
               type="submit"
-              className="px-6 py-3 bg-white text-noir text-xs font-bold tracking-widest uppercase hover:bg-neutral-200 transition-all flex items-center justify-center gap-1.5 shrink-0"
+              disabled={isSearching}
+              className="px-6 py-3 bg-white text-noir text-xs font-bold tracking-widest uppercase hover:bg-neutral-200 transition-all flex items-center justify-center gap-1.5 disabled:opacity-60"
             >
-              <Search className="w-3.5 h-3.5" />
-              <span>TRACK</span>
+              {isSearching ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <span>SEARCHING…</span>
+                </>
+              ) : (
+                <>
+                  <Search className="w-3.5 h-3.5" />
+                  <span>TRACK</span>
+                </>
+              )}
             </button>
+            <p className="text-[10px] text-white/50 font-mono-luxury">
+              Add your checkout email to view this order from any device.
+            </p>
           </form>
         </div>
       </div>

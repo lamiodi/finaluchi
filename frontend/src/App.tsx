@@ -146,6 +146,12 @@ export const App: React.FC = () => {
     setIsPaystackOpen(true);
   };
 
+  const handlePaymentComplete = (orderNumber: string) => {
+    setTrackerOrderNumber(orderNumber);
+    setIsPaystackOpen(false);
+    setCurrentView('TRACKER');
+  };
+
   const handleOpenPolicy = (policy: PolicyId) => {
     setLegalPolicy(policy);
     setCurrentView('LEGAL');
@@ -393,6 +399,7 @@ export const App: React.FC = () => {
             orderId={pendingPaymentOrderId}
             totalKobo={pendingPaymentTotalKobo}
             customerEmail={pendingPaymentEmail}
+            onPaymentComplete={handlePaymentComplete}
           />
         )}
 

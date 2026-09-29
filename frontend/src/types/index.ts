@@ -57,11 +57,12 @@ export type OccasionType =
   | 'RED_CARPET' 
   | 'COCKTAIL_SOIREE';
 
-export type PaymentStatus = 
-  | 'PAYMENT_PENDING' 
-  | 'PAYMENT_AUTHORIZED' 
-  | 'PAYMENT_SUCCESSFUL' 
-  | 'PAYMENT_FAILED' 
+export type PaymentStatus =
+  | 'PAYMENT_PENDING'
+  | 'PAYMENT_AUTHORIZED'
+  | 'PAYMENT_SUCCESSFUL'
+  | 'PAYMENT_FAILED'
+  | 'PAYMENT_AMOUNT_MISMATCH'
   | 'REFUNDED';
 
 export type OrderStatus = 

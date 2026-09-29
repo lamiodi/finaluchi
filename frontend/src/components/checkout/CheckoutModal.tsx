@@ -36,6 +36,18 @@ const INTL_COUNTRIES = [
   { code: 'IT', name: 'Italy' },
 ];
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Nigerian mobile formats: +2348031234567, 2348031234567 or 08031234567.
+const NG_PHONE_RE = /^(?:\+?234|0)\d{9,10}$/;
+// International: optional + then 7–15 digits (E.164-ish).
+const INTL_PHONE_RE = /^\+?[1-9]\d{6,14}$/;
+
+function isValidPhone(raw: string, country: string): boolean {
+  const digits = raw.replace(/[\s\-()]/g, '');
+  if (!digits) return false;
+  return country === 'NG' ? NG_PHONE_RE.test(digits) : INTL_PHONE_RE.test(digits);
+}
+
 export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   isOpen,
   onClose,
@@ -82,6 +94,20 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
     if (!fullName.trim() || !email.trim() || !phone.trim() || !city.trim() || !addressLine1.trim()) {
       toast.error('Please complete all required delivery details.');
+      return;
+    }
+
+    if (!EMAIL_RE.test(email.trim())) {
+      toast.error('Please enter a valid email address — your order confirmation is sent there.');
+      return;
+    }
+
+    if (!isValidPhone(phone.trim(), country)) {
+      toast.error(
+        country === 'NG'
+          ? 'Enter a valid Nigerian phone number, e.g. +234 803 000 0000 or 0803 000 0000.'
+          : 'Enter your full phone number with the international dialling code, e.g. +1 555 000 0000.'
+      );
       return;
     }
 

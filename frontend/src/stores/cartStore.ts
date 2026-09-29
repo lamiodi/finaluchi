@@ -1,6 +1,14 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { toast } from 'sonner';
 import { CartItem, PackagingOption, Product, ProductColorway } from '../types';
+
+// Rail-stock cap for a ready-to-wear line; made-to-measure pieces are cut per
+// client, so they carry no variant stock ceiling.
+const stockCapFor = (product: Product, size: string, isMadeToMeasure: boolean): number | undefined => {
+  if (isMadeToMeasure) return undefined;
+  return product.variants?.find((v) => v.size === size)?.stockQuantity;
+};
 
 export const PACKAGING_OPTIONS: PackagingOption[] = [
   {
@@ -69,6 +77,23 @@ export const useCartStore = create<CartState>()(
       (item) => item.productId === product.id && item.colorway.id === colorway.id && item.size === size && item.isMadeToMeasure === isMadeToMeasure
     );
 
+    const stockCap = stockCapFor(product, size, isMadeToMeasure);
+    const alreadyInCart = existingIndex > -1 ? get().items[existingIndex].quantity : 0;
+    let quantityToAdd = quantity;
+
+    if (stockCap !== undefined && alreadyInCart + quantityToAdd > stockCap) {
+      quantityToAdd = Math.max(stockCap - alreadyInCart, 0);
+      toast.error(
+        quantityToAdd > 0
+          ? `Only ${stockCap} of this size are available — quantity adjusted.`
+          : `You already have all ${stockCap} available units of this size in your bag.`
+      );
+      if (quantityToAdd <= 0) {
+        set({ isDrawerOpen: true });
+        return;
+      }
+    }
+
     const now = Date.now();
     const expiresAt = now + 15 * 60 * 1000; // 15-minute reservation hold
 
@@ -80,7 +105,7 @@ export const useCartStore = create<CartState>()(
 
     if (existingIndex > -1) {
       const updated = [...get().items];
-      updated[existingIndex].quantity += quantity;
+      updated[existingIndex].quantity += quantityToAdd;
       set({ items: updated, isDrawerOpen: true, reservationExpiresAt: expiresAt });
     } else {
       const newItem: CartItem = {
@@ -89,7 +114,7 @@ export const useCartStore = create<CartState>()(
         product,
         colorway,
         size,
-        quantity,
+        quantity: quantityToAdd,
         unitPriceKobo,
         isMadeToMeasure,
         customMeasurements,
@@ -112,8 +137,17 @@ export const useCartStore = create<CartState>()(
       get().removeFromCart(itemId);
       return;
     }
+    const target = get().items.find((item) => item.id === itemId);
+    let clamped = newQuantity;
+    if (target) {
+      const stockCap = stockCapFor(target.product, target.size, target.isMadeToMeasure);
+      if (stockCap !== undefined && newQuantity > stockCap) {
+        clamped = stockCap;
+        toast.error(`Only ${stockCap} of this size are available.`);
+      }
+    }
     const updated = get().items.map((item) =>
-      item.id === itemId ? { ...item, quantity: newQuantity } : item
+      item.id === itemId ? { ...item, quantity: clamped } : item
     );
     set({ items: updated });
   },

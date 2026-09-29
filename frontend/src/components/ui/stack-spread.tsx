@@ -11,7 +11,7 @@ import {
   useSpring,
   useMotionValueEvent,
   type MotionValue,
-} from "motion/react";
+} from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 const IMG_BASE =

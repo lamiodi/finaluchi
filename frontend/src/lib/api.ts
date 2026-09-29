@@ -38,10 +38,12 @@ export function submitOrder(order: Order): Promise<unknown> {
   });
 }
 
-export function markOrderPaid(orderNumber: string, gatewayReference: string): Promise<unknown> {
-  return request(`/api/orders/${encodeURIComponent(orderNumber)}/paid`, {
+// Server-to-server verification of a Paystack reference. The backend calls
+// Paystack's verify API with its secret key before an order can turn paid —
+// the client callback alone is never trusted.
+export async function verifyPayment(reference: string): Promise<{ ok: boolean; order?: Order; alreadyPaid?: boolean } | null> {
+  return request(`/api/payments/verify/${encodeURIComponent(reference)}`, {
     method: 'POST',
-    body: JSON.stringify({ gatewayReference }),
   });
 }
 

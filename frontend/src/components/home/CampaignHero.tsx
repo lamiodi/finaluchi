@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { useAudioStore } from '../../stores/audioStore';
-import { useReducedMotion } from 'motion/react';
+import { useReducedMotion } from 'framer-motion';
 import { buildWebPSrcSet, webpVariant } from '../../utils/images';
 
 interface CampaignHeroProps {

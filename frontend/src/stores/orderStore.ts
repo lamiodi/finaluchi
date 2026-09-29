@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import { Appointment, AuditLogEntry, DigitalCertificate, Order, OrderItemSnapshot, ShippingAddress } from '../types';
 import { useCartStore } from './cartStore';
 import { generateCertificateSerialNumber, generateOrderNumber } from '../utils/formatters';
-import { markOrderPaid, submitAppointment, submitOrder } from '../lib/api';
+import { submitAppointment, submitOrder } from '../lib/api';
 
 interface OrderState {
   orders: Order[];
@@ -299,8 +299,9 @@ export const useOrderStore = create<OrderState>()(
 
     useCartStore.getState().clearCart();
 
-    // Notify the backend so the atelier ledger and confirmation email fire.
-    void markOrderPaid(targetOrder?.orderNumber || orderId, gatewayReference);
+    // The backend ledger is updated server-side by POST /api/payments/verify
+    // (or the signed webhook) before this local celebration fires — nothing to
+    // push from here.
 
     return targetOrder || get().orders[0];
   },
