@@ -15,6 +15,7 @@ import {
   type MotionValue,
 } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { onImageError } from "@/utils/images";
 
 /* ── Halo Reel ───────────────────────────────────────────────────
  * Cards ride an ellipse. Card i sits at θ = i·step + rotation on an
@@ -37,6 +38,9 @@ export type HaloReelItem = {
   /** Image for the card. Omit it and the card falls back to the text face. */
   src?: string;
   alt?: string;
+  /** Caption strip over the bottom of an image card (name + price). */
+  label?: string;
+  sublabel?: string;
   /** Text face, used when there is no `src`. Both default to neutral
    *  surfaces, so a text card themes itself in light and dark. */
   bgColor?: string;
@@ -407,12 +411,32 @@ function WheelCard({
       className="absolute overflow-hidden shadow-xl"
     >
       {item.src ? (
-        <img
-          src={item.src}
-          alt={decorative ? "" : (item.alt ?? "")}
-          draggable={false}
-          className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover"
-        />
+        <>
+          {/* Dark ground so the white crest fallback (photo pending) reads as
+              a deliberate card; a real photo covers it edge to edge. */}
+          <div className="absolute inset-0 bg-noir" />
+          <img
+            src={item.src}
+            alt={decorative ? "" : (item.alt ?? "")}
+            draggable={false}
+            onError={onImageError}
+            className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover"
+          />
+          {(item.label || item.sublabel) && (
+            <div className="absolute inset-x-0 bottom-0 bg-white/90 px-1.5 py-1.5 text-center backdrop-blur-[2px]">
+              {item.label ? (
+                <span className="block truncate font-sans-luxury text-[9px] font-semibold uppercase tracking-[0.14em] text-noir sm:text-[10px]">
+                  {item.label}
+                </span>
+              ) : null}
+              {item.sublabel ? (
+                <span className="block font-mono-luxury text-[8px] tracking-[0.1em] text-neutral-600 sm:text-[9px]">
+                  {item.sublabel}
+                </span>
+              ) : null}
+            </div>
+          )}
+        </>
       ) : (
         <div
           className="flex h-full w-full flex-col items-center justify-center gap-1 bg-oyster p-3 text-center text-noir"
