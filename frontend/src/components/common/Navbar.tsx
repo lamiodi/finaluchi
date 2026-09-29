@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   ShoppingBag, Search, Sparkles, Menu, X,
   ChevronDown, Heart, User, MessageCircle, ArrowRight,
@@ -41,6 +41,35 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [hoveredPillar, setHoveredPillar] = useState<string | null>(null);
+
+  // Desktop mega-menu hover timing: a short grace period before closing, so
+  // brushing off the panel (or crossing the trigger→panel gap) doesn't slam
+  // the menu shut mid-move.
+  const closeTimerRef = useRef<number | null>(null);
+  const clearCloseTimer = () => {
+    if (closeTimerRef.current !== null) {
+      window.clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  };
+  const openCollectionsHover = () => {
+    clearCloseTimer();
+    setIsCategoryDropdownOpen(true);
+  };
+  const closeCollectionsNow = () => {
+    clearCloseTimer();
+    setIsCategoryDropdownOpen(false);
+    setHoveredPillar(null);
+  };
+  const scheduleCollectionsClose = () => {
+    clearCloseTimer();
+    closeTimerRef.current = window.setTimeout(() => {
+      closeTimerRef.current = null;
+      setIsCategoryDropdownOpen(false);
+      setHoveredPillar(null);
+    }, 180);
+  };
+  useEffect(() => clearCloseTimer, []);
 
   const { items, openDrawer } = useCartStore();
   const { playTactileClick } = useAudioStore();
@@ -133,22 +162,15 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Desktop Collections Dropdown Trigger */}
             <div
               className="relative"
-              onMouseEnter={() => setIsCategoryDropdownOpen(true)}
-              onMouseLeave={() => {
-                setIsCategoryDropdownOpen(false);
-                setHoveredPillar(null);
-              }}
+              onMouseEnter={openCollectionsHover}
+              onMouseLeave={scheduleCollectionsClose}
               onBlur={(e) => {
                 if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-                  setIsCategoryDropdownOpen(false);
-                  setHoveredPillar(null);
+                  closeCollectionsNow();
                 }
               }}
               onKeyDown={(e) => {
-                if (e.key === 'Escape') {
-                  setIsCategoryDropdownOpen(false);
-                  setHoveredPillar(null);
-                }
+                if (e.key === 'Escape') closeCollectionsNow();
               }}
             >
               <button
@@ -177,7 +199,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {/* Architectural Haute Couture Mega-Directory */}
               {isCategoryDropdownOpen && (
                 <div
-                  className="absolute left-0 top-full mt-1.5 w-[880px] bg-white/98 backdrop-blur-2xl border border-black/10 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] p-7 z-50 animate-in fade-in zoom-in-98 duration-150 rounded-none"
+                  className="absolute left-0 top-full mt-1.5 w-[880px] bg-white/98 backdrop-blur-2xl border border-black/10 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] p-7 z-50 animate-in fade-in zoom-in-98 duration-150 rounded-none before:absolute before:inset-x-0 before:-top-2 before:h-2 before:content-['']"
                 >
                   {/* Mega Menu Eyebrow Header */}
                   <div className="flex items-center justify-between pb-3.5 border-b border-black/10 mb-6">
