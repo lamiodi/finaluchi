@@ -15,6 +15,7 @@ export interface CatalogVariant {
   size: string;
   sku: string;
   stockQuantity: number;
+  priceDeltaKobo?: number; // size-tiered pricing, e.g. Boss Set UK 14–18 +₦30,000
 }
 
 export interface CatalogProduct {
@@ -108,6 +109,71 @@ export const SERVER_CATALOG: CatalogProduct[] = [
       stockQuantity: 8,
     })),
   },
+
+  // ————— THE RECALL COLLECTION · 2024/25 AUTUMN DROP —————
+  // Mirror of the frontend catalog entries (photos pending). Keep in sync
+  // with frontend/src/data/catalog.ts.
+  {
+    id: 'prod-dress-03',
+    name: 'Sloane Dress',
+    basePriceKobo: 12000000,
+    colorways: [{ id: 'cw-dr3-ivory', sku: 'FC-DR-RC24-SLN-IVR', priceDeltaKobo: 0 }],
+    variants: ['6', '8', '10', '12'].map((size) => ({
+      id: `v-dr3-${size}`,
+      size,
+      sku: `FC-DR-RC24-SLN-${size}`,
+      stockQuantity: 8,
+    })),
+  },
+  {
+    id: 'prod-2pc-03',
+    name: 'Boss Set',
+    basePriceKobo: 22000000, // ₦220,000 (UK 6–12); 14–18 carry +₦30,000
+    colorways: [{ id: 'cw-2pc3-black', sku: 'FC-2P-RC24-BSS-BLK', priceDeltaKobo: 0 }],
+    variants: ['6', '8', '10', '12', '14', '16', '18'].map((size) => ({
+      id: `v-2pc3-${size}`,
+      size,
+      sku: `FC-2P-RC24-BSS-${size}`,
+      stockQuantity: 8,
+      priceDeltaKobo: Number(size) >= 14 ? 3000000 : 0, // +₦30,000 for UK 14–18
+    })),
+  },
+  {
+    id: 'prod-dress-04',
+    name: 'Fantasia Dress',
+    basePriceKobo: 14500000,
+    colorways: [{ id: 'cw-dr4-ivory', sku: 'FC-DR-RC24-FNT-IVR', priceDeltaKobo: 0 }],
+    variants: ['6', '8', '10', '12'].map((size) => ({
+      id: `v-dr4-${size}`,
+      size,
+      sku: `FC-DR-RC24-FNT-${size}`,
+      stockQuantity: 8,
+    })),
+  },
+  {
+    id: 'prod-dress-05',
+    name: 'Elizabeth Brazer Dress',
+    basePriceKobo: 24500000,
+    colorways: [{ id: 'cw-dr5-ivory', sku: 'FC-DR-RC24-ELZ-IVR', priceDeltaKobo: 0 }],
+    variants: ['6', '8', '10', '12'].map((size) => ({
+      id: `v-dr5-${size}`,
+      size,
+      sku: `FC-DR-RC24-ELZ-${size}`,
+      stockQuantity: 8,
+    })),
+  },
+  {
+    id: 'prod-dress-06',
+    name: 'Teresa Dress',
+    basePriceKobo: 10500000,
+    colorways: [{ id: 'cw-dr6-ivory', sku: 'FC-DR-RC24-TRS-IVR', priceDeltaKobo: 0 }],
+    variants: ['6', '8', '10', '12'].map((size) => ({
+      id: `v-dr6-${size}`,
+      size,
+      sku: `FC-DR-RC24-TRS-${size}`,
+      stockQuantity: 8,
+    })),
+  },
 ];
 
 export function findCatalogProduct(productId: string): CatalogProduct | undefined {
@@ -163,7 +229,7 @@ export function priceOrderItems(rawItems: unknown[]): PriceItemsResult {
 
     const unitPriceKobo = isMadeToMeasure
       ? Math.max(0, Math.round(Number(item.unitPriceKobo) || 0))
-      : product.basePriceKobo + (colorway?.priceDeltaKobo || 0);
+      : product.basePriceKobo + (colorway?.priceDeltaKobo || 0) + (variant?.priceDeltaKobo || 0);
 
     if (variant) {
       const alreadyRequested = requestedPerVariant.get(variant.id) || 0;

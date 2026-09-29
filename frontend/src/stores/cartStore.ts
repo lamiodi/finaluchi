@@ -101,7 +101,13 @@ export const useCartStore = create<CartState>()(
       ? product.variants?.find((v) => v.size === 'MADE_TO_MEASURE' || v.sizeLabel === 'MADE_TO_MEASURE')
       : undefined;
     const mtmDeltaKobo = mtmVariant?.priceDeltaKobo || 0;
-    const unitPriceKobo = product.basePriceKobo + (colorway.priceDeltaKobo || 0) + mtmDeltaKobo;
+    // Size-tiered pricing (e.g. Boss Set UK 14–18 carries +₦30,000) rides on
+    // the selected variant's priceDeltaKobo.
+    const sizeVariant = isMadeToMeasure
+      ? undefined
+      : product.variants?.find((v) => (v.sizeLabel || v.size) === size);
+    const sizeDeltaKobo = sizeVariant?.priceDeltaKobo || 0;
+    const unitPriceKobo = product.basePriceKobo + (colorway.priceDeltaKobo || 0) + sizeDeltaKobo + mtmDeltaKobo;
 
     if (existingIndex > -1) {
       const updated = [...get().items];

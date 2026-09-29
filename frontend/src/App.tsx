@@ -248,7 +248,9 @@ export const App: React.FC = () => {
             <OccasionEditsBar onSelectCategory={handleNavigatePillar} onSelectOccasion={handleNavigatePillar} />
 
             <ReadyToWearGrid
-              products={MASTER_CATALOG}
+              // Home capsule shows photographed pieces only — unphotographed
+              // drops stay in the catalog until their photos land (isFeatured).
+              products={MASTER_CATALOG.filter((p) => p.isFeatured)}
               onSelectProduct={handleSelectProduct}
               onSeeMore={() => handleNavigatePillar('ALL')}
             />

@@ -179,6 +179,7 @@ export interface Product {
   editorialQuote?: string;
   isFeatured?: boolean;
   displayProportion?: 'tall' | 'standard' | 'wide';
+  collectionId?: string; // links to MASTER_COLLECTIONS in data/collections.ts
 }
 
 export interface CartItem {

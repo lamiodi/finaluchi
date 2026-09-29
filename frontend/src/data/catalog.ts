@@ -312,6 +312,265 @@ export const MASTER_PRODUCTS: Product[] = [
     ],
     completeTheLookProductIds: ['prod-top-02', 'prod-skirt-02'],
   },
+
+  // ————— THE RECALL COLLECTION · 2024/25 AUTUMN DROP —————
+  // Photos pending: media folders are public/images/products/<slug>/ — drop
+  // <product>-1.jpeg, -2.jpeg … into each and commit+push (Vercel serves
+  // images from the repo, not a database). Until then every image reference
+  // degrades to the house crest via onImageError.
+
+  // 6. SLOANE DRESS — Dresses, ₦120,000, UK 6–12
+  {
+    id: 'prod-dress-03',
+    name: 'Sloane Dress',
+    slug: 'sloane-dress',
+    pillar: 'DRESSES',
+    categoryName: 'Dresses',
+    headline: 'The Sloane — an easy day-to-evening dress with a fluid skirt.',
+    description: 'The Sloane keeps the evening simple: a clean neckline, a quietly sculpted waist and a fluid skirt that carries from afternoon errands to dinner reservations. One of five pieces in the Recall Collection, made to be recalled season after season.',
+    atelierNotes: 'Ready-to-wear piece produced in limited runs.',
+    basePriceKobo: 12000000, // ₦120,000
+    availability: 'AVAILABLE',
+    occasions: ['PRIVATE_DINNER', 'COCKTAIL_SOIREE', 'WEDDING'],
+    displayProportion: 'standard',
+    isFeatured: false, // TODO(product): flip on when photos land
+    isMadeToMeasureAllowed: false,
+    has360Rotation: false,
+    editorialQuote: 'Simple, but never plain — the one you reach for first.',
+    fabricIntelligence: {
+      material: 'To be confirmed', // TODO(product): confirm with atelier
+      composition: 'To be confirmed', // TODO(product)
+      weightGsm: 180, // TODO(product): confirm
+      drapeDescription: 'Fluid, body-skimming drape',
+      finish: 'To be confirmed', // TODO(product)
+      careInstructions: 'Dry clean recommended. Cool iron on reverse.',
+    },
+    silhouette: { fit: 70, drape: 75, weight: 35, structure: 30, stretch: 15 },
+    colorways: [
+      {
+        // TODO(product): placeholder colour — update when photos arrive.
+        id: 'cw-dr3-ivory',
+        colorId: 'cl-02',
+        color: getColorByCode('CL-02'),
+        sku: 'FC-DR-RC24-SLN-IVR',
+        heroImageUrl: '/images/products/sloane-dress/sloane-1.jpeg',
+        mediaGalleryUrls: ['/images/products/sloane-dress/sloane-1.jpeg'],
+        rotationFrameUrls: [],
+        isDefault: true,
+      },
+    ],
+    variants: [
+      { id: 'v-dr3-6', size: '6', sizeLabel: '6', sku: 'FC-DR-RC24-SLN-6', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-dr3-8', size: '8', sizeLabel: '8', sku: 'FC-DR-RC24-SLN-8', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-dr3-10', size: '10', sizeLabel: '10', sku: 'FC-DR-RC24-SLN-10', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-dr3-12', size: '12', sizeLabel: '12', sku: 'FC-DR-RC24-SLN-12', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+    ],
+    completeTheLookProductIds: ['prod-2pc-03', 'prod-dress-06'],
+    collectionId: 'recall-aw2425',
+  },
+
+  // 7. BOSS SET — 2 Pieces, ₦220,000 (UK 6–12) / ₦250,000 (UK 14–18)
+  {
+    id: 'prod-2pc-03',
+    name: 'Boss Set',
+    slug: 'boss-set',
+    pillar: '2PIECES',
+    categoryName: '2pieces',
+    headline: 'The Boss — a statement two-piece that runs boardroom to banquet.',
+    description: 'The Boss Set answers to its name: a commanding two-piece worn as one look. UK 6–12 is ₦220,000; UK 14–18 is ₦250,000 — the larger cut carries the difference. Part of the Recall Collection\'s 2024/25 Autumn Drop.',
+    atelierNotes: 'Ready-to-wear piece produced in limited runs.',
+    basePriceKobo: 22000000, // ₦220,000 (UK 6–12); sizes 14–18 add ₦30,000 via variant delta
+    availability: 'AVAILABLE',
+    occasions: ['GALA_BLACK_TIE', 'RED_CARPET', 'PRIVATE_DINNER'],
+    displayProportion: 'standard',
+    isFeatured: false, // TODO(product): flip on when photos land
+    isMadeToMeasureAllowed: false,
+    has360Rotation: false,
+    editorialQuote: 'Walk in like the meeting is already won.',
+    fabricIntelligence: {
+      material: 'To be confirmed', // TODO(product): confirm with atelier
+      composition: 'To be confirmed', // TODO(product)
+      weightGsm: 220, // TODO(product): confirm
+      drapeDescription: 'Clean structured drape through both pieces',
+      finish: 'To be confirmed', // TODO(product)
+      careInstructions: 'Dry clean recommended. Cool iron on reverse.',
+    },
+    silhouette: { fit: 85, drape: 55, weight: 55, structure: 70, stretch: 10 },
+    colorways: [
+      {
+        // TODO(product): placeholder colour — update when photos arrive.
+        id: 'cw-2pc3-black',
+        colorId: 'cl-01',
+        color: getColorByCode('CL-01'),
+        sku: 'FC-2P-RC24-BSS-BLK',
+        heroImageUrl: '/images/products/boss-set/boss-1.jpeg',
+        mediaGalleryUrls: ['/images/products/boss-set/boss-1.jpeg'],
+        rotationFrameUrls: [],
+        isDefault: true,
+      },
+    ],
+    variants: [
+      { id: 'v-2pc3-6', size: '6', sizeLabel: '6', sku: 'FC-2P-RC24-BSS-6', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-2pc3-8', size: '8', sizeLabel: '8', sku: 'FC-2P-RC24-BSS-8', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-2pc3-10', size: '10', sizeLabel: '10', sku: 'FC-2P-RC24-BSS-10', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-2pc3-12', size: '12', sizeLabel: '12', sku: 'FC-2P-RC24-BSS-12', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-2pc3-14', size: '14', sizeLabel: '14', sku: 'FC-2P-RC24-BSS-14', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 3000000, isMadeToOrder: false }, // +₦30,000
+      { id: 'v-2pc3-16', size: '16', sizeLabel: '16', sku: 'FC-2P-RC24-BSS-16', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 3000000, isMadeToOrder: false }, // +₦30,000
+      { id: 'v-2pc3-18', size: '18', sizeLabel: '18', sku: 'FC-2P-RC24-BSS-18', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 3000000, isMadeToOrder: false }, // +₦30,000
+    ],
+    completeTheLookProductIds: ['prod-dress-03', 'prod-dress-04'],
+    collectionId: 'recall-aw2425',
+  },
+
+  // 8. FANTASIA DRESS — Dresses, ₦145,000, UK 6–12
+  {
+    id: 'prod-dress-04',
+    name: 'Fantasia Dress',
+    slug: 'fantasia-dress',
+    pillar: 'DRESSES',
+    categoryName: 'Dresses',
+    headline: 'The Fantasia — a party dress with movement in every seam.',
+    description: 'Made for the hours after dark, the Fantasia moves the way the night should: fluid through the body, easy at the hem, unbothered by dance floors. The third of five pieces in the Recall Collection.',
+    atelierNotes: 'Ready-to-wear piece produced in limited runs.',
+    basePriceKobo: 14500000, // ₦145,000
+    availability: 'AVAILABLE',
+    occasions: ['COCKTAIL_SOIREE', 'WEDDING'],
+    displayProportion: 'standard',
+    isFeatured: false, // TODO(product): flip on when photos land
+    isMadeToMeasureAllowed: false,
+    has360Rotation: false,
+    editorialQuote: 'Half dress, half evening — entirely Fantasia.',
+    fabricIntelligence: {
+      material: 'To be confirmed', // TODO(product): confirm with atelier
+      composition: 'To be confirmed', // TODO(product)
+      weightGsm: 180, // TODO(product): confirm
+      drapeDescription: 'Fluid, body-skimming drape',
+      finish: 'To be confirmed', // TODO(product)
+      careInstructions: 'Dry clean recommended. Cool iron on reverse.',
+    },
+    silhouette: { fit: 75, drape: 75, weight: 35, structure: 30, stretch: 15 },
+    colorways: [
+      {
+        // TODO(product): placeholder colour — update when photos arrive.
+        id: 'cw-dr4-ivory',
+        colorId: 'cl-02',
+        color: getColorByCode('CL-02'),
+        sku: 'FC-DR-RC24-FNT-IVR',
+        heroImageUrl: '/images/products/fantasia-dress/fantasia-1.jpeg',
+        mediaGalleryUrls: ['/images/products/fantasia-dress/fantasia-1.jpeg'],
+        rotationFrameUrls: [],
+        isDefault: true,
+      },
+    ],
+    variants: [
+      { id: 'v-dr4-6', size: '6', sizeLabel: '6', sku: 'FC-DR-RC24-FNT-6', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-dr4-8', size: '8', sizeLabel: '8', sku: 'FC-DR-RC24-FNT-8', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-dr4-10', size: '10', sizeLabel: '10', sku: 'FC-DR-RC24-FNT-10', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-dr4-12', size: '12', sizeLabel: '12', sku: 'FC-DR-RC24-FNT-12', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+    ],
+    completeTheLookProductIds: ['prod-dress-05', 'prod-dress-03'],
+    collectionId: 'recall-aw2425',
+  },
+
+  // 9. ELIZABETH BRAZER DRESS — Dresses, ₦245,000, UK 6–12
+  {
+    id: 'prod-dress-05',
+    name: 'Elizabeth Brazer Dress',
+    slug: 'elizabeth-brazer-dress',
+    pillar: 'DRESSES',
+    categoryName: 'Dresses',
+    headline: 'The Elizabeth — a sculpted bra-top dress with an elongated skirt.',
+    description: 'The Elizabeth leads with its bodice: a brazer top cut close and confident, flowing into a long, unbroken skirt. The collection\'s most sculptural piece — ₦245,000 across UK 6–12.',
+    atelierNotes: 'Ready-to-wear piece produced in limited runs.',
+    basePriceKobo: 24500000, // ₦245,000
+    availability: 'AVAILABLE',
+    occasions: ['WEDDING', 'COCKTAIL_SOIREE', 'PRIVATE_DINNER'],
+    displayProportion: 'standard',
+    isFeatured: false, // TODO(product): flip on when photos land
+    isMadeToMeasureAllowed: false,
+    has360Rotation: false,
+    editorialQuote: 'A bodice with opinions — the Elizabeth speaks first.',
+    fabricIntelligence: {
+      material: 'To be confirmed', // TODO(product): confirm with atelier
+      composition: 'To be confirmed', // TODO(product)
+      weightGsm: 220, // TODO(product): confirm
+      drapeDescription: 'Sculpted hold through the bodice, fluid skirt',
+      finish: 'To be confirmed', // TODO(product)
+      careInstructions: 'Dry clean recommended. Cool iron on reverse.',
+    },
+    silhouette: { fit: 85, drape: 60, weight: 45, structure: 55, stretch: 10 },
+    colorways: [
+      {
+        // TODO(product): placeholder colour — update when photos arrive.
+        id: 'cw-dr5-ivory',
+        colorId: 'cl-02',
+        color: getColorByCode('CL-02'),
+        sku: 'FC-DR-RC24-ELZ-IVR',
+        heroImageUrl: '/images/products/elizabeth-brazer-dress/elizabeth-1.jpeg',
+        mediaGalleryUrls: ['/images/products/elizabeth-brazer-dress/elizabeth-1.jpeg'],
+        rotationFrameUrls: [],
+        isDefault: true,
+      },
+    ],
+    variants: [
+      { id: 'v-dr5-6', size: '6', sizeLabel: '6', sku: 'FC-DR-RC24-ELZ-6', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-dr5-8', size: '8', sizeLabel: '8', sku: 'FC-DR-RC24-ELZ-8', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-dr5-10', size: '10', sizeLabel: '10', sku: 'FC-DR-RC24-ELZ-10', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-dr5-12', size: '12', sizeLabel: '12', sku: 'FC-DR-RC24-ELZ-12', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+    ],
+    completeTheLookProductIds: ['prod-dress-04', 'prod-dress-06'],
+    collectionId: 'recall-aw2425',
+  },
+
+  // 10. TERESA DRESS — Dresses, ₦105,000, UK 6–12
+  {
+    id: 'prod-dress-06',
+    name: 'Teresa Dress',
+    slug: 'teresa-dress',
+    pillar: 'DRESSES',
+    categoryName: 'Dresses',
+    headline: 'The Teresa — the collection\'s lightest dress, made for long evenings.',
+    description: 'The Teresa closes the Recall Collection at ₦105,000: the lightest, easiest piece of the five, cut for long evenings and warm rooms. Simple enough to style up, easy enough to live in.',
+    atelierNotes: 'Ready-to-wear piece produced in limited runs.',
+    basePriceKobo: 10500000, // ₦105,000
+    availability: 'AVAILABLE',
+    occasions: ['COCKTAIL_SOIREE', 'VACATION'],
+    displayProportion: 'standard',
+    isFeatured: false, // TODO(product): flip on when photos land
+    isMadeToMeasureAllowed: false,
+    has360Rotation: false,
+    editorialQuote: 'Light on the body, long on the evening.',
+    fabricIntelligence: {
+      material: 'To be confirmed', // TODO(product): confirm with atelier
+      composition: 'To be confirmed', // TODO(product)
+      weightGsm: 160, // TODO(product): confirm
+      drapeDescription: 'Light, easy drape with gentle movement',
+      finish: 'To be confirmed', // TODO(product)
+      careInstructions: 'Dry clean recommended. Cool iron on reverse.',
+    },
+    silhouette: { fit: 70, drape: 80, weight: 25, structure: 25, stretch: 20 },
+    colorways: [
+      {
+        // TODO(product): placeholder colour — update when photos arrive.
+        id: 'cw-dr6-ivory',
+        colorId: 'cl-02',
+        color: getColorByCode('CL-02'),
+        sku: 'FC-DR-RC24-TRS-IVR',
+        heroImageUrl: '/images/products/teresa-dress/teresa-1.jpeg',
+        mediaGalleryUrls: ['/images/products/teresa-dress/teresa-1.jpeg'],
+        rotationFrameUrls: [],
+        isDefault: true,
+      },
+    ],
+    variants: [
+      { id: 'v-dr6-6', size: '6', sizeLabel: '6', sku: 'FC-DR-RC24-TRS-6', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-dr6-8', size: '8', sizeLabel: '8', sku: 'FC-DR-RC24-TRS-8', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-dr6-10', size: '10', sizeLabel: '10', sku: 'FC-DR-RC24-TRS-10', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-dr6-12', size: '12', sizeLabel: '12', sku: 'FC-DR-RC24-TRS-12', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+    ],
+    completeTheLookProductIds: ['prod-dress-03', 'prod-dress-05'],
+    collectionId: 'recall-aw2425',
+  },
 ];
 
 export const getProductBySlug = (slug: string): Product | undefined => {

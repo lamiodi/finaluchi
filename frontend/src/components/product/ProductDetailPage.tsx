@@ -13,6 +13,7 @@ import { onImageError, buildWebPSrcSet } from '../../utils/images';
 import { SizeGuideModal } from '../common/SizeGuideModal';
 import { toast } from 'sonner';
 import { ORDER_CLARITY_NOTE, buildWhatsAppUrl } from '../../data/brand';
+import { getCollectionById } from '../../data/collections';
 
 interface ProductDetailPageProps {
   product: Product;
@@ -60,6 +61,15 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
   const isSaved = savedEdits.some((e) => e.productIds.includes(product.id));
 
+  // Price follows the selected size tier — variants may carry priceDeltaKobo
+  // (e.g. Boss Set UK 14–18) on top of the base price and colourway delta.
+  const selectedVariant = product.variants?.find((v) => (v.sizeLabel || v.size) === selectedSize);
+  const displayPriceKobo =
+    product.basePriceKobo +
+    (selectedColorway.priceDeltaKobo || 0) +
+    (isMadeToMeasure ? 0 : selectedVariant?.priceDeltaKobo || 0);
+  const collection = getCollectionById(product.collectionId);
+
   // 360 Rotation Frames
   const frames = selectedColorway.rotationFrameUrls?.length > 0
     ? selectedColorway.rotationFrameUrls
@@ -97,7 +107,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       product.name,
       `Colour: ${selectedColorway.color.name} (${selectedColorway.color.code})`,
       `Size: ${isMadeToMeasure ? 'Custom / Made to Measure' : selectedSize}`,
-      `Listed price: ${formatPriceWithDisplay(product.basePriceKobo + (selectedColorway.priceDeltaKobo || 0), displayCurrency)}`,
+      `Listed price: ${formatPriceWithDisplay(displayPriceKobo, displayCurrency)}`,
       '',
       'Before proceeding with payment, please confirm:',
       '1. Itemized written invoice & production schedule',
@@ -233,6 +243,12 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 </div>
               </div>
 
+              {collection && (
+                <p className="text-[10px] sm:text-[11px] font-mono-luxury uppercase tracking-[0.3em] text-bronze">
+                  {collection.title}
+                </p>
+              )}
+
               <h1 className="font-sans-luxury text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-noir uppercase leading-tight">
                 {product.name}
               </h1>
@@ -244,7 +260,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               {/* Price Display */}
               <div className="pt-2">
                 <span className="text-2xl sm:text-3xl font-mono-luxury font-bold text-noir">
-                  {formatPriceWithDisplay(product.basePriceKobo + (selectedColorway.priceDeltaKobo || 0), displayCurrency)}
+                  {formatPriceWithDisplay(displayPriceKobo, displayCurrency)}
                 </span>
                 <span className="text-[10px] text-neutral-500 font-mono-luxury block mt-1 tracking-wider uppercase">
                   Confirm availability and measurements before payment
