@@ -37,3 +37,7 @@ pnpm-debug.log*
 # OS files
 .DS_Store
 Thumbs.db
+
+# Derived responsive WebP variants — regenerated from tracked JPEGs by
+# frontend/scripts/optimize-assets.mjs during `npm run build`
+frontend/public/images/**/*.webp

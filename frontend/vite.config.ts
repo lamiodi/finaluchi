@@ -12,7 +12,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      'motion/react': 'framer-motion',
     },
   },
   build: {
@@ -30,9 +29,7 @@ export default defineConfig({
           }
           if (
             id.includes('node_modules/zustand') ||
-            id.includes('node_modules/sonner') ||
-            id.includes('node_modules/clsx') ||
-            id.includes('node_modules/tailwind-merge')
+            id.includes('node_modules/sonner')
           ) {
             return 'vendor-ui';
           }

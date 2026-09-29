@@ -19,6 +19,20 @@ async function optimizeLogos() {
 
   console.log('--- Optimizing Finaluchi Logos ---');
 
+  const outputs = [
+    { path: path.join(publicDir, 'FINALUCHIlogo.webp'), width: 512, height: 512 },
+    { path: path.join(publicDir, 'FINALUCHIlogo-nav.webp'), width: 256, height: 256 },
+    { path: path.join(publicDir, 'FINALUCHIlogo-preloader.webp'), width: 400, height: 400 },
+    { path: path.join(publicDir, 'FINALUCHIlogo-optimized.jpg'), width: 800, height: 800 },
+  ];
+
+  // Skip regeneration while every output is newer than the crest source.
+  const sourceMtime = fs.statSync(sourceLogo).mtimeMs;
+  if (outputs.every((o) => fs.existsSync(o.path) && fs.statSync(o.path).mtimeMs > sourceMtime)) {
+    console.log('Logos up to date — skipped.');
+    return;
+  }
+
   // 1. General High-Res WebP Logo (512x512)
   const logo512Path = path.join(publicDir, 'FINALUCHIlogo.webp');
   await sharp(sourceLogo)
@@ -107,6 +121,18 @@ async function optimizeImages() {
     const origStat = fs.statSync(origPath);
     totalOrigBytes += origStat.size;
     let lastBytes = 0;
+
+    // Derived artifacts: regenerate a source only when an output is missing
+    // or older than the JPEG it is generated from.
+    const outPaths = SIZES.map(({ suffix }) => origPath.replace(/\.(jpg|jpeg)$/i, `${suffix}.webp`));
+    const upToDate = outPaths.every(
+      (outPath) => fs.existsSync(outPath) && fs.statSync(outPath).mtimeMs > origStat.mtimeMs
+    );
+    if (upToDate) {
+      lastBytes = fs.statSync(outPaths[2]).size;
+      totalWebpBytes += outPaths.reduce((sum, p) => sum + fs.statSync(p).size, 0);
+      continue;
+    }
 
     for (const { suffix, width } of SIZES) {
       const outPath = origPath.replace(/\.(jpg|jpeg)$/i, `${suffix}.webp`);
