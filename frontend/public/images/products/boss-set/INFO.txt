@@ -1,0 +1,19 @@
+BOSS SET — product info & media folder
+=======================================
+Collection : THE RECALL COLLECTION · 2024/25 AUTUMN DROP
+Category   : 2 Pieces
+Sizes      : UK 6–12  → ₦220,000
+             UK 14–18 → ₦250,000  (+₦30,000 applied automatically at size selection)
+Catalog ID : prod-2pc-03   |   SKU: FC-2P-RC24-BSS
+Status     : LIVE in catalog — photos/videos pending (site shows the house crest until media is committed)
+
+PASTE YOUR MEDIA IN THIS FOLDER, NAMED:
+  Photos : boss-1.jpeg, boss-2.jpeg, boss-3.jpeg ...  (.jpg/.jpeg/.png fine)
+  Videos : boss-video-1.mp4, boss-video-2.mov ...      (.mp4/.mov/.webm)
+  * boss-1.jpeg should be a PHOTO — it is the cover shown in grids/search.
+  * Videos play inside the product page gallery automatically.
+  * One folder serves all sizes — no need to duplicate per size tier.
+
+AFTER PASTING: tell me in chat — I wire the files into the gallery,
+commit and push. Vercel builds from GitHub, so media only on this
+computer never reaches the live site.

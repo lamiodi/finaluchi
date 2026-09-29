@@ -9,7 +9,7 @@ import { useCartStore } from '../../stores/cartStore';
 import { useWishlistStore } from '../../stores/wishlistStore';
 import { useAudioStore } from '../../stores/audioStore';
 import { formatPriceWithDisplay } from '../../utils/formatters';
-import { onImageError, buildWebPSrcSet } from '../../utils/images';
+import { onImageError, buildWebPSrcSet, isVideoMedia } from '../../utils/images';
 import { SizeGuideModal } from '../common/SizeGuideModal';
 import { toast } from 'sonner';
 import { ORDER_CLARITY_NOTE, buildWhatsAppUrl } from '../../data/brand';
@@ -190,16 +190,28 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             ) : (
               /* Vertical Lookbook Image Stack */
               <div className="space-y-4">
-                {selectedColorway.mediaGalleryUrls.map((imgUrl, i) => (
+                {selectedColorway.mediaGalleryUrls.map((mediaUrl, i) => (
                   <div key={i} className="aspect-[3/4.2] w-full bg-[#F7F7F7] overflow-hidden group">
-                    <img
-                      src={imgUrl}
-                      srcSet={buildWebPSrcSet(imgUrl)}
-                      sizes="(min-width: 1024px) 50vw, 92vw"
-                      alt={`${product.name} - Angle ${i + 1}`}
-                      onError={onImageError}
-                      className="w-full h-full object-contain group-hover:scale-102 transition-transform duration-700 ease-out p-4"
-                    />
+                    {isVideoMedia(mediaUrl) ? (
+                      <video
+                        src={mediaUrl}
+                        controls
+                        loop
+                        muted
+                        playsInline
+                        preload="metadata"
+                        className="w-full h-full object-contain p-4"
+                      />
+                    ) : (
+                      <img
+                        src={mediaUrl}
+                        srcSet={buildWebPSrcSet(mediaUrl)}
+                        sizes="(min-width: 1024px) 50vw, 92vw"
+                        alt={`${product.name} - Angle ${i + 1}`}
+                        onError={onImageError}
+                        className="w-full h-full object-contain group-hover:scale-102 transition-transform duration-700 ease-out p-4"
+                      />
+                    )}
                   </div>
                 ))}
               </div>

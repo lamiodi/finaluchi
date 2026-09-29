@@ -1,0 +1,18 @@
+ELIZABETH BRAZER DRESS — product info & media folder
+=====================================================
+Collection : THE RECALL COLLECTION · 2024/25 AUTUMN DROP
+Category   : Dresses
+Sizes      : UK 6–12
+Price      : ₦245,000 (all sizes)
+Catalog ID : prod-dress-05   |   SKU: FC-DR-RC24-ELZ
+Status     : LIVE in catalog — photos/videos pending (site shows the house crest until media is committed)
+
+PASTE YOUR MEDIA IN THIS FOLDER, NAMED:
+  Photos : elizabeth-1.jpeg, elizabeth-2.jpeg, elizabeth-3.jpeg ...  (.jpg/.jpeg/.png fine)
+  Videos : elizabeth-video-1.mp4, elizabeth-video-2.mov ...           (.mp4/.mov/.webm)
+  * elizabeth-1.jpeg should be a PHOTO — it is the cover shown in grids/search.
+  * Videos play inside the product page gallery automatically.
+
+AFTER PASTING: tell me in chat — I wire the files into the gallery,
+commit and push. Vercel builds from GitHub, so media only on this
+computer never reaches the live site.
