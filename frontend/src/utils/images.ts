@@ -18,6 +18,9 @@ const IMAGE_EXTENSION = /\.(jpg|jpeg)$/i;
 export const isCommittedPhoto = (url: string | undefined): boolean =>
   !!url && IMAGE_EXTENSION.test(url);
 
+export const isVideoMedia = (url: string | undefined): boolean =>
+  !!url && /\.(mp4|webm|mov|ogg|m4v)(\?.*)?$/i.test(url);
+
 /** Full srcset for the generated WebP ladder. Undefined for non-photo URLs. */
 export const buildWebPSrcSet = (url: string | undefined): string | undefined => {
   if (!isCommittedPhoto(url)) return undefined;

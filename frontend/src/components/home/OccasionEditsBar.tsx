@@ -29,7 +29,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
     // 01. DRESSES — The Rossa
     {
       item: {
-        src: '/images/products/rossa-dress/rossa-1.jpeg',
+        src: '/images/products/rossa-dress/rossa-1-640w.webp',
         alt: 'The Rossa Dress',
         title: 'The Rossa Dress',
         category: 'Dresses',
@@ -39,13 +39,13 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
       stackOffset: { x: -8, y: -10 },
       stackRotate: -16,
       target: { x: -35, y: -32, rotate: -2, scale: 0.9, w: 16, h: 28 },
-      targetSm: { x: -22, y: -44 },
+      targetSm: { x: -23, y: -37, w: 26, h: 19 },
       z: 2,
     },
     // 02. JUMPSUITS — The Cleo
     {
       item: {
-        src: '/images/products/cleo-capri-jumpsuit/cleo-1.jpeg',
+        src: '/images/products/cleo-capri-jumpsuit/cleo-1-640w.webp',
         alt: 'Cleo Capri Jumpsuit',
         title: 'Cleo Capri Jumpsuit',
         category: 'Jumpsuits',
@@ -55,13 +55,13 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
       stackOffset: { x: 12, y: -12 },
       stackRotate: 18,
       target: { x: 35, y: -30, rotate: 2, scale: 0.92, w: 16, h: 29 },
-      targetSm: { x: 22, y: -44 },
+      targetSm: { x: 23, y: -37, w: 26, h: 19 },
       z: 3,
     },
     // 03. TOPS — Dahlia Tank
     {
       item: {
-        src: '/images/products/dahlia-tank-top/dahlia-4.jpeg',
+        src: '/images/products/dahlia-tank-top/dahlia-4-640w.webp',
         alt: 'Dahlia Tank Top',
         title: 'Dahlia Tank Top',
         category: 'Tops',
@@ -71,13 +71,13 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
       stackOffset: { x: -14, y: 2 },
       stackRotate: -6,
       target: { x: -17, y: -34, rotate: 1, scale: 0.88, w: 15, h: 26 },
-      targetSm: { x: -22, y: 15 },
+      targetSm: { x: -31, y: 37, w: 26, h: 19 },
       z: 4,
     },
     // 04. SKIRTS — Dahlia Skirt
     {
       item: {
-        src: '/images/products/dahlia-skirt/dahlia-1.jpeg',
+        src: '/images/products/dahlia-skirt/dahlia-1-640w.webp',
         alt: 'Dahlia Skirt',
         title: 'Dahlia Skirt',
         category: 'Skirts',
@@ -87,13 +87,13 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
       stackOffset: { x: 2, y: -8 },
       stackRotate: -2,
       target: { x: 17, y: -34, rotate: -1, scale: 0.88, w: 15, h: 26 },
-      targetSm: { x: 22, y: 15 },
+      targetSm: { x: 0, y: 37, w: 26, h: 19 },
       z: 5,
     },
     // 05. 2PIECES — Leonie
     {
       item: {
-        src: '/images/products/leonie-capri-lounge-2-piece/leonie-3.jpeg',
+        src: '/images/products/leonie-capri-lounge-2-piece/leonie-3-640w.webp',
         alt: 'Leonie Capri Lounge 2 Piece',
         title: 'Leonie Lounge Set',
         category: '2 Pieces',
@@ -103,7 +103,7 @@ export const OccasionEditsBar: React.FC<OccasionEditsBarProps> = ({
       stackOffset: { x: 16, y: 4 },
       stackRotate: 8,
       target: { x: 0, y: 37, rotate: -1, scale: 0.88, w: 15, h: 26 },
-      targetSm: { x: 0, y: 56 },
+      targetSm: { x: 31, y: 37, w: 26, h: 19 },
       z: 6,
     },
   ];
