@@ -108,7 +108,13 @@ async function ensureLoaded(): Promise<void> {
     db.contacts = Array.isArray(parsed.contacts) ? parsed.contacts : [];
     db.newsletter = Array.isArray(parsed.newsletter) ? parsed.newsletter : [];
   } catch (err: any) {
-    if (err?.code !== 'ENOENT') {
+    if (err?.code === 'ENOENT') return;
+    // Preserve the unreadable file for manual recovery instead of silently
+    // replacing it with an empty store on the next write.
+    try {
+      await fs.promises.rename(DB_FILE, `${DB_FILE}.corrupt-${Date.now()}`);
+      console.error('[Storage] db.json unreadable — moved aside as db.corrupt-*.json, starting empty:', err?.message || err);
+    } catch {
       console.error('[Storage] Failed to read db.json, starting empty:', err?.message || err);
     }
   }

@@ -14,6 +14,7 @@ import {
   sanitizeOrderForClient,
   upsertOrder,
 } from './storage.js';
+import { computeOrderTotals, priceOrderItems } from './catalog.js';
 import {
   notifyStudio,
   sendAppointmentConfirmation,
@@ -100,6 +101,13 @@ function isValidEmail(value: unknown): value is string {
   return typeof value === 'string' && EMAIL_RE.test(value.trim());
 }
 
+// Treat unset / example placeholder values as "not configured". Paystack keys
+// are only usable once a real account exists (see docs/LAUNCH_RUNBOOK.md).
+function isRealSecret(value: string | undefined): boolean {
+  const v = (value || '').trim();
+  return v.length > 0 && !v.includes('your_') && !v.startsWith('sk_test_x') && !v.startsWith('pk_test_x');
+}
+
 // ---------------------------------------------------------------------------
 // Admin authentication: passcode -> short-lived HMAC token
 // ---------------------------------------------------------------------------
@@ -146,6 +154,7 @@ app.get('/api/health', (_req: Request, res: Response) => {
     service: 'finaluchi-backend',
     email: process.env.RESEND_API_KEY ? 'configured' : 'not-configured',
     admin: ADMIN_PASSCODE ? 'configured' : 'not-configured',
+    paystack: isRealSecret(process.env.PAYSTACK_SECRET_KEY) ? 'configured' : 'not-configured',
     timestamp: new Date().toISOString(),
   });
 });
@@ -157,12 +166,37 @@ app.post('/api/orders', rateLimit, async (req: Request, res: Response) => {
   const body = req.body as Partial<StoredOrder>;
   const orderNumber = String(body.orderNumber || '').trim();
 
-  if (!orderNumber || !isValidEmail(body.customerEmail) || !Array.isArray(body.items)) {
-    return res.status(400).json({ error: 'orderNumber, customerEmail and items are required.' });
+  if (!orderNumber || !isValidEmail(body.customerEmail) || !Array.isArray(body.items) || body.items.length === 0) {
+    return res.status(400).json({ error: 'orderNumber, customerEmail and at least one item are required.' });
   }
 
+  // Server-authoritative validation: prices are recomputed from the catalog
+  // mirror and stock caps enforced, so a tampered client ledger never survives.
+  const priced = priceOrderItems(body.items);
+  if (!priced.ok) {
+    return res.status(400).json({ error: priced.error });
+  }
+
+  const country = String((body.shippingAddress as Record<string, unknown> | undefined)?.country || 'NG');
+  const totals = computeOrderTotals(priced.subtotalKobo, String(body.packagingType || 'SIGNATURE_BOX'), country);
+
   try {
-    const order = await upsertOrder(body as StoredOrder);
+    const order = await upsertOrder({
+      ...body,
+      items: priced.items,
+      currency: 'NGN',
+      packagingType: String(body.packagingType || 'SIGNATURE_BOX'),
+      subtotalKobo: priced.subtotalKobo,
+      shippingKobo: totals.shippingKobo,
+      taxKobo: totals.taxKobo,
+      discountKobo: 0,
+      totalKobo: totals.totalKobo,
+      // A new order always starts unpaid regardless of what the client claims;
+      // payment state changes only via verified Paystack flows.
+      paymentStatus: 'PAYMENT_PENDING',
+      orderStatus: 'PENDING_PAYMENT',
+      fulfillmentStatus: 'UNFULFILLED',
+    } as StoredOrder);
 
     void sendOrderConfirmation(order);
     void notifyStudio(`New Order ${order.orderNumber}`, [
@@ -197,23 +231,117 @@ app.get('/api/orders/track', rateLimit, async (req: Request, res: Response) => {
   return res.json({ ok: true, order: sanitizeOrderForClient(order) });
 });
 
-// Payment capture notification from the storefront (Paystack inline success).
-// Authoritative verification remains the signed webhook below.
-app.post('/api/orders/:orderNumber/paid', rateLimit, async (req: Request, res: Response) => {
-  const existing = await findOrderByNumber(String(req.params.orderNumber));
-  if (!existing) return res.status(404).json({ error: 'Order not found.' });
+// ---------------------------------------------------------------------------
+// Payment settlement — shared by the S2S verify endpoint and the webhook.
+// Idempotent, reconciles amount + currency, and only emails on the pending→paid
+// transition so Paystack retry deliveries never spam the client or the atelier.
+// ---------------------------------------------------------------------------
+type SettleResult =
+  | { ok: true; order: Record<string, unknown>; alreadyPaid: boolean }
+  | { ok: false; status: number; error: string };
 
-  const gatewayReference = String(req.body?.gatewayReference || '');
+async function settleSuccessfulPayment(params: {
+  orderNumber: string;
+  reference: string;
+  amount: number;
+  currency: string;
+  source: 'webhook' | 'verify';
+}): Promise<SettleResult> {
+  const existing = await findOrderByNumber(params.orderNumber);
+  if (!existing) {
+    console.warn(
+      `[Payment:${params.source}] Ref ${params.reference} — no matching order "${params.orderNumber}".`
+    );
+    return { ok: false, status: 404, error: 'No matching order for this payment reference.' };
+  }
+
+  // Idempotency guard: redelivered events for an already-paid order stop here.
+  if (existing.paymentStatus === 'PAYMENT_SUCCESSFUL') {
+    return { ok: true, order: sanitizeOrderForClient(existing), alreadyPaid: true };
+  }
+
+  const amountMismatch =
+    (params.currency || '').toUpperCase() !== 'NGN' || Number(params.amount) !== existing.totalKobo;
+  if (amountMismatch) {
+    await upsertOrder({
+      ...existing,
+      paymentStatus: 'PAYMENT_AMOUNT_MISMATCH',
+      gatewayReference: params.reference || existing.gatewayReference,
+    } as StoredOrder);
+    void notifyStudio(`⚠ Payment amount mismatch — ${existing.orderNumber}`, [
+      `Expected: ₦${Math.round((existing.totalKobo || 0) / 100).toLocaleString('en-NG')} NGN`,
+      `Received: ${params.currency} ${Math.round((Number(params.amount) || 0) / 100).toLocaleString('en-NG')} (ref ${params.reference})`,
+      'Order NOT confirmed automatically. Review in the Paystack dashboard before fulfilling.',
+    ]);
+    console.error(
+      `[Payment:${params.source}] Amount mismatch for ${existing.orderNumber}: expected ${existing.totalKobo} kobo, got ${params.amount} ${params.currency}.`
+    );
+    return {
+      ok: false,
+      status: 400,
+      error: 'Payment amount does not match the order total. The atelier has been notified.',
+    };
+  }
+
   const updated = await upsertOrder({
     ...existing,
     paymentStatus: 'PAYMENT_SUCCESSFUL',
     orderStatus: 'CONFIRMED',
     fulfillmentStatus: existing.fulfillmentStatus === 'UNFULFILLED' ? 'ALLOCATED' : existing.fulfillmentStatus,
-    gatewayReference: gatewayReference || existing.gatewayReference,
+    gatewayReference: params.reference || existing.gatewayReference,
   } as StoredOrder);
 
   void sendOrderConfirmation(updated);
-  return res.json({ ok: true, order: sanitizeOrderForClient(updated) });
+  console.log(`[Payment:${params.source}] Order ${updated.orderNumber} confirmed — ref ${params.reference}.`);
+  return { ok: true, order: sanitizeOrderForClient(updated), alreadyPaid: false };
+}
+
+// Server-to-server verification of a Paystack inline checkout. The storefront
+// calls this from the popup success callback; it is the only client-triggered
+// path that can move an order to PAYMENT_SUCCESSFUL, and it trusts nothing but
+// Paystack's own verify API.
+app.post('/api/payments/verify/:reference', rateLimit, async (req: Request, res: Response) => {
+  const secretKey = process.env.PAYSTACK_SECRET_KEY;
+  if (!isRealSecret(secretKey)) {
+    return res.status(503).json({ error: 'Payment gateway is not configured on the server (PAYSTACK_SECRET_KEY).' });
+  }
+
+  const reference = String(req.params.reference || '').trim();
+  if (!reference) return res.status(400).json({ error: 'A payment reference is required.' });
+
+  try {
+    const response = await fetch(
+      `https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`,
+      { headers: { Authorization: `Bearer ${secretKey}` } }
+    );
+    const payload = (await response.json().catch(() => null)) as
+      | { status?: boolean; data?: { status?: string; reference?: string; amount?: number; currency?: string; metadata?: { orderNumber?: string } } }
+      | null;
+    const tx = payload?.data;
+
+    if (!response.ok || !payload?.status || !tx || tx.status !== 'success') {
+      console.warn(`[Payment:verify] Ref ${reference} not successful (gateway status: ${tx?.status || 'unknown'}).`);
+      return res.status(400).json({
+        error: 'Payment was not successful or the reference is unknown.',
+        gatewayStatus: tx?.status || 'unknown',
+      });
+    }
+
+    const orderNumber = tx.metadata?.orderNumber || tx.reference || reference;
+    const result = await settleSuccessfulPayment({
+      orderNumber: String(orderNumber),
+      reference: String(tx.reference || reference),
+      amount: Number(tx.amount),
+      currency: String(tx.currency || ''),
+      source: 'verify',
+    });
+
+    if (!result.ok) return res.status(result.status).json({ error: result.error });
+    return res.json({ ok: true, order: result.order, alreadyPaid: result.alreadyPaid });
+  } catch (err: any) {
+    console.error('[Payment:verify] Failed:', err?.message || err);
+    return res.status(502).json({ error: 'Could not reach the payment gateway to verify this payment.' });
+  }
 });
 
 // ---------------------------------------------------------------------------
@@ -367,53 +495,86 @@ app.post('/api/admin/orders/:orderNumber/dispatch', requireAdmin, async (req: Re
 });
 
 // ---------------------------------------------------------------------------
-// Paystack Webhook Handler with HMAC SHA-512 Verification
+// Paystack Webhook Handler — HMAC SHA-512, fail-closed
 // ---------------------------------------------------------------------------
 app.post('/api/webhooks/paystack', async (req: Request, res: Response) => {
-  const signature = req.headers['x-paystack-signature'] as string | undefined;
+  const signature = req.headers['x-paystack-signature'];
   const webhookSecret = process.env.PAYSTACK_WEBHOOK_SECRET || process.env.PAYSTACK_SECRET_KEY;
 
-  if (webhookSecret && signature) {
-    const rawBody = (req as any).rawBody || Buffer.from(JSON.stringify(req.body));
-    const expectedSignature = crypto
-      .createHmac('sha512', webhookSecret)
-      .update(rawBody)
-      .digest('hex');
-
-    if (signature !== expectedSignature) {
-      console.warn('[Paystack Webhook] Invalid signature rejected.');
-      return res.status(401).json({ error: 'Invalid webhook signature' });
-    }
-  } else if (process.env.NODE_ENV === 'production' && !signature) {
+  // Fail closed: without a configured secret we cannot authenticate Paystack at
+  // all, so the event is rejected instead of trusted.
+  if (!isRealSecret(webhookSecret)) {
+    console.error(
+      '[Paystack Webhook] Rejected: PAYSTACK_WEBHOOK_SECRET / PAYSTACK_SECRET_KEY is not configured.'
+    );
+    return res.status(500).json({ error: 'Webhook secret is not configured.' });
+  }
+  if (typeof signature !== 'string' || signature.length === 0) {
     return res.status(401).json({ error: 'Missing x-paystack-signature header' });
+  }
+
+  const rawBody: Buffer | undefined = (req as any).rawBody;
+  if (!rawBody || rawBody.length === 0) {
+    return res.status(400).json({ error: 'Webhook body unavailable for verification.' });
+  }
+
+  const expectedSignature = crypto
+    .createHmac('sha512', webhookSecret as string)
+    .update(rawBody)
+    .digest('hex');
+  const received = Buffer.from(signature, 'utf-8');
+  const expected = Buffer.from(expectedSignature, 'utf-8');
+  if (received.length !== expected.length || !crypto.timingSafeEqual(received, expected)) {
+    console.warn('[Paystack Webhook] Invalid signature rejected.');
+    return res.status(401).json({ error: 'Invalid webhook signature' });
   }
 
   const event = req.body;
   console.log('[Paystack Webhook Verified]:', event?.event || 'Unknown event');
 
+  const orderNumberFromEvent = (data: any): string | undefined =>
+    data?.metadata?.orderNumber ||
+    (typeof data?.metadata?.custom_fields?.[0]?.value === 'string'
+      ? data.metadata.custom_fields[0].value
+      : undefined) ||
+    (typeof data?.reference === 'string' ? data.reference : undefined);
+
   if (event?.event === 'charge.success') {
     const data = event.data || {};
-    const orderNumber =
-      data?.metadata?.orderNumber ||
-      (typeof data?.metadata?.custom_fields?.[0]?.value === 'string' ? data.metadata.custom_fields[0].value : undefined);
-    const existing = orderNumber ? await findOrderByNumber(orderNumber) : undefined;
-
-    if (existing) {
-      const updated = await upsertOrder({
-        ...existing,
-        paymentStatus: 'PAYMENT_SUCCESSFUL',
-        orderStatus: 'CONFIRMED',
-        fulfillmentStatus: existing.fulfillmentStatus === 'UNFULFILLED' ? 'ALLOCATED' : existing.fulfillmentStatus,
-        gatewayReference: data?.reference || existing.gatewayReference,
-      } as StoredOrder);
-      void sendOrderConfirmation(updated);
-      console.log(`[Paystack Payment Confirmed]: Ref ${data?.reference} matched order ${updated.orderNumber}.`);
-    } else {
-      console.warn(`[Paystack Payment Confirmed]: Ref ${data?.reference} — no matching order (${orderNumber || 'no orderNumber in metadata'}).`);
+    const orderNumber = orderNumberFromEvent(data);
+    if (!orderNumber) {
+      console.warn(`[Paystack Webhook] charge.success ref ${data?.reference} — no order reference in payload.`);
+      return res.status(200).json({ received: true });
     }
+
+    const result = await settleSuccessfulPayment({
+      orderNumber: String(orderNumber),
+      reference: String(data?.reference || ''),
+      amount: Number(data?.amount),
+      currency: String(data?.currency || ''),
+      source: 'webhook',
+    });
+
+    if (!result.ok && result.status === 404) {
+      console.warn(`[Paystack Webhook] charge.success ref ${data?.reference} — order "${orderNumber}" not found.`);
+    }
+    return res.status(200).json({ received: true });
   }
 
-  // Acknowledge receipt immediately with 200 OK
+  if (event?.event === 'charge.failed') {
+    const data = event.data || {};
+    const orderNumber = orderNumberFromEvent(data);
+    const existing = orderNumber ? await findOrderByNumber(orderNumber) : undefined;
+    if (existing && existing.paymentStatus === 'PAYMENT_PENDING') {
+      // Only pending orders roll back — never clobber a successful retry that
+      // may have landed before this failure event.
+      await upsertOrder({ ...existing, paymentStatus: 'PAYMENT_FAILED' } as StoredOrder);
+      console.warn(`[Paystack Webhook] charge.failed — order ${existing.orderNumber} marked PAYMENT_FAILED.`);
+    }
+    return res.status(200).json({ received: true });
+  }
+
+  // Acknowledge all other verified events immediately with 200 OK
   return res.status(200).json({ received: true });
 });
 
@@ -426,7 +587,7 @@ app.get('/', (_req: Request, res: Response) => {
       health: '/api/health',
       orders: 'POST /api/orders',
       track: 'GET /api/orders/track?orderNumber=&email=',
-      markPaid: 'POST /api/orders/:orderNumber/paid',
+      verifyPayment: 'POST /api/payments/verify/:reference',
       appointments: 'POST /api/appointments',
       contact: 'POST /api/contact',
       newsletter: 'POST /api/newsletter',
