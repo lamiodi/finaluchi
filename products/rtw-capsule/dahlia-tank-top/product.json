@@ -1,0 +1,53 @@
+{
+  "name": "Dahlia Tank Top",
+  "slug": "dahlia-tank-top",
+  "id": "prod-top-02",
+  "collection": { "id": null, "name": "RTW core line" },
+  "status": "LIVE",
+  "mirroredOn": "2026-09-29",
+  "sourceOfTruth": "frontend/src/data/catalog.ts + backend/src/catalog.ts (keep in sync)",
+  "category": { "pillar": "TOPS", "categoryName": "Tops" },
+  "isFeatured": true,
+  "pricing": {
+    "currency": "NGN",
+    "basePriceNaira": 35000,
+    "basePriceKobo": 3500000,
+    "priceDisplay": "₦35,000",
+    "sizeTierPricing": false
+  },
+  "sizes": {
+    "range": "S–L",
+    "list": ["S", "M", "L"],
+    "defaultInventoryPerSize": 8,
+    "sizePriceDeltaKobo": 0
+  },
+  "colors": [
+    { "name": "Alabaster Ivory (white/cream)", "colorCode": "CL-02", "sku": "FC-TP-2026-WHT", "isDefault": true, "photoStatus": "PHOTOGRAPHED" },
+    { "name": "Caramel Nude", "colorCode": "CL-22", "sku": "FC-TP-2026-NDE", "isDefault": false, "photoStatus": "PHOTOGRAPHED" }
+  ],
+  "copy": {
+    "headline": "Ribbed crop tank with the leopard teardrop at the heart.",
+    "description": "A fine-rib stretch tank, cropped at the waist with a clean neckline and wide straps. At the centre chest, the signature teardrop cutout lined in the house leopard. Made to pair with the Dahlia Skirt — worn here in cream and caramel on the same shoot.",
+    "atelierNotes": "Ready-to-wear piece produced in limited runs. Leopard appliqué is fused and stitched by hand.",
+    "editorialQuote": "The quiet foundation — one leopard detail, cut with intention.",
+    "occasions": ["VACATION", "PRIVATE_DINNER"]
+  },
+  "fabric": {
+    "material": "Fine-rib stretch knit with leopard appliqué",
+    "composition": null,
+    "weightGsm": 180,
+    "drapeDescription": "Body-skimming stretch rib with quick recovery",
+    "finish": "Matte rib surface, hand-applied print appliqué",
+    "careInstructions": "Hand wash cold. Dry flat. Do not wring."
+  },
+  "silhouette": { "fit": 80, "drape": 55, "weight": 25, "structure": 20, "stretch": 30 },
+  "completeTheLookProductIds": ["prod-skirt-02", "prod-dress-02"],
+  "skuPattern": {
+    "colorway": "FC-TP-2026-<CLR>",
+    "size": "FC-TP-2026-<SIZE>"
+  },
+  "media": {
+    "liveMediaFolder": "frontend/public/images/products/dahlia-tank-top/",
+    "note": "Photos are committed to the repo at the live folder above (dahlia-1…4.jpeg) — the site serves them from there. Do not duplicate them into this staging folder."
+  }
+}

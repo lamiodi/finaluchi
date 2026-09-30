@@ -1,0 +1,54 @@
+{
+  "name": "Dahlia Skirt",
+  "slug": "dahlia-skirt",
+  "id": "prod-skirt-02",
+  "collection": { "id": null, "name": "RTW core line" },
+  "status": "LIVE",
+  "mirroredOn": "2026-09-29",
+  "sourceOfTruth": "frontend/src/data/catalog.ts + backend/src/catalog.ts (keep in sync)",
+  "category": { "pillar": "SKIRTS", "categoryName": "Skirts" },
+  "isFeatured": true,
+  "pricing": {
+    "currency": "NGN",
+    "basePriceNaira": 46000,
+    "basePriceKobo": 4600000,
+    "priceDisplay": "₦46,000",
+    "sizeTierPricing": false
+  },
+  "sizes": {
+    "range": "UK 6–18",
+    "list": ["6", "8", "10", "12", "14", "16", "18"],
+    "defaultInventoryPerSize": 8,
+    "sizePriceDeltaKobo": 0
+  },
+  "colors": [
+    { "name": "Dahlia Wine (deep wine red)", "colorCode": "CL-21", "sku": "FC-SK-2026-RED", "isDefault": true, "photoStatus": "PHOTOGRAPHED" },
+    { "name": "Alabaster Ivory (white)", "colorCode": "CL-02", "sku": "FC-SK-2026-WHT", "isDefault": false, "photoStatus": "NOT_PHOTOGRAPHED — currently shares the wine shots" },
+    { "name": "Noir Onyx (black)", "colorCode": "CL-01", "sku": "FC-SK-2026-BLK", "isDefault": false, "photoStatus": "NOT_PHOTOGRAPHED — currently shares the wine shots" }
+  ],
+  "copy": {
+    "headline": "The Dahlia — a sculpted mini blooming with 3D rosettes.",
+    "description": "A high-rise mini whose surface blooms: row upon row of hand-mounted 3D dahlia petals over a structured base, in the deep house wine. Pair it with the Dahlia Tank for the full look, or let it carry a simple knit on its own.",
+    "atelierNotes": "Ready-to-wear piece produced in limited runs. Each rosette is individually mounted — the Dahlia is the most handwork in the capsule.",
+    "editorialQuote": "Half of the Dahlia language — a skirt in full bloom.",
+    "occasions": ["COCKTAIL_SOIREE", "WEDDING", "PRIVATE_DINNER"]
+  },
+  "fabric": {
+    "material": "Structured crepe with 3D rosette appliqué",
+    "composition": null,
+    "weightGsm": 280,
+    "drapeDescription": "Sculptural hold — the petals carry the movement",
+    "finish": "Matte wine ground with raised petal relief",
+    "careInstructions": "Dry clean only. Store folded with tissue between petals."
+  },
+  "silhouette": { "fit": 85, "drape": 45, "weight": 65, "structure": 90, "stretch": 5 },
+  "completeTheLookProductIds": ["prod-top-02", "prod-jump-02"],
+  "skuPattern": {
+    "colorway": "FC-SK-2026-<CLR>",
+    "size": "FC-SK-2026-<SIZE>"
+  },
+  "media": {
+    "liveMediaFolder": "frontend/public/images/products/dahlia-skirt/",
+    "note": "Photos are committed to the repo at the live folder above (dahlia-1…4.jpeg) — the site serves them from there. Do not duplicate them into this staging folder."
+  }
+}

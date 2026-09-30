@@ -1,0 +1,52 @@
+{
+  "name": "Fantasia Dress",
+  "slug": "fantasia-dress",
+  "id": "prod-dress-04",
+  "collection": { "id": "recall-aw2425", "name": "The Recall Collection · 2024/25 Autumn Drop" },
+  "status": "LIVE — AWAITING PHOTOS",
+  "mirroredOn": "2026-09-29",
+  "sourceOfTruth": "frontend/src/data/catalog.ts + backend/src/catalog.ts (keep in sync)",
+  "category": { "pillar": "DRESSES", "categoryName": "Dresses" },
+  "isFeatured": false,
+  "pricing": {
+    "currency": "NGN",
+    "basePriceNaira": 145000,
+    "basePriceKobo": 14500000,
+    "priceDisplay": "₦145,000",
+    "sizeTierPricing": false
+  },
+  "sizes": {
+    "range": "UK 6–12",
+    "list": ["6", "8", "10", "12"],
+    "defaultInventoryPerSize": 8,
+    "sizePriceDeltaKobo": 0
+  },
+  "colors": [
+    { "name": "Alabaster Ivory (placeholder)", "colorCode": "CL-02", "sku": "FC-DR-RC24-FNT-IVR", "isDefault": true, "photoStatus": "NOT_PHOTOGRAPHED — placeholder colour, update when photos arrive" }
+  ],
+  "copy": {
+    "headline": "The Fantasia — a party dress with movement in every seam.",
+    "description": "Made for the hours after dark, the Fantasia moves the way the night should: fluid through the body, easy at the hem, unbothered by dance floors. The third of five pieces in the Recall Collection.",
+    "atelierNotes": "Ready-to-wear piece produced in limited runs.",
+    "editorialQuote": "Half dress, half evening — entirely Fantasia.",
+    "occasions": ["COCKTAIL_SOIREE", "WEDDING"]
+  },
+  "fabric": {
+    "material": null,
+    "composition": null,
+    "weightGsm": 180,
+    "drapeDescription": "Fluid, body-skimming drape",
+    "finish": null,
+    "careInstructions": "Dry clean recommended. Cool iron on reverse."
+  },
+  "silhouette": { "fit": 75, "drape": 75, "weight": 35, "structure": 30, "stretch": 15 },
+  "completeTheLookProductIds": ["prod-dress-05", "prod-dress-03"],
+  "skuPattern": {
+    "colorway": "FC-DR-RC24-FNT-<CLR>",
+    "size": "FC-DR-RC24-FNT-<SIZE>"
+  },
+  "media": {
+    "liveMediaFolder": "frontend/public/images/products/fantasia-dress/",
+    "note": "Photos pending — drop fantasia-1.jpeg, fantasia-2.jpeg … into the live folder above and commit+push; the catalog already points at fantasia-1.jpeg."
+  }
+}

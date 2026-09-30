@@ -1,0 +1,52 @@
+{
+  "name": "Elizabeth Brazer Dress",
+  "slug": "elizabeth-brazer-dress",
+  "id": "prod-dress-05",
+  "collection": { "id": "recall-aw2425", "name": "The Recall Collection · 2024/25 Autumn Drop" },
+  "status": "LIVE — AWAITING PHOTOS",
+  "mirroredOn": "2026-09-29",
+  "sourceOfTruth": "frontend/src/data/catalog.ts + backend/src/catalog.ts (keep in sync)",
+  "category": { "pillar": "DRESSES", "categoryName": "Dresses" },
+  "isFeatured": false,
+  "pricing": {
+    "currency": "NGN",
+    "basePriceNaira": 245000,
+    "basePriceKobo": 24500000,
+    "priceDisplay": "₦245,000",
+    "sizeTierPricing": false
+  },
+  "sizes": {
+    "range": "UK 6–12",
+    "list": ["6", "8", "10", "12"],
+    "defaultInventoryPerSize": 8,
+    "sizePriceDeltaKobo": 0
+  },
+  "colors": [
+    { "name": "Alabaster Ivory (placeholder)", "colorCode": "CL-02", "sku": "FC-DR-RC24-ELZ-IVR", "isDefault": true, "photoStatus": "NOT_PHOTOGRAPHED — placeholder colour, update when photos arrive" }
+  ],
+  "copy": {
+    "headline": "The Elizabeth — a sculpted bra-top dress with an elongated skirt.",
+    "description": "The Elizabeth leads with its bodice: a brazer top cut close and confident, flowing into a long, unbroken skirt. The collection's most sculptural piece — ₦245,000 across UK 6–12.",
+    "atelierNotes": "Ready-to-wear piece produced in limited runs.",
+    "editorialQuote": "A bodice with opinions — the Elizabeth speaks first.",
+    "occasions": ["WEDDING", "COCKTAIL_SOIREE", "PRIVATE_DINNER"]
+  },
+  "fabric": {
+    "material": null,
+    "composition": null,
+    "weightGsm": 220,
+    "drapeDescription": "Sculpted hold through the bodice, fluid skirt",
+    "finish": null,
+    "careInstructions": "Dry clean recommended. Cool iron on reverse."
+  },
+  "silhouette": { "fit": 85, "drape": 60, "weight": 45, "structure": 55, "stretch": 10 },
+  "completeTheLookProductIds": ["prod-dress-04", "prod-dress-06"],
+  "skuPattern": {
+    "colorway": "FC-DR-RC24-ELZ-<CLR>",
+    "size": "FC-DR-RC24-ELZ-<SIZE>"
+  },
+  "media": {
+    "liveMediaFolder": "frontend/public/images/products/elizabeth-brazer-dress/",
+    "note": "Photos pending — drop elizabeth-1.jpeg, elizabeth-2.jpeg … into the live folder above and commit+push; the catalog already points at elizabeth-1.jpeg."
+  }
+}

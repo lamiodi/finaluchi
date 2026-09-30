@@ -1,0 +1,52 @@
+{
+  "name": "Rossa Dress",
+  "slug": "rossa-dress",
+  "id": "prod-dress-02",
+  "collection": { "id": null, "name": "RTW core line" },
+  "status": "LIVE",
+  "mirroredOn": "2026-09-29",
+  "sourceOfTruth": "frontend/src/data/catalog.ts + backend/src/catalog.ts (keep in sync)",
+  "category": { "pillar": "DRESSES", "categoryName": "Dresses" },
+  "isFeatured": true,
+  "pricing": {
+    "currency": "NGN",
+    "basePriceNaira": 66000,
+    "basePriceKobo": 6600000,
+    "priceDisplay": "₦66,000",
+    "sizeTierPricing": false
+  },
+  "sizes": {
+    "range": "UK 6–16",
+    "list": ["6", "8", "10", "12", "14", "16"],
+    "defaultInventoryPerSize": 8,
+    "sizePriceDeltaKobo": 0
+  },
+  "colors": [
+    { "name": "House Leopard", "colorCode": "CL-20", "sku": "FC-DR-2026-LEO", "isDefault": true, "photoStatus": "PHOTOGRAPHED" }
+  ],
+  "copy": {
+    "headline": "Halter mini in the house leopard print — shoulder rosette, asymmetric ruffle hem.",
+    "description": "A plunging halter neckline, an oversized rosette at the shoulder, and a cascading asymmetric ruffle hem that moves with every step. Cut in the Finaluchi house leopard on a cream ground, the Rossa is photographed across the size range because it is made for every version of her.",
+    "atelierNotes": "Ready-to-wear piece produced in limited runs. Rosettes are cut and mounted by hand.",
+    "editorialQuote": "One print, one rosette, one dress — endlessly worn.",
+    "occasions": ["COCKTAIL_SOIREE", "WEDDING", "PRIVATE_DINNER"]
+  },
+  "fabric": {
+    "material": "House leopard-print crepe",
+    "composition": null,
+    "weightGsm": 180,
+    "drapeDescription": "Fluid body-skimming drape with lift at the ruffle hem",
+    "finish": "Matte print on a cream ground with black and mauve spots",
+    "careInstructions": "Dry clean recommended. Cool iron on reverse."
+  },
+  "silhouette": { "fit": 75, "drape": 75, "weight": 30, "structure": 40, "stretch": 10 },
+  "completeTheLookProductIds": ["prod-jump-02", "prod-top-02"],
+  "skuPattern": {
+    "colorway": "FC-DR-2026-LEO",
+    "size": "FC-DR-2026-<SIZE>"
+  },
+  "media": {
+    "liveMediaFolder": "frontend/public/images/products/rossa-dress/",
+    "note": "Photos are committed to the repo at the live folder above (rossa-1…4.jpeg) — the site serves them from there. Do not duplicate them into this staging folder."
+  }
+}

@@ -11,6 +11,12 @@ export interface Collection {
   slug: string;
   description: string;
   coverImageUrl?: string; // TODO(product): set when the drop's campaign photo lands
+  // True only once every piece in the drop has its photos committed to
+  // frontend/public/images/products/ (flip it in the same pass that turns the
+  // pieces' isFeatured on). Until then the homepage presents the photographed
+  // capsule instead — a collection reel of crest placeholders reads as a
+  // broken shop.
+  photographed?: boolean;
 }
 
 export const MASTER_COLLECTIONS: Collection[] = [
@@ -22,6 +28,7 @@ export const MASTER_COLLECTIONS: Collection[] = [
     slug: 'the-recall-collection-2024-25-autumn-drop',
     description:
       'Five evening pieces released together as the 2024/25 Autumn Drop — the Sloane, the Boss Set, the Fantasia, the Elizabeth and the Teresa.',
+    photographed: false, // photos pending — the home reel presents the photographed capsule until they land
   },
 ];
 

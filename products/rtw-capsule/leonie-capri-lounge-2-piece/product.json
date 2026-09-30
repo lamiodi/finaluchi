@@ -1,0 +1,52 @@
+{
+  "name": "Leonie Capri Lounge 2 Piece",
+  "slug": "leonie-capri-lounge-2-piece",
+  "id": "prod-2pc-02",
+  "collection": { "id": null, "name": "RTW core line" },
+  "status": "LIVE",
+  "mirroredOn": "2026-09-29",
+  "sourceOfTruth": "frontend/src/data/catalog.ts + backend/src/catalog.ts (keep in sync)",
+  "category": { "pillar": "2PIECES", "categoryName": "2pieces" },
+  "isFeatured": true,
+  "pricing": {
+    "currency": "NGN",
+    "basePriceNaira": 80000,
+    "basePriceKobo": 8000000,
+    "priceDisplay": "₦80,000",
+    "sizeTierPricing": false
+  },
+  "sizes": {
+    "range": "UK 10–16",
+    "list": ["10", "12", "14", "16"],
+    "defaultInventoryPerSize": 8,
+    "sizePriceDeltaKobo": 0
+  },
+  "colors": [
+    { "name": "House Leopard", "colorCode": "CL-20", "sku": "FC-2PC-2026-LEO", "isDefault": true, "photoStatus": "PHOTOGRAPHED" }
+  ],
+  "copy": {
+    "headline": "Leopard lounge set with red ribbon ties — rest, refined.",
+    "description": "The Leonie refuses to look like loungewear: a cropped leopard tee edged in contrast red rib at the neck and cuffs, over high-waist capri leggings finished with red ribbon ties at the ankle. Soft stretch jersey for slow mornings and sunset terraces.",
+    "atelierNotes": "Ready-to-wear piece produced in limited runs. Ankle ties are hand-threaded grosgrain ribbon.",
+    "editorialQuote": "Leopard at rest — the house print, softened.",
+    "occasions": ["VACATION"]
+  },
+  "fabric": {
+    "material": "Leopard-print stretch jersey with red ribbon trims",
+    "composition": null,
+    "weightGsm": 220,
+    "drapeDescription": "Soft stretch drape with a gently gathered tee hem",
+    "finish": "Matte print with contrast red rib trims and grosgrain ankle ties",
+    "careInstructions": "Machine wash cold. Dry flat. Do not tumble dry."
+  },
+  "silhouette": { "fit": 70, "drape": 70, "weight": 30, "structure": 25, "stretch": 30 },
+  "completeTheLookProductIds": ["prod-top-02", "prod-skirt-02"],
+  "skuPattern": {
+    "colorway": "FC-2PC-2026-LEO",
+    "size": "FC-2PC-2026-<SIZE>"
+  },
+  "media": {
+    "liveMediaFolder": "frontend/public/images/products/leonie-capri-lounge-2-piece/",
+    "note": "Photos are committed to the repo at the live folder above (leonie-1…4.jpeg) — the site serves them from there. Do not duplicate them into this staging folder."
+  }
+}

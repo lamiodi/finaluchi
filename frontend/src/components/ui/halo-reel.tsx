@@ -80,7 +80,9 @@ export interface HaloReelProps
    *  that they overlap. The ring repeats `items` until it holds this spacing,
    *  so a wider ring means more cards rather than bigger gaps. @default 1.2 */
   spread?: number;
-  /** Ceiling on the number of cards drawn around the ring. @default 64 */
+  /** Ceiling on the number of cards drawn around the ring. @default 64
+   *  Pass `items.length` to draw each item exactly once — the ring then
+   *  shows no repeated photos, however wide the stage. */
   maxCards?: number;
   /** Multiplier on the drag rotation. @default 1 */
   dragSensitivity?: number;
@@ -313,11 +315,20 @@ export function HaloReel({
         <div
           className="pointer-events-none absolute inset-y-0 z-0 flex items-center justify-center px-4 text-center"
           // Parked in whatever space the ring leaves rather than at a fixed
-          // spot, so it can never end up underneath the cards at any width.
-          style={{
-            left: size.w * centerXRatio + radiusX + cardW / 2,
-            right: 0,
-          }}
+          // spot, so it can never end up underneath the cards at any width:
+          // inside the hole when the whole ring is on stage, otherwise in
+          // the open space beside the visible arc.
+          style={
+            size.w > 0 && centerXRatio * size.w >= radiusX + cardW / 2
+              ? {
+                  left: size.w * centerXRatio - radiusX - cardW / 2,
+                  right: (1 - centerXRatio) * size.w - radiusX - cardW / 2,
+                }
+              : {
+                  left: size.w * centerXRatio + radiusX + cardW / 2,
+                  right: 0,
+                }
+          }
         >
           {centerLabel}
         </div>

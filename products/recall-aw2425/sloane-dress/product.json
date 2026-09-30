@@ -1,0 +1,52 @@
+{
+  "name": "Sloane Dress",
+  "slug": "sloane-dress",
+  "id": "prod-dress-03",
+  "collection": { "id": "recall-aw2425", "name": "The Recall Collection · 2024/25 Autumn Drop" },
+  "status": "LIVE — AWAITING PHOTOS",
+  "mirroredOn": "2026-09-29",
+  "sourceOfTruth": "frontend/src/data/catalog.ts + backend/src/catalog.ts (keep in sync)",
+  "category": { "pillar": "DRESSES", "categoryName": "Dresses" },
+  "isFeatured": false,
+  "pricing": {
+    "currency": "NGN",
+    "basePriceNaira": 120000,
+    "basePriceKobo": 12000000,
+    "priceDisplay": "₦120,000",
+    "sizeTierPricing": false
+  },
+  "sizes": {
+    "range": "UK 6–12",
+    "list": ["6", "8", "10", "12"],
+    "defaultInventoryPerSize": 8,
+    "sizePriceDeltaKobo": 0
+  },
+  "colors": [
+    { "name": "Alabaster Ivory (placeholder)", "colorCode": "CL-02", "sku": "FC-DR-RC24-SLN-IVR", "isDefault": true, "photoStatus": "NOT_PHOTOGRAPHED — placeholder colour, update when photos arrive" }
+  ],
+  "copy": {
+    "headline": "The Sloane — an easy day-to-evening dress with a fluid skirt.",
+    "description": "The Sloane keeps the evening simple: a clean neckline, a quietly sculpted waist and a fluid skirt that carries from afternoon errands to dinner reservations. One of five pieces in the Recall Collection, made to be recalled season after season.",
+    "atelierNotes": "Ready-to-wear piece produced in limited runs.",
+    "editorialQuote": "Simple, but never plain — the one you reach for first.",
+    "occasions": ["PRIVATE_DINNER", "COCKTAIL_SOIREE", "WEDDING"]
+  },
+  "fabric": {
+    "material": null,
+    "composition": null,
+    "weightGsm": 180,
+    "drapeDescription": "Fluid, body-skimming drape",
+    "finish": null,
+    "careInstructions": "Dry clean recommended. Cool iron on reverse."
+  },
+  "silhouette": { "fit": 70, "drape": 75, "weight": 35, "structure": 30, "stretch": 15 },
+  "completeTheLookProductIds": ["prod-2pc-03", "prod-dress-06"],
+  "skuPattern": {
+    "colorway": "FC-DR-RC24-SLN-<CLR>",
+    "size": "FC-DR-RC24-SLN-<SIZE>"
+  },
+  "media": {
+    "liveMediaFolder": "frontend/public/images/products/sloane-dress/",
+    "note": "Photos pending — drop sloane-1.jpeg, sloane-2.jpeg … into the live folder above and commit+push; the catalog already points at sloane-1.jpeg."
+  }
+}

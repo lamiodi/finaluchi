@@ -1,0 +1,59 @@
+{
+  "name": "Diza Set",
+  "slug": "diza-set",
+  "proposedId": "prod-2pc-05",
+  "collection": { "id": null, "name": "RTW core line" },
+  "category": { "pillar": "2PIECES", "categoryName": "2pieces" },
+  "status": "PENDING_PHOTOS",
+  "addedOn": "2026-09-29",
+  "source": "Owner brief, 2026-09-29",
+  "pricing": {
+    "currency": "NGN",
+    "basePriceNaira": 125000,
+    "basePriceKobo": 12500000,
+    "priceDisplay": "₦125,000",
+    "sizeTierPricing": false
+  },
+  "sizes": {
+    "range": "UK 6–16",
+    "list": ["6", "8", "10", "12", "14", "16"],
+    "defaultInventoryPerSize": 8,
+    "sizePriceDeltaKobo": 0
+  },
+  "colors": [
+    { "name": "Pink", "colorCodeSuggestion": null, "colorCodeStatus": "NEW_CODE_NEEDED", "notes": "Not in the house palette yet — add as the next free code (CL-23+) in frontend/src/data/colors.ts when confirmed." },
+    { "name": "Cream", "colorCodeSuggestion": "CL-04", "colorCodeStatus": "SUGGESTED_MATCH", "notes": "CL-04 Dune Crepe is the closest warm neutral — confirm, or mint a new code if the shade is distinct." },
+    { "name": "Black", "colorCodeSuggestion": "CL-01", "colorCodeStatus": "SUGGESTED_MATCH", "notes": "CL-01 Noir Onyx — confirm." }
+  ],
+  "copy": {
+    "headline": null,
+    "description": null,
+    "atelierNotes": null,
+    "editorialQuote": null,
+    "occasions": []
+  },
+  "fabric": {
+    "material": null,
+    "composition": null,
+    "weightGsm": null,
+    "drapeDescription": null,
+    "finish": null,
+    "careInstructions": null
+  },
+  "skuPattern": {
+    "colorway": "FC-2P-2026-DZA-<CLR>",
+    "size": "FC-2P-2026-DZA-<SIZE>"
+  },
+  "media": {
+    "imageFolder": "images/",
+    "imageNaming": "diza-1.jpeg, diza-2.jpeg, … — numbered set per product, galleries reuse per colorway (same convention as live products)",
+    "videoFolder": "videos/",
+    "videoNaming": "diza-<color>.mp4 or diza-360.mp4 — optional; has360Rotation stays false unless a 360 spin set is provided",
+    "webpNote": "Never commit .webp variants — the build generates them."
+  },
+  "notes": [
+    "TODO(product): write headline/description/atelierNotes before promoting to the live catalog — match the voice in frontend/src/data/catalog.ts.",
+    "TODO(product): confirm fabric details with the atelier.",
+    "TODO(product): confirm colour-code matches with the atelier."
+  ]
+}

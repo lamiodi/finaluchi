@@ -1,0 +1,54 @@
+{
+  "name": "Cleo Capri Jumpsuit",
+  "slug": "cleo-capri-jumpsuit",
+  "id": "prod-jump-02",
+  "collection": { "id": null, "name": "RTW core line" },
+  "status": "LIVE",
+  "mirroredOn": "2026-09-29",
+  "sourceOfTruth": "frontend/src/data/catalog.ts + backend/src/catalog.ts (keep in sync)",
+  "category": { "pillar": "JUMPSUITS", "categoryName": "Jumpsuits" },
+  "isFeatured": true,
+  "pricing": {
+    "currency": "NGN",
+    "basePriceNaira": 75000,
+    "basePriceKobo": 7500000,
+    "priceDisplay": "₦75,000",
+    "sizeTierPricing": false
+  },
+  "sizes": {
+    "range": "UK 6–14",
+    "list": ["6", "8", "10", "12", "14"],
+    "defaultInventoryPerSize": 8,
+    "sizePriceDeltaKobo": 0
+  },
+  "colors": [
+    { "name": "Noir Onyx (black)", "colorCode": "CL-01", "sku": "FC-JS-2026-BLK", "isDefault": true, "photoStatus": "PHOTOGRAPHED" },
+    { "name": "Dusk Carmine (red)", "colorCode": "CL-19", "sku": "FC-JS-2026-RED", "isDefault": false, "photoStatus": "PHOTOGRAPHED" },
+    { "name": "Alabaster Ivory (white)", "colorCode": "CL-02", "sku": "FC-JS-2026-WHT", "isDefault": false, "photoStatus": "NOT_PHOTOGRAPHED — currently shares the duo shot" }
+  ],
+  "copy": {
+    "headline": "Plunging halter jumpsuit — leopard bodice, solid capri leg, wide print sash.",
+    "description": "The Cleo cuts a long line in one move: a plunging halter neckline over a leopard-print bodice, a sleek solid stretch body through the waist, and a cropped capri leg. The wide leopard sash cinches the waist and ties the print story together.",
+    "atelierNotes": "Ready-to-wear piece produced in limited runs. Sash is cut from the same house print as the bodice.",
+    "editorialQuote": "One piece, zero effort — the whole look tied at the waist.",
+    "occasions": ["VACATION", "COCKTAIL_SOIREE", "PRIVATE_DINNER"]
+  },
+  "fabric": {
+    "material": "Printed stretch crepe with leopard sash",
+    "composition": null,
+    "weightGsm": 200,
+    "drapeDescription": "Clean fitted drape through the body with ease at the capri leg",
+    "finish": "Matte solid body with house leopard bodice and sash",
+    "careInstructions": "Dry clean recommended. Cool iron on reverse."
+  },
+  "silhouette": { "fit": 80, "drape": 65, "weight": 35, "structure": 50, "stretch": 15 },
+  "completeTheLookProductIds": ["prod-top-02", "prod-skirt-02"],
+  "skuPattern": {
+    "colorway": "FC-JS-2026-<CLR>",
+    "size": "FC-JS-2026-<SIZE>"
+  },
+  "media": {
+    "liveMediaFolder": "frontend/public/images/products/cleo-capri-jumpsuit/",
+    "note": "Photos are committed to the repo at the live folder above (cleo-1…3.jpeg) — the site serves them from there. Do not duplicate them into this staging folder."
+  }
+}
