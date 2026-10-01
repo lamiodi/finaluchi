@@ -3,8 +3,8 @@
   "slug": "sloane-dress",
   "id": "prod-dress-03",
   "collection": { "id": "recall-aw2425", "name": "The Recall Collection · 2024/25 Autumn Drop" },
-  "status": "LIVE — AWAITING PHOTOS",
-  "mirroredOn": "2026-09-29",
+  "status": "LIVE",
+  "mirroredOn": "2026-10-01",
   "sourceOfTruth": "frontend/src/data/catalog.ts + backend/src/catalog.ts (keep in sync)",
   "category": { "pillar": "DRESSES", "categoryName": "Dresses" },
   "isFeatured": false,
@@ -22,7 +22,7 @@
     "sizePriceDeltaKobo": 0
   },
   "colors": [
-    { "name": "Alabaster Ivory (placeholder)", "colorCode": "CL-02", "sku": "FC-DR-RC24-SLN-IVR", "isDefault": true, "photoStatus": "NOT_PHOTOGRAPHED — placeholder colour, update when photos arrive" }
+    { "name": "Alabaster Ivory", "colorCode": "CL-02", "sku": "FC-DR-RC24-SLN-IVR", "isDefault": true, "photoStatus": "PHOTOGRAPHED" }
   ],
   "copy": {
     "headline": "The Sloane — an easy day-to-evening dress with a fluid skirt.",
@@ -47,6 +47,7 @@
   },
   "media": {
     "liveMediaFolder": "frontend/public/images/products/sloane-dress/",
-    "note": "Photos pending — drop sloane-1.jpeg, sloane-2.jpeg … into the live folder above and commit+push; the catalog already points at sloane-1.jpeg."
+    "images": ["sloane-1.jpeg", "sloane-2.jpeg", "sloane-3.jpeg"],
+    "note": "3 photos live with responsive WebP variants in frontend/public/images/products/sloane-dress/."
   }
 }

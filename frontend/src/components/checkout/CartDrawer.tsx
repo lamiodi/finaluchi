@@ -1,11 +1,11 @@
 import React from 'react';
-import { X, Trash2, Plus, Minus, ShoppingBag, Gift, ShieldCheck, ArrowRight, Box } from 'lucide-react';
+import { X, Trash2, Plus, Minus, ArrowUpRight, ShieldCheck } from 'lucide-react';
 import { useCartStore, PACKAGING_OPTIONS } from '../../stores/cartStore';
 import { useCurrencyStore } from '../../stores/currencyStore';
 import { useAudioStore } from '../../stores/audioStore';
 import { formatKoboToNgn, formatPriceWithDisplay } from '../../utils/formatters';
 import { useModalA11y } from '../../lib/useModalA11y';
-import { webpVariant } from '../../utils/images';
+import { webpVariant, onImageError } from '../../utils/images';
 
 interface CartDrawerProps {
   onProceedToCheckout: () => void;
@@ -47,152 +47,137 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const total = getTotalKobo('NG');
 
   return (
-    <div className="fixed inset-0 z-[600] flex justify-end bg-noir/80 backdrop-blur-sm animate-in fade-in duration-200">
-      
+    <div className="bag-veil">
+
       {/* Click outside to close */}
       <div className="flex-1" onClick={closeDrawer} aria-hidden="true" />
 
-      {/* Slide-over Drawer (Haute Couture Specs) */}
+      {/* Slide-over drawer — the shop's paper room, narrowed to a rail */}
       <div
         ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="cart-drawer-title"
         tabIndex={-1}
-        className="w-full max-w-lg bg-white text-noir h-full flex flex-col justify-between border-l border-black/15 shadow-2xl animate-in slide-in-from-right duration-300 relative z-10 font-sans-luxury outline-none"
+        className="bag-drawer shop-page"
       >
-        
-        {/* Header Bar */}
-        <div className="p-6 border-b border-black/10 flex items-center justify-between bg-white">
-          <div className="flex items-center gap-2.5">
-            <ShoppingBag className="w-5 h-5 text-bronze" />
-            <h2 id="cart-drawer-title" className="font-sans-luxury text-lg font-bold tracking-wider text-noir uppercase">
-              Your Bag ({items.reduce((s, i) => s + i.quantity, 0)})
+
+        {/* Header */}
+        <div className="bag-head">
+          <div>
+            <span className="shop-eyebrow" style={{ color: '#7c7164' }}>Finaluchi / your selections</span>
+            <h2 id="cart-drawer-title" style={{ font: "400 30px/1.15 'Antic Didone', serif", marginTop: 8 }}>
+              The bag{' '}
+              <i style={{ fontStyle: 'normal', fontSize: 14, color: '#846548' }}>
+                {items.reduce((s, i) => s + i.quantity, 0)}{' '}
+                {items.length === 1 ? 'piece' : 'pieces'}
+              </i>
             </h2>
           </div>
-          
           <button
             onClick={() => {
               playTactileClick();
               closeDrawer();
             }}
-            className="p-2 text-black/60 hover:text-noir transition-colors"
-            aria-label="Close Bag"
+            className="bag-head-close"
+            aria-label="Close bag"
           >
-            <X className="w-5 h-5" />
+            <X size={17} />
           </button>
         </div>
 
-        {/* Scrollable Items List */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4">
-          
+        {/* Scrollable body */}
+        <div className="bag-scroll">
+
           {items.length === 0 ? (
-            <div className="py-24 text-center space-y-4">
-              <ShoppingBag className="w-12 h-12 text-champagne/40 mx-auto" />
-              <div className="space-y-1.5">
-                <h3 className="font-sans-luxury text-xl font-bold uppercase text-noir">Your Bag is Empty</h3>
-                <p className="text-xs text-black/60 font-light">Explore ready-to-wear, statement sets and occasion pieces.</p>
-              </div>
+            <div style={{ padding: '90px 10px', textAlign: 'center' }}>
+              <span className="shop-eyebrow" style={{ color: '#7c7164' }}>A different direction</span>
+              <h3 style={{ font: "400 32px/1.15 'Antic Didone', serif", margin: '12px 0 0' }}>
+                Your bag is <em style={{ color: '#846548', fontStyle: 'italic' }}>empty.</em>
+              </h3>
+              <p style={{ fontSize: 12, color: '#706961', lineHeight: 1.8, marginTop: 12 }}>
+                Ready-to-wear, statement sets and occasion pieces are waiting.
+              </p>
               <button
                 onClick={() => {
                   playTactileClick();
                   closeDrawer();
                   onExploreCatalog();
                 }}
-                className="px-6 py-3 bg-noir text-white text-xs font-semibold tracking-widest uppercase border border-transparent hover:bg-white hover:text-noir hover:border-noir transition-all"
+                className="shop-solid-button"
+                style={{ marginTop: 26, color: 'white' }}
               >
-                EXPLORE COLLECTION
+                <span>Explore the collection</span>
+                <ArrowUpRight size={16} />
               </button>
             </div>
           ) : (
             <>
               {items.map((item) => (
-                <div key={item.id} className="p-4 bg-white border border-black/10 flex gap-4 transition-all">
-                  {/* Thumbnail */}
-                  <div className="w-20 h-28 bg-alabaster-subtle border border-black/10 overflow-hidden shrink-0">
-                    <img
-                      src={webpVariant(item.colorway.heroImageUrl, 480)}
-                      alt={item.product.name}
-                      className="w-full h-full object-cover object-top"
-                    />
-                  </div>
+                <div key={item.id} className="bag-item">
+                  <img
+                    className="bag-item-photo"
+                    src={webpVariant(item.colorway.heroImageUrl, 480)}
+                    alt={item.product.name}
+                    onError={onImageError}
+                  />
 
-                  {/* Item Details */}
-                  <div className="flex-1 flex flex-col justify-between">
+                  <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 12 }}>
                     <div>
-                      <div className="flex items-start justify-between gap-2">
-                        <h3 className="font-sans-luxury text-sm font-semibold uppercase text-noir line-clamp-1">
-                          {item.product.name}
-                        </h3>
+                      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
+                        <h3 className="bag-item-title">{item.product.name}</h3>
                         <button
                           onClick={() => {
                             playTactileClick();
                             removeFromCart(item.id);
                           }}
-                          className="text-muted hover:text-red-600 transition-colors p-1 relative before:content-[''] before:absolute before:-inset-3"
-                          title="Remove Item"
                           aria-label={`Remove ${item.product.name} from bag`}
+                          style={{ color: '#9a9285', padding: 4, marginTop: 2 }}
                         >
-                          <Trash2 className="w-3.5 h-3.5" />
+                          <Trash2 size={14} />
                         </button>
                       </div>
 
-                      <div className="text-[11px] text-black/60 font-mono-luxury mt-1 space-y-0.5">
-                        <div>Color: <span className="text-noir font-semibold">{item.colorway.color.code} — {item.colorway.color.name}</span></div>
-                        <div>Size: <span className="text-noir font-semibold">{item.size}</span></div>
+                      <div style={{ fontSize: 10, letterSpacing: '.08em', color: '#706961', marginTop: 7, lineHeight: 1.7 }}>
+                        {item.colorway.color.code} — {item.colorway.color.name}
+                        <br />
+                        Size {item.size}
                         {item.isMadeToMeasure && (
-                          <span className="inline-block px-2 py-0.5 bg-noir text-white text-[9px] font-semibold uppercase tracking-wider mt-1">
-                            Bespoke Atelier Fit
+                          <span style={{ display: 'inline-block', marginLeft: 8, padding: '3px 7px', background: '#201f1d', color: '#faf9f6', fontSize: 8, letterSpacing: '.14em', textTransform: 'uppercase' }}>
+                            Bespoke atelier fit
                           </span>
                         )}
                       </div>
                     </div>
 
-                    {/* Quantity & Unit Price */}
-                    <div className="flex items-center justify-between pt-3 border-t border-black/10 mt-2">
-                      <div className="flex items-center border border-black/20 bg-white text-xs">
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+                      <span className="bag-stepper">
                         <button
-                          onClick={() => {
-                            playTactileClick();
-                            updateQuantity(item.id, item.quantity - 1);
-                          }}
-                          className="p-1.5 text-black/60 hover:text-noir relative before:content-[''] before:absolute before:-inset-2.5"
+                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
                           aria-label={`Decrease quantity of ${item.product.name}`}
                         >
-                          <Minus className="w-3 h-3" />
+                          <Minus size={12} />
                         </button>
-                        <span className="px-3 font-mono-luxury font-bold text-xs text-noir">
-                          {item.quantity}
-                        </span>
+                        <span>{item.quantity}</span>
                         <button
-                          onClick={() => {
-                            playTactileClick();
-                            updateQuantity(item.id, item.quantity + 1);
-                          }}
-                          className="p-1.5 text-black/60 hover:text-noir relative before:content-[''] before:absolute before:-inset-2.5"
+                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
                           aria-label={`Increase quantity of ${item.product.name}`}
                         >
-                          <Plus className="w-3 h-3" />
+                          <Plus size={12} />
                         </button>
-                      </div>
-
-                      <span className="text-xs font-mono-luxury font-bold text-noir">
+                      </span>
+                      <span style={{ fontSize: 12 }}>
                         {formatPriceWithDisplay(item.unitPriceKobo * item.quantity, displayCurrency)}
                       </span>
                     </div>
-
                   </div>
                 </div>
               ))}
 
-              {/* Luxury Packaging Options */}
-              <div className="pt-4 space-y-3">
-                <div className="flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-noir">
-                  <Box className="w-4 h-4 text-bronze" />
-                  <span>ORDER PACKAGING</span>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {/* Packaging */}
+              <div style={{ marginTop: 28 }}>
+                <span className="shop-eyebrow" style={{ color: '#7c7164' }}>Order packaging</span>
+                <div className="bag-pack">
                   {PACKAGING_OPTIONS.map((opt) => (
                     <button
                       key={opt.id}
@@ -200,81 +185,72 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         playTactileClick();
                         setPackagingType(opt.id);
                       }}
-                      className={`p-3.5 text-left border text-xs transition-all ${
-                        packagingType === opt.id
-                          ? 'border-noir bg-noir text-white'
-                          : 'border-black/15 bg-white text-black/70 hover:border-noir'
-                      }`}
+                      aria-pressed={packagingType === opt.id}
                     >
-                      <div className={`font-semibold uppercase tracking-wide ${packagingType === opt.id ? 'text-white' : 'text-noir'}`}>{opt.title}</div>
-                      <div className={`text-[10px] mt-0.5 ${packagingType === opt.id ? 'text-white/70' : 'text-black/60'}`}>{opt.subtitle}</div>
-                      <div className={`text-[11px] font-mono-luxury mt-1.5 font-bold ${packagingType === opt.id ? 'text-bronze-deep' : 'text-bronze-deep'}`}>
+                      <span style={{ display: 'block', textTransform: 'uppercase', letterSpacing: '.1em' }}>{opt.title}</span>
+                      <span style={{ display: 'block', fontSize: 10, opacity: 0.75, marginTop: 3 }}>{opt.subtitle}</span>
+                      <span style={{ display: 'block', marginTop: 7, color: packagingType === opt.id ? '#e8dfd0' : '#846548', fontSize: 11 }}>
                         {opt.priceKobo === 0 ? 'Complimentary' : formatKoboToNgn(opt.priceKobo)}
-                      </div>
+                      </span>
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* Gift Concierge Toggle */}
-              <div className="pt-2 space-y-2">
-                <label className="flex items-center gap-2 cursor-pointer text-xs font-medium text-noir">
+              {/* Gift note */}
+              <div style={{ marginTop: 22 }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 11, cursor: 'pointer' }}>
                   <input
                     type="checkbox"
                     checked={isGift}
                     onChange={(e) => setGiftOptions(e.target.checked, giftMessage)}
-                    className="accent-noir rounded-none"
+                    style={{ accentColor: '#201f1d' }}
                   />
-                  <span className="flex items-center gap-1.5">
-                    <Gift className="w-3.5 h-3.5 text-bronze" />
-                    This is a gift (add a gift-note request)
-                  </span>
+                  This is a gift — add a gift-note request
                 </label>
-
                 {isGift && (
-                  <textarea
-                    placeholder="Enter a note for the recipient..."
-                    aria-label="Gift note for the recipient"
-                    value={giftMessage}
-                    onChange={(e) => setGiftOptions(true, e.target.value)}
-                    className="w-full p-3 text-xs bg-white border border-black/20 focus:outline-none focus:border-noir"
-                    rows={2}
-                  />
+                  <label className="order-field" style={{ marginTop: 4 }}>
+                    <span>Note for the recipient</span>
+                    <textarea
+                      aria-label="Gift note for the recipient"
+                      value={giftMessage}
+                      onChange={(e) => setGiftOptions(true, e.target.value)}
+                      rows={2}
+                      placeholder="Written by hand at the atelier…"
+                    />
+                  </label>
                 )}
               </div>
             </>
           )}
-
         </div>
 
-        {/* Footer Totals & Checkout Button */}
+        {/* Ledger + checkout */}
         {items.length > 0 && (
-          <div className="p-5 sm:p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] bg-white border-t border-black/10 space-y-4">
-            <div className="space-y-2 text-xs font-mono-luxury">
-              <div className="flex justify-between text-black/60">
-                <span>SUBTOTAL:</span>
-                <span className="text-noir font-semibold">{formatKoboToNgn(subtotal)}</span>
+          <div className="bag-ledger">
+            <div className="bag-ledger-row">
+              <span>Subtotal</span>
+              <span style={{ color: '#201f1d' }}>{formatKoboToNgn(subtotal)}</span>
+            </div>
+            {packaging > 0 && (
+              <div className="bag-ledger-row">
+                <span>Packaging</span>
+                <span style={{ color: '#201f1d' }}>{formatKoboToNgn(packaging)}</span>
               </div>
-              {packaging > 0 && (
-                <div className="flex justify-between text-black/60">
-                  <span>PACKAGING:</span>
-                  <span className="text-noir font-semibold">{formatKoboToNgn(packaging)}</span>
-                </div>
-              )}
-              <div className="flex justify-between text-black/60">
-                <span>LOCAL SHIPPING (NG):</span>
-                <span className="text-noir font-semibold">
-                  {shipping === 0 ? 'Complimentary' : formatKoboToNgn(shipping)}
-                </span>
-              </div>
-              <div className="flex justify-between text-black/60">
-                <span>ESTIMATED VAT (7.5%):</span>
-                <span className="text-noir font-semibold">{formatKoboToNgn(tax)}</span>
-              </div>
-              <div className="flex justify-between text-sm font-bold text-noir pt-2 border-t border-black/10">
-                <span>TOTAL:</span>
-                <span className="text-base text-noir font-mono-luxury">{formatPriceWithDisplay(total, displayCurrency)}</span>
-              </div>
+            )}
+            <div className="bag-ledger-row">
+              <span>Local shipping (NG)</span>
+              <span style={{ color: '#201f1d' }}>
+                {shipping === 0 ? 'Complimentary' : formatKoboToNgn(shipping)}
+              </span>
+            </div>
+            <div className="bag-ledger-row">
+              <span>Estimated VAT (7.5%)</span>
+              <span style={{ color: '#201f1d' }}>{formatKoboToNgn(tax)}</span>
+            </div>
+            <div className="bag-ledger-total">
+              <span style={{ textTransform: 'uppercase', letterSpacing: '.14em', fontSize: 10 }}>Total</span>
+              <span style={{ fontSize: 16 }}>{formatPriceWithDisplay(total, displayCurrency)}</span>
             </div>
 
             <button
@@ -283,14 +259,17 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 closeDrawer();
                 onProceedToCheckout();
               }}
-              className="w-full py-4 sm:py-4.5 bg-noir text-white text-xs font-bold tracking-[0.25em] uppercase hover:bg-neutral-900 border border-noir active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+              className="order-submit"
+              style={{ marginTop: 18 }}
             >
-              <span>REVIEW DELIVERY & CHECKOUT</span>
-              <ArrowRight className="w-4 h-4 text-bronze" />
+              <span>Review delivery &amp; checkout</span>
+              <ArrowUpRight size={16} style={{ color: '#e8dfd0' }} />
             </button>
 
-            <div className="flex items-center justify-center gap-4 text-[10px] text-black/60 font-mono-luxury">
-              <span className="flex items-center gap-1"><ShieldCheck className="w-3.5 h-3.5 text-bronze" /> Prices charged in NGN</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginTop: 14, fontSize: 9, letterSpacing: '.1em', textTransform: 'uppercase', color: '#8b8378' }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                <ShieldCheck size={12} style={{ color: '#846548' }} /> Prices charged in NGN
+              </span>
               <span>Review delivery details before payment</span>
             </div>
           </div>

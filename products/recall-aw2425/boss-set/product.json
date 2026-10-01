@@ -3,8 +3,8 @@
   "slug": "boss-set",
   "id": "prod-2pc-03",
   "collection": { "id": "recall-aw2425", "name": "The Recall Collection · 2024/25 Autumn Drop" },
-  "status": "LIVE — AWAITING PHOTOS",
-  "mirroredOn": "2026-09-29",
+  "status": "LIVE",
+  "mirroredOn": "2026-10-01",
   "sourceOfTruth": "frontend/src/data/catalog.ts + backend/src/catalog.ts (keep in sync)",
   "category": { "pillar": "2PIECES", "categoryName": "2pieces" },
   "isFeatured": false,
@@ -23,7 +23,7 @@
     "sizePriceDeltasKobo": { "14": 3000000, "16": 3000000, "18": 3000000 }
   },
   "colors": [
-    { "name": "Noir Onyx (black placeholder)", "colorCode": "CL-01", "sku": "FC-2P-RC24-BSS-BLK", "isDefault": true, "photoStatus": "NOT_PHOTOGRAPHED — placeholder colour, update when photos arrive" }
+    { "name": "Noir Onyx", "colorCode": "CL-01", "sku": "FC-2P-RC24-BSS-BLK", "isDefault": true, "photoStatus": "PHOTOGRAPHED" }
   ],
   "copy": {
     "headline": "The Boss — a statement two-piece that runs boardroom to banquet.",
@@ -48,6 +48,7 @@
   },
   "media": {
     "liveMediaFolder": "frontend/public/images/products/boss-set/",
-    "note": "Photos pending — drop boss-1.jpeg, boss-2.jpeg … into the live folder above and commit+push; the catalog already points at boss-1.jpeg."
+    "images": ["boss-1.jpeg", "boss-2.jpeg", "boss-3.jpeg"],
+    "note": "3 photos live with responsive WebP variants in frontend/public/images/products/boss-set/."
   }
 }

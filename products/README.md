@@ -36,20 +36,20 @@ Collection folder names match the `collectionId` used in the site's registry
 | `dahlia-tank-top/` | Dahlia Tank Top | ₦35,000 | S–L | cream, caramel nude | **LIVE**, photographed |
 | `dahlia-skirt/` | Dahlia Skirt | ₦46,000 | 6–18 | wine, white, black | **LIVE**; white/black not photographed |
 | `leonie-capri-lounge-2-piece/` | Leonie Capri Lounge 2 Piece | ₦80,000 | 10–16 | house leopard | **LIVE**, photographed |
-| `essence-set/` | Essence Set | ₦78,900 | 6–16 | peach, black, white, navy blue | **New brief** — awaiting photos, not on site |
-| `diza-set/` | Diza Set | ₦125,000 | 6–16 | pink, cream, black | **New brief** — awaiting photos, not on site |
-| `amber-dress/` | Amber Dress | ₦85,000 | 6–12 | black, cream | **New brief** — awaiting photos, not on site |
-| `hasam-set/` | Hasam Set | ₦97,900 | 6–12 | clay brown, white, black, navy blue, "crusty brown" | **New brief** — awaiting photos, not on site |
+| `essence-set/` | Essence Set | ₦78,900 | 6–16 | peach, black, white, navy blue | **New brief** — photos staged in `images/` |
+| `diza-set/` | Diza Set | ₦125,000 | 6–16 | pink, cream, black | **New brief** — photos staged in `images/` |
+| `amber-dress/` | Amber Dress | ₦85,000 | 6–12 | black, cream | **New brief** — photos staged in `images/` |
+| `hasam-set/` | Hasam Set | ₦97,900 | 6–12 | clay brown, white, black, navy blue, "crusty brown" | **New brief** — photos staged in `images/` |
 
 ## Inventory — The Recall Collection (`recall-aw2425/`)
 
 | Folder | Product | Price | Sizes | Status |
 |---|---|---|---|---|
-| `sloane-dress/` | Sloane Dress | ₦120,000 | 6–12 | **LIVE** (listed), awaiting photos |
-| `boss-set/` | Boss Set | ₦220,000 · 14–18 +₦30,000 | 6–18 | **LIVE** (listed), awaiting photos |
-| `fantasia-dress/` | Fantasia Dress | ₦145,000 | 6–12 | **LIVE** (listed), awaiting photos |
-| `elizabeth-brazer-dress/` | Elizabeth Brazer Dress | ₦245,000 | 6–12 | **LIVE** (listed), awaiting photos |
-| `teresa-dress/` | Teresa Dress | ₦105,000 | 6–12 | **LIVE** (listed), awaiting photos |
+| `sloane-dress/` | Sloane Dress | ₦120,000 | 6–12 | **LIVE**, photographed (3 views) |
+| `boss-set/` | Boss Set | ₦220,000 · 14–18 +₦30,000 | 6–18 | **LIVE**, photographed (3 views) |
+| `fantasia-dress/` | Fantasia Dress | ₦145,000 | 6–12 | **LIVE**, photographed (4 views) |
+| `elizabeth-brazer-dress/` | Elizabeth Brazer Dress | ₦245,000 | 6–12 | **LIVE**, photographed (3 views) |
+| `teresa-dress/` | Teresa Dress | ₦105,000 | 6–12 | **LIVE**, photographed (1 view) |
 
 ## Where the photos actually live
 

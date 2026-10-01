@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { 
-  Heart, ShoppingBag, Ruler, ChevronDown, ChevronUp, 
-  RotateCw, Share2, Calendar, MessageCircle
+import {
+  Heart, ShoppingBag, Ruler, Plus, Minus,
+  RotateCw, Share2, Calendar, ArrowUpRight, MessageCircle
 } from 'lucide-react';
 import { Product, ProductColorway } from '../../types';
 import { useCurrencyStore } from '../../stores/currencyStore';
@@ -11,6 +11,7 @@ import { useAudioStore } from '../../stores/audioStore';
 import { formatPriceWithDisplay } from '../../utils/formatters';
 import { onImageError, buildWebPSrcSet, isVideoMedia } from '../../utils/images';
 import { SizeGuideModal } from '../common/SizeGuideModal';
+import { ShopProductCard } from '../catalog/ShopProductCard';
 import { toast } from 'sonner';
 import { ORDER_CLARITY_NOTE, buildWhatsAppUrl } from '../../data/brand';
 import { getCollectionById } from '../../data/collections';
@@ -50,9 +51,6 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const [rotationFrameIndex, setRotationFrameIndex] = useState<number>(0);
   const [isDragging360, setIsDragging360] = useState<boolean>(false);
   const [startX360, setStartX360] = useState<number>(0);
-
-  // Accordion open states
-  const [openAccordion, setOpenAccordion] = useState<string | null>('DETAILS');
 
   const { displayCurrency } = useCurrencyStore();
   const { addToCart } = useCartStore();
@@ -119,431 +117,366 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     window.open(buildWhatsAppUrl(message), '_blank', 'noopener,noreferrer');
   };
 
-  const toggleAccordion = (name: string) => {
-    playTactileClick();
-    setOpenAccordion((prev) => (prev === name ? null : name));
-  };
-
   const recommendations = allProducts
     .filter((p) => p.id !== product.id && (p.pillar === product.pillar || product.completeTheLookProductIds?.includes(p.id)))
     .slice(0, 4);
 
   return (
-    <div className="w-full bg-white min-h-screen text-noir font-sans-luxury pb-24">
-      
-      {/* Breadcrumb Navigation */}
-      <div className="max-w-[1680px] mx-auto px-4 sm:px-8 py-4 text-[11px] text-muted tracking-[0.2em] uppercase flex items-center gap-2 border-b border-black/10">
-        <button onClick={onBackToCatalog} className="hover:text-noir transition-colors">Collections</button>
-        <span>/</span>
+    <div className="shop-page min-h-screen pb-4">
+
+      {/* Breadcrumb */}
+      <nav className="pdp-breadcrumb" aria-label="Breadcrumb">
+        <button onClick={onBackToCatalog}>Collections</button>
+        <span aria-hidden="true">/</span>
         <span>{product.pillar.replace('_', ' ')}</span>
-        <span>/</span>
-        <span className="text-noir font-semibold line-clamp-1">{product.name}</span>
-      </div>
+        <span aria-hidden="true">/</span>
+        <span className="is-here">{product.name}</span>
+      </nav>
 
-      {/* Main Split Layout Grid */}
-      <div className="max-w-[1680px] mx-auto px-4 sm:px-8 pt-6 sm:pt-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
-          
-          {/* Left Column: Vertical Multi-Angle Lookbook Gallery */}
-          <div className="lg:col-span-7 space-y-4">
-            
-            {/* 360 Rotation Toggle Bar */}
-            {product.has360Rotation && (
-              <div className="flex items-center justify-between p-3 bg-white border border-black/15 mb-2">
-                <div className="flex items-center gap-2 text-xs font-semibold tracking-wider uppercase text-noir">
-                  <RotateCw className="w-3.5 h-3.5 text-bronze" />
-                  <span>Interactive 360° View</span>
-                </div>
-                <button
-                  onClick={() => {
-                    playTactileClick();
-                    setIs360Active(!is360Active);
-                  }}
-                  className={`px-3 py-1.5 text-xs font-semibold tracking-wider uppercase transition-colors border ${
-                    is360Active ? 'bg-noir text-white border-noir' : 'bg-white text-noir border-black/20 hover:border-noir'
-                  }`}
-                >
-                  {is360Active ? 'Exit 360° View' : 'Drag to Rotate'}
-                </button>
-              </div>
-            )}
+      {/* Lookbook + purchase rail */}
+      <div className="pdp-split">
 
-            {/* Interactive 360 Canvas */}
-            {is360Active ? (
-              <div
-                onMouseDown={handleMouseDown360}
-                onMouseMove={handleMouseMove360}
-                onMouseUp={handleMouseUp360}
-                onMouseLeave={handleMouseUp360}
-                className="aspect-[3/4] w-full bg-alabaster-subtle border border-black/15 overflow-hidden cursor-ew-resize relative flex items-center justify-center select-none"
+        {/* Left: vertical lookbook gallery */}
+        <div className="pdp-gallery">
+
+          {product.has360Rotation && (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontSize: 10, letterSpacing: '.18em', textTransform: 'uppercase', color: '#7c7164' }}>
+                <RotateCw size={14} style={{ color: '#846548' }} /> Interactive 360° view
+              </span>
+              <a
+                className="shop-text-link"
+                style={{ color: '#201f1d', gap: 10, padding: '6px 0 4px', fontSize: 10 }}
+                href="#rotate"
+                onClick={(e) => {
+                  e.preventDefault();
+                  playTactileClick();
+                  setIs360Active(!is360Active);
+                }}
               >
-                <img
-                  src={frames[rotationFrameIndex] || selectedColorway.heroImageUrl}
-                  alt={`${product.name} 360 view`}
-                  onError={onImageError}
-                  className="w-full h-full object-cover object-top pointer-events-none"
-                />
-                <div className="absolute bottom-4 px-3 py-1.5 bg-noir text-white text-[10px] font-mono-luxury tracking-widest uppercase">
-                  Angle {rotationFrameIndex + 1} / {frames.length} • Drag horizontally
-                </div>
-              </div>
-            ) : (
-              /* Vertical Lookbook Image Stack */
-              <div className="space-y-4">
-                {selectedColorway.mediaGalleryUrls.map((mediaUrl, i) => (
-                  <div key={i} className="aspect-[3/4.2] w-full bg-[#F7F7F7] overflow-hidden group">
-                    {isVideoMedia(mediaUrl) ? (
-                      <video
-                        src={mediaUrl}
-                        controls
-                        loop
-                        muted
-                        playsInline
-                        preload="metadata"
-                        className="w-full h-full object-contain p-4"
-                      />
-                    ) : (
-                      <img
-                        src={mediaUrl}
-                        srcSet={buildWebPSrcSet(mediaUrl)}
-                        sizes="(min-width: 1024px) 50vw, 92vw"
-                        alt={`${product.name} - Angle ${i + 1}`}
-                        onError={onImageError}
-                        className="w-full h-full object-contain group-hover:scale-102 transition-transform duration-700 ease-out p-4"
-                      />
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-
-          </div>
-
-          {/* Right Column: Sticky Product Details Rail */}
-          <div className="lg:col-span-5 lg:sticky lg:top-24 h-fit space-y-6">
-            
-            {/* Header / Badges */}
-            <div className="space-y-3 pb-5 border-b border-black/10">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono-luxury text-neutral-500 uppercase tracking-[0.25em] font-medium">
-                  {product.categoryName} • {selectedColorway.sku}
-                </span>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => {
-                      playTactileClick();
-                      toggleProductInEdit('edit-default', product.id);
-                    }}
-                    className={`p-2.5 border transition-colors ${
-                      isSaved ? 'bg-noir text-white border-noir' : 'border-black/15 text-noir hover:border-noir'
-                    }`}
-                    title="Save Piece"
-                  >
-                    <Heart className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
-                  </button>
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(window.location.href);
-                      toast.success('Piece share link copied to clipboard.');
-                    }}
-                    className="p-2.5 border border-black/15 text-noir hover:border-noir transition-colors"
-                    title="Share Piece"
-                  >
-                    <Share2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-
-              {collection && (
-                <p className="text-[10px] sm:text-[11px] font-mono-luxury uppercase tracking-[0.3em] text-bronze">
-                  {collection.title}
-                </p>
-              )}
-
-              <h1 className="font-sans-luxury text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-noir uppercase leading-tight">
-                {product.name}
-              </h1>
-
-              <p className="text-xs sm:text-sm text-black/70 font-light leading-relaxed">
-                {product.headline}
-              </p>
-
-              {/* Price Display */}
-              <div className="pt-2">
-                <span className="text-2xl sm:text-3xl font-mono-luxury font-bold text-noir">
-                  {formatPriceWithDisplay(displayPriceKobo, displayCurrency)}
-                </span>
-                <span className="text-[10px] text-neutral-500 font-mono-luxury block mt-1 tracking-wider uppercase">
-                  Confirm availability and measurements before payment
-                </span>
-              </div>
+                {is360Active ? 'Exit 360°' : 'Drag to rotate'} <ArrowUpRight size={13} />
+              </a>
             </div>
+          )}
 
-            {/* Interactive Cloth Swatches */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-semibold text-noir tracking-widest uppercase">
-                  COLOUR: <span className="text-taupe font-mono-luxury">{selectedColorway.color.name}</span>
-                </span>
-                {selectedColorway.isMadeToOrder && (
-                  <span className="text-[10px] font-mono-luxury text-neutral-500 uppercase font-medium tracking-wider">
-                    Made to Order
-                  </span>
-                )}
-              </div>
-
-              {/* Swatch List */}
-              <div className="flex flex-wrap items-center gap-2.5">
-                {product.colorways.map((cw) => {
-                  const isActive = cw.id === selectedColorway.id;
-                  return (
-                    <button
-                      key={cw.id}
-                      onClick={() => {
-                        playTactileClick();
-                        setSelectedColorway(cw);
-                      }}
-                      className={`swatch-chip ${isActive ? 'active' : ''} ${cw.isSoldOut ? 'sold-out' : ''} ${cw.isMadeToOrder ? 'made-to-order' : ''}`}
-                      style={{ backgroundColor: cw.color.hexCode }}
-                      title={`${cw.color.code} — ${cw.color.name}`}
-                    />
-                  );
-                })}
-              </div>
-
-              <span className="text-[10px] text-neutral-500 font-mono-luxury block tracking-wider uppercase">
-                {selectedColorway.color.lusterDescription}
+          {is360Active ? (
+            <div
+              className="pdp-360-canvas"
+              onMouseDown={handleMouseDown360}
+              onMouseMove={handleMouseMove360}
+              onMouseUp={handleMouseUp360}
+              onMouseLeave={handleMouseUp360}
+            >
+              <img
+                src={frames[rotationFrameIndex] || selectedColorway.heroImageUrl}
+                alt={`${product.name} 360 view`}
+                onError={onImageError}
+              />
+              <span className="salon-stage-chip" style={{ background: '#faf9f6e8', color: '#201f1d' }}>
+                Angle {String(rotationFrameIndex + 1).padStart(2, '0')} / {String(frames.length).padStart(2, '0')} · Drag horizontally
               </span>
             </div>
-
-            {/* Size Selector */}
-            <div className="space-y-3 pt-2">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-semibold text-noir tracking-widest uppercase">
-                  SELECT SIZE:
-                </span>
-                <button
-                  onClick={() => {
-                    playTactileClick();
-                    setIsSizeGuideOpen(true);
-                  }}
-                  className="flex items-center gap-1.5 text-black hover:text-taupe underline underline-offset-4 tracking-wider uppercase text-[11px] font-semibold transition-colors"
-                >
-                  <Ruler className="w-3.5 h-3.5" />
-                  <span>Size & Measurement Guide</span>
-                </button>
-              </div>
-
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                {sizeOptionsFor(product).map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => {
-                      playTactileClick();
-                      setSelectedSize(s);
-                      setIsMadeToMeasure(false);
-                    }}
-                    className={`py-3 text-xs font-mono-luxury font-semibold border transition-all ${
-                      selectedSize === s && !isMadeToMeasure
-                        ? 'bg-noir text-white border-noir'
-                        : 'bg-white text-noir border-black/15 hover:border-noir'
-                    }`}
-                  >
-                    {s}
-                  </button>
-                ))}
-
-                {product.isMadeToMeasureAllowed && (
-                  <button
-                    onClick={() => {
-                      playTactileClick();
-                      setIsMadeToMeasure(true);
-                      setSelectedSize('MADE_TO_MEASURE');
-                    }}
-                    className={`col-span-3 sm:col-span-6 py-3.5 text-xs font-semibold tracking-widest uppercase border transition-all flex items-center justify-center gap-2 ${
-                      isMadeToMeasure
-                        ? 'bg-noir text-white border-noir font-bold'
-                        : 'bg-white text-noir border-black/30 hover:bg-noir hover:text-white'
-                    }`}
-                  >
-                    <span>CUSTOM / MADE TO MEASURE</span>
-                  </button>
+          ) : (
+            selectedColorway.mediaGalleryUrls.map((mediaUrl, i) => (
+              <div key={i} className="pdp-figure">
+                {isVideoMedia(mediaUrl) ? (
+                  <video
+                    src={mediaUrl}
+                    controls
+                    loop
+                    muted
+                    playsInline
+                    preload="metadata"
+                  />
+                ) : (
+                  <img
+                    src={mediaUrl}
+                    srcSet={buildWebPSrcSet(mediaUrl)}
+                    sizes="(min-width: 1024px) 55vw, 92vw"
+                    alt={`${product.name} — angle ${i + 1}`}
+                    onError={onImageError}
+                  />
+                )}
+                <span className="pdp-figure-tag">F / {String(i + 1).padStart(2, '0')}</span>
+                {i === 0 && (
+                  <span className="pdp-figure-note">{product.name}.</span>
                 )}
               </div>
-            </div>
-
-            {/* Actions */}
-            <div className="pt-3 space-y-3">
-              <button
-                onClick={handleAddToCart}
-                className="w-full py-4 sm:py-5 bg-noir text-white text-xs font-bold tracking-[0.25em] uppercase hover:bg-neutral-900 border border-noir transition-all flex items-center justify-center gap-3 shadow-sm"
-              >
-                <ShoppingBag className="w-4 h-4 text-white" />
-                <span>ADD TO BAG</span>
-              </button>
-
-              <button
-                onClick={handleWhatsAppInquiry}
-                className="w-full py-3.5 bg-white text-noir text-xs font-bold tracking-[0.2em] uppercase border border-noir hover:bg-noir hover:text-white transition-all flex items-center justify-center gap-2"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span>ASK ABOUT THIS PIECE ON WHATSAPP</span>
-              </button>
-
-              <div className="flex items-center justify-between text-[11px] text-neutral-500 font-mono-luxury pt-1 border-b border-black/10 pb-3">
-                <span>Abuja Atelier Direct</span>
-                <button
-                  onClick={() => {
-                    playTactileClick();
-                    onBookAppointment();
-                  }}
-                  className="text-noir font-semibold underline underline-offset-2 flex items-center gap-1.5 hover:text-taupe transition-colors"
-                >
-                  <Calendar className="w-3.5 h-3.5" />
-                  <span>Request a Fitting</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Materiality */}
-            <div className="py-4 space-y-3 border-b border-black/10 text-xs">
-              <div className="flex items-center justify-between">
-                <span className="font-sans-luxury font-bold tracking-wider uppercase text-black">
-                  Craft & Materiality
-                </span>
-                <span className="text-[10px] font-mono-luxury text-neutral-500 uppercase">
-                  {product.fabricIntelligence.weightGsm} GSM
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
-                <div>
-                  <span className="text-[10px] font-mono-luxury text-neutral-500 block uppercase tracking-wider">Material</span>
-                  <span className="font-medium text-black">{product.fabricIntelligence.material}</span>
-                </div>
-                <div>
-                  <span className="text-[10px] font-mono-luxury text-neutral-500 block uppercase tracking-wider">Composition</span>
-                  <span className="font-medium text-black">{product.fabricIntelligence.composition}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Collapsible Accordions */}
-            <div className="divide-y divide-black/10 text-xs">
-              {/* Details */}
-              <div>
-                <button
-                  onClick={() => toggleAccordion('DETAILS')}
-                  className="w-full py-3.5 flex items-center justify-between font-bold tracking-widest uppercase text-noir hover:text-champagne transition-colors text-left"
-                >
-                  <span>DESIGN & FIT DETAILS</span>
-                  {openAccordion === 'DETAILS' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                </button>
-                {openAccordion === 'DETAILS' && (
-                  <div className="pb-4 text-black/75 font-light leading-relaxed space-y-2 animate-in fade-in">
-                    <p>{product.description}</p>
-                    <p className="font-mono-luxury text-noir text-[11px] pt-1">
-                      {product.atelierNotes}
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              {/* Delivery & Terms */}
-              <div>
-                <button
-                  onClick={() => toggleAccordion('SHIPPING')}
-                  className="w-full py-3.5 flex items-center justify-between font-bold tracking-widest uppercase text-noir hover:text-champagne transition-colors text-left"
-                >
-                  <span>DELIVERY & ALTERATIONS</span>
-                  {openAccordion === 'SHIPPING' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                </button>
-                {openAccordion === 'SHIPPING' && (
-                  <div className="pb-4 text-black/75 font-light leading-relaxed space-y-2.5 animate-in fade-in">
-                    <p>{ORDER_CLARITY_NOTE}</p>
-                    <p><strong>Itemized Written Invoice:</strong> Every order is backed by an itemized written invoice stating garment specifications, fabric details, confirmed delivery date, and agreed price.</p>
-                    <p><strong>Delivery Timelines:</strong> Production timelines and transit dates are agreed in writing before cutting. Nationwide Nigerian delivery is handled via vetted dispatch/couriers; international orders are fulfilled via express DHL/FedEx.</p>
-                    <p><strong>Fittings & Alterations:</strong> Ready-to-wear pieces may be exchanged within 48 hours in unworn original condition. Custom bespoke garments receive dedicated fitting consultations and complimentary alteration adjustments at our Abuja studio or through guided virtual fitting reviews.</p>
-                  </div>
-                )}
-              </div>
-
-              {/* Composition & Care */}
-              <div>
-                <button
-                  onClick={() => toggleAccordion('CARE')}
-                  className="w-full py-3.5 flex items-center justify-between font-bold tracking-widest uppercase text-noir hover:text-champagne transition-colors text-left"
-                >
-                  <span>CARE INSTRUCTIONS</span>
-                  {openAccordion === 'CARE' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                </button>
-                {openAccordion === 'CARE' && (
-                  <div className="pb-4 text-black/75 font-light leading-relaxed space-y-1 animate-in fade-in">
-                    <p><strong>Care:</strong> {product.fabricIntelligence.careInstructions}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-
-          </div>
-
+            ))
+          )}
         </div>
 
-        {/* More Pieces Recommendations */}
-        <div className="pt-20 border-t border-black/10 mt-20">
-          <div className="text-center space-y-2 mb-10">
-            <span className="text-[10px] font-mono-luxury text-neutral-500 uppercase tracking-[0.25em]">
-              Editorial Curation
-            </span>
-            <h2 className="font-sans-luxury text-2xl sm:text-3xl font-bold tracking-tight text-noir uppercase">
-              More Finaluchi Pieces
-            </h2>
-          </div>
+        {/* Right: sticky purchase rail */}
+        <div className="pdp-rail">
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-            {recommendations.map((rec) => (
-              <div
-                key={rec.id}
-                role="button"
-                tabIndex={0}
-                aria-label={`View ${rec.name}`}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+            <span className="pdp-label" style={{ margin: 0 }}>
+              {product.categoryName} · {selectedColorway.sku}
+            </span>
+            <span style={{ display: 'inline-flex', gap: 10 }}>
+              <button
                 onClick={() => {
                   playTactileClick();
-                  onSelectProduct(rec);
+                  toggleProductInEdit('edit-default', product.id);
                 }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    playTactileClick();
-                    onSelectProduct(rec);
-                  }
+                aria-pressed={isSaved}
+                aria-label={isSaved ? 'Unsave piece' : 'Save piece'}
+                style={{
+                  width: 40, height: 40, display: 'grid', placeItems: 'center',
+                  border: '1px solid #dcd8d0', borderRadius: '50%', color: isSaved ? '#faf9f6' : '#201f1d',
+                  background: isSaved ? '#201f1d' : 'transparent',
                 }}
-                className="group cursor-pointer flex flex-col transition-all"
               >
-                <div className="aspect-[3/4] w-full overflow-hidden bg-[#F7F7F7] mb-3 p-3 flex items-center justify-center">
-                  <img
-                    src={rec.colorways[0].heroImageUrl}
-                    srcSet={buildWebPSrcSet(rec.colorways[0].heroImageUrl)}
-                    sizes="(min-width: 1024px) 22vw, 46vw"
-                    alt={rec.name}
-                    onError={onImageError}
-                    className="w-full h-full object-contain group-hover:scale-104 transition-transform duration-700 ease-out"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <h3 className="text-xs sm:text-sm font-sans-luxury font-semibold uppercase text-noir group-hover:text-bronze transition-colors line-clamp-1">
-                    {rec.name}
-                  </h3>
-                  <div className="text-xs sm:text-sm font-mono-luxury text-noir font-bold">
-                    {formatPriceWithDisplay(rec.basePriceKobo, displayCurrency)}
-                  </div>
-                </div>
-              </div>
-            ))}
+                <Heart size={16} fill={isSaved ? 'currentColor' : 'none'} />
+              </button>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href);
+                  toast.success('Piece share link copied to clipboard.');
+                }}
+                aria-label="Share piece"
+                style={{
+                  width: 40, height: 40, display: 'grid', placeItems: 'center',
+                  border: '1px solid #dcd8d0', borderRadius: '50%', color: '#201f1d',
+                }}
+              >
+                <Share2 size={16} />
+              </button>
+            </span>
           </div>
-        </div>
 
+          {collection && (
+            <span className="pdp-label" style={{ marginTop: 14, color: '#846548' }}>
+              {collection.title}
+            </span>
+          )}
+
+          <h1 className="pdp-title">{product.name}</h1>
+          <p style={{ fontSize: 13, lineHeight: 1.9, color: '#69645e', marginTop: 14 }}>
+            {product.headline}
+          </p>
+
+          <div className="pdp-price">
+            {formatPriceWithDisplay(displayPriceKobo, displayCurrency)}
+            <span className="pdp-label" style={{ marginTop: 8, fontSize: 8, letterSpacing: '.16em' }}>
+              Confirm availability &amp; measurements before payment
+            </span>
+          </div>
+
+          {/* Colour */}
+          <div style={{ marginTop: 30 }}>
+            <span className="pdp-label">
+              Colour — {selectedColorway.color.name}
+              {selectedColorway.isMadeToOrder ? ' · made to order' : ''}
+            </span>
+            <div className="pdp-swatch-row" role="group" aria-label="Choose colour">
+              {product.colorways.map((cw) => (
+                <button
+                  key={cw.id}
+                  onClick={() => {
+                    playTactileClick();
+                    setSelectedColorway(cw);
+                  }}
+                  aria-pressed={cw.id === selectedColorway.id}
+                  aria-label={`${cw.color.code} — ${cw.color.name}`}
+                  title={`${cw.color.code} — ${cw.color.name}`}
+                >
+                  <i
+                    style={{
+                      background: cw.color.hexCode,
+                      opacity: cw.isSoldOut ? 0.35 : 1,
+                    }}
+                  />
+                </button>
+              ))}
+            </div>
+            <span style={{ display: 'block', fontSize: 10, color: '#8b8378', marginTop: 10 }}>
+              {selectedColorway.color.lusterDescription}
+            </span>
+          </div>
+
+          {/* Size */}
+          <div style={{ marginTop: 28 }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 14 }}>
+              <span className="pdp-label">Select size</span>
+              <a
+                className="shop-text-link"
+                style={{ color: '#201f1d', gap: 8, fontSize: 9, padding: '2px 0' }}
+                href="#size-guide"
+                onClick={(e) => {
+                  e.preventDefault();
+                  playTactileClick();
+                  setIsSizeGuideOpen(true);
+                }}
+              >
+                <Ruler size={12} /> Size guide
+              </a>
+            </div>
+            <div className="pdp-sizes" role="group" aria-label="Choose size">
+              {sizeOptionsFor(product).map((s) => (
+                <button
+                  key={s}
+                  onClick={() => {
+                    playTactileClick();
+                    setSelectedSize(s);
+                    setIsMadeToMeasure(false);
+                  }}
+                  aria-pressed={selectedSize === s && !isMadeToMeasure}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+            {product.isMadeToMeasureAllowed && (
+              <button
+                className="pdp-mtm"
+                onClick={() => {
+                  playTactileClick();
+                  setIsMadeToMeasure(true);
+                  setSelectedSize('MADE_TO_MEASURE');
+                }}
+                aria-pressed={isMadeToMeasure}
+              >
+                <span>Custom / made to measure</span>
+                <ArrowUpRight size={15} />
+              </button>
+            )}
+          </div>
+
+          {/* Actions */}
+          <div style={{ marginTop: 30, display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <button
+              onClick={handleAddToCart}
+              className="shop-solid-button"
+              style={{ marginTop: 0, justifyContent: 'center', padding: '18px 20px' }}
+            >
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 12 }}>
+                <ShoppingBag size={15} /> Add to bag
+              </span>
+              <span style={{ fontSize: 13 }}>{formatPriceWithDisplay(displayPriceKobo, displayCurrency)}</span>
+            </button>
+
+            <a
+              className="shop-text-link"
+              style={{ color: '#201f1d', justifyContent: 'space-between', width: '100%', padding: '10px 0 8px' }}
+              href="#inquire"
+              onClick={(e) => {
+                e.preventDefault();
+                handleWhatsAppInquiry();
+              }}
+            >
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+                <MessageCircle size={14} /> Ask about this piece on WhatsApp
+              </span>
+              <ArrowUpRight size={15} />
+            </a>
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 12, borderTop: '1px solid #e4dfd6' }}>
+              <span className="pdp-label" style={{ margin: 0 }}>Abuja atelier direct</span>
+              <a
+                className="shop-text-link"
+                style={{ color: '#846548', gap: 8, fontSize: 9, padding: '2px 0' }}
+                href="#fitting"
+                onClick={(e) => {
+                  e.preventDefault();
+                  playTactileClick();
+                  onBookAppointment();
+                }}
+              >
+                <Calendar size={12} /> Request a fitting <ArrowUpRight size={12} />
+              </a>
+            </div>
+          </div>
+
+          {/* Craft & materiality */}
+          <div style={{ marginTop: 30, paddingTop: 22, borderTop: '1px solid #dcd8d0' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+              <span className="pdp-label" style={{ margin: 0 }}>Craft &amp; materiality</span>
+              <span style={{ fontSize: 10, color: '#8b8378' }}>{product.fabricIntelligence.weightGsm} GSM</span>
+            </div>
+            <div className="pdp-meta" style={{ marginTop: 14 }}>
+              <div>
+                <span className="pdp-label" style={{ fontSize: 8 }}>Material</span>
+                <b>{product.fabricIntelligence.material}</b>
+              </div>
+              <div>
+                <span className="pdp-label" style={{ fontSize: 8 }}>Composition</span>
+                <b>{product.fabricIntelligence.composition}</b>
+              </div>
+            </div>
+          </div>
+
+          {/* Accordions */}
+          <div style={{ marginTop: 26 }}>
+            <details className="pdp-accordion" open>
+              <summary>
+                Design &amp; fit details
+                <Plus size={13} className="pdp-acc-plus" />
+                <Minus size={13} className="pdp-acc-minus" />
+              </summary>
+              <div className="pdp-accordion-body">
+                <p>{product.description}</p>
+                <p style={{ marginTop: 10, color: '#201f1d' }}>{product.atelierNotes}</p>
+              </div>
+            </details>
+            <details className="pdp-accordion">
+              <summary>
+                Delivery &amp; alterations
+                <Plus size={13} className="pdp-acc-plus" />
+                <Minus size={13} className="pdp-acc-minus" />
+              </summary>
+              <div className="pdp-accordion-body">
+                <p>{ORDER_CLARITY_NOTE}</p>
+                <p style={{ marginTop: 10 }}><strong>Itemized written invoice:</strong> every order is backed by an itemized written invoice stating garment specifications, fabric details, confirmed delivery date, and agreed price.</p>
+                <p style={{ marginTop: 8 }}><strong>Delivery timelines:</strong> production timelines and transit dates are agreed in writing before cutting. Nationwide Nigerian delivery is handled via vetted dispatch/couriers; international orders are fulfilled via express DHL/FedEx.</p>
+                <p style={{ marginTop: 8 }}><strong>Fittings &amp; alterations:</strong> ready-to-wear pieces may be exchanged within 48 hours in unworn original condition. Custom bespoke garments receive dedicated fitting consultations and complimentary alteration adjustments at our Abuja studio or through guided virtual fitting reviews.</p>
+              </div>
+            </details>
+            <details className="pdp-accordion">
+              <summary>
+                Care instructions
+                <Plus size={13} className="pdp-acc-plus" />
+                <Minus size={13} className="pdp-acc-minus" />
+              </summary>
+              <div className="pdp-accordion-body">
+                <p>{product.fabricIntelligence.careInstructions}</p>
+              </div>
+            </details>
+          </div>
+
+        </div>
+      </div>
+
+      {/* More pieces */}
+      <div className="pdp-recs">
+        <div className="shop-collection-heading">
+          <div>
+            <span className="shop-eyebrow" style={{ color: '#7c7164' }}>Editorial curation</span>
+            <h2 style={{ font: "400 43px/1.15 'Antic Didone', serif", marginTop: 9 }}>
+              More Finaluchi <em style={{ color: '#846548', fontStyle: 'italic' }}>pieces.</em>
+            </h2>
+          </div>
+          <a
+            className="shop-text-link"
+            style={{ color: '#201f1d' }}
+            href="#collection"
+            onClick={(e) => {
+              e.preventDefault();
+              onBackToCatalog();
+            }}
+          >
+            View the collection <ArrowUpRight size={15} />
+          </a>
+        </div>
+        <div className="pdp-recs-grid" style={{ marginTop: 36 }}>
+          {recommendations.map((rec) => (
+            <ShopProductCard
+              key={rec.id}
+              product={rec}
+              onSelectProduct={onSelectProduct}
+            />
+          ))}
+        </div>
       </div>
 
       {/* Size Guide Modal */}

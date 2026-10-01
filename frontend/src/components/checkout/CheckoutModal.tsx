@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Lock, CreditCard, AlertCircle } from 'lucide-react';
+import { X, Lock, ArrowUpRight, AlertCircle } from 'lucide-react';
 import { useCartStore } from '../../stores/cartStore';
 import { useCurrencyStore } from '../../stores/currencyStore';
 import { useOrderStore } from '../../stores/orderStore';
@@ -8,7 +8,7 @@ import { formatKoboToNgn, formatPriceWithDisplay } from '../../utils/formatters'
 import { ShippingAddress } from '../../types';
 import { toast } from 'sonner';
 import { useModalA11y } from '../../lib/useModalA11y';
-import { webpVariant } from '../../utils/images';
+import { webpVariant, onImageError } from '../../utils/images';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -132,31 +132,30 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
     // Initialize Order Intent
     const newOrder = createOrder(shippingAddress, packagingType, isGift, giftMessage);
-    
+
     // Trigger Paystack Gateway Modal
     onPaymentInitiated(newOrder.orderNumber, total, email);
   };
 
   return (
-    <div className="fixed inset-0 z-[700] flex items-start sm:items-center justify-center p-4 bg-noir/80 backdrop-blur-sm overflow-y-auto animate-in fade-in duration-200">
+    <div className="order-veil">
       <div
         ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="checkout-title"
         tabIndex={-1}
-        className="bg-white text-noir w-full max-w-4xl border border-black/20 shadow-2xl overflow-hidden my-8 font-sans-luxury outline-none"
+        className="order-modal shop-page"
       >
-        
+
         {/* Header */}
-        <div className="p-6 bg-noir text-white border-b border-white/10 flex items-center justify-between">
+        <div className="order-head">
           <div>
-            <div className="flex items-center gap-2 text-champagne text-xs font-mono-luxury tracking-widest uppercase">
-              <Lock className="w-3.5 h-3.5" />
-              <span>FINALUCHI CHECKOUT • PRICES CHARGED IN NGN</span>
-            </div>
-            <h2 id="checkout-title" className="font-sans-luxury text-2xl sm:text-3xl font-bold tracking-tight text-white uppercase mt-1">
-              Delivery Details
+            <span className="shop-eyebrow" style={{ color: '#7c7164', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+              <Lock size={11} style={{ color: '#846548' }} /> Finaluchi checkout · prices charged in NGN
+            </span>
+            <h2 id="checkout-title">
+              Delivery <em>details.</em>
             </h2>
           </div>
 
@@ -165,25 +164,22 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               playTactileClick();
               onClose();
             }}
-            className="p-2 text-white/60 hover:text-white transition-colors"
-            aria-label="Close Checkout"
+            className="bag-head-close"
+            aria-label="Close checkout"
           >
-            <X className="w-5 h-5" />
+            <X size={17} />
           </button>
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 p-6 sm:p-8 bg-white">
-            
-            {/* Left: Country-Aware Address Form */}
-            <div className="lg:col-span-7 space-y-6">
-              
-              {/* Destination Country Toggle */}
-              <div className="space-y-2.5">
-                <label className="text-xs font-bold tracking-widest uppercase text-noir block">
-                  DELIVERY DESTINATION COUNTRY:
-                </label>
-                <div className="grid grid-cols-2 gap-2">
+          <div className="order-body">
+
+            {/* Left: country-aware address form */}
+            <div className="order-form">
+
+              <div>
+                <span className="shop-eyebrow" style={{ color: '#7c7164' }}>Delivery destination</span>
+                <div className="pdp-sizes" style={{ marginTop: 8 }}>
                   <button
                     type="button"
                     aria-pressed={country === 'NG'}
@@ -192,15 +188,9 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       setCountry('NG');
                       setState('FCT (Abuja)');
                     }}
-                    className={`py-3 px-4 text-xs font-semibold tracking-wider uppercase border transition-all ${
-                      country === 'NG'
-                        ? 'bg-noir text-white border-noir'
-                        : 'bg-white text-black/70 border-black/15 hover:border-noir'
-                    }`}
                   >
-                    NIGERIA DELIVERY
+                    Nigeria
                   </button>
-
                   <button
                     type="button"
                     aria-pressed={country !== 'NG'}
@@ -209,284 +199,211 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       setCountry('US');
                       setState('New York');
                     }}
-                    className={`py-3 px-4 text-xs font-semibold tracking-wider uppercase border transition-all ${
-                      country !== 'NG'
-                        ? 'bg-noir text-white border-noir'
-                        : 'bg-white text-black/70 border-black/15 hover:border-noir'
-                    }`}
                   >
-                    INTERNATIONAL DELIVERY
+                    International
                   </button>
                 </div>
               </div>
 
-              {/* International Country Selector */}
               {country !== 'NG' && (
-                <div className="space-y-1.5">
-                  <label htmlFor="checkout-country" className="text-[11px] font-mono-luxury text-black/60 uppercase">Select Destination Country</label>
-                  <select
-                    id="checkout-country"
-                    value={country}
-                    onChange={(e) => setCountry(e.target.value)}
-                    className="w-full p-3 bg-white border border-black/20 text-xs focus:outline-none focus:border-noir"
-                  >
+                <label className="order-field">
+                  <span>Destination country</span>
+                  <select value={country} onChange={(e) => setCountry(e.target.value)}>
                     {INTL_COUNTRIES.map((c) => (
-                      <option key={c.code} value={c.code}>
-                        {c.name}
-                      </option>
+                      <option key={c.code} value={c.code}>{c.name}</option>
                     ))}
                   </select>
-                </div>
+                </label>
               )}
 
-              {/* Contact Information */}
-              <div className="space-y-3 pt-2">
-                <h3 className="text-xs font-bold tracking-widest uppercase text-bronze-deep border-b border-black/10 pb-1.5">
-                  1. CLIENT CONTACT INFORMATION
-                </h3>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                  <div>
-                    <label htmlFor="checkout-name" className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">Full Legal Name *</label>
+              {/* Contact */}
+              <div style={{ marginTop: 30 }}>
+                <span className="shop-eyebrow" style={{ color: '#846548' }}>01 — Client contact</span>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 26px' }}>
+                  <label className="order-field">
+                    <span>Full legal name *</span>
                     <input
                       type="text"
-                      id="checkout-name"
                       placeholder="e.g. Amara Okafor"
                       required
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      className="w-full p-3 bg-white border border-black/20 text-xs focus:outline-none focus:border-noir"
                     />
-                  </div>
-                  <div>
-                    <label htmlFor="checkout-email" className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">Email Address *</label>
+                  </label>
+                  <label className="order-field">
+                    <span>Email address *</span>
                     <input
                       type="email"
-                      id="checkout-email"
                       placeholder="client@domain.com"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full p-3 bg-white border border-black/20 text-xs focus:outline-none focus:border-noir"
                     />
-                  </div>
+                  </label>
                 </div>
-
-                <div>
-                  <label htmlFor="checkout-phone" className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">Phone Number (with country code) *</label>
+                <label className="order-field">
+                  <span>Phone number (with country code) *</span>
                   <input
                     type="tel"
-                    id="checkout-phone"
                     placeholder={country === 'NG' ? '+234 803 000 0000' : '+1 (555) 000-0000'}
                     required
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full p-3 bg-white border border-black/20 text-xs focus:outline-none focus:border-noir font-mono-luxury"
+                    style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}
                   />
-                </div>
+                </label>
               </div>
 
-              {/* Delivery Address */}
-              <div className="space-y-3 pt-2">
-                <h3 className="text-xs font-bold tracking-widest uppercase text-bronze-deep border-b border-black/10 pb-1.5">
-                  2. DELIVERY ADDRESS
-                </h3>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                  <div>
-                    <label htmlFor="checkout-state" className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">
-                      {country === 'NG' ? 'State (36 States + FCT) *' : 'State / Province / Region *'}
-                    </label>
+              {/* Address */}
+              <div style={{ marginTop: 26 }}>
+                <span className="shop-eyebrow" style={{ color: '#846548' }}>02 — Delivery address</span>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 26px' }}>
+                  <label className="order-field">
+                    <span>{country === 'NG' ? 'State (36 states + FCT) *' : 'State / province / region *'}</span>
                     {country === 'NG' ? (
-                      <select
-                        id="checkout-state"
-                        value={state}
-                        onChange={(e) => setState(e.target.value)}
-                        className="w-full p-3 bg-white border border-black/20 text-xs focus:outline-none focus:border-noir"
-                      >
+                      <select value={state} onChange={(e) => setState(e.target.value)}>
                         {NIGERIAN_STATES.map((st) => (
-                          <option key={st} value={st}>
-                            {st}
-                          </option>
+                          <option key={st} value={st}>{st}</option>
                         ))}
                       </select>
                     ) : (
                       <input
                         type="text"
-                        id="checkout-state"
                         placeholder="e.g. New York / London"
                         required
                         value={state}
                         onChange={(e) => setState(e.target.value)}
-                        className="w-full p-3 bg-white border border-black/20 text-xs focus:outline-none focus:border-noir"
                       />
                     )}
-                  </div>
-
-                  <div>
-                    <label htmlFor="checkout-city" className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">Town / City / Area *</label>
+                  </label>
+                  <label className="order-field">
+                    <span>Town / city / area *</span>
                     <input
                       type="text"
-                      id="checkout-city"
                       placeholder={country === 'NG' ? 'e.g. Maitama / Gwarinpa' : 'City name'}
                       required
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
-                      className="w-full p-3 bg-white border border-black/20 text-xs focus:outline-none focus:border-noir"
                     />
-                  </div>
+                  </label>
                 </div>
-
-                <div>
-                  <label htmlFor="checkout-address" className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">Street Address Line 1 *</label>
+                <label className="order-field">
+                  <span>Street address line 1 *</span>
                   <input
                     type="text"
-                    id="checkout-address"
                     placeholder="House number, street name, estate"
                     required
                     value={addressLine1}
                     onChange={(e) => setAddressLine1(e.target.value)}
-                    className="w-full p-3 bg-white border border-black/20 text-xs focus:outline-none focus:border-noir"
                   />
-                </div>
-
+                </label>
                 {country !== 'NG' && (
-                  <div>
-                    <label htmlFor="checkout-postal" className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">
-                      Postal / ZIP Code *
-                    </label>
+                  <label className="order-field">
+                    <span>Postal / ZIP code *</span>
                     <input
                       type="text"
-                      id="checkout-postal"
                       placeholder="e.g. 10001 or SW1A 1AA"
                       value={postalCode}
                       onChange={(e) => setPostalCode(e.target.value)}
-                      className="w-full p-3 bg-white border border-black/20 text-xs focus:outline-none focus:border-noir font-mono-luxury uppercase"
+                      style={{ textTransform: 'uppercase', fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}
                     />
-                  </div>
+                  </label>
                 )}
-
                 {country === 'NG' && (
-                  <div>
-                    <label htmlFor="checkout-landmark" className="text-[10px] font-mono-luxury text-black/60 uppercase block mb-1">
-                      Landmark / Gate Instructions (Optional)
-                    </label>
+                  <label className="order-field">
+                    <span>Landmark / gate instructions (optional)</span>
                     <input
                       type="text"
-                      id="checkout-landmark"
                       placeholder="e.g. Near civic center, deliver to security post"
                       value={landmarkNotes}
                       onChange={(e) => setLandmarkNotes(e.target.value)}
-                      className="w-full p-3 bg-white border border-black/20 text-xs focus:outline-none focus:border-noir"
                     />
-                    <span className="text-[10px] text-muted font-mono-luxury mt-1 block">
-                      ✓ No Postal / ZIP code required for Nigerian addresses.
-                    </span>
-                  </div>
+                    <i style={{ display: 'block', fontStyle: 'normal', fontSize: 10, color: '#8b8378', marginTop: 6 }}>
+                      No postal / ZIP code required for Nigerian addresses.
+                    </i>
+                  </label>
                 )}
               </div>
 
-              {/* International DDU Disclaimer */}
               {country !== 'NG' && (
-                <div className="p-4 bg-amber-500/10 border border-amber-500/30 flex items-start gap-2.5 text-xs text-black/80">
-                  <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                  <p className="text-[11px] leading-relaxed">
-                    <strong>International order:</strong> Confirm destination availability, courier cost, delivery timeline, customs responsibilities and return terms before payment.
-                  </p>
+                <div className="order-note" style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                  <AlertCircle size={15} style={{ color: '#846548', flexShrink: 0, marginTop: 2 }} />
+                  <span><strong>International order:</strong> confirm destination availability, courier cost, delivery timeline, customs responsibilities and return terms before payment.</span>
                 </div>
               )}
-
             </div>
 
-            {/* Right: Order Summary & Paystack Action */}
-            <div className="lg:col-span-5 bg-white p-6 border border-black/15 space-y-6 flex flex-col justify-between">
-              <div className="space-y-4">
-                <h3 className="text-xs font-bold tracking-widest uppercase text-noir border-b border-black/10 pb-2">
-                  ORDER SUMMARY ({items.length} PIECES)
-                </h3>
+            {/* Right: order summary */}
+            <div className="order-summary">
+              <span className="shop-eyebrow" style={{ color: '#7c7164' }}>
+                Order summary — {items.length} {items.length === 1 ? 'piece' : 'pieces'}
+              </span>
 
-                {/* Items preview list */}
-                <div className="space-y-3 max-h-52 overflow-y-auto divide-y divide-black/10 text-xs">
-                  {items.map((item) => (
-                    <div key={item.id} className="pt-2.5 first:pt-0 flex justify-between items-center gap-2">
-                      <div className="flex items-center gap-2.5">
-                        <img
-                          src={webpVariant(item.colorway.heroImageUrl, 480)}
-                          alt={item.product.name}
-                          className="w-9 h-11 object-cover border border-black/10"
-                        />
-                        <div className="line-clamp-1">
-                          <div className="font-semibold text-noir uppercase text-[11px]">{item.product.name}</div>
-                          <div className="text-[10px] text-black/60 font-mono-luxury">
-                            {item.colorway.color.name} • {item.size} (×{item.quantity})
-                          </div>
-                        </div>
+              <div style={{ marginTop: 6 }}>
+                {items.map((item) => (
+                  <div key={item.id} className="order-summary-item">
+                    <img
+                      src={webpVariant(item.colorway.heroImageUrl, 480)}
+                      alt={item.product.name}
+                      onError={onImageError}
+                    />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ font: "400 16px/1.3 'Antic Didone', serif" }}>{item.product.name}</div>
+                      <div style={{ fontSize: 10, color: '#706961', marginTop: 3 }}>
+                        {item.colorway.color.name} · {item.size} (×{item.quantity})
                       </div>
-                      <span className="font-mono-luxury font-bold text-noir shrink-0">
-                        {formatKoboToNgn(item.unitPriceKobo * item.quantity)}
-                      </span>
                     </div>
-                  ))}
-                </div>
-
-                {/* Ledger Calculations */}
-                <div className="pt-4 border-t border-black/10 space-y-2 text-xs font-mono-luxury">
-                  <div className="flex justify-between text-black/60">
-                    <span>SUBTOTAL:</span>
-                    <span className="text-noir font-semibold">{formatKoboToNgn(subtotal)}</span>
-                  </div>
-                  {packaging > 0 && (
-                    <div className="flex justify-between text-black/60">
-                      <span>PACKAGING:</span>
-                      <span className="text-noir font-semibold">{formatKoboToNgn(packaging)}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between text-black/60">
-                    <span>SHIPPING ({country}):</span>
-                    <span className="text-noir font-semibold">
-                      {shipping === 0 ? 'Complimentary' : formatKoboToNgn(shipping)}
+                    <span style={{ fontSize: 11, whiteSpace: 'nowrap' }}>
+                      {formatKoboToNgn(item.unitPriceKobo * item.quantity)}
                     </span>
                   </div>
-                  <div className="flex justify-between text-black/60">
-                    <span>ESTIMATED VAT (7.5%):</span>
-                    <span className="text-noir font-semibold">{formatKoboToNgn(tax)}</span>
-                  </div>
-                  <div className="flex justify-between text-base font-bold text-noir pt-2.5 border-t border-black/10">
-                    <span>TOTAL BILLED (NGN):</span>
-                    <span className="text-noir">{formatKoboToNgn(total)}</span>
-                  </div>
-                  {displayCurrency !== 'NGN' && (
-                    <div className="text-right text-[11px] text-bronze-deep font-bold">
-                      {formatPriceWithDisplay(total, displayCurrency)}
-                    </div>
-                  )}
-                </div>
-
+                ))}
               </div>
 
-              {/* Order Confirmation & Concierge Action */}
-              <div className="space-y-3 pt-4 border-t border-black/10">
-                <button
-                  type="submit"
-                  className="w-full py-4.5 bg-noir text-white text-xs font-bold tracking-[0.25em] uppercase hover:bg-neutral-900 border border-noir transition-all flex items-center justify-center gap-2"
-                >
-                  <CreditCard className="w-4 h-4 text-white" />
-                  <span>CONFIRM ORDER & REQUEST INVOICE • {formatKoboToNgn(total)}</span>
+              <div style={{ marginTop: 'auto', paddingTop: 22 }}>
+                <div className="bag-ledger-row">
+                  <span>Subtotal</span>
+                  <span style={{ color: '#201f1d' }}>{formatKoboToNgn(subtotal)}</span>
+                </div>
+                {packaging > 0 && (
+                  <div className="bag-ledger-row">
+                    <span>Packaging</span>
+                    <span style={{ color: '#201f1d' }}>{formatKoboToNgn(packaging)}</span>
+                  </div>
+                )}
+                <div className="bag-ledger-row">
+                  <span>Shipping ({country})</span>
+                  <span style={{ color: '#201f1d' }}>
+                    {shipping === 0 ? 'Complimentary' : formatKoboToNgn(shipping)}
+                  </span>
+                </div>
+                <div className="bag-ledger-row">
+                  <span>Estimated VAT (7.5%)</span>
+                  <span style={{ color: '#201f1d' }}>{formatKoboToNgn(tax)}</span>
+                </div>
+                <div className="bag-ledger-total">
+                  <span style={{ textTransform: 'uppercase', letterSpacing: '.14em', fontSize: 10 }}>Total billed (NGN)</span>
+                  <span style={{ fontSize: 16 }}>{formatKoboToNgn(total)}</span>
+                </div>
+                {displayCurrency !== 'NGN' && (
+                  <div style={{ textAlign: 'right', fontSize: 11, color: '#846548', marginTop: 6 }}>
+                    {formatPriceWithDisplay(total, displayCurrency)}
+                  </div>
+                )}
+
+                <button type="submit" className="order-submit">
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+                    <Lock size={12} /> Confirm order &amp; request invoice
+                  </span>
+                  <ArrowUpRight size={15} />
                 </button>
 
-                <div className="p-3 bg-alabaster-subtle border border-black/10 text-[10px] text-black/75 font-mono-luxury space-y-1">
-                  <div className="flex items-center gap-1.5 font-bold text-black uppercase">
-                    <Lock className="w-3 h-3 text-bronze" />
-                    <span>Authoritative Atelier Verification:</span>
-                  </div>
-                  <p>Your piece specifications, custom sizing, and guaranteed completion date are reviewed directly by our Abuja atelier. An official itemized invoice and traceable payment instructions are provided upon confirmation.</p>
-                </div>
-
-                <p className="text-[10px] text-center text-black/60 font-mono-luxury">
-                  Review your delivery timeline, measurements and order terms before finalising with our concierge.
+                <p style={{ fontSize: 9, lineHeight: 1.8, letterSpacing: '.06em', color: '#8b8378', marginTop: 14, textTransform: 'uppercase' }}>
+                  Your piece specifications, custom sizing and guaranteed completion date are reviewed
+                  directly by the Abuja atelier. An itemized written invoice and traceable payment
+                  instructions follow confirmation.
                 </p>
               </div>
-
             </div>
 
           </div>

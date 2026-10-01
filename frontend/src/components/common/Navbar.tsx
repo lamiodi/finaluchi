@@ -348,31 +348,9 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Center: FINALUCHI Brand Crest & Signature Mark */}
-        <button
-          type="button"
-          className="cursor-pointer select-none flex items-center justify-center gap-2 sm:gap-2.5 group mx-auto px-2"
-          onClick={() => {
-            playTactileClick();
-            onNavigateHome();
-          }}
-        >
-          <div className="w-6 h-6 sm:w-7 sm:h-7 bg-white p-0.5 border border-black/15 group-hover:border-champagne transition-colors flex items-center justify-center shrink-0 shadow-2xs">
-            <picture>
-              <source srcSet="/FINALUCHIlogo-nav.webp" type="image/webp" />
-              <img
-                src="/FINALUCHIlogo-nav.webp"
-                alt="Finaluchi Emblem"
-                width={28}
-                height={28}
-                fetchPriority="high"
-                decoding="async"
-                className="w-full h-full object-contain"
-              />
-            </picture>
-          </div>
-          <span className="font-sans-luxury text-base sm:text-xl font-bold tracking-[0.24em] sm:tracking-[0.28em] text-noir uppercase group-hover:opacity-80 transition-opacity">
-            FINALUCHI
-          </span>
+        <button type="button" className="nav-house-brand" aria-label="Finaluchi Couture home" onClick={() => { playTactileClick(); onNavigateHome(); }}>
+          <img src="/FINALUCHIlogo-nav.webp" alt="" width={34} height={38} className="nav-house-emblem" />
+          <span className="nav-house-type"><span className="nav-house-name">FINALUCHI</span><span className="couture-signature">Couture</span></span>
         </button>
 
         {/* Right: Actions Dock */}

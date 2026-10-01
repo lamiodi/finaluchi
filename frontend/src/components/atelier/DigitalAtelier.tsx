@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronRight, ChevronLeft, ZoomIn, X } from 'lucide-react';
+import { ChevronRight, ChevronLeft, ZoomIn, X, ArrowUpRight } from 'lucide-react';
 import { ATELIER_STAGES } from '../../data/atelierStages';
 import { useAudioStore } from '../../stores/audioStore';
 import { useModalA11y } from '../../lib/useModalA11y';
@@ -12,7 +12,7 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
   const [activeStageIndex, setActiveStageIndex] = useState(0);
   const [isMacroModalOpen, setIsMacroModalOpen] = useState(false);
   const [isNoteOpen, setIsNoteOpen] = useState(false);
-  
+
   const { playTactileClick } = useAudioStore();
   const macroPanelRef = useModalA11y<HTMLDivElement>({
     onClose: () => setIsMacroModalOpen(false),
@@ -39,52 +39,58 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
   };
 
   return (
-    <section className="w-full bg-noir text-white py-20 sm:py-28 relative overflow-hidden font-sans-luxury">
-      
-      {/* Background ambient gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.05),transparent_60%)]" />
+    <section className="salon-section relative overflow-hidden" aria-label="The bespoke process">
 
-      <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
-        
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 sm:pb-8 border-b border-white/20 mb-8 sm:mb-12">
+      <div className="salon-inner">
+
+        {/* Salon heading — champagne eyebrow, serif display, stage counter
+            and the room's circular controls. */}
+        <div className="salon-heading">
           <div>
-            <span className="text-[10px] sm:text-xs font-mono-luxury text-champagne uppercase tracking-[0.25em] font-semibold block mb-1">
-              Atelier Craftsmanship
-            </span>
-            <h2 className="font-sans-luxury text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white uppercase">
-              The Bespoke Process
+            <span className="salon-eyebrow">Atelier craftsmanship · Abuja</span>
+            <h2>
+              The bespoke <em>process.</em>
             </h2>
-            <p className="text-xs text-white/70 font-light mt-2 max-w-xl">
-              From first consultation and measurement confirmation to toile creation and the final fitting.
+            <p style={{ fontSize: 12, lineHeight: 1.9, color: '#b2ada4', marginTop: 14, maxWidth: 460 }}>
+              From first consultation and measurement confirmation to toile creation and
+              the final fitting.
             </p>
           </div>
-
-          <div className="flex items-center gap-4">
-            <span className="text-xs font-mono-luxury text-white/60 uppercase tracking-widest">
-              Step 0{stage.step} of 0{ATELIER_STAGES.length}
+          <div className="salon-heading-side">
+            <span className="salon-count" role="status">
+              {stage.step}
             </span>
-            <div className="flex gap-2">
+            <div style={{ display: 'flex', gap: 15 }}>
               <button
                 onClick={handlePrev}
-                className="p-2.5 rounded-full border border-white/20 hover:border-white hover:text-white hover:bg-white/10 transition-colors"
                 aria-label="Previous Stage"
+                style={{
+                  width: 42, height: 42, display: 'grid', placeItems: 'center',
+                  border: '1px solid #ffffff35', borderRadius: '50%', color: '#efebe3',
+                }}
               >
-                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft size={19} />
               </button>
               <button
                 onClick={handleNext}
-                className="p-2.5 rounded-full border border-white/20 hover:border-white hover:text-white hover:bg-white/10 transition-colors"
                 aria-label="Next Stage"
+                style={{
+                  width: 42, height: 42, display: 'grid', placeItems: 'center',
+                  border: '1px solid #ffffff35', borderRadius: '50%', color: '#efebe3',
+                }}
               >
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight size={19} />
               </button>
             </div>
           </div>
         </div>
 
-        {/* Minimalist Navigation Steps */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-8 sm:mb-12 border-b border-white/10 pb-4">
+        {/* Stage navigation — runway thumbnail strip logic: numbered,
+            champagne when current. */}
+        <div
+          className="salon-grid"
+          style={{ gridTemplateColumns: 'repeat(6, minmax(0, 1fr))', gap: '0 24px', borderBottom: '1px solid #ffffff17', paddingBottom: 18, marginBottom: 42 }}
+        >
           {ATELIER_STAGES.map((stg, idx) => (
             <button
               key={stg.step}
@@ -93,150 +99,201 @@ export const DigitalAtelier: React.FC<DigitalAtelierProps> = ({ onBookFitting })
                 setActiveStageIndex(idx);
                 setIsNoteOpen(false);
               }}
-              className={`text-left pb-3 transition-all border-b-2 ${
-                idx === activeStageIndex
-                  ? 'border-white text-white font-medium'
-                  : 'border-transparent text-white/60 hover:text-white/80'
-              }`}
+              aria-pressed={idx === activeStageIndex}
+              style={{
+                textAlign: 'left',
+                paddingBottom: 10,
+                borderBottom: idx === activeStageIndex ? '2px solid #cab291' : '2px solid transparent',
+                color: idx === activeStageIndex ? '#efebe3' : '#9a9285',
+              }}
             >
-              <span className="text-[10px] font-mono-luxury block mb-1 text-champagne">
-                0{idx + 1}
+              <span style={{ display: 'block', fontSize: 9, letterSpacing: '.2em', color: '#baa78c', marginBottom: 6 }}>
+                {String(idx + 1).padStart(2, '0')}
               </span>
-              <span className="text-xs font-sans-luxury line-clamp-1">
+              <span style={{ fontSize: 11, display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {stg.title.split('&')[0]}
               </span>
             </button>
           ))}
         </div>
 
-        {/* Stage Content Presentation */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
-          
-          {/* Left: Imagery Stage */}
-          <div className="lg:col-span-7 relative group overflow-hidden bg-black border border-white/10 shadow-2xl">
-            <div className="aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden relative">
-              <img
-                src={stage.imageUrl}
-                alt={stage.title}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-            </div>
+        {/* Stage presentation — photo salon left, craft commentary right. */}
+        <div className="home-editorial" style={{ padding: 0, gridTemplateColumns: '1.35fr 1fr', gap: '5%' }}>
 
-            {/* Macro Zoom Trigger Button */}
-            <button
+          {/* Imagery stage */}
+          <div className="home-editorial-image" style={{ gap: 0 }}>
+            <div
+              className="home-editorial-figure"
+              style={{ aspectRatio: '16 / 10', cursor: 'zoom-in' }}
+              role="button"
+              tabIndex={0}
+              aria-label={`Inspect detail — ${stage.title}`}
               onClick={() => {
                 playTactileClick();
                 setIsMacroModalOpen(true);
               }}
-              className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 px-3 py-1.5 bg-black/80 backdrop-blur-md border border-white/30 text-white text-[10px] font-mono-luxury tracking-widest uppercase flex items-center gap-1.5 hover:bg-white hover:text-black transition-all"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setIsMacroModalOpen(true);
+                }
+              }}
             >
-              <ZoomIn className="w-3.5 h-3.5" />
-              <span>Inspect Detail</span>
-            </button>
-
-            <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 text-[10px] sm:text-xs font-mono-luxury text-white/70">
-              {stage.leadTailor} — Abuja Atelier
+              <img src={stage.imageUrl} alt={stage.title} />
+              <span className="salon-stage-chip">
+                Finaluchi / Stage {String(activeStageIndex + 1).padStart(2, '0')} · Atelier
+              </span>
+              <span
+                style={{
+                  position: 'absolute', bottom: 15, right: 15, zIndex: 2,
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  background: '#171715be', color: '#efebe3', padding: '8px 11px',
+                  fontSize: 8, letterSpacing: '.2em', textTransform: 'uppercase',
+                }}
+              >
+                <ZoomIn size={13} /> Inspect detail
+              </span>
             </div>
+            <span className="home-figure-micro" style={{ color: '#948c7f', marginTop: 14 }}>
+              {stage.leadTailor} — Abuja Atelier
+            </span>
           </div>
 
-          {/* Right: Craft Commentary */}
-          <div className="lg:col-span-5 space-y-6">
-            
-            <div className="space-y-1.5">
-              <span className="text-[10px] font-mono-luxury text-champagne uppercase tracking-[0.25em] font-medium block">
+          {/* Craft commentary */}
+          <div style={{ position: 'relative' }}>
+            <span className="salon-ghost-number" aria-hidden="true" style={{ position: 'absolute', right: 0, top: -18 }}>
+              {String(activeStageIndex + 1).padStart(2, '0')}
+            </span>
+            <div style={{ position: 'relative' }}>
+              <span className="salon-eyebrow" style={{ display: 'block' }}>
                 {stage.subtitle}
               </span>
-              <h3 className="font-sans-luxury text-2xl sm:text-4xl font-bold text-white leading-tight">
+              <h3
+                style={{
+                  font: "400 clamp(28px, 3vw, 44px)/1.14 'Antic Didone', serif",
+                  letterSpacing: '-.02em',
+                  margin: '16px 0 0',
+                  color: '#efebe3',
+                }}
+              >
                 {stage.title}
               </h3>
             </div>
 
-            {/* Quote */}
-            <blockquote className="pl-4 border-l border-champagne text-xs sm:text-sm text-white/80 italic font-display leading-relaxed">
+            <blockquote
+              style={{
+                margin: '24px 0 0',
+                padding: '2px 0 2px 18px',
+                borderLeft: '1px solid #c5a880',
+                color: '#cab291',
+                fontFamily: "'Antic Didone', serif",
+                fontStyle: 'italic',
+                fontSize: 19,
+                lineHeight: 1.5,
+              }}
+            >
               &ldquo;{stage.quote}&rdquo;
             </blockquote>
 
-            {/* Details List */}
-            <div className="space-y-2.5 pt-2 border-t border-white/10">
-              <span className="text-[10px] font-mono-luxury uppercase tracking-wider text-white/50 block">
-                Key Considerations
+            <div style={{ marginTop: 28, borderTop: '1px solid #ffffff17', paddingTop: 20 }}>
+              <span style={{ display: 'block', fontSize: 9, letterSpacing: '.2em', textTransform: 'uppercase', color: '#948c7f' }}>
+                Key considerations
               </span>
-              <ul className="space-y-2">
+              <ul style={{ listStyle: 'none', margin: '14px 0 0', padding: 0 }}>
                 {stage.details.map((detail, i) => (
-                  <li key={i} className="flex items-start gap-2.5 text-xs text-white/80 font-light">
-                    <span className="text-champagne text-[10px] font-mono-luxury mt-0.5">•</span>
+                  <li
+                    key={i}
+                    style={{
+                      display: 'flex', gap: 12, alignItems: 'baseline',
+                      fontSize: 12, lineHeight: 1.8, color: '#b2ada4',
+                      paddingBottom: 9, borderBottom: i === stage.details.length - 1 ? 'none' : '1px solid #ffffff12',
+                    }}
+                  >
+                    <span style={{ color: '#c5a880', fontSize: 10 }}>{String(i + 1).padStart(2, '0')}</span>
                     <span>{detail}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Ordering Note Accordion */}
-            <div className="pt-2 border-t border-white/10">
+            {/* Ordering note accordion */}
+            <div style={{ marginTop: 20, borderTop: '1px solid #ffffff17', paddingTop: 4 }}>
               <button
                 onClick={toggleNote}
-                className="flex items-center justify-between w-full py-2 text-xs font-mono-luxury text-white/60 hover:text-white transition-colors uppercase tracking-wider"
+                aria-expanded={isNoteOpen}
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  width: '100%', padding: '10px 0', fontSize: 9, letterSpacing: '.2em',
+                  textTransform: 'uppercase', color: '#948c7f',
+                }}
               >
-                <span>Atelier Commentary</span>
-                <span>{isNoteOpen ? '− Close' : '+ Read Notes'}</span>
+                <span>Atelier commentary</span>
+                <span>{isNoteOpen ? '− Close' : '+ Read notes'}</span>
               </button>
-              
               {isNoteOpen && (
-                <p className="text-xs text-white/80 pt-2 font-light leading-relaxed animate-in fade-in">
+                <p style={{ fontSize: 12, lineHeight: 1.9, color: '#b2ada4', paddingTop: 4 }}>
                   {stage.audioTranscript}
                 </p>
               )}
             </div>
 
-            {/* Action */}
-            <div className="pt-2">
-              <button
-                onClick={() => {
-                  playTactileClick();
-                  onBookFitting();
-                }}
-                className="w-full py-4 bg-white text-black text-xs font-sans-luxury font-bold uppercase tracking-[0.2em] hover:bg-neutral-200 transition-all flex items-center justify-center"
-              >
-                <span>Request Custom Consultation</span>
-              </button>
-            </div>
+            {/* Action — the runway room's champagne bar. */}
+            <button
+              className="salon-solid-bar"
+              style={{ marginTop: 24 }}
+              onClick={() => {
+                playTactileClick();
+                onBookFitting();
+              }}
+            >
+              <span>Request custom consultation</span>
+              <ArrowUpRight size={17} />
+            </button>
 
           </div>
-
         </div>
 
       </div>
 
-      {/* Macro Detail Zoom Modal */}
+      {/* Macro detail zoom — the salon's inspection room. */}
       {isMacroModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-noir/90 backdrop-blur-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
           <div
             ref={macroPanelRef}
             role="dialog"
             aria-modal="true"
             aria-label={`Garment detail — ${stage.title}`}
             tabIndex={-1}
-            className="bg-noir border border-white/20 max-w-4xl w-full p-6 relative outline-none"
+            className="salon-section outline-none"
+            style={{ maxWidth: '56rem', width: '100%', padding: 26, position: 'relative' }}
           >
             <button
               onClick={() => setIsMacroModalOpen(false)}
-              className="absolute top-4 right-4 p-2 text-white/70 hover:text-white"
               aria-label="Close Detail View"
+              style={{
+                position: 'absolute', top: 16, right: 16, width: 42, height: 42,
+                display: 'grid', placeItems: 'center', border: '1px solid #ffffff35',
+                borderRadius: '50%', color: '#efebe3',
+              }}
             >
-              <X className="w-5 h-5" />
+              <X size={19} />
             </button>
-            <h4 className="font-sans-luxury text-xl text-white mb-4 uppercase tracking-couture">
-              Garment Detail — {stage.title}
+            <span className="salon-eyebrow">Macro inspection</span>
+            <h4
+              style={{
+                font: "400 30px/1.2 'Antic Didone', serif", color: '#efebe3', marginTop: 12,
+              }}
+            >
+              {stage.title}
             </h4>
-            <div className="aspect-[16/9] w-full overflow-hidden bg-black">
+            <div style={{ aspectRatio: '16 / 9', width: '100%', overflow: 'hidden', background: '#23231f', marginTop: 18 }}>
               <img
                 src={stage.macroZoomUrl}
                 alt="Detail view"
                 className="w-full h-full object-cover scale-150 transform hover:scale-175 transition-transform duration-500 cursor-crosshair"
               />
             </div>
-            <p className="text-xs text-white/60 mt-3 font-mono-luxury">
+            <p style={{ fontSize: 10, letterSpacing: '.08em', color: '#a19a8e', marginTop: 14 }}>
               Fabric, texture and finishing specifications confirmed with the Abuja atelier team.
             </p>
           </div>

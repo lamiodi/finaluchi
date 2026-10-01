@@ -9,6 +9,9 @@
     <meta name="description" content="Finaluchi Couture is an Abuja-based Nigerian fashion brand designing and hand-tailoring bold occasion wear, women's couture, ready-to-wear, asoebi, and custom bridal gowns." />
     
     <meta name="theme-color" content="#000000" />
+    <!-- Critical paint: the maison opens on a dark canvas so the preloader
+         never flashes white before React mounts. -->
+    <style>html { background: #0c0c0b; }</style>
     <link rel="canonical" href="https://finaluchi.com/" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://finaluchi.com/" />
@@ -28,9 +31,9 @@
     <!-- Google Fonts: Antic Didone (Headings), DM Sans (Body), JetBrains Mono (Labels & Prices) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Antic+Didone&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Allura&family=Antic+Didone&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
   </head>
-  <body class="bg-white text-noir antialiased selection:bg-black selection:text-white">
+  <body class="text-noir antialiased selection:bg-black selection:text-white" style="background: #0c0c0b">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

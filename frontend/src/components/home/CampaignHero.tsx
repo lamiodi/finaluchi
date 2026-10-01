@@ -175,7 +175,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
             />
 
             {/* Subtle Vignettes */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/40 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/40 max-sm:to-black/5 pointer-events-none" />
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/35 pointer-events-none hidden sm:block" />
           </div>
         ))}
@@ -195,7 +195,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
         </div>
 
         {/* Hero Central Block */}
-        <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 items-end pb-4 sm:pb-6">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 items-end pb-4 sm:pb-6 mt-auto sm:mt-0">
           
           {/* Left: Wide Heading & Actions */}
           <div className="lg:col-span-8 space-y-4 sm:space-y-5 max-w-4xl">

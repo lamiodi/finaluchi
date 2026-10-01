@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, CheckCircle2, MessageCircle, Sparkles } from 'lucide-react';
+import { ArrowUpRight, CheckCircle2, Sparkles } from 'lucide-react';
 import { BRAND, ORDER_CLARITY_NOTE, buildWhatsAppUrl } from '../../data/brand';
 import { useAudioStore } from '../../stores/audioStore';
 
@@ -9,6 +9,17 @@ interface FooterProps {
   onOpenContact?: () => void;
   onOpenAbout?: () => void;
 }
+
+const SHOP_WOMEN = [
+  { label: 'Dinner Dresses & Gowns', pillar: 'DINNER_DRESSES' },
+  { label: 'Dresses & Playsuits', pillar: 'DRESSES' },
+  { label: '2-Piece & 3-Piece Sets', pillar: '2PIECES' },
+  { label: 'Jumpsuits & Kimonos', pillar: 'JUMPSUITS' },
+  { label: 'Jackets, Pants & Skirts', pillar: 'JACKETS' },
+  { label: 'Bikini, Resort & Tops', pillar: 'BIKINI' },
+];
+
+const PROMISES = ['Written invoice', 'Confirmed event & delivery date', 'Measurement approval', 'Alteration & refund terms'];
 
 export const Footer: React.FC<FooterProps> = ({
   onNavigate,
@@ -22,13 +33,24 @@ export const Footer: React.FC<FooterProps> = ({
     'Hello Finaluchi Couture, I would like help choosing a piece or planning a custom order.'
   );
 
+  const link = 'text-left hover:text-[#efebe3] text-[#b2ada4] transition-colors';
+
   return (
-    <footer className="bg-noir text-white pt-14 sm:pt-16 pb-12 border-t border-white/15 font-sans-luxury relative z-10">
-      <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 pb-12 sm:pb-16 border-b border-white/15">
-          <div className="lg:col-span-5 space-y-4">
-            <div className="flex items-center gap-3 sm:gap-4">
-              <div className="w-12 sm:w-14 h-12 sm:h-14 bg-white p-1.5 border border-white/40 shadow-xl flex items-center justify-center shrink-0 rounded-xs">
+    <footer className="salon-section relative z-10">
+      <div className="salon-inner" style={{ paddingBottom: 0 }}>
+
+        {/* House block — the room's wordmark pairing: letterspaced serif
+            against the champagne Couture signature. */}
+        <div
+          className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 pb-14"
+          style={{ borderBottom: '1px solid #ffffff25' }}
+        >
+          <div className="lg:col-span-5 flex flex-col gap-7">
+            <div className="flex items-center gap-5">
+              <div
+                className="w-14 h-14 bg-white p-1.5 shrink-0 flex items-center justify-center"
+                style={{ border: '1px solid #ffffff35' }}
+              >
                 <picture>
                   <source srcSet="/FINALUCHIlogo.webp" type="image/webp" />
                   <img
@@ -42,58 +64,63 @@ export const Footer: React.FC<FooterProps> = ({
                   />
                 </picture>
               </div>
-              <div>
-                <span className="font-sans-luxury text-lg sm:text-2xl tracking-[0.22em] font-bold text-white uppercase block">
-                  FINALUCHI COUTURE
+              <div className="flex items-baseline gap-3">
+                <span
+                  style={{
+                    font: "400 26px/1 'Antic Didone', serif",
+                    letterSpacing: '.15em',
+                    color: '#efebe3',
+                  }}
+                >
+                  FINALUCHI
                 </span>
-                <p className="text-[9px] sm:text-[10px] tracking-[0.3em] text-champagne uppercase font-mono-luxury mt-0.5 font-medium">
-                  Abuja, Nigeria · Couture & Ready-to-Wear
-                </p>
+                <span className="couture-signature" style={{ fontSize: 30, color: '#c5a880', transform: 'rotate(-6deg)', display: 'inline-block' }}>
+                  Couture
+                </span>
               </div>
             </div>
 
-            <p className="text-xs text-white/80 leading-relaxed max-w-md font-light">
+            <span className="salon-eyebrow">Abuja, Nigeria · Couture &amp; Ready-to-Wear</span>
+
+            <p style={{ fontSize: 12, lineHeight: 1.9, color: '#b2ada4', maxWidth: 400 }}>
               A Nigerian fashion brand creating bold women&apos;s couture, ready-to-wear, asoebi,
-              event and bridal dressing—with menswear and lifestyle lines across the FLC family.
+              event and bridal dressing — with menswear and lifestyle lines across the FLC family.
             </p>
 
-            <button
-              onClick={onOpenAbout}
-              className="hover:text-champagne-light transition-colors underline underline-offset-4 text-xs text-left"
-            >
-              Meet Finaluchi and its creative direction ⟶
-            </button>
-          </div>
-
-          <div className="lg:col-span-3 space-y-4">
-            <h2 className="text-xs font-bold tracking-loose-couture uppercase text-white">
-              Plan Your Order
-            </h2>
-            <p className="text-xs text-white/70 font-light leading-relaxed">
-              Share the piece you like, your event date, preferred size or measurements and any
-              custom details. The team can confirm what is possible before you pay.
-            </p>
             <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => playTactileClick()}
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-white text-black text-xs font-bold tracking-widest uppercase hover:bg-champagne-light transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              className="salon-text-link"
+              href="#about"
+              onClick={(e) => {
+                e.preventDefault();
+                playTactileClick();
+                onOpenAbout?.();
+              }}
             >
-              <MessageCircle className="w-4 h-4" />
-              WhatsApp {BRAND.whatsappDisplay}
+              Meet Finaluchi and its creative direction <ArrowUpRight size={15} />
             </a>
           </div>
 
-          <div className="lg:col-span-4 space-y-4">
-            <h2 className="text-xs font-bold tracking-loose-couture uppercase text-white">
-              Before You Pay
-            </h2>
-            <p className="text-xs text-white/70 font-light leading-relaxed">{ORDER_CLARITY_NOTE}</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-white/80">
-              {['Written invoice', 'Confirmed event & delivery date', 'Measurement approval', 'Alteration & refund terms'].map((item) => (
-                <span key={item} className="flex items-start gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-champagne shrink-0 mt-0.5" />
+          {/* Plan your order — the room's champagne bar. */}
+          <div className="lg:col-span-3 flex flex-col gap-4">
+            <span className="salon-eyebrow">Plan your order</span>
+            <p style={{ fontSize: 12, lineHeight: 1.8, color: '#b2ada4' }}>
+              Share the piece you like, your event date, preferred size or measurements and any
+              custom details. The team can confirm what is possible before you pay.
+            </p>
+            <a className="salon-solid-bar" style={{ width: '100%', marginTop: 8 }} href={whatsappUrl} target="_blank" rel="noreferrer" onClick={() => playTactileClick()}>
+              <span>WhatsApp {BRAND.whatsappDisplay}</span>
+              <ArrowUpRight size={16} />
+            </a>
+          </div>
+
+          {/* Before you pay. */}
+          <div className="lg:col-span-4 flex flex-col gap-4">
+            <span className="salon-eyebrow">Before you pay</span>
+            <p style={{ fontSize: 12, lineHeight: 1.8, color: '#b2ada4' }}>{ORDER_CLARITY_NOTE}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5">
+              {PROMISES.map((item) => (
+                <span key={item} className="flex items-start gap-2.5" style={{ fontSize: 11, color: '#b2ada4' }}>
+                  <CheckCircle2 className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: '#c5a880' }} />
                   {item}
                 </span>
               ))}
@@ -101,33 +128,37 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-12 py-10 sm:py-12 text-xs">
-          <div className="space-y-3">
-            <h3 className="font-bold tracking-loose-couture uppercase">Shop Women</h3>
-            <ul className="space-y-2 text-white/75">
-              <li><button onClick={() => onNavigate('catalog', { pillar: 'DINNER_DRESSES' })} className="hover:text-white text-left">Dinner Dresses & Gowns</button></li>
-              <li><button onClick={() => onNavigate('catalog', { pillar: 'DRESSES' })} className="hover:text-white text-left">Dresses & Playsuits</button></li>
-              <li><button onClick={() => onNavigate('catalog', { pillar: '2PIECES' })} className="hover:text-white text-left">2-Piece & 3-Piece Sets</button></li>
-              <li><button onClick={() => onNavigate('catalog', { pillar: 'JUMPSUITS' })} className="hover:text-white text-left">Jumpsuits & Kimonos</button></li>
-              <li><button onClick={() => onNavigate('catalog', { pillar: 'JACKETS' })} className="hover:text-white text-left">Jackets, Pants & Skirts</button></li>
-              <li><button onClick={() => onNavigate('catalog', { pillar: 'BIKINI' })} className="hover:text-white text-left">Bikini, Resort & Tops</button></li>
+        {/* Directory. */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 py-12">
+          <div className="flex flex-col gap-4">
+            <span className="salon-eyebrow">Shop women</span>
+            <ul className="space-y-2.5" style={{ fontSize: 12 }}>
+              {SHOP_WOMEN.map(({ label, pillar }) => (
+                <li key={pillar}>
+                  <button className={link} onClick={() => onNavigate('catalog', { pillar })}>{label}</button>
+                </li>
+              ))}
             </ul>
           </div>
 
-          <div className="space-y-3">
-            <h3 className="font-bold tracking-loose-couture uppercase">Order Support</h3>
-            <ul className="space-y-2.5 text-white/75">
-              <li><button onClick={onOpenAppointments} className="hover:text-white text-left">Request a Custom Order</button></li>
-              <li><button onClick={() => onNavigate('tracker')} className="hover:text-white text-left">Track an Order</button></li>
-              <li><button onClick={() => onNavigate('client')} className="hover:text-white text-left">Saved Pieces</button></li>
-              <li><button onClick={onOpenContact} className="hover:text-white text-left">Contact Finaluchi</button></li>
-              <li><button onClick={() => onNavigate('atelier')} className="hover:text-white flex items-center gap-1.5 text-left"><Sparkles className="w-3 h-3 text-champagne" /> How Custom Orders Work</button></li>
+          <div className="flex flex-col gap-4">
+            <span className="salon-eyebrow">Order support</span>
+            <ul className="space-y-2.5" style={{ fontSize: 12 }}>
+              <li><button className={link} onClick={onOpenAppointments}>Request a Custom Order</button></li>
+              <li><button className={link} onClick={() => onNavigate('tracker')}>Track an Order</button></li>
+              <li><button className={link} onClick={() => onNavigate('client')}>Saved Pieces</button></li>
+              <li><button className={link} onClick={onOpenContact}>Contact Finaluchi</button></li>
+              <li>
+                <button className={`${link} inline-flex items-center gap-1.5`} onClick={() => onNavigate('atelier')}>
+                  <Sparkles className="w-3 h-3" style={{ color: '#c5a880' }} /> How Custom Orders Work
+                </button>
+              </li>
             </ul>
           </div>
 
-          <div className="space-y-3">
-            <h3 className="font-bold tracking-loose-couture uppercase">Based in Abuja</h3>
-            <p className="text-white/75 leading-relaxed font-light">
+          <div className="flex flex-col gap-4">
+            <span className="salon-eyebrow">Based in Abuja</span>
+            <p style={{ fontSize: 12, lineHeight: 1.8, color: '#b2ada4' }}>
               Finaluchi Couture is based in Abuja, Nigeria. Studio address, fitting availability,
               delivery timelines and collection arrangements are confirmed directly with the team.
             </p>
@@ -135,21 +166,26 @@ export const Footer: React.FC<FooterProps> = ({
               href={BRAND.instagramUrl}
               target="_blank"
               rel="noreferrer"
-              className="text-champagne-light hover:text-white inline-flex items-center gap-1.5"
+              className="salon-text-link self-start"
             >
-              View current work <ArrowRight className="w-3.5 h-3.5" />
+              View current work <ArrowUpRight size={14} />
             </a>
           </div>
         </div>
 
-        <div className="pt-8 border-t border-white/15 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/55">
+        {/* Colophon. */}
+        <div
+          className="flex flex-col sm:flex-row items-center justify-between gap-4 py-8"
+          style={{ borderTop: '1px solid #ffffff25', fontSize: 10, letterSpacing: '.1em', color: '#948c7f' }}
+        >
           <p>© {new Date().getFullYear()} Finaluchi Couture. All rights reserved.</p>
-          <div className="flex flex-wrap items-center justify-center gap-5 text-white/70">
+          <div className="flex flex-wrap items-center justify-center gap-6" style={{ textTransform: 'uppercase' }}>
             <span>Creative direction: {BRAND.creativeLead}</span>
-            <button onClick={onOpenAbout} className="hover:text-white">About</button>
-            <button onClick={onOpenContact} className="hover:text-white">Contact</button>
+            <button className="hover:text-[#efebe3] transition-colors" onClick={onOpenAbout}>About</button>
+            <button className="hover:text-[#efebe3] transition-colors" onClick={onOpenContact}>Contact</button>
           </div>
         </div>
+
       </div>
     </footer>
   );

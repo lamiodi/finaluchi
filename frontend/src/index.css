@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./refinements.css";
 
 @theme {
   --color-alabaster: #FFFFFF;
@@ -127,7 +128,9 @@
 
   html {
     font-family: var(--font-sans);
-    background-color: var(--color-alabaster);
+    /* Dark base canvas: the preloader opens onto it before React mounts,
+       and overscroll edges sit against the noir hero / salon footer. */
+    background-color: #0c0c0b;
     color: var(--color-noir);
     scroll-behavior: smooth;
     overflow-x: clip;
@@ -135,7 +138,7 @@
 
   body {
     font-family: var(--font-sans);
-    background-color: var(--color-alabaster);
+    background-color: #0c0c0b;
     color: var(--color-noir);
     overflow-x: clip;
   }
@@ -296,6 +299,31 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #000000;
+}
+
+/* ── Coverflow Reel stage ─────────────────────────────────────────
+ * Swiper draws the coverflow transforms; the house styling — portrait
+ * slide size, the dim that receding slides fall into, and the champagne
+ * keyline on the active card — lives here. */
+.coverflow-reel-stage {
+  overflow: visible; /* receding cards may bleed past the section box */
+  padding: 1.5rem 0; /* keyline + shadow room so nothing clips */
+}
+
+.coverflow-reel-stage .swiper-slide {
+  width: clamp(210px, 56vw, 330px);
+  aspect-ratio: 2 / 3;
+  height: auto;
+  transition: filter 600ms cubic-bezier(0.23, 1, 0.32, 1);
+  filter: brightness(0.45);
+}
+
+.coverflow-reel-stage .swiper-slide-active {
+  filter: none;
+}
+
+.coverflow-reel-stage .swiper-slide-active .reel-keyline {
+  border-color: rgba(197, 168, 128, 0.55);
 }
 
 /* Respect Reduced Motion */

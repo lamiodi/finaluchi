@@ -36,7 +36,7 @@ const AboutModal = React.lazy(() => import('./components/common/AboutModal').the
 const SearchModal = React.lazy(() => import('./components/common/SearchModal').then(m => ({ default: m.SearchModal })));
 const LegalPage = React.lazy(() => import('./components/common/LegalPage').then(m => ({ default: m.LegalPage })));
 const FaqPage = React.lazy(() => import('./components/common/FaqPage').then(m => ({ default: m.FaqPage })));
-import { WhatsAppWidget } from './components/common/WhatsAppWidget';
+import { WelcomeModal } from './components/common/WelcomeModal';
 
 type ViewMode = 'HOME' | 'CATALOG' | 'PRODUCT' | 'TRACKER' | 'CLIENT' | 'ADMIN' | 'LEGAL' | 'FAQ';
 
@@ -73,6 +73,7 @@ export const App: React.FC = () => {
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState<boolean>(false);
   const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
   const [isAboutOpen, setIsAboutOpen] = useState<boolean>(false);
+  const [isWelcomeOpen, setIsWelcomeOpen] = useState<boolean>(false);
 
   // Paystack checkout transaction context
   const [pendingPaymentOrderId, setPendingPaymentOrderId] = useState<string>('');
@@ -96,6 +97,26 @@ export const App: React.FC = () => {
       if (route.view === 'LEGAL') setLegalPolicy(route.policy);
     }
   }, []);
+
+  // The maison's welcome card — offered once per session, and only when
+  // the visitor actually lands on the home stage.
+  useEffect(() => {
+    if (currentView !== 'HOME') return;
+    try {
+      if (sessionStorage.getItem('flc-welcome-seen') === '1') return;
+    } catch {
+      return;
+    }
+    const timer = window.setTimeout(() => {
+      try {
+        sessionStorage.setItem('flc-welcome-seen', '1');
+      } catch {
+        /* private mode — the card simply shows again next visit */
+      }
+      setIsWelcomeOpen(true);
+    }, 2600);
+    return () => window.clearTimeout(timer);
+  }, [currentView]);
 
   // Keep the URL hash in sync with the active view without polluting history
   useEffect(() => {
@@ -245,7 +266,7 @@ export const App: React.FC = () => {
               }}
             />
 
-            <OccasionEditsBar onSelectCategory={handleNavigatePillar} onSelectOccasion={handleNavigatePillar} />
+            <OccasionEditsBar onSelectCategory={handleNavigatePillar} onSelectOccasion={handleNavigatePillar} onSelectProduct={handleSelectProduct} />
 
             <ReadyToWearGrid
               // Home capsule shows photographed pieces only — unphotographed
@@ -462,8 +483,24 @@ export const App: React.FC = () => {
         )}
       </React.Suspense>
 
-      {/* WhatsApp Floating Concierge Widget */}
-      <WhatsAppWidget />
+      {/* Maison welcome card — once per session on the home stage */}
+      <WelcomeModal
+        isOpen={isWelcomeOpen}
+        onClose={() => setIsWelcomeOpen(false)}
+        onDiscoverCapsule={() => {
+          setIsWelcomeOpen(false);
+          // Let the card unmount (and release its scroll lock) first.
+          window.setTimeout(() => {
+            const el = document.getElementById('the-capsule-section');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+            else handleNavigatePillar('ALL');
+          }, 120);
+        }}
+        onBookFitting={() => {
+          setIsWelcomeOpen(false);
+          setIsAppointmentModalOpen(true);
+        }}
+      />
 
     </div>
   );
