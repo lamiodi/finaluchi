@@ -333,7 +333,7 @@ export const MASTER_PRODUCTS: Product[] = [
     availability: 'AVAILABLE',
     occasions: ['PRIVATE_DINNER', 'COCKTAIL_SOIREE', 'WEDDING'],
     displayProportion: 'standard',
-    isFeatured: false, // TODO(product): flip on when photos land
+    isFeatured: true, // photos landed 2026-10-01
     isMadeToMeasureAllowed: false,
     has360Rotation: false,
     editorialQuote: 'Simple, but never plain — the one you reach for first.',
@@ -387,7 +387,7 @@ export const MASTER_PRODUCTS: Product[] = [
     availability: 'AVAILABLE',
     occasions: ['GALA_BLACK_TIE', 'RED_CARPET', 'PRIVATE_DINNER'],
     displayProportion: 'standard',
-    isFeatured: false, // TODO(product): flip on when photos land
+    isFeatured: true, // photos landed 2026-10-01
     isMadeToMeasureAllowed: false,
     has360Rotation: false,
     editorialQuote: 'Walk in like the meeting is already won.',
@@ -444,7 +444,7 @@ export const MASTER_PRODUCTS: Product[] = [
     availability: 'AVAILABLE',
     occasions: ['COCKTAIL_SOIREE', 'WEDDING'],
     displayProportion: 'standard',
-    isFeatured: false, // TODO(product): flip on when photos land
+    isFeatured: true, // photos landed 2026-10-01
     isMadeToMeasureAllowed: false,
     has360Rotation: false,
     editorialQuote: 'Half dress, half evening — entirely Fantasia.',
@@ -499,7 +499,7 @@ export const MASTER_PRODUCTS: Product[] = [
     availability: 'AVAILABLE',
     occasions: ['WEDDING', 'COCKTAIL_SOIREE', 'PRIVATE_DINNER'],
     displayProportion: 'standard',
-    isFeatured: false, // TODO(product): flip on when photos land
+    isFeatured: true, // photos landed 2026-10-01
     isMadeToMeasureAllowed: false,
     has360Rotation: false,
     editorialQuote: 'A bodice with opinions — the Elizabeth speaks first.',
@@ -553,7 +553,7 @@ export const MASTER_PRODUCTS: Product[] = [
     availability: 'AVAILABLE',
     occasions: ['COCKTAIL_SOIREE', 'VACATION'],
     displayProportion: 'standard',
-    isFeatured: false, // TODO(product): flip on when photos land
+    isFeatured: true, // photos landed 2026-10-01
     isMadeToMeasureAllowed: false,
     has360Rotation: false,
     editorialQuote: 'Light on the body, long on the evening.',

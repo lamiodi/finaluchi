@@ -28,7 +28,7 @@ export const MASTER_COLLECTIONS: Collection[] = [
     slug: 'the-recall-collection-2024-25-autumn-drop',
     description:
       'Five evening pieces released together as the 2024/25 Autumn Drop — the Sloane, the Boss Set, the Fantasia, the Elizabeth and the Teresa.',
-    photographed: false, // photos pending — the home reel presents the photographed capsule until they land
+    photographed: true, // photos committed 2026-10-01 (df05e76) — the homepage presents the collection
   },
 ];
 

@@ -33,8 +33,9 @@ export const ReadyToWearGrid: React.FC<ReadyToWearGridProps> = ({
               className="home-figure-micro"
               style={{ display: 'block', marginTop: 12, maxWidth: 430, lineHeight: 1.8 }}
             >
-              House prints, hand-mounted rosettes and easy jersey — five ready-to-wear
-              pieces, photographed on the Finaluchi client.
+              House prints, hand-mounted rosettes, easy jersey and the Recall
+              Collection's evening pieces — every ready-to-wear piece,
+              photographed on the Finaluchi client.
             </p>
           </div>
           <span className="shop-result-count" role="status">
