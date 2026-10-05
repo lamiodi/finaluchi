@@ -1,0 +1,10 @@
+file_name,product_id,product_name,role,suggested_public_id,cloudinary_url
+amber-1.jpeg,prod-dress-07,Amber Dress,hero,finaluchi/products/amber-dress/amber-1,
+amber-2.jpeg,prod-dress-07,Amber Dress,gallery,finaluchi/products/amber-dress/amber-2,
+essence-1.jpeg,prod-2pc-04,Essence Set,hero,finaluchi/products/essence-set/essence-1,
+diza-1.jpeg,prod-2pc-05,Diza Set,hero,finaluchi/products/diza-set/diza-1,
+diza-2.jpeg,prod-2pc-05,Diza Set,gallery,finaluchi/products/diza-set/diza-2,
+hasam-1.jpeg,prod-2pc-06,Hasam Set,hero,finaluchi/products/hasam-set/hasam-1,
+hasam-2.jpeg,prod-2pc-06,Hasam Set,gallery,finaluchi/products/hasam-set/hasam-2,
+hasam-3.jpeg,prod-2pc-06,Hasam Set,gallery,finaluchi/products/hasam-set/hasam-3,
+hasam-4.jpeg,prod-2pc-06,Hasam Set,gallery,finaluchi/products/hasam-set/hasam-4,

@@ -1,0 +1,201 @@
+{
+  "batch": "upload-batch",
+  "createdOn": "2026-10-05",
+  "sourceBriefs": "products/rtw-capsule/<slug>/product.json (untouched — this batch is a prepared copy)",
+  "targetImageStore": "Cloudinary — see cloudinary-mapping.csv; upload images/ flat, record final URLs in the CSV",
+  "targetDatabase": "Supabase Postgres (project pueovgrhdqjwqusyuppm) — DATABASE_URL already wired in backend/.env via backend/src/db.ts",
+  "imagePathConvention": "Live site serves /images/products/<slug>/<file>. Once on Cloudinary, swap the base for the Cloudinary delivery URL of finaluchi/products/<slug>/<file> so ids stay 1:1 with the live paths.",
+  "newColorCodes": [
+    { "code": "CL-23", "name": "Lagos Rose", "hexCode": "#E7A9C4", "pantoneRef": "13-2807 TCX", "colorFamily": "PINKS_BLOSSOM", "status": "MINTED_FOR_BATCH — must be added to frontend/src/data/colors.ts in the same pass that promotes these products" },
+    { "code": "CL-24", "name": "Harmattan Peach", "hexCode": "#F2C19B", "pantoneRef": "13-1023 TCX", "colorFamily": "PEACHES_EARTHWARM", "status": "MINTED_FOR_BATCH — must be added to frontend/src/data/colors.ts in the same pass that promotes these products" }
+  ],
+  "batchPendingReview": [
+    "Fabric composition / weight / care per product — confirm with the atelier (material is observational, from the photos).",
+    "Suggested colour matches (CL-01/02/04/07/10/14) adopted from the briefs — confirm shades against the actual garments.",
+    "Essence Set has a single photo — the live convention is 2–4 per product; add shots before promoting to the homepage reel."
+  ],
+  "products": [
+    {
+      "id": "prod-2pc-04",
+      "name": "Essence Set",
+      "slug": "essence-set",
+      "pillar": "2PIECES",
+      "categoryName": "2pieces",
+      "collectionId": null,
+      "headline": "Oversized collar top with a wave-embroidered hem, matched to easy shorts.",
+      "description": "The Essence Set is ease, tailored. An oversized camp-collar top in a soft peach weave carries a single line of wave embroidery along the hem — the atelier's signature drawn in one continuous stroke — falling over matching shorts cut long enough for the street and light enough for the heat. Wear it as a set or split it; it answers to both.",
+      "atelierNotes": "Ready-to-wear piece produced in limited runs. Wave embroidery is applied by hand-guided machine.",
+      "editorialQuote": "One line, drawn all the way to the hem.",
+      "occasions": ["VACATION", "PRIVATE_DINNER"],
+      "currency": "NGN",
+      "basePriceKobo": 7890000,
+      "priceDisplay": "₦78,900",
+      "availability": "AVAILABLE",
+      "isFeatured": false,
+      "isMadeToMeasureAllowed": false,
+      "has360Rotation": false,
+      "sizes": { "range": "UK 6–16", "list": ["6", "8", "10", "12", "14", "16"] },
+      "defaultInventoryPerSize": 8,
+      "variants": [
+        { "id": "v-2pc4-6", "size": "6", "sku": "FC-2P-2026-ESS-6", "inventoryCount": 8, "priceDeltaKobo": 0 },
+        { "id": "v-2pc4-8", "size": "8", "sku": "FC-2P-2026-ESS-8", "inventoryCount": 8, "priceDeltaKobo": 0 },
+        { "id": "v-2pc4-10", "size": "10", "sku": "FC-2P-2026-ESS-10", "inventoryCount": 8, "priceDeltaKobo": 0 },
+        { "id": "v-2pc4-12", "size": "12", "sku": "FC-2P-2026-ESS-12", "inventoryCount": 8, "priceDeltaKobo": 0 },
+        { "id": "v-2pc4-14", "size": "14", "sku": "FC-2P-2026-ESS-14", "inventoryCount": 8, "priceDeltaKobo": 0 },
+        { "id": "v-2pc4-16", "size": "16", "sku": "FC-2P-2026-ESS-16", "inventoryCount": 8, "priceDeltaKobo": 0 }
+      ],
+      "colorways": [
+        { "id": "cw-2pc4-peach", "colorCode": "CL-24", "colorName": "Harmattan Peach", "hexCode": "#F2C19B", "isNewCode": true, "sku": "FC-2P-2026-ESS-PCH", "heroImageFile": "essence-1.jpeg", "galleryFiles": ["essence-1.jpeg"], "isDefault": true },
+        { "id": "cw-2pc4-black", "colorCode": "CL-01", "colorName": "Noir Onyx", "hexCode": "#000000", "isNewCode": false, "sku": "FC-2P-2026-ESS-BLK", "heroImageFile": "essence-1.jpeg", "galleryFiles": ["essence-1.jpeg"], "isDefault": false },
+        { "id": "cw-2pc4-white", "colorCode": "CL-02", "colorName": "Alabaster Ivory", "hexCode": "#FFFFFF", "isNewCode": false, "sku": "FC-2P-2026-ESS-WHT", "heroImageFile": "essence-1.jpeg", "galleryFiles": ["essence-1.jpeg"], "isDefault": false },
+        { "id": "cw-2pc4-navy", "colorCode": "CL-07", "colorName": "Yoruba Indigo", "hexCode": "#1B2A4A", "isNewCode": false, "sku": "FC-2P-2026-ESS-NVY", "heroImageFile": "essence-1.jpeg", "galleryFiles": ["essence-1.jpeg"], "isDefault": false }
+      ],
+      "fabric": {
+        "material": "Soft-breathable woven",
+        "composition": null,
+        "weightGsm": null,
+        "drapeDescription": "Relaxed and airy; boxy through the top, easy through the short",
+        "finish": "Tonal buttons and a single wave-embroidered hem line",
+        "careInstructions": null
+      },
+      "silhouette": { "fit": 25, "drape": 60, "weight": 30, "structure": 15, "stretch": 5 },
+      "stagedImages": ["essence-1.jpeg"],
+      "pendingReview": ["Single photo staged — add 1–3 more before homepage promotion.", "Confirm fabric details with the atelier."]
+    },
+    {
+      "id": "prod-2pc-05",
+      "name": "Diza Set",
+      "slug": "diza-set",
+      "pillar": "2PIECES",
+      "categoryName": "2pieces",
+      "collectionId": null,
+      "headline": "Embroidered button-front shirt and column maxi skirt — a two-piece that reads as one line.",
+      "description": "The Diza Set pairs a relaxed button-front shirt with drop shoulders and a trail of floral embroidery across the chest, over a full-length column skirt that falls to a side slit. Cut in the house's powdery pink and warm cream, it moves from morning flights to evening tables without changing a thing.",
+      "atelierNotes": "Ready-to-wear piece produced in limited runs. Floral embroidery is placed by hand on each shirt.",
+      "editorialQuote": "Petal-soft, sharp at the seam.",
+      "occasions": ["VACATION", "COCKTAIL_SOIREE", "PRIVATE_DINNER"],
+      "currency": "NGN",
+      "basePriceKobo": 12500000,
+      "priceDisplay": "₦125,000",
+      "availability": "AVAILABLE",
+      "isFeatured": false,
+      "isMadeToMeasureAllowed": false,
+      "has360Rotation": false,
+      "sizes": { "range": "UK 6–16", "list": ["6", "8", "10", "12", "14", "16"] },
+      "defaultInventoryPerSize": 8,
+      "variants": [
+        { "id": "v-2pc5-6", "size": "6", "sku": "FC-2P-2026-DZA-6", "inventoryCount": 8, "priceDeltaKobo": 0 },
+        { "id": "v-2pc5-8", "size": "8", "sku": "FC-2P-2026-DZA-8", "inventoryCount": 8, "priceDeltaKobo": 0 },
+        { "id": "v-2pc5-10", "size": "10", "sku": "FC-2P-2026-DZA-10", "inventoryCount": 8, "priceDeltaKobo": 0 },
+        { "id": "v-2pc5-12", "size": "12", "sku": "FC-2P-2026-DZA-12", "inventoryCount": 8, "priceDeltaKobo": 0 },
+        { "id": "v-2pc5-14", "size": "14", "sku": "FC-2P-2026-DZA-14", "inventoryCount": 8, "priceDeltaKobo": 0 },
+        { "id": "v-2pc5-16", "size": "16", "sku": "FC-2P-2026-DZA-16", "inventoryCount": 8, "priceDeltaKobo": 0 }
+      ],
+      "colorways": [
+        { "id": "cw-2pc5-pink", "colorCode": "CL-23", "colorName": "Lagos Rose", "hexCode": "#E7A9C4", "isNewCode": true, "sku": "FC-2P-2026-DZA-PNK", "heroImageFile": "diza-1.jpeg", "galleryFiles": ["diza-1.jpeg", "diza-2.jpeg"], "isDefault": true },
+        { "id": "cw-2pc5-cream", "colorCode": "CL-04", "colorName": "Dune Crepe", "hexCode": "#D2C4B2", "isNewCode": false, "sku": "FC-2P-2026-DZA-CRM", "heroImageFile": "diza-1.jpeg", "galleryFiles": ["diza-1.jpeg", "diza-2.jpeg"], "isDefault": false },
+        { "id": "cw-2pc5-black", "colorCode": "CL-01", "colorName": "Noir Onyx", "hexCode": "#000000", "isNewCode": false, "sku": "FC-2P-2026-DZA-BLK", "heroImageFile": "diza-1.jpeg", "galleryFiles": ["diza-1.jpeg", "diza-2.jpeg"], "isDefault": false }
+      ],
+      "fabric": {
+        "material": "Lightweight woven with embroidered floral detail",
+        "composition": null,
+        "weightGsm": null,
+        "drapeDescription": "Fluid column through the skirt; relaxed and airy through the shirt",
+        "finish": "Matte weave with burgundy line-floral embroidery",
+        "careInstructions": null
+      },
+      "silhouette": { "fit": 45, "drape": 80, "weight": 25, "structure": 20, "stretch": 5 },
+      "stagedImages": ["diza-1.jpeg", "diza-2.jpeg"],
+      "pendingReview": ["Confirm fabric details with the atelier."]
+    },
+    {
+      "id": "prod-2pc-06",
+      "name": "Hasam Set",
+      "slug": "hasam-set",
+      "pillar": "2PIECES",
+      "categoryName": "2pieces",
+      "collectionId": null,
+      "headline": "Embroidered asymmetric top over wide-leg palazzo trousers.",
+      "description": "The Hasam Set is quiet grandeur: a softly draped top with an asymmetric fall and fine floral embroidery tracing the neckline and hem, worn over wide-leg palazzo trousers that pool at the floor. Grounded in the house's terracotta and alabaster, it is made for weddings, long dinners and every room she intends to hold.",
+      "atelierNotes": "Ready-to-wear piece produced in limited runs. Hem draping is finished by hand.",
+      "editorialQuote": "Terracotta warmth, cathedral volume.",
+      "occasions": ["WEDDING", "PRIVATE_DINNER", "COCKTAIL_SOIREE"],
+      "currency": "NGN",
+      "basePriceKobo": 9790000,
+      "priceDisplay": "₦97,900",
+      "availability": "AVAILABLE",
+      "isFeatured": false,
+      "isMadeToMeasureAllowed": false,
+      "has360Rotation": false,
+      "sizes": { "range": "UK 6–12", "list": ["6", "8", "10", "12"] },
+      "defaultInventoryPerSize": 8,
+      "variants": [
+        { "id": "v-2pc6-6", "size": "6", "sku": "FC-2P-2026-HSM-6", "inventoryCount": 8, "priceDeltaKobo": 0 },
+        { "id": "v-2pc6-8", "size": "8", "sku": "FC-2P-2026-HSM-8", "inventoryCount": 8, "priceDeltaKobo": 0 },
+        { "id": "v-2pc6-10", "size": "10", "sku": "FC-2P-2026-HSM-10", "inventoryCount": 8, "priceDeltaKobo": 0 },
+        { "id": "v-2pc6-12", "size": "12", "sku": "FC-2P-2026-HSM-12", "inventoryCount": 8, "priceDeltaKobo": 0 }
+      ],
+      "colorways": [
+        { "id": "cw-2pc6-clay", "colorCode": "CL-10", "colorName": "Sahara Terracotta", "hexCode": "#A84B29", "isNewCode": false, "sku": "FC-2P-2026-HSM-CLY", "heroImageFile": "hasam-1.jpeg", "galleryFiles": ["hasam-1.jpeg", "hasam-2.jpeg", "hasam-3.jpeg", "hasam-4.jpeg"], "isDefault": true },
+        { "id": "cw-2pc6-white", "colorCode": "CL-02", "colorName": "Alabaster Ivory", "hexCode": "#FFFFFF", "isNewCode": false, "sku": "FC-2P-2026-HSM-WHT", "heroImageFile": "hasam-1.jpeg", "galleryFiles": ["hasam-1.jpeg", "hasam-2.jpeg", "hasam-3.jpeg", "hasam-4.jpeg"], "isDefault": false },
+        { "id": "cw-2pc6-black", "colorCode": "CL-01", "colorName": "Noir Onyx", "hexCode": "#000000", "isNewCode": false, "sku": "FC-2P-2026-HSM-BLK", "heroImageFile": "hasam-1.jpeg", "galleryFiles": ["hasam-1.jpeg", "hasam-2.jpeg", "hasam-3.jpeg", "hasam-4.jpeg"], "isDefault": false },
+        { "id": "cw-2pc6-navy", "colorCode": "CL-07", "colorName": "Yoruba Indigo", "hexCode": "#1B2A4A", "isNewCode": false, "sku": "FC-2P-2026-HSM-NVY", "heroImageFile": "hasam-1.jpeg", "galleryFiles": ["hasam-1.jpeg", "hasam-2.jpeg", "hasam-3.jpeg", "hasam-4.jpeg"], "isDefault": false },
+        { "id": "cw-2pc6-rust", "colorCode": "CL-14", "colorName": "Burnished Copper", "hexCode": "#B86B43", "isNewCode": false, "sku": "FC-2P-2026-HSM-RST", "heroImageFile": "hasam-1.jpeg", "galleryFiles": ["hasam-1.jpeg", "hasam-2.jpeg", "hasam-3.jpeg", "hasam-4.jpeg"], "isDefault": false }
+      ],
+      "fabric": {
+        "material": "Softly draping woven with embroidered trim",
+        "composition": null,
+        "weightGsm": null,
+        "drapeDescription": "Soft asymmetric fall through the top; clean, floor-pooling volume in the palazzo",
+        "finish": "Fine floral embroidery tracing the neckline and hem",
+        "careInstructions": null
+      },
+      "silhouette": { "fit": 55, "drape": 75, "weight": 35, "structure": 30, "stretch": 5 },
+      "stagedImages": ["hasam-1.jpeg", "hasam-2.jpeg", "hasam-3.jpeg", "hasam-4.jpeg"],
+      "pendingReview": ["Confirm fabric details with the atelier.", "Brief wrote 'crusty brown' — recorded as Burnished Copper (CL-14); confirm the intended name/shade."]
+    },
+    {
+      "id": "prod-dress-07",
+      "name": "Amber Dress",
+      "slug": "amber-dress",
+      "pillar": "DRESSES",
+      "categoryName": "Dresses",
+      "collectionId": null,
+      "headline": "Satin halter mini with a plunging neckline, contrast banded waist and a voluminous bubble hem.",
+      "description": "The Amber Dress is built on contrast: a plunging halter neckline in high-shine satin, a banded waist that cinches before it lets go, and a voluminous bubble-cut mini skirt that catches the light with every turn. Worn in the house's signature colour pairings, it is the after-dark answer to the Finaluchi capsule — photographed across the size range because it is made for every version of her.",
+      "atelierNotes": "Ready-to-wear piece produced in limited runs. The bubble hem is cut and finished by hand.",
+      "editorialQuote": "High shine, higher drama.",
+      "occasions": ["COCKTAIL_SOIREE", "RED_CARPET", "WEDDING"],
+      "currency": "NGN",
+      "basePriceKobo": 8500000,
+      "priceDisplay": "₦85,000",
+      "availability": "AVAILABLE",
+      "isFeatured": false,
+      "isMadeToMeasureAllowed": false,
+      "has360Rotation": false,
+      "sizes": { "range": "UK 6–12", "list": ["6", "8", "10", "12"] },
+      "defaultInventoryPerSize": 8,
+      "variants": [
+        { "id": "v-dr7-6", "size": "6", "sku": "FC-DR-2026-AMB-6", "inventoryCount": 8, "priceDeltaKobo": 0 },
+        { "id": "v-dr7-8", "size": "8", "sku": "FC-DR-2026-AMB-8", "inventoryCount": 8, "priceDeltaKobo": 0 },
+        { "id": "v-dr7-10", "size": "10", "sku": "FC-DR-2026-AMB-10", "inventoryCount": 8, "priceDeltaKobo": 0 },
+        { "id": "v-dr7-12", "size": "12", "sku": "FC-DR-2026-AMB-12", "inventoryCount": 8, "priceDeltaKobo": 0 }
+      ],
+      "colorways": [
+        { "id": "cw-dr7-black", "colorCode": "CL-01", "colorName": "Noir Onyx", "hexCode": "#000000", "isNewCode": false, "sku": "FC-DR-2026-AMB-BLK", "heroImageFile": "amber-1.jpeg", "galleryFiles": ["amber-1.jpeg", "amber-2.jpeg"], "isDefault": true },
+        { "id": "cw-dr7-cream", "colorCode": "CL-04", "colorName": "Dune Crepe", "hexCode": "#D2C4B2", "isNewCode": false, "sku": "FC-DR-2026-AMB-CRM", "heroImageFile": "amber-1.jpeg", "galleryFiles": ["amber-1.jpeg", "amber-2.jpeg"], "isDefault": false }
+      ],
+      "fabric": {
+        "material": "High-shine duchess satin",
+        "composition": null,
+        "weightGsm": null,
+        "drapeDescription": "Liquid through the bodice; structured volume at the bubble hem",
+        "finish": "High-sheen satin with contrast colour-blocked waist bands",
+        "careInstructions": null
+      },
+      "silhouette": { "fit": 70, "drape": 55, "weight": 55, "structure": 45, "stretch": 0 },
+      "stagedImages": ["amber-1.jpeg", "amber-2.jpeg"],
+      "pendingReview": ["Confirm fabric details with the atelier."]
+    }
+  ]
+}
