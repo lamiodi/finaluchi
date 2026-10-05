@@ -2,6 +2,8 @@ export const BRAND = {
   name: 'Finaluchi Couture',
   shortName: 'FLC',
   location: 'Abuja, Nigeria',
+  founded: '2016',
+  tagline: 'Togetherness in Style.',
   whatsappDisplay: '+234 803 231 2961',
   whatsappNumber: '2348032312961',
   instagramHandle: '@finaluchi_couture',
@@ -9,10 +11,10 @@ export const BRAND = {
   creativeLead: 'Oluchi Irokanulo',
   creativeLeadRole: 'Fashion Director & Creative Designer',
   creativeLeadSince: 'October 2017',
-  positioning: 'A global fashion brand inspired by the power of togetherness.',
-  bio: 'A global fashion brand inspired by the power of togetherness.',
+  positioning: 'A Nigerian luxury fashion house built on the power of togetherness.',
+  bio: 'Togetherness in Style — a Nigerian luxury fashion house creating bespoke couture, haute couture, and ready-to-wear.',
   brandStory:
-    'Finaluchi Couture (FLC) is an Abuja-based Nigerian fashion brand dedicated to designing and producing original luxury occasion wear. Led creatively by Oluchi Irokanulo since October 2017, the house crafts women’s couture, ready-to-wear, asoebi, event dresses, and wedding gowns, alongside dedicated menswear, bridal, and lifestyle collections.',
+    'Finaluchi Couture (FLC) is a Nigerian luxury fashion house founded in 2016 in Abuja, built on the power of togetherness — the belief that when passion, creativity, culture, and people come together, something extraordinary is created. What began as a dream born from a passion for fashion has grown into a couture house creating bespoke, haute couture, and ready-to-wear pieces that blend contemporary luxury with African influence, led creatively by Fashion Director Oluchi Irokanulo and made to make the wearer feel confident, powerful, feminine, and unapologetically themselves.',
   aestheticSignatures: [
     'Sculpted corsetry & boned stays',
     'Intricate hand embellishments & crystal beading',

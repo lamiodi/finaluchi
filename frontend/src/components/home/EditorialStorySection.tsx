@@ -11,7 +11,7 @@ interface EditorialStorySectionProps {
 }
 
 const MILESTONES = [
-  { label: '2017 · Atelier', note: 'Founded in Abuja under the creative lead of Oluchi Irokanulo.' },
+  { label: '2016 · The Dream', note: 'FLC is founded in Abuja — a dream born from a passion for fashion.' },
   { label: '2020 · BellaNaija', note: 'Featured in a landmark AsoEbi editorial spotlight.' },
   { label: '2022 · Press', note: 'Recognized for red-carpet and milestone occasion dressing.' },
   { label: '2026 · Horizons', note: 'Bridal and couture evening collections debuting through the season.' },
@@ -68,18 +68,20 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
             Finaluchi / Editorial heritage · Abuja, Nigeria
           </span>
           <h2>
-            Designed &amp; tailored for the<br />
-            <em>Nigerian occasion.</em>
+            Togetherness<br />
+            <em>in Style.</em>
           </h2>
           <p>
-            Finaluchi Couture (FLC) is an authentic Abuja-based Nigerian fashion house. Led
-            creatively by Fashion Director <strong>Oluchi Irokanulo</strong> since October 2017,
-            the house designs and crafts original occasion wear for milestone celebrations.
+            Finaluchi Couture (FLC) is a Nigerian luxury fashion house founded in 2016 — a dream
+            born from a passion for fashion, built on the power of togetherness and led creatively
+            by Fashion Director <strong>Oluchi Irokanulo</strong>. Every piece blends contemporary
+            luxury with African influence.
           </p>
           <p style={{ marginTop: 14 }}>
             Our silhouettes balance contemporary elegance with meticulous couture construction:
-            internal corsetry, crystal beadwork, sculpted shoulders, and sweeping bridal
-            trains — spanning women&apos;s couture, asoebi, event dressing, and bridal creations.
+            internal corsetry, crystal beadwork, sculpted shoulders, and sweeping bridal trains —
+            each creation thoughtfully designed and carefully crafted to make the wearer feel
+            confident, powerful, feminine, and unapologetically themselves.
           </p>
 
           <a
@@ -131,7 +133,7 @@ export const EditorialStorySection: React.FC<EditorialStorySectionProps> = ({
           </nav>
 
           <div className="shop-editorial-foot" style={{ paddingTop: 30, marginTop: 0 }}>
-            <span>Since October 2017</span>
+            <span>Est. 2016</span>
             <span>Abuja, Nigeria</span>
           </div>
         </div>

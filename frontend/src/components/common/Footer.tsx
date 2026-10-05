@@ -80,11 +80,12 @@ export const Footer: React.FC<FooterProps> = ({
               </div>
             </div>
 
-            <span className="salon-eyebrow">Abuja, Nigeria · Couture &amp; Ready-to-Wear</span>
+            <span className="salon-eyebrow">Abuja, Nigeria · Est. 2016 · Togetherness in Style</span>
 
             <p style={{ fontSize: 12, lineHeight: 1.9, color: '#b2ada4', maxWidth: 400 }}>
-              A Nigerian fashion brand creating bold women&apos;s couture, ready-to-wear, asoebi,
-              event and bridal dressing — with menswear and lifestyle lines across the FLC family.
+              A Nigerian luxury fashion house built on the power of togetherness — creating bespoke
+              couture, haute couture, and ready-to-wear that blends contemporary luxury with
+              African influence, with bridal, menswear and lifestyle lines across the FLC family.
             </p>
 
             <a

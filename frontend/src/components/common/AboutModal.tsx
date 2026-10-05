@@ -76,25 +76,32 @@ export const AboutModal: React.FC<AboutModalProps> = ({
               className="w-full h-full object-cover object-[center_35%] brightness-90 contrast-[1.05]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-noir/90 via-noir/30 to-transparent flex flex-col justify-end p-4 sm:p-6 text-white">
-              <span className="text-[10px] font-mono-luxury uppercase tracking-widest text-champagne">Abuja, Nigeria · Creative Lead: Oluchi Irokanulo (Since Oct 2017)</span>
+              <span className="text-[10px] font-mono-luxury uppercase tracking-widest text-champagne">Abuja, Nigeria · Est. 2016 · Creative Lead: Oluchi Irokanulo</span>
               <h3 className="font-sans-luxury text-base sm:text-xl font-bold uppercase tracking-tight text-white mt-0.5">
-                Bold Nigerian Occasion Wear with an Architectural Silhouette
+                Togetherness in Style
               </h3>
             </div>
           </div>
 
-          {/* Core Brand Narrative */}
+          {/* Core Brand Narrative — the founder's story, per the maison */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs text-noir/80">
             <div className="space-y-3">
               <h4 className="font-bold text-noir uppercase tracking-tight text-sm flex items-center gap-2">
                 <Compass className="w-4 h-4 text-bronze" />
-                <span>Original Nigerian Occasion Wear</span>
+                <span>The House</span>
               </h4>
               <p>
-                Finaluchi Couture (FLC) is an established Abuja-based fashion house rather than a clothing reseller. We design and hand-tailor women&apos;s haute couture, ready-to-wear, asoebi, event dresses, and both traditional and white wedding gowns.
+                Finaluchi Couture (FLC) is a Nigerian luxury fashion house founded in 2016 — a
+                dream born from a passion for fashion that has grown into a couture house built on
+                the power of togetherness: the belief that when passion, creativity, culture, and
+                people come together, something extraordinary is created.
               </p>
               <p>
-                Our signature aesthetic is unapologetically bold and glamorous: precision corsetry, intricate embellishments, sculpted silhouettes, dramatic sleeves, and sweeping trains built for unforgettable entrance moments.
+                We design and hand-tailor bespoke couture, haute couture, and ready-to-wear pieces
+                that blend contemporary luxury with African influence — precision corsetry,
+                intricate embellishments, sculpted silhouettes, dramatic sleeves, and sweeping
+                trains. Each creation is thoughtfully designed and carefully crafted to make the
+                wearer feel confident, powerful, feminine, and unapologetically themselves.
               </p>
             </div>
 
@@ -104,12 +111,45 @@ export const AboutModal: React.FC<AboutModalProps> = ({
                 <span>Creative Direction</span>
               </h4>
               <p>
-                Oluchi Irokanulo has served as Fashion Director and Creative Designer at Finaluchi Couture since October 2017, steering the brand&apos;s distinctive structural identity and luxurious drape.
+                Oluchi Irokanulo has served as Fashion Director and Creative Designer at Finaluchi
+                Couture since October 2017, steering the house&apos;s distinctive structural
+                identity and luxurious drape.
               </p>
               <p>
-                Guided by the ethos “a global fashion brand inspired by the power of togetherness,” FLC builds lasting client relationships across Nigeria and the global diaspora.
+                Our journey has always been about more than clothing. It is about people,
+                relationships, shared dreams, and the strength that comes from building together —
+                from our foundation as a family-owned brand to the community of clients, creatives,
+                artisans, and FLC believers who continue to grow with us.
               </p>
             </div>
+          </div>
+
+          {/* The Power of Togetherness — the maison's philosophy, in the CEO's words */}
+          <div className="p-5 sm:p-6 bg-noir text-white border border-white/20 rounded-xs space-y-3 shadow-md">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-champagne">
+              <Sparkles className="w-4 h-4" />
+              <span>The Power of Togetherness</span>
+            </div>
+            <p className="text-[11px] text-white/85 leading-relaxed">
+              At FLC, we believe different people can have different styles and still move in one
+              direction. Our philosophy, <em className="text-white not-italic font-bold">“Togetherness in Style,”</em> celebrates
+              the idea that fashion connects us — a language through which we express who we are,
+              where we come from, and who we aspire to become.
+            </p>
+            <p className="text-[11px] text-white/80 leading-relaxed font-light">
+              We believe in women supporting women, creatives building together, and communities
+              growing through shared purpose. Every FLC piece carries a part of this philosophy —
+              a reminder that while individuality makes us unique, togetherness makes us stronger.
+            </p>
+            <p className="text-[11px] text-white/85 leading-relaxed">
+              As we continue to grow, our vision is to build a globally recognised African luxury
+              fashion house that not only creates exceptional fashion but also creates
+              opportunities, inspires confidence, celebrates culture, and leaves a meaningful
+              legacy.
+            </p>
+            <p className="text-[10px] font-mono-luxury uppercase tracking-widest text-champagne pt-1">
+              This is FLC. This is our story. This is the power of togetherness.
+            </p>
           </div>
 
           {/* Public Track Record & Milestones */}
