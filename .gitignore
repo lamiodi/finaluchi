@@ -23,6 +23,7 @@ tsconfig.tsbuildinfo
 
 # Editor and agent configurations
 .agents/
+.claude/
 .gemini/
 .codex/
 .vscode/
