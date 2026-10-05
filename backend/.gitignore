@@ -7,3 +7,6 @@ dist
 
 # Local JSON database (orders, appointments, subscriber emails)
 data/
+
+# Generated email preview HTML (backend/scripts/preview-emails.ts)
+scripts/previews/

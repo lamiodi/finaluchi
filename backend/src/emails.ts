@@ -2,10 +2,14 @@
 // If RESEND_API_KEY is not configured, emails are logged instead of sent so the
 // atelier can still run locally / in test mode without an email provider.
 //
-// Templates follow the site's design language: the salon-dark veil wrapping a
-// paper card (like the checkout modal), Antic Didone's serif voice (Georgia in
-// email-safe stacks) with bronze italic accents, hairline rules instead of
-// heavy borders, and ink-bar calls to action.
+// Templates follow the site's design language (frontend/src/refinements.css):
+// the salon-dark room wrapping a paper card (the checkout modal's world),
+// Antic Didone's serif voice with bronze italic accents, the Allura Couture
+// signature, hairline rules instead of heavy borders, bag-drawer photo rows
+// for order items, and the ink-bar call to action. Web fonts are loaded via
+// Google Fonts where clients allow them; the stacks fall back to Didot /
+// Georgia (serif) and system faces elsewhere. CSS transforms are avoided —
+// most email clients strip them.
 
 import { StoredAppointment, StoredOrder } from './storage.js';
 
@@ -13,12 +17,13 @@ const ATELIER_EMAIL = process.env.ATELIER_EMAIL || process.env.RESEND_FROM || ''
 const RESEND_FROM = process.env.RESEND_FROM || 'FINALUCHI COUTURE <onboarding@resend.dev>';
 const WHATSAPP_DISPLAY = '+234 803 231 2961';
 const WHATSAPP_NUMBER = '2348032312961';
-const SITE_URL = process.env.SITE_URL || 'https://finaluchi.com';
+const SITE_URL = (process.env.SITE_URL || 'https://www.finaluchi.com').replace(/\/+$/, '');
+const INSTAGRAM_URL = 'https://www.instagram.com/finaluchi_couture/';
+const INSTAGRAM_HANDLE = '@finaluchi_couture';
 
 /* Design tokens — the paper & salon worlds from src/refinements.css. */
 const PAPER = '#faf9f6';
 const INK = '#201f1d';
-const INK_HOVER = '#332f2a';
 const SALON = '#171715';
 const SALON_LINE = '#2e2c29';
 const IVORY = '#efebe3';
@@ -32,8 +37,10 @@ const FAINT = '#948c7f';
 const HAIRLINE = '#dcd8d0';
 const HAIRLINE_SOFT = '#e4dfd6';
 const PANEL = '#f0ede7';
-const SERIF = "Georgia, 'Times New Roman', serif";
-const SANS = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
+const PHOTO_GROUND = '#e4e1db';
+const SERIF = "'Antic Didone', Didot, 'Bodoni MT', 'Playfair Display', Georgia, serif";
+const SANS = "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif";
+const SCRIPT = "'Allura', 'Segoe Script', 'Brush Script MT', cursive";
 const MONO = "'Courier New', Courier, monospace";
 
 export function isEmailConfigured(): boolean {
@@ -64,32 +71,34 @@ function whatsappLink(message: string): string {
 /* Pattern primitives — eyebrow, serif heading with bronze italic, ink bar. */
 
 function eyebrow(text: string, color: string = LABEL): string {
-  return `<span style="font-family: ${SANS}; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: ${color}; font-weight: 600; display: block;">${text}</span>`;
+  return `<span style="font-family: ${SANS}; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: ${color}; font-weight: 500; display: block;">${text}</span>`;
 }
 
 function displayHeading(html: string): string {
-  return `<h1 style="font-family: ${SERIF}; font-size: 27px; line-height: 1.22; letter-spacing: -0.01em; color: ${INK}; margin: 12px 0 0 0; font-weight: normal;">${html}</h1>`;
+  return `<h1 style="font-family: ${SERIF}; font-size: 30px; line-height: 1.16; letter-spacing: -0.02em; color: ${INK}; margin: 14px 0 0 0; font-weight: normal;">${html}</h1>`;
 }
 
+/* The order-submit bar: full-width ink block, label only, uppercase tracking —
+ * no arrows; the site's solid bars carry none. */
 function inkBar(href: string, label: string): string {
-  return `<a href="${href}" style="display: inline-block; background-color: ${INK}; color: ${PAPER}; font-family: ${SANS}; font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; padding: 16px 26px; border: 1px solid ${INK};">${label}&nbsp;&nbsp;&#8599;</a>`;
+  return `<a href="${href}" style="display: block; background-color: ${INK}; color: ${PAPER}; font-family: ${SANS}; font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; padding: 17px 19px; text-align: center;">${label}</a>`;
 }
 
 function bodyParagraph(html: string, extra = ''): string {
   return `<p style="font-family: ${SANS}; font-size: 13px; line-height: 1.85; color: ${BODY_TEXT}; margin: 0 0 14px 0; ${extra}">${html}</p>`;
 }
 
-/* The maison's wordmark pairing: letterspaced serif against the champagne
- * Couture signature — the same block that closes the site's footer. */
+/* The maison's wordmark pairing from the nav and runway header: letterspaced
+ * serif FINALUCHI over the Allura Couture signature in champagne. */
 function brandHeader(subtitle: string): string {
   return `
   <tr>
-    <td align="center" style="background-color: ${SALON}; padding: 36px 20px 30px 20px; border-bottom: 1px solid ${SALON_LINE};">
+    <td align="center" style="background-color: ${SALON}; padding: 38px 20px 30px 20px; border-bottom: 1px solid ${SALON_LINE};">
       <a href="${SITE_URL}" style="text-decoration: none;">
-        <span style="font-family: ${SERIF}; font-size: 21px; letter-spacing: 0.2em; color: ${IVORY}; display: inline-block;">FINALUCHI</span>
-        <span style="font-family: ${SERIF}; font-style: italic; font-size: 19px; color: ${CHAMPAGNE}; display: inline-block; margin-left: 10px; transform: rotate(-4deg);">Couture</span>
+        <span style="font-family: ${SERIF}; font-size: 21px; letter-spacing: 0.2em; color: ${IVORY}; display: block;">FINALUCHI</span>
+        <span style="font-family: ${SCRIPT}; font-size: 32px; line-height: 1.1; color: ${CHAMPAGNE}; display: block; margin-top: 2px;">Couture</span>
       </a>
-      <span style="font-family: ${SANS}; font-size: 8px; letter-spacing: 0.32em; color: ${SALON_EYEBROW}; text-transform: uppercase; margin-top: 12px; display: block;">${escapeHtml(subtitle)}</span>
+      <span style="font-family: ${SANS}; font-size: 8px; letter-spacing: 0.32em; color: ${SALON_EYEBROW}; text-transform: uppercase; margin-top: 14px; display: block;">${escapeHtml(subtitle)}</span>
     </td>
   </tr>`;
 }
@@ -97,11 +106,12 @@ function brandHeader(subtitle: string): string {
 function brandFooter(note?: string): string {
   return `
   <tr>
-    <td align="center" style="background-color: ${SALON}; padding: 30px 24px 26px 24px; border-top: 1px solid ${SALON_LINE};">
+    <td align="center" style="background-color: ${SALON}; padding: 32px 24px 26px 24px; border-top: 1px solid ${SALON_LINE};">
       <span style="font-family: ${SERIF}; font-size: 13px; letter-spacing: 0.2em; color: ${IVORY}; display: inline-block;">FINALUCHI</span>
-      <span style="font-family: ${SERIF}; font-style: italic; font-size: 12px; color: ${CHAMPAGNE}; display: inline-block; margin-left: 7px;">Couture</span>
-      <p style="font-family: ${SANS}; font-size: 8px; letter-spacing: 0.24em; text-transform: uppercase; color: ${SALON_EYEBROW}; margin: 12px 0 14px 0;">Abuja, Nigeria &middot; Atelier ${WHATSAPP_DISPLAY}</p>
-      <p style="font-family: ${SANS}; font-size: 11px; line-height: 1.7; color: #b2ada4; margin: 0 0 14px 0;">
+      <span style="font-family: ${SCRIPT}; font-size: 20px; line-height: 1; color: ${CHAMPAGNE}; display: inline-block; margin-left: 7px;">Couture</span>
+      <p style="font-family: ${SANS}; font-size: 8px; letter-spacing: 0.24em; text-transform: uppercase; color: ${SALON_EYEBROW}; margin: 12px 0 16px 0;">Abuja, Nigeria &middot; Atelier ${WHATSAPP_DISPLAY}</p>
+      <a href="${INSTAGRAM_URL}" target="_blank" style="display: inline-block; font-family: ${SANS}; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: ${IVORY}; text-decoration: none; border-bottom: 1px solid ${CHAMPAGNE}; padding-bottom: 4px;">Instagram &mdash; ${INSTAGRAM_HANDLE}</a>
+      <p style="font-family: ${SANS}; font-size: 11px; line-height: 1.7; color: #b2ada4; margin: 18px 0 14px 0;">
         ${note ? `${escapeHtml(note)}<br>` : ''}
         You are receiving this communication regarding your relationship with finaluchi.com.
       </p>
@@ -119,6 +129,9 @@ function emailShell(innerHtml: string, preheader: string): string {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Finaluchi Couture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Antic+Didone&family=Allura&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body style="margin: 0; padding: 0; background-color: ${SALON}; font-family: ${SANS}; color: ${INK}; -webkit-font-smoothing: antialiased;">
   <span style="display: none; max-height: 0; overflow: hidden; opacity: 0;">${escapeHtml(preheader)}</span>
@@ -141,12 +154,13 @@ function notePanelOpen(): string {
 
 const NOTE_PANEL_CLOSE = `</td></tr></table>`;
 
-/* Ledger row — the bag-ledger vocabulary: muted label, ink value, hairlines. */
+/* Ledger row — the bag-ledger vocabulary: muted label, ink value, hairlines.
+ * Values are sans (the site's ledger is set in DM Sans, not a typewriter face). */
 function ledgerRow(label: string, value: string, bold = false): string {
   return `
   <tr>
     <td style="font-family: ${SANS}; font-size: ${bold ? 12 : 11}px; color: ${MUTED}; padding: 5px 0;">${label}</td>
-    <td align="right" style="font-family: ${bold ? SANS : MONO}; font-size: ${bold ? 13 : 11}px; color: ${INK}; padding: 5px 0; ${bold ? 'font-weight: bold;' : ''}">${value}</td>
+    <td align="right" style="font-family: ${SANS}; font-size: ${bold ? 13 : 12}px; color: ${INK}; padding: 5px 0; white-space: nowrap; ${bold ? 'font-weight: bold;' : ''}">${value}</td>
   </tr>`;
 }
 
@@ -198,23 +212,40 @@ export async function sendEmail({ to, subject, html, replyTo }: SendEmailOptions
  * Template 1 — Order Confirmation & Atelier Receipt
  * ------------------------------------------------------------------------- */
 export function renderOrderConfirmationEmail(order: StoredOrder): { subject: string; html: string } {
-  const items = (order.items || []).map((item: any) => `
-    <tr style="border-bottom: 1px solid ${HAIRLINE_SOFT};">
-      <td style="padding: 15px 0; border-bottom: 1px solid ${HAIRLINE_SOFT};">
-        <span style="font-family: ${SERIF}; font-size: 16px; color: ${INK}; display: block;">${escapeHtml(item.productNameSnapshot)}</span>
-        <span style="font-family: ${SANS}; font-size: 10px; letter-spacing: 0.08em; color: ${MUTED}; display: block; margin-top: 5px; text-transform: uppercase;">
-          ${escapeHtml(item.colorNameSnapshot)} &middot; Size ${escapeHtml(item.sizeSnapshot)} &middot; Qty ${escapeHtml(item.quantity)}
-        </span>
+  const items = (order.items || []).map((item: any) => {
+    const name = escapeHtml(item.productNameSnapshot);
+    const meta = [
+      escapeHtml(item.colorNameSnapshot),
+      item.sizeSnapshot ? `Size ${escapeHtml(item.sizeSnapshot)}` : '',
+      `Qty ${escapeHtml(item.quantity)}`,
+    ].filter(Boolean).join(' &middot; ');
+    const imageFile = item.productImageSnapshot
+      ? `<img src="${SITE_URL}${escapeHtml(item.productImageSnapshot)}" width="76" alt="${name}" style="display: block; width: 76px; height: auto; border: 1px solid ${HAIRLINE}; background-color: ${PHOTO_GROUND};">`
+      : `<div style="width: 76px; height: 96px; background-color: ${PHOTO_GROUND}; border: 1px solid ${HAIRLINE};">&nbsp;</div>`;
+
+    return `
+    <tr>
+      <td style="padding: 18px 0; border-bottom: 1px solid ${HAIRLINE_SOFT};">
+        <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="78" valign="top" style="vertical-align: top;">${imageFile}</td>
+            <td valign="top" style="vertical-align: top; padding-left: 18px;">
+              <span style="font-family: ${SERIF}; font-size: 17px; line-height: 1.3; color: ${INK}; display: block;">${name}</span>
+              <span style="font-family: ${SANS}; font-size: 10px; letter-spacing: 0.1em; color: ${MUTED}; display: block; margin-top: 6px; text-transform: uppercase;">${meta}</span>
+            </td>
+            <td align="right" valign="top" style="font-family: ${SANS}; font-size: 12px; color: ${INK}; padding-left: 12px; white-space: nowrap;">${formatKobo(item.unitPriceKobo * item.quantity)}</td>
+          </tr>
+        </table>
       </td>
-      <td align="right" style="font-family: ${MONO}; font-size: 12px; color: ${INK}; padding: 15px 0; border-bottom: 1px solid ${HAIRLINE_SOFT}; white-space: nowrap;">${formatKobo(item.unitPriceKobo * item.quantity)}</td>
-    </tr>`).join('');
+    </tr>`;
+  }).join('');
 
   const inner = `
   <table role="presentation" width="600" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; width: 100%; background-color: ${PAPER}; border: 1px solid ${HAIRLINE};">
     ${brandHeader('Abuja flagship atelier · Nigeria')}
 
     <tr>
-      <td style="padding: 38px 40px 26px 40px;">
+      <td style="padding: 40px 40px 26px 40px;">
         ${eyebrow('Finaluchi / Order confirmation &amp; atelier receipt')}
         ${displayHeading(`Your order is <em style="color: ${BRONZE};">received.</em>`)}
         <div style="height: 14px; line-height: 14px;">&nbsp;</div>
@@ -319,7 +350,7 @@ export function renderAppointmentEmail(appointment: StoredAppointment): { subjec
     ${brandHeader('Private client services · Abuja')}
 
     <tr>
-      <td style="padding: 38px 40px 26px 40px;">
+      <td style="padding: 40px 40px 26px 40px;">
         ${eyebrow('Finaluchi / Appointment reservation')}
         ${displayHeading(`Your fitting is <em style="color: ${BRONZE};">reserved.</em>`)}
         <div style="height: 14px; line-height: 14px;">&nbsp;</div>
@@ -349,9 +380,13 @@ export function renderAppointmentEmail(appointment: StoredAppointment): { subjec
         <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
           ${prepItems.map((item, i) => `
           <tr>
-            <td style="padding: 11px 0; ${i < prepItems.length - 1 ? `border-bottom: 1px solid ${HAIRLINE_SOFT};` : ''} display: block;">
-              <span style="font-family: ${MONO}; font-size: 9px; color: ${BRONZE}; letter-spacing: 0.1em; margin-right: 10px;">0${i + 1}</span>
-              <span style="font-family: ${SANS}; font-size: 12px; line-height: 1.8; color: ${BODY_TEXT};">${item}</span>
+            <td style="padding: 13px 0; ${i < prepItems.length - 1 ? `border-bottom: 1px solid ${HAIRLINE_SOFT};` : ''}">
+              <table role="presentation" border="0" cellspacing="0" cellpadding="0" width="100%">
+                <tr>
+                  <td width="34" valign="top" style="font-family: ${SERIF}; font-size: 15px; color: ${BRONZE}; white-space: nowrap;">0${i + 1}</td>
+                  <td valign="top" style="font-family: ${SANS}; font-size: 12px; line-height: 1.8; color: ${BODY_TEXT};">${item}</td>
+                </tr>
+              </table>
             </td>
           </tr>`).join('')}
         </table>
@@ -359,7 +394,7 @@ export function renderAppointmentEmail(appointment: StoredAppointment): { subjec
     </tr>
 
     <tr>
-      <td align="center" style="padding: 0 40px 40px 40px;">
+      <td style="padding: 0 40px 40px 40px;">
         ${inkBar(whatsappLink(`Hello Finaluchi, I am confirming my fitting request for ${appointment.date}`), 'Confirm details on WhatsApp')}
       </td>
     </tr>
@@ -382,14 +417,14 @@ export function renderDispatchEmail(
   trackingNumber: string,
   trackingUrl?: string
 ): { subject: string; html: string } {
-  const trackLink = trackingUrl || 'https://finaluchi.com/#/tracker';
+  const trackLink = trackingUrl || `${SITE_URL}/#/tracker`;
 
   const inner = `
   <table role="presentation" width="600" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; width: 100%; background-color: ${PAPER}; border: 1px solid ${HAIRLINE};">
     ${brandHeader('Handcrafted in Nigeria · Dispatched')}
 
     <tr>
-      <td style="padding: 38px 40px 26px 40px;">
+      <td style="padding: 40px 40px 26px 40px;">
         ${eyebrow('Finaluchi / Signature dispatch notification')}
         ${displayHeading(`Your piece is <em style="color: ${BRONZE};">on its way.</em>`)}
         <div style="height: 14px; line-height: 14px;">&nbsp;</div>
@@ -416,7 +451,7 @@ export function renderDispatchEmail(
     </tr>
 
     <tr>
-      <td align="center" style="padding: 0 40px 40px 40px;">
+      <td style="padding: 0 40px 40px 40px;">
         ${inkBar(escapeHtml(trackLink), 'Track delivery status')}
       </td>
     </tr>

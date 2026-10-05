@@ -4,8 +4,8 @@ export const BRAND = {
   location: 'Abuja, Nigeria',
   whatsappDisplay: '+234 803 231 2961',
   whatsappNumber: '2348032312961',
-  instagramHandle: '@finaluchicouture',
-  instagramUrl: 'https://www.instagram.com/finaluchicouture/',
+  instagramHandle: '@finaluchi_couture',
+  instagramUrl: 'https://www.instagram.com/finaluchi_couture/',
   creativeLead: 'Oluchi Irokanulo',
   creativeLeadRole: 'Fashion Director & Creative Designer',
   creativeLeadSince: 'October 2017',
@@ -46,8 +46,8 @@ export const BRAND = {
   lines: [
     {
       name: 'Finaluchi Couture',
-      handle: '@finaluchicouture',
-      url: 'https://www.instagram.com/finaluchicouture/',
+      handle: '@finaluchi_couture',
+      url: 'https://www.instagram.com/finaluchi_couture/',
       description: 'Women’s couture, ready-to-wear, asoebi and event dressing.',
     },
     {
