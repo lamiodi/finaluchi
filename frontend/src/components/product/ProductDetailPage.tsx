@@ -8,7 +8,7 @@ import { useCurrencyStore } from '../../stores/currencyStore';
 import { useCartStore } from '../../stores/cartStore';
 import { useWishlistStore } from '../../stores/wishlistStore';
 import { useAudioStore } from '../../stores/audioStore';
-import { formatPriceWithDisplay } from '../../utils/formatters';
+import { formatPriceWithDisplay, isPlaceholderSpec } from '../../utils/formatters';
 import { onImageError, buildWebPSrcSet, isVideoMedia } from '../../utils/images';
 import { SizeGuideModal } from '../common/SizeGuideModal';
 import { ShopProductCard } from '../catalog/ShopProductCard';
@@ -388,22 +388,28 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             </div>
           </div>
 
-          {/* Craft & materiality */}
+          {/* Craft & materiality — unconfirmed specs stay hidden, never shown as fact */}
           <div style={{ marginTop: 30, paddingTop: 22, borderTop: '1px solid #dcd8d0' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
               <span className="pdp-label" style={{ margin: 0 }}>Craft &amp; materiality</span>
               <span style={{ fontSize: 10, color: '#8b8378' }}>{product.fabricIntelligence.weightGsm} GSM</span>
             </div>
-            <div className="pdp-meta" style={{ marginTop: 14 }}>
-              <div>
-                <span className="pdp-label" style={{ fontSize: 8 }}>Material</span>
-                <b>{product.fabricIntelligence.material}</b>
+            {(!isPlaceholderSpec(product.fabricIntelligence.material) || !isPlaceholderSpec(product.fabricIntelligence.composition)) && (
+              <div className="pdp-meta" style={{ marginTop: 14 }}>
+                {!isPlaceholderSpec(product.fabricIntelligence.material) && (
+                  <div>
+                    <span className="pdp-label" style={{ fontSize: 8 }}>Material</span>
+                    <b>{product.fabricIntelligence.material}</b>
+                  </div>
+                )}
+                {!isPlaceholderSpec(product.fabricIntelligence.composition) && (
+                  <div>
+                    <span className="pdp-label" style={{ fontSize: 8 }}>Composition</span>
+                    <b>{product.fabricIntelligence.composition}</b>
+                  </div>
+                )}
               </div>
-              <div>
-                <span className="pdp-label" style={{ fontSize: 8 }}>Composition</span>
-                <b>{product.fabricIntelligence.composition}</b>
-              </div>
-            </div>
+            )}
           </div>
 
           {/* Accordions */}

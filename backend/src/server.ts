@@ -507,7 +507,7 @@ app.post('/api/webhooks/paystack', async (req: Request, res: Response) => {
     console.error(
       '[Paystack Webhook] Rejected: PAYSTACK_WEBHOOK_SECRET / PAYSTACK_SECRET_KEY is not configured.'
     );
-    return res.status(500).json({ error: 'Webhook secret is not configured.' });
+    return res.status(503).json({ error: 'Webhook secret is not configured.' });
   }
   if (typeof signature !== 'string' || signature.length === 0) {
     return res.status(401).json({ error: 'Missing x-paystack-signature header' });

@@ -330,7 +330,7 @@ export const CampaignHero: React.FC<CampaignHeroProps> = ({ onShopNow, onExplore
                 playTactileClick();
                 setCurrentSlide(i);
               }}
-              className={`relative h-0.5 transition-all duration-300 before:content-[''] before:absolute before:-inset-y-3.5 before:-inset-x-1.5 ${
+              className={`relative h-0.5 transition-all duration-300 before:content-[''] before:absolute before:-inset-y-3.5 before:-inset-x-2 ${
                 i === currentSlide ? 'w-8 bg-white' : 'w-2 bg-white/30 hover:bg-white/60'
               }`}
               aria-label={`Go to slide ${i + 1}`}

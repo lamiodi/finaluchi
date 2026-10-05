@@ -12,6 +12,11 @@ export const INDICATIVE_RATES: Record<SupportedDisplayCurrency, { rateToNgn: num
   AED: { rateToNgn: 435, symbol: 'AED ', prefix: 'AED' },
 };
 
+// Fabric/spec fields the atelier hasn't confirmed yet are stored as
+// "To be confirmed" — never present an unknown spec to a shopper as fact.
+export const isPlaceholderSpec = (value: string | number | null | undefined): boolean =>
+  value == null || String(value).trim().toLowerCase() === 'to be confirmed';
+
 /**
  * Format authoritative integer NGN kobo into currency string
  * e.g., 38000000 kobo -> ₦380,000

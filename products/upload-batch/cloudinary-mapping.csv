@@ -1,10 +1,10 @@
 file_name,product_id,product_name,role,suggested_public_id,cloudinary_url
-amber-1.jpeg,prod-dress-07,Amber Dress,hero,finaluchi/products/amber-dress/amber-1,
-amber-2.jpeg,prod-dress-07,Amber Dress,gallery,finaluchi/products/amber-dress/amber-2,
-essence-1.jpeg,prod-2pc-04,Essence Set,hero,finaluchi/products/essence-set/essence-1,
-diza-1.jpeg,prod-2pc-05,Diza Set,hero,finaluchi/products/diza-set/diza-1,
-diza-2.jpeg,prod-2pc-05,Diza Set,gallery,finaluchi/products/diza-set/diza-2,
-hasam-1.jpeg,prod-2pc-06,Hasam Set,hero,finaluchi/products/hasam-set/hasam-1,
-hasam-2.jpeg,prod-2pc-06,Hasam Set,gallery,finaluchi/products/hasam-set/hasam-2,
-hasam-3.jpeg,prod-2pc-06,Hasam Set,gallery,finaluchi/products/hasam-set/hasam-3,
-hasam-4.jpeg,prod-2pc-06,Hasam Set,gallery,finaluchi/products/hasam-set/hasam-4,
+amber-1.jpeg,prod-dress-07,Amber Dress,hero,finaluchi/products/amber-dress/amber-1,https://res.cloudinary.com/rxgdrwqy/image/upload/v1791226339/finaluchi/products/amber-dress/amber-1.jpg
+amber-2.jpeg,prod-dress-07,Amber Dress,gallery,finaluchi/products/amber-dress/amber-2,https://res.cloudinary.com/rxgdrwqy/image/upload/v1791226340/finaluchi/products/amber-dress/amber-2.jpg
+essence-1.jpeg,prod-2pc-04,Essence Set,hero,finaluchi/products/essence-set/essence-1,https://res.cloudinary.com/rxgdrwqy/image/upload/v1791226341/finaluchi/products/essence-set/essence-1.jpg
+diza-1.jpeg,prod-2pc-05,Diza Set,hero,finaluchi/products/diza-set/diza-1,https://res.cloudinary.com/rxgdrwqy/image/upload/v1791226342/finaluchi/products/diza-set/diza-1.jpg
+diza-2.jpeg,prod-2pc-05,Diza Set,gallery,finaluchi/products/diza-set/diza-2,https://res.cloudinary.com/rxgdrwqy/image/upload/v1791226343/finaluchi/products/diza-set/diza-2.jpg
+hasam-1.jpeg,prod-2pc-06,Hasam Set,hero,finaluchi/products/hasam-set/hasam-1,https://res.cloudinary.com/rxgdrwqy/image/upload/v1791226344/finaluchi/products/hasam-set/hasam-1.jpg
+hasam-2.jpeg,prod-2pc-06,Hasam Set,gallery,finaluchi/products/hasam-set/hasam-2,https://res.cloudinary.com/rxgdrwqy/image/upload/v1791226345/finaluchi/products/hasam-set/hasam-2.jpg
+hasam-3.jpeg,prod-2pc-06,Hasam Set,gallery,finaluchi/products/hasam-set/hasam-3,https://res.cloudinary.com/rxgdrwqy/image/upload/v1791226346/finaluchi/products/hasam-set/hasam-3.jpg
+hasam-4.jpeg,prod-2pc-06,Hasam Set,gallery,finaluchi/products/hasam-set/hasam-4,https://res.cloudinary.com/rxgdrwqy/image/upload/v1791226347/finaluchi/products/hasam-set/hasam-4.jpg

@@ -3,7 +3,7 @@ import { Search, X, ArrowRight } from 'lucide-react';
 import { Product } from '../../types';
 import { useCurrencyStore } from '../../stores/currencyStore';
 import { useAudioStore } from '../../stores/audioStore';
-import { formatPriceWithDisplay } from '../../utils/formatters';
+import { formatPriceWithDisplay, isPlaceholderSpec } from '../../utils/formatters';
 import { useModalA11y } from '../../lib/useModalA11y';
 import { webpVariant } from '../../utils/images';
 
@@ -141,7 +141,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                     />
                     <div>
                       <span className="text-[9px] font-mono-luxury text-bronze-deep uppercase tracking-wider block">
-                        {prod.categoryName} • {prod.fabricIntelligence.material.split('&')[0]}
+                        {prod.categoryName}{!isPlaceholderSpec(prod.fabricIntelligence.material) ? ` • ${prod.fabricIntelligence.material.split('&')[0]}` : ''}
                       </span>
                       <h4 className="font-sans-luxury font-semibold text-sm text-noir group-hover:text-champagne uppercase transition-colors">
                         {prod.name}

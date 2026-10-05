@@ -20,6 +20,7 @@ export interface CatalogVariant {
 
 export interface CatalogProduct {
   id: string;
+  slug: string;
   name: string;
   basePriceKobo: number;
   colorways: CatalogColorway[];
@@ -40,6 +41,7 @@ const MAX_UNITS_PER_LINE = 10;
 export const SERVER_CATALOG: CatalogProduct[] = [
   {
     id: 'prod-dress-02',
+    slug: 'rossa-dress',
     name: 'Rossa Dress',
     basePriceKobo: 6600000,
     colorways: [{ id: 'cw-dr2-leopard', sku: 'FC-DR-2026-LEO', priceDeltaKobo: 0 }],
@@ -52,6 +54,7 @@ export const SERVER_CATALOG: CatalogProduct[] = [
   },
   {
     id: 'prod-jump-02',
+    slug: 'cleo-capri-jumpsuit',
     name: 'Cleo Capri Jumpsuit',
     basePriceKobo: 7500000,
     colorways: [
@@ -68,6 +71,7 @@ export const SERVER_CATALOG: CatalogProduct[] = [
   },
   {
     id: 'prod-top-02',
+    slug: 'dahlia-tank-top',
     name: 'Dahlia Tank Top',
     basePriceKobo: 3500000,
     colorways: [
@@ -83,6 +87,7 @@ export const SERVER_CATALOG: CatalogProduct[] = [
   },
   {
     id: 'prod-skirt-02',
+    slug: 'dahlia-skirt',
     name: 'Dahlia Skirt',
     basePriceKobo: 4600000,
     colorways: [
@@ -99,6 +104,7 @@ export const SERVER_CATALOG: CatalogProduct[] = [
   },
   {
     id: 'prod-2pc-02',
+    slug: 'leonie-capri-lounge-2-piece',
     name: 'Leonie Capri Lounge 2 Piece',
     basePriceKobo: 8000000,
     colorways: [{ id: 'cw-2pc2-leopard', sku: 'FC-2PC-2026-LEO', priceDeltaKobo: 0 }],
@@ -115,6 +121,7 @@ export const SERVER_CATALOG: CatalogProduct[] = [
   // with frontend/src/data/catalog.ts.
   {
     id: 'prod-dress-03',
+    slug: 'sloane-dress',
     name: 'Sloane Dress',
     basePriceKobo: 12000000,
     colorways: [{ id: 'cw-dr3-ivory', sku: 'FC-DR-RC24-SLN-IVR', priceDeltaKobo: 0 }],
@@ -127,6 +134,7 @@ export const SERVER_CATALOG: CatalogProduct[] = [
   },
   {
     id: 'prod-2pc-03',
+    slug: 'boss-set',
     name: 'Boss Set',
     basePriceKobo: 22000000, // ₦220,000 (UK 6–12); 14–18 carry +₦30,000
     colorways: [{ id: 'cw-2pc3-black', sku: 'FC-2P-RC24-BSS-BLK', priceDeltaKobo: 0 }],
@@ -140,6 +148,7 @@ export const SERVER_CATALOG: CatalogProduct[] = [
   },
   {
     id: 'prod-dress-04',
+    slug: 'fantasia-dress',
     name: 'Fantasia Dress',
     basePriceKobo: 14500000,
     colorways: [{ id: 'cw-dr4-ivory', sku: 'FC-DR-RC24-FNT-IVR', priceDeltaKobo: 0 }],
@@ -152,6 +161,7 @@ export const SERVER_CATALOG: CatalogProduct[] = [
   },
   {
     id: 'prod-dress-05',
+    slug: 'elizabeth-brazer-dress',
     name: 'Elizabeth Brazer Dress',
     basePriceKobo: 24500000,
     colorways: [{ id: 'cw-dr5-ivory', sku: 'FC-DR-RC24-ELZ-IVR', priceDeltaKobo: 0 }],
@@ -164,6 +174,7 @@ export const SERVER_CATALOG: CatalogProduct[] = [
   },
   {
     id: 'prod-dress-06',
+    slug: 'teresa-dress',
     name: 'Teresa Dress',
     basePriceKobo: 10500000,
     colorways: [{ id: 'cw-dr6-ivory', sku: 'FC-DR-RC24-TRS-IVR', priceDeltaKobo: 0 }],
@@ -171,6 +182,78 @@ export const SERVER_CATALOG: CatalogProduct[] = [
       id: `v-dr6-${size}`,
       size,
       sku: `FC-DR-RC24-TRS-${size}`,
+      stockQuantity: 8,
+    })),
+  },
+  // 2026 RTW batch (products/upload-batch, promoted 2026-10-05) — 8 units per
+  // size, no size-tier pricing, colourways share the single photographed shot.
+  {
+    id: 'prod-2pc-04',
+    slug: 'essence-set',
+    name: 'Essence Set',
+    basePriceKobo: 7890000,
+    colorways: [
+      { id: 'cw-2pc4-peach', sku: 'FC-2P-2026-ESS-PCH', priceDeltaKobo: 0 },
+      { id: 'cw-2pc4-black', sku: 'FC-2P-2026-ESS-BLK', priceDeltaKobo: 0 },
+      { id: 'cw-2pc4-white', sku: 'FC-2P-2026-ESS-WHT', priceDeltaKobo: 0 },
+      { id: 'cw-2pc4-navy', sku: 'FC-2P-2026-ESS-NVY', priceDeltaKobo: 0 },
+    ],
+    variants: ['6', '8', '10', '12', '14', '16'].map((size) => ({
+      id: `v-2pc4-${size}`,
+      size,
+      sku: `FC-2P-2026-ESS-${size}`,
+      stockQuantity: 8,
+    })),
+  },
+  {
+    id: 'prod-2pc-05',
+    slug: 'diza-set',
+    name: 'Diza Set',
+    basePriceKobo: 12500000,
+    colorways: [
+      { id: 'cw-2pc5-pink', sku: 'FC-2P-2026-DZA-PNK', priceDeltaKobo: 0 },
+      { id: 'cw-2pc5-cream', sku: 'FC-2P-2026-DZA-CRM', priceDeltaKobo: 0 },
+      { id: 'cw-2pc5-black', sku: 'FC-2P-2026-DZA-BLK', priceDeltaKobo: 0 },
+    ],
+    variants: ['6', '8', '10', '12', '14', '16'].map((size) => ({
+      id: `v-2pc5-${size}`,
+      size,
+      sku: `FC-2P-2026-DZA-${size}`,
+      stockQuantity: 8,
+    })),
+  },
+  {
+    id: 'prod-2pc-06',
+    slug: 'hasam-set',
+    name: 'Hasam Set',
+    basePriceKobo: 9790000,
+    colorways: [
+      { id: 'cw-2pc6-clay', sku: 'FC-2P-2026-HSM-CLY', priceDeltaKobo: 0 },
+      { id: 'cw-2pc6-white', sku: 'FC-2P-2026-HSM-WHT', priceDeltaKobo: 0 },
+      { id: 'cw-2pc6-black', sku: 'FC-2P-2026-HSM-BLK', priceDeltaKobo: 0 },
+      { id: 'cw-2pc6-navy', sku: 'FC-2P-2026-HSM-NVY', priceDeltaKobo: 0 },
+      { id: 'cw-2pc6-rust', sku: 'FC-2P-2026-HSM-RST', priceDeltaKobo: 0 },
+    ],
+    variants: ['6', '8', '10', '12'].map((size) => ({
+      id: `v-2pc6-${size}`,
+      size,
+      sku: `FC-2P-2026-HSM-${size}`,
+      stockQuantity: 8,
+    })),
+  },
+  {
+    id: 'prod-dress-07',
+    slug: 'amber-dress',
+    name: 'Amber Dress',
+    basePriceKobo: 8500000,
+    colorways: [
+      { id: 'cw-dr7-black', sku: 'FC-DR-2026-AMB-BLK', priceDeltaKobo: 0 },
+      { id: 'cw-dr7-cream', sku: 'FC-DR-2026-AMB-CRM', priceDeltaKobo: 0 },
+    ],
+    variants: ['6', '8', '10', '12'].map((size) => ({
+      id: `v-dr7-${size}`,
+      size,
+      sku: `FC-DR-2026-AMB-${size}`,
       stockQuantity: 8,
     })),
   },
@@ -186,6 +269,8 @@ export type PricedItem = Record<string, unknown> & {
   skuSnapshot: string;
   unitPriceKobo: number;
   quantity: number;
+  productSlugSnapshot: string;
+  productImageSnapshot: string;
 };
 
 export type PriceItemsResult =
@@ -242,7 +327,18 @@ export function priceOrderItems(rawItems: unknown[]): PriceItemsResult {
       requestedPerVariant.set(variant.id, alreadyRequested + quantity);
     }
 
-    priced.push({ ...item, unitPriceKobo } as PricedItem);
+    // Media snapshots for receipts/emails: photo files follow the documented
+    // `<first-segment>-N.jpeg` naming under public/images/products/<slug>/
+    // (products/README.md), with -1 always present on photographed pieces.
+    const imagePrefix = product.slug.split('-')[0];
+    const productImageSnapshot = `/images/products/${product.slug}/${imagePrefix}-1.jpeg`;
+
+    priced.push({
+      ...item,
+      unitPriceKobo,
+      productSlugSnapshot: product.slug,
+      productImageSnapshot,
+    } as PricedItem);
     subtotalKobo += unitPriceKobo * quantity;
   }
 

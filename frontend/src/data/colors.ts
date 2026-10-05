@@ -309,6 +309,36 @@ export const MASTER_CLOTH_COLORS: ClothColor[] = [
     culturalResonance: 'Second shade of the Dahlia tank',
     isCorePalette: true,
   },
+  {
+    // Minted for the 2026 RTW batch (Diza Set's pink) — products/upload-batch.
+    id: 'cl-23',
+    code: 'CL-23',
+    name: 'Lagos Rose',
+    slug: 'lagos-rose',
+    hexCode: '#E7A9C4',
+    pantoneRef: '13-2807 TCX',
+    colorFamily: 'SAVANNA_SOLSTICE',
+    sheenType: 'MATTE',
+    fabricSubstrate: 'Embroidered Lightweight Woven',
+    lusterDescription: 'Powdery rose ground with a soft matte bloom',
+    culturalResonance: 'The Diza Set in its house pink',
+    isCorePalette: true,
+  },
+  {
+    // Minted for the 2026 RTW batch (Essence Set's peach) — products/upload-batch.
+    id: 'cl-24',
+    code: 'CL-24',
+    name: 'Harmattan Peach',
+    slug: 'harmattan-peach',
+    hexCode: '#F2C19B',
+    pantoneRef: '13-1023 TCX',
+    colorFamily: 'SAVANNA_SOLSTICE',
+    sheenType: 'MATTE',
+    fabricSubstrate: 'Soft-Breathable Woven',
+    lusterDescription: 'Warm harmattan-haze peach with an airy matte cast',
+    culturalResonance: 'The Essence Set in its signature peach',
+    isCorePalette: true,
+  },
 ];
 
 export const getColorByCode = (code: string): ClothColor => {

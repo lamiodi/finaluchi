@@ -588,6 +588,308 @@ export const MASTER_PRODUCTS: Product[] = [
     completeTheLookProductIds: ['prod-dress-03', 'prod-dress-05'],
     collectionId: 'recall-aw2425',
   },
+
+  // 11. ESSENCE SET — 2-Piece Sets, ₦78,900, UK 6–16 (2026 RTW batch — upload-batch 2026-10-05)
+  {
+    id: 'prod-2pc-04',
+    name: 'Essence Set',
+    slug: 'essence-set',
+    pillar: '2PIECES',
+    categoryName: '2pieces',
+    headline: 'Oversized collar top with a wave-embroidered hem, matched to easy shorts.',
+    description: 'The Essence Set is ease, tailored. An oversized camp-collar top in a soft peach weave carries a single line of wave embroidery along the hem — the atelier\'s signature drawn in one continuous stroke — falling over matching shorts cut long enough for the street and light enough for the heat. Wear it as a set or split it; it answers to both.',
+    atelierNotes: 'Ready-to-wear piece produced in limited runs. Wave embroidery is applied by hand-guided machine.',
+    basePriceKobo: 7890000, // ₦78,900
+    availability: 'AVAILABLE',
+    occasions: ['VACATION', 'PRIVATE_DINNER'],
+    displayProportion: 'standard',
+    isFeatured: false,
+    isMadeToMeasureAllowed: false,
+    has360Rotation: false,
+    editorialQuote: 'One line, drawn all the way to the hem.',
+    fabricIntelligence: {
+      material: 'Soft-breathable woven',
+      composition: 'To be confirmed', // TODO(product): confirm with atelier
+      weightGsm: 160, // TODO(product): confirm
+      drapeDescription: 'Relaxed and airy; boxy through the top, easy through the short',
+      finish: 'Tonal buttons and a single wave-embroidered hem line',
+      careInstructions: 'Dry clean recommended. Cool iron on reverse.',
+      macroZoomUrl: '/images/products/essence-set/essence-1.jpeg',
+    },
+    silhouette: { fit: 25, drape: 60, weight: 30, structure: 15, stretch: 5 },
+    colorways: [
+      {
+        id: 'cw-2pc4-peach',
+        colorId: 'cl-24',
+        color: getColorByCode('CL-24'),
+        sku: 'FC-2P-2026-ESS-PCH',
+        heroImageUrl: '/images/products/essence-set/essence-1.jpeg',
+        mediaGalleryUrls: ['/images/products/essence-set/essence-1.jpeg'],
+        rotationFrameUrls: [],
+        isDefault: true,
+      },
+      {
+        // TODO(product): shot in peach only — reusing the hero until per-colour photos arrive.
+        id: 'cw-2pc4-black',
+        colorId: 'cl-01',
+        color: getColorByCode('CL-01'),
+        sku: 'FC-2P-2026-ESS-BLK',
+        heroImageUrl: '/images/products/essence-set/essence-1.jpeg',
+        mediaGalleryUrls: ['/images/products/essence-set/essence-1.jpeg'],
+        rotationFrameUrls: [],
+      },
+      {
+        // TODO(product): shot in peach only — reusing the hero until per-colour photos arrive.
+        id: 'cw-2pc4-white',
+        colorId: 'cl-02',
+        color: getColorByCode('CL-02'),
+        sku: 'FC-2P-2026-ESS-WHT',
+        heroImageUrl: '/images/products/essence-set/essence-1.jpeg',
+        mediaGalleryUrls: ['/images/products/essence-set/essence-1.jpeg'],
+        rotationFrameUrls: [],
+      },
+      {
+        // TODO(product): shot in peach only — reusing the hero until per-colour photos arrive.
+        id: 'cw-2pc4-navy',
+        colorId: 'cl-07',
+        color: getColorByCode('CL-07'),
+        sku: 'FC-2P-2026-ESS-NVY',
+        heroImageUrl: '/images/products/essence-set/essence-1.jpeg',
+        mediaGalleryUrls: ['/images/products/essence-set/essence-1.jpeg'],
+        rotationFrameUrls: [],
+      },
+    ],
+    variants: [
+      { id: 'v-2pc4-6', size: '6', sizeLabel: '6', sku: 'FC-2P-2026-ESS-6', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-2pc4-8', size: '8', sizeLabel: '8', sku: 'FC-2P-2026-ESS-8', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-2pc4-10', size: '10', sizeLabel: '10', sku: 'FC-2P-2026-ESS-10', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-2pc4-12', size: '12', sizeLabel: '12', sku: 'FC-2P-2026-ESS-12', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-2pc4-14', size: '14', sizeLabel: '14', sku: 'FC-2P-2026-ESS-14', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-2pc4-16', size: '16', sizeLabel: '16', sku: 'FC-2P-2026-ESS-16', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+    ],
+  },
+
+  // 12. DIZA SET — 2-Piece Sets, ₦125,000, UK 6–16 (2026 RTW batch — upload-batch 2026-10-05)
+  {
+    id: 'prod-2pc-05',
+    name: 'Diza Set',
+    slug: 'diza-set',
+    pillar: '2PIECES',
+    categoryName: '2pieces',
+    headline: 'Embroidered button-front shirt and column maxi skirt — a two-piece that reads as one line.',
+    description: 'The Diza Set pairs a relaxed button-front shirt with drop shoulders and a trail of floral embroidery across the chest, over a full-length column skirt that falls to a side slit. Cut in the house\'s powdery pink and warm cream, it moves from morning flights to evening tables without changing a thing.',
+    atelierNotes: 'Ready-to-wear piece produced in limited runs. Floral embroidery is placed by hand on each shirt.',
+    basePriceKobo: 12500000, // ₦125,000
+    availability: 'AVAILABLE',
+    occasions: ['VACATION', 'COCKTAIL_SOIREE', 'PRIVATE_DINNER'],
+    displayProportion: 'tall',
+    isFeatured: false,
+    isMadeToMeasureAllowed: false,
+    has360Rotation: false,
+    editorialQuote: 'Petal-soft, sharp at the seam.',
+    fabricIntelligence: {
+      material: 'Lightweight woven with embroidered floral detail',
+      composition: 'To be confirmed', // TODO(product): confirm with atelier
+      weightGsm: 150, // TODO(product): confirm
+      drapeDescription: 'Fluid column through the skirt; relaxed and airy through the shirt',
+      finish: 'Matte weave with burgundy line-floral embroidery',
+      careInstructions: 'Dry clean recommended. Cool iron on reverse.',
+      macroZoomUrl: '/images/products/diza-set/diza-1.jpeg',
+    },
+    silhouette: { fit: 45, drape: 80, weight: 25, structure: 20, stretch: 5 },
+    colorways: [
+      {
+        id: 'cw-2pc5-pink',
+        colorId: 'cl-23',
+        color: getColorByCode('CL-23'),
+        sku: 'FC-2P-2026-DZA-PNK',
+        heroImageUrl: '/images/products/diza-set/diza-1.jpeg',
+        mediaGalleryUrls: ['/images/products/diza-set/diza-1.jpeg', '/images/products/diza-set/diza-2.jpeg'],
+        rotationFrameUrls: [],
+        isDefault: true,
+      },
+      {
+        // TODO(product): shot in pink only — reusing the hero until per-colour photos arrive.
+        id: 'cw-2pc5-cream',
+        colorId: 'cl-04',
+        color: getColorByCode('CL-04'),
+        sku: 'FC-2P-2026-DZA-CRM',
+        heroImageUrl: '/images/products/diza-set/diza-1.jpeg',
+        mediaGalleryUrls: ['/images/products/diza-set/diza-1.jpeg', '/images/products/diza-set/diza-2.jpeg'],
+        rotationFrameUrls: [],
+      },
+      {
+        // TODO(product): shot in pink only — reusing the hero until per-colour photos arrive.
+        id: 'cw-2pc5-black',
+        colorId: 'cl-01',
+        color: getColorByCode('CL-01'),
+        sku: 'FC-2P-2026-DZA-BLK',
+        heroImageUrl: '/images/products/diza-set/diza-1.jpeg',
+        mediaGalleryUrls: ['/images/products/diza-set/diza-1.jpeg', '/images/products/diza-set/diza-2.jpeg'],
+        rotationFrameUrls: [],
+      },
+    ],
+    variants: [
+      { id: 'v-2pc5-6', size: '6', sizeLabel: '6', sku: 'FC-2P-2026-DZA-6', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-2pc5-8', size: '8', sizeLabel: '8', sku: 'FC-2P-2026-DZA-8', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-2pc5-10', size: '10', sizeLabel: '10', sku: 'FC-2P-2026-DZA-10', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-2pc5-12', size: '12', sizeLabel: '12', sku: 'FC-2P-2026-DZA-12', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-2pc5-14', size: '14', sizeLabel: '14', sku: 'FC-2P-2026-DZA-14', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-2pc5-16', size: '16', sizeLabel: '16', sku: 'FC-2P-2026-DZA-16', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+    ],
+  },
+
+  // 13. HASAM SET — 2-Piece Sets, ₦97,900, UK 6–12 (2026 RTW batch — upload-batch 2026-10-05)
+  {
+    id: 'prod-2pc-06',
+    name: 'Hasam Set',
+    slug: 'hasam-set',
+    pillar: '2PIECES',
+    categoryName: '2pieces',
+    headline: 'Embroidered asymmetric top over wide-leg palazzo trousers.',
+    description: 'The Hasam Set is quiet grandeur: a softly draped top with an asymmetric fall and fine floral embroidery tracing the neckline and hem, worn over wide-leg palazzo trousers that pool at the floor. Grounded in the house\'s terracotta and alabaster, it is made for weddings, long dinners and every room she intends to hold.',
+    atelierNotes: 'Ready-to-wear piece produced in limited runs. Hem draping is finished by hand.',
+    basePriceKobo: 9790000, // ₦97,900
+    availability: 'AVAILABLE',
+    occasions: ['WEDDING', 'PRIVATE_DINNER', 'COCKTAIL_SOIREE'],
+    displayProportion: 'tall',
+    isFeatured: false,
+    isMadeToMeasureAllowed: false,
+    has360Rotation: false,
+    editorialQuote: 'Terracotta warmth, cathedral volume.',
+    fabricIntelligence: {
+      material: 'Softly draping woven with embroidered trim',
+      composition: 'To be confirmed', // TODO(product): confirm with atelier
+      weightGsm: 200, // TODO(product): confirm
+      drapeDescription: 'Soft asymmetric fall through the top; clean, floor-pooling volume in the palazzo',
+      finish: 'Fine floral embroidery tracing the neckline and hem',
+      careInstructions: 'Dry clean recommended. Cool iron on reverse.',
+      macroZoomUrl: '/images/products/hasam-set/hasam-1.jpeg',
+    },
+    silhouette: { fit: 55, drape: 75, weight: 35, structure: 30, stretch: 5 },
+    colorways: [
+      {
+        id: 'cw-2pc6-clay',
+        colorId: 'cl-10',
+        color: getColorByCode('CL-10'),
+        sku: 'FC-2P-2026-HSM-CLY',
+        heroImageUrl: '/images/products/hasam-set/hasam-1.jpeg',
+        mediaGalleryUrls: [
+          '/images/products/hasam-set/hasam-1.jpeg',
+          '/images/products/hasam-set/hasam-2.jpeg',
+          '/images/products/hasam-set/hasam-3.jpeg',
+          '/images/products/hasam-set/hasam-4.jpeg',
+        ],
+        rotationFrameUrls: [],
+        isDefault: true,
+      },
+      {
+        // TODO(product): shot in terracotta only — reusing the hero until per-colour photos arrive.
+        id: 'cw-2pc6-white',
+        colorId: 'cl-02',
+        color: getColorByCode('CL-02'),
+        sku: 'FC-2P-2026-HSM-WHT',
+        heroImageUrl: '/images/products/hasam-set/hasam-1.jpeg',
+        mediaGalleryUrls: ['/images/products/hasam-set/hasam-1.jpeg', '/images/products/hasam-set/hasam-2.jpeg'],
+        rotationFrameUrls: [],
+      },
+      {
+        // TODO(product): shot in terracotta only — reusing the hero until per-colour photos arrive.
+        id: 'cw-2pc6-black',
+        colorId: 'cl-01',
+        color: getColorByCode('CL-01'),
+        sku: 'FC-2P-2026-HSM-BLK',
+        heroImageUrl: '/images/products/hasam-set/hasam-1.jpeg',
+        mediaGalleryUrls: ['/images/products/hasam-set/hasam-1.jpeg', '/images/products/hasam-set/hasam-2.jpeg'],
+        rotationFrameUrls: [],
+      },
+      {
+        // TODO(product): shot in terracotta only — reusing the hero until per-colour photos arrive.
+        id: 'cw-2pc6-navy',
+        colorId: 'cl-07',
+        color: getColorByCode('CL-07'),
+        sku: 'FC-2P-2026-HSM-NVY',
+        heroImageUrl: '/images/products/hasam-set/hasam-1.jpeg',
+        mediaGalleryUrls: ['/images/products/hasam-set/hasam-1.jpeg', '/images/products/hasam-set/hasam-3.jpeg'],
+        rotationFrameUrls: [],
+      },
+      {
+        // TODO(product): shot in terracotta only — reusing the hero until per-colour photos arrive.
+        // Brief wrote 'crusty brown' — recorded as Burnished Copper (CL-14); confirm the intended shade.
+        id: 'cw-2pc6-rust',
+        colorId: 'cl-14',
+        color: getColorByCode('CL-14'),
+        sku: 'FC-2P-2026-HSM-RST',
+        heroImageUrl: '/images/products/hasam-set/hasam-1.jpeg',
+        mediaGalleryUrls: ['/images/products/hasam-set/hasam-1.jpeg', '/images/products/hasam-set/hasam-4.jpeg'],
+        rotationFrameUrls: [],
+      },
+    ],
+    variants: [
+      { id: 'v-2pc6-6', size: '6', sizeLabel: '6', sku: 'FC-2P-2026-HSM-6', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-2pc6-8', size: '8', sizeLabel: '8', sku: 'FC-2P-2026-HSM-8', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-2pc6-10', size: '10', sizeLabel: '10', sku: 'FC-2P-2026-HSM-10', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-2pc6-12', size: '12', sizeLabel: '12', sku: 'FC-2P-2026-HSM-12', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+    ],
+  },
+
+  // 14. AMBER DRESS — Dresses, ₦85,000, UK 6–12 (2026 RTW batch — upload-batch 2026-10-05)
+  {
+    id: 'prod-dress-07',
+    name: 'Amber Dress',
+    slug: 'amber-dress',
+    pillar: 'DRESSES',
+    categoryName: 'Dresses',
+    headline: 'Satin halter mini with a plunging neckline, contrast banded waist and a voluminous bubble hem.',
+    description: 'The Amber Dress is built on contrast: a plunging halter neckline in high-shine satin, a banded waist that cinches before it lets go, and a voluminous bubble-cut mini skirt that catches the light with every turn. Worn in the house\'s signature colour pairings, it is the after-dark answer to the Finaluchi capsule — photographed across the size range because it is made for every version of her.',
+    atelierNotes: 'Ready-to-wear piece produced in limited runs. The bubble hem is cut and finished by hand.',
+    basePriceKobo: 8500000, // ₦85,000
+    availability: 'AVAILABLE',
+    occasions: ['COCKTAIL_SOIREE', 'RED_CARPET', 'WEDDING'],
+    displayProportion: 'standard',
+    isFeatured: false,
+    isMadeToMeasureAllowed: false,
+    has360Rotation: false,
+    editorialQuote: 'High shine, higher drama.',
+    fabricIntelligence: {
+      material: 'High-shine duchess satin',
+      composition: 'To be confirmed', // TODO(product): confirm with atelier
+      weightGsm: 220, // TODO(product): confirm
+      drapeDescription: 'Liquid through the bodice; structured volume at the bubble hem',
+      finish: 'High-sheen satin with contrast colour-blocked waist bands',
+      careInstructions: 'Dry clean recommended. Cool iron on reverse.',
+      macroZoomUrl: '/images/products/amber-dress/amber-2.jpeg',
+    },
+    silhouette: { fit: 70, drape: 55, weight: 55, structure: 45, stretch: 0 },
+    colorways: [
+      {
+        id: 'cw-dr7-black',
+        colorId: 'cl-01',
+        color: getColorByCode('CL-01'),
+        sku: 'FC-DR-2026-AMB-BLK',
+        heroImageUrl: '/images/products/amber-dress/amber-1.jpeg',
+        mediaGalleryUrls: ['/images/products/amber-dress/amber-1.jpeg', '/images/products/amber-dress/amber-2.jpeg'],
+        rotationFrameUrls: [],
+        isDefault: true,
+      },
+      {
+        // TODO(product): shot in black only — reusing the hero until per-colour photos arrive.
+        id: 'cw-dr7-cream',
+        colorId: 'cl-04',
+        color: getColorByCode('CL-04'),
+        sku: 'FC-DR-2026-AMB-CRM',
+        heroImageUrl: '/images/products/amber-dress/amber-1.jpeg',
+        mediaGalleryUrls: ['/images/products/amber-dress/amber-1.jpeg', '/images/products/amber-dress/amber-2.jpeg'],
+        rotationFrameUrls: [],
+      },
+    ],
+    variants: [
+      { id: 'v-dr7-6', size: '6', sizeLabel: '6', sku: 'FC-DR-2026-AMB-6', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-dr7-8', size: '8', sizeLabel: '8', sku: 'FC-DR-2026-AMB-8', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-dr7-10', size: '10', sizeLabel: '10', sku: 'FC-DR-2026-AMB-10', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+      { id: 'v-dr7-12', size: '12', sizeLabel: '12', sku: 'FC-DR-2026-AMB-12', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
+    ],
+  },
 ];
 
 export const getProductBySlug = (slug: string): Product | undefined => {

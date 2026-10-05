@@ -265,7 +265,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
           {/* Atelier Physical Locations */}
           <div className="pt-3 border-t border-border/70 space-y-3">
             <div className="flex items-center justify-between">
-              <div className="text-[10px] font-mono-luxury text-bronze uppercase tracking-widest font-semibold">
+              <div className="text-[10px] font-mono-luxury text-bronze-deep uppercase tracking-widest font-semibold">
                 VISIT & COLLECTION INFORMATION
               </div>
               {onOpenAppointments && (
