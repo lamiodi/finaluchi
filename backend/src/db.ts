@@ -10,6 +10,9 @@ if (!connectionString) {
   throw new Error('DATABASE_URL is not set — add the Supabase connection string to backend/.env');
 }
 
-const sql = postgres(connectionString);
+// prepare: false is required on Supabase's transaction pooler (port 6543),
+// which doesn't support prepared statements — keep it even after switching
+// to a direct/session connection; the cost is negligible at this scale.
+const sql = postgres(connectionString, { prepare: false });
 
 export default sql;
