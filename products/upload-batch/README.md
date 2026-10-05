@@ -53,14 +53,14 @@ upload-batch/
    verified `200 image/jpeg` after upload.
 4. `.webp` variants were not uploaded — the frontend build generates them.
 
-## Upload step 2 — Supabase (products)
+## Upload step 2 — Supabase (products) — DONE (2026-10-05)
 
 1. ~~Fill in the real DB password in `backend/.env`~~ — done (DATABASE_URL live).
-2. Create the `products` table (no schema exists yet in the Supabase project —
-   `docs/LAUNCH_RUNBOOK.md` §3 covers the migration).
-3. Insert the rows from `products.json` (one row per product; variants/colourways can
-   be JSONB columns or child tables — the record shape matches the live
-   `frontend/src/data/catalog.ts` `Product` type either way).
+2. ~~Create the `products` table~~ — done via `backend/scripts/sql/001_create_products.sql`
+   (applied by `backend/scripts/apply-products-migration.mjs` through the
+   transaction pooler `aws-1-eu-central-1.pooler.supabase.com:6543`).
+3. ~~Insert the rows from `products.json`~~ — done; all four upserted and
+   verified with a SELECT (idempotent runner, safe to re-run).
 
 ## Still open (needs the studio, not blocking DB upload)
 
