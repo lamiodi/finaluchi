@@ -32,13 +32,13 @@ const OrderTrackerPage = React.lazy(() => import('./components/post-purchase/Ord
 const ClientPortalPage = React.lazy(() => import('./components/client/ClientPortalPage').then(m => ({ default: m.ClientPortalPage })));
 const BespokeAppointmentModal = React.lazy(() => import('./components/client/BespokeAppointmentModal').then(m => ({ default: m.BespokeAppointmentModal })));
 const ContactModal = React.lazy(() => import('./components/common/ContactModal').then(m => ({ default: m.ContactModal })));
-const AboutModal = React.lazy(() => import('./components/common/AboutModal').then(m => ({ default: m.AboutModal })));
+const AboutPage = React.lazy(() => import('./components/common/AboutPage').then(m => ({ default: m.AboutPage })));
 const SearchModal = React.lazy(() => import('./components/common/SearchModal').then(m => ({ default: m.SearchModal })));
 const LegalPage = React.lazy(() => import('./components/common/LegalPage').then(m => ({ default: m.LegalPage })));
 const FaqPage = React.lazy(() => import('./components/common/FaqPage').then(m => ({ default: m.FaqPage })));
 import { WelcomeModal } from './components/common/WelcomeModal';
 
-type ViewMode = 'HOME' | 'CATALOG' | 'PRODUCT' | 'TRACKER' | 'CLIENT' | 'ADMIN' | 'LEGAL' | 'FAQ';
+type ViewMode = 'HOME' | 'CATALOG' | 'PRODUCT' | 'TRACKER' | 'CLIENT' | 'ADMIN' | 'LEGAL' | 'FAQ' | 'ABOUT';
 
 // Hash deep links (shareable, e.g. https://finaluchi.com/#/privacy)
 function hashToRoute(hash: string): { view: ViewMode; policy: PolicyId } | null {
@@ -49,6 +49,7 @@ function hashToRoute(hash: string): { view: ViewMode; policy: PolicyId } | null 
     case 'returns': return { view: 'LEGAL', policy: 'returns' };
     case 'shipping': return { view: 'LEGAL', policy: 'shipping' };
     case 'faq': return { view: 'FAQ', policy: 'privacy' };
+    case 'about': return { view: 'ABOUT', policy: 'privacy' };
     case 'tracker': return { view: 'TRACKER', policy: 'privacy' };
     case 'admin': return { view: 'ADMIN', policy: 'privacy' };
     case 'client': return { view: 'CLIENT', policy: 'privacy' };
@@ -72,7 +73,6 @@ export const App: React.FC = () => {
   const [isPaystackOpen, setIsPaystackOpen] = useState<boolean>(false);
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState<boolean>(false);
   const [isContactOpen, setIsContactOpen] = useState<boolean>(false);
-  const [isAboutOpen, setIsAboutOpen] = useState<boolean>(false);
   const [isWelcomeOpen, setIsWelcomeOpen] = useState<boolean>(false);
 
   // Paystack checkout transaction context
@@ -235,7 +235,7 @@ export const App: React.FC = () => {
         <AnnouncementBar 
           onOpenAppointments={() => setIsAppointmentModalOpen(true)} 
           onOpenContact={() => setIsContactOpen(true)}
-          onOpenAbout={() => setIsAboutOpen(true)}
+          onOpenAbout={() => setCurrentView('ABOUT')}
         />
         
         <Navbar
@@ -247,7 +247,7 @@ export const App: React.FC = () => {
           onOpenClientPortal={() => setCurrentView('CLIENT')}
           onOpenAppointments={() => setIsAppointmentModalOpen(true)}
           onOpenContact={() => setIsContactOpen(true)}
-          onOpenAbout={() => setIsAboutOpen(true)}
+          onOpenAbout={() => setCurrentView('ABOUT')}
           totalWishlistCount={totalSavedCount}
         />
       </div>
@@ -384,6 +384,18 @@ export const App: React.FC = () => {
           </div>
         )}
 
+        {/* VIEW 9: THE MAISON — ABOUT THE HOUSE (#/about) */}
+        {currentView === 'ABOUT' && (
+          <div className="animate-in fade-in duration-300">
+            <React.Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center font-mono-luxury text-xs text-bronze-deep">Loading the Maison...</div>}>
+              <AboutPage
+                onExploreCollection={() => handleNavigatePillar('ALL')}
+                onOpenAppointments={() => setIsAppointmentModalOpen(true)}
+              />
+            </React.Suspense>
+          </div>
+        )}
+
       </main>
 
       {/* Global Footer */}
@@ -391,7 +403,7 @@ export const App: React.FC = () => {
         onNavigate={handleFooterNavigate}
         onOpenAppointments={() => setIsAppointmentModalOpen(true)}
         onOpenContact={() => setIsContactOpen(true)}
-        onOpenAbout={() => setIsAboutOpen(true)}
+        onOpenAbout={() => setCurrentView('ABOUT')}
       />
 
       {/* Lazy Loaded Drawers & Modals with Suspense */}
@@ -462,22 +474,6 @@ export const App: React.FC = () => {
             onOpenAppointments={() => {
               setIsContactOpen(false);
               setIsAppointmentModalOpen(true);
-            }}
-          />
-        )}
-
-        {/* Maison Heritage & Craftsmanship / About Modal */}
-        {isAboutOpen && (
-          <AboutModal
-            isOpen={isAboutOpen}
-            onClose={() => setIsAboutOpen(false)}
-            onOpenAppointments={() => {
-              setIsAboutOpen(false);
-              setIsAppointmentModalOpen(true);
-            }}
-            onExploreCollections={() => {
-              setIsAboutOpen(false);
-              handleNavigatePillar('ALL');
             }}
           />
         )}
