@@ -74,9 +74,6 @@ export const Footer: React.FC<FooterProps> = ({
                 >
                   FINALUCHI
                 </span>
-                <span className="couture-signature" style={{ fontSize: 30, color: '#c5a880', transform: 'rotate(-6deg)', display: 'inline-block' }}>
-                  Couture
-                </span>
               </div>
             </div>
 

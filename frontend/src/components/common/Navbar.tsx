@@ -350,7 +350,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Center: FINALUCHI Brand Crest & Signature Mark */}
         <button type="button" className="nav-house-brand" aria-label="Finaluchi Couture home" onClick={() => { playTactileClick(); onNavigateHome(); }}>
           <img src="/FINALUCHIlogo-nav.webp" alt="" width={34} height={38} className="nav-house-emblem" />
-          <span className="nav-house-type"><span className="nav-house-name">FINALUCHI</span><span className="couture-signature">Couture</span></span>
+          <span className="nav-house-type"><span className="nav-house-name">FINALUCHI</span></span>
         </button>
 
         {/* Right: Actions Dock */}
