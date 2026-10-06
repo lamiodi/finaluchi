@@ -667,6 +667,7 @@ export const MASTER_PRODUCTS: Product[] = [
       { id: 'v-2pc4-14', size: '14', sizeLabel: '14', sku: 'FC-2P-2026-ESS-14', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
       { id: 'v-2pc4-16', size: '16', sizeLabel: '16', sku: 'FC-2P-2026-ESS-16', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
     ],
+    collectionId: 'rtw-2026',
   },
 
   // 12. DIZA SET — 2-Piece Sets, ₦125,000, UK 6–16 (2026 RTW batch — upload-batch 2026-10-05)
@@ -737,6 +738,7 @@ export const MASTER_PRODUCTS: Product[] = [
       { id: 'v-2pc5-14', size: '14', sizeLabel: '14', sku: 'FC-2P-2026-DZA-14', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
       { id: 'v-2pc5-16', size: '16', sizeLabel: '16', sku: 'FC-2P-2026-DZA-16', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
     ],
+    collectionId: 'rtw-2026',
   },
 
   // 13. HASAM SET — 2-Piece Sets, ₦97,900, UK 6–12 (2026 RTW batch — upload-batch 2026-10-05)
@@ -831,6 +833,7 @@ export const MASTER_PRODUCTS: Product[] = [
       { id: 'v-2pc6-10', size: '10', sizeLabel: '10', sku: 'FC-2P-2026-HSM-10', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
       { id: 'v-2pc6-12', size: '12', sizeLabel: '12', sku: 'FC-2P-2026-HSM-12', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
     ],
+    collectionId: 'rtw-2026',
   },
 
   // 14. AMBER DRESS — Dresses, ₦85,000, UK 6–12 (2026 RTW batch — upload-batch 2026-10-05)
@@ -889,6 +892,7 @@ export const MASTER_PRODUCTS: Product[] = [
       { id: 'v-dr7-10', size: '10', sizeLabel: '10', sku: 'FC-DR-2026-AMB-10', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
       { id: 'v-dr7-12', size: '12', sizeLabel: '12', sku: 'FC-DR-2026-AMB-12', inventoryCount: 8, stockQuantity: 8, reservedHoldCount: 0, priceDeltaKobo: 0, isMadeToOrder: false },
     ],
+    collectionId: 'rtw-2026',
   },
 ];
 

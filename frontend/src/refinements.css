@@ -297,3 +297,7 @@
 @media (max-width: 1100px) { .pdp-split { grid-template-columns: 1fr 1.05fr; } .pdp-recs-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .order-body { grid-template-columns: 1fr; } .order-summary { border-left: none; border-top: 1px solid #dcd8d0; } }
 @media (max-width: 800px) { .pdp-breadcrumb { padding: 16px 22px 0; } .pdp-split { grid-template-columns: 1fr; padding: 22px 22px 10px; gap: 30px; } .pdp-rail { position: static; } .pdp-recs { padding: 40px 22px 60px; } .pdp-recs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 14px; } .bag-pack { grid-template-columns: 1fr; } .order-head, .order-form { padding-left: 22px; padding-right: 22px; } .welcome-card { grid-template-columns: 1fr; } .welcome-image { min-height: 0; aspect-ratio: 16/10; } .welcome-copy { padding: 32px 26px 30px; } }
 @media (max-width: 540px) { .pdp-split { padding: 18px 16px 6px; } .pdp-title { font-size: 32px; } .pdp-meta { grid-template-columns: 1fr; } .bag-head, .bag-scroll, .bag-ledger { padding-left: 18px; padding-right: 18px; } .bag-item-photo { width: 64px; height: 84px; } .bag-ledger { padding-bottom: max(18px, env(safe-area-inset-bottom)); } .welcome-copy h2 { font-size: 30px; } .welcome-image { aspect-ratio: 16/9; } }
+
+/* Collection axis — the drop chips under the category tabs (shop page) */
+.shop-collection-row { border-bottom: 1px solid #e4dfd6; }
+.shop-collection-row button { padding: 14px 0; font-size: 11px; }

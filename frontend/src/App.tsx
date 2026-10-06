@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Toaster } from 'sonner';
-import { MASTER_CATALOG } from './data/catalog';
+import { MASTER_CATALOG, getProductBySlug } from './data/catalog';
 import { OccasionType, Product } from './types';
 import { useWishlistStore } from './stores/wishlistStore';
 import { PolicyId } from './data/policies';
@@ -18,6 +18,7 @@ import { ReadyToWearGrid } from './components/home/ReadyToWearGrid';
 import { EditorialStorySection } from './components/home/EditorialStorySection';
 import { SeparatesShowcase } from './components/home/SeparatesShowcase';
 import { OccasionEditsBar } from './components/home/OccasionEditsBar';
+import { CategoryTiles } from './components/home/CategoryTiles';
 import { DigitalAtelier } from './components/atelier/DigitalAtelier';
 
 // Lazy Loaded Modals, Pages and Views for Instant Initial Paint & Minimal JS Payload
@@ -40,10 +41,23 @@ import { WelcomeModal } from './components/common/WelcomeModal';
 
 type ViewMode = 'HOME' | 'CATALOG' | 'PRODUCT' | 'TRACKER' | 'CLIENT' | 'ADMIN' | 'LEGAL' | 'FAQ' | 'ABOUT';
 
-// Hash deep links (shareable, e.g. https://finaluchi.com/#/privacy)
-function hashToRoute(hash: string): { view: ViewMode; policy: PolicyId } | null {
-  const h = hash.replace(/^#\/?/, '').toLowerCase();
-  switch (h) {
+interface HashRoute {
+  view: ViewMode;
+  policy: PolicyId;
+  productSlug?: string;
+  catalogPillar?: string;
+}
+
+// 'DINNER_DRESSES' <-> 'dinner-dresses' keeps pillar URLs readable
+const pillarToSlug = (pillar: string): string => pillar.toLowerCase().replace(/_/g, '-');
+const slugToPillar = (slug: string): string => slug.toUpperCase().replace(/-/g, '_');
+
+// Hash deep links (shareable, e.g. https://finaluchi.com/#/privacy or #/product/the-rossa-dress)
+function hashToRoute(hash: string): HashRoute | null {
+  const segments = hash.replace(/^#\/?/, '').toLowerCase().split('/');
+  const head = segments[0];
+  const tail = segments.length > 1 ? segments[1] : '';
+  switch (head) {
     case 'privacy': return { view: 'LEGAL', policy: 'privacy' };
     case 'terms': return { view: 'LEGAL', policy: 'terms' };
     case 'returns': return { view: 'LEGAL', policy: 'returns' };
@@ -53,16 +67,37 @@ function hashToRoute(hash: string): { view: ViewMode; policy: PolicyId } | null 
     case 'tracker': return { view: 'TRACKER', policy: 'privacy' };
     case 'admin': return { view: 'ADMIN', policy: 'privacy' };
     case 'client': return { view: 'CLIENT', policy: 'privacy' };
+    case 'catalog': return { view: 'CATALOG', policy: 'privacy', catalogPillar: tail ? slugToPillar(tail) : 'ALL' };
+    case 'product': return tail ? { view: 'PRODUCT', policy: 'privacy', productSlug: tail } : null;
     default: return null;
   }
 }
 
 export const App: React.FC = () => {
-  // Routing State
-  const [currentView, setCurrentView] = useState<ViewMode>('HOME');
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [catalogPillar, setCatalogPillar] = useState<string>('ALL');
+  // Routing State — resolved from the URL hash before first paint so a refresh
+  // (or a shared link) restores the page it names.
+  const [boot] = useState(() => {
+    const route = hashToRoute(window.location.hash);
+    const product = route?.productSlug ? getProductBySlug(route.productSlug) ?? null : null;
+    // A product slug that no longer resolves can't render the PDP — fall back home.
+    const view: ViewMode = route && !(route.view === 'PRODUCT' && !product) ? route.view : 'HOME';
+    const pillar = route?.catalogPillar ?? 'ALL';
+    // An unknown pillar would render an empty grid — degrade to the full catalog.
+    const knownPillar = pillar === 'ALL' || MASTER_CATALOG.some((p) => p.pillar === pillar);
+    return {
+      view,
+      product,
+      pillar: knownPillar ? pillar : 'ALL',
+      policy: route?.policy ?? 'privacy',
+    };
+  });
+  const [currentView, setCurrentView] = useState<ViewMode>(boot.view);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(boot.product);
+  const [catalogPillar, setCatalogPillar] = useState<string>(boot.pillar);
   const [catalogOccasion, setCatalogOccasion] = useState<OccasionType | undefined>(undefined);
+  // Collection chips are a filter (like occasion/palette), not an address —
+  // they stay out of the hash on purpose.
+  const [catalogCollection, setCatalogCollection] = useState<string>('ALL');
   const [trackerOrderNumber, setTrackerOrderNumber] = useState<string>('');
   const [legalPolicy, setLegalPolicy] = useState<PolicyId>('privacy');
 
@@ -89,15 +124,6 @@ export const App: React.FC = () => {
     scrollToTop();
   }, [currentView, selectedProduct]);
 
-  // Deep link on first load (e.g. /#/privacy from an email or Paystack review)
-  useEffect(() => {
-    const route = hashToRoute(window.location.hash);
-    if (route) {
-      setCurrentView(route.view);
-      if (route.view === 'LEGAL') setLegalPolicy(route.policy);
-    }
-  }, []);
-
   // The maison's welcome card — offered once per session, and only when
   // the visitor actually lands on the home stage.
   useEffect(() => {
@@ -118,7 +144,8 @@ export const App: React.FC = () => {
     return () => window.clearTimeout(timer);
   }, [currentView]);
 
-  // Keep the URL hash in sync with the active view without polluting history
+  // Keep the URL hash in sync with the active view without polluting history —
+  // every view must be addressable or a refresh drops the visitor back home.
   useEffect(() => {
     const next =
       currentView === 'LEGAL' ? `#/${legalPolicy}` :
@@ -126,15 +153,20 @@ export const App: React.FC = () => {
       currentView === 'TRACKER' ? '#/tracker' :
       currentView === 'ADMIN' ? '#/admin' :
       currentView === 'CLIENT' ? '#/client' :
+      currentView === 'ABOUT' ? '#/about' :
+      currentView === 'CATALOG' ? `#/catalog${catalogPillar !== 'ALL' ? `/${pillarToSlug(catalogPillar)}` : ''}` :
+      currentView === 'PRODUCT' && selectedProduct ? `#/product/${selectedProduct.slug}` :
       '#/';
     if (window.location.hash === next) return;
     if (next === '#/' && window.location.hash === '') return;
     history.replaceState(null, '', next === '#/' ? `${window.location.pathname}${window.location.search}` : next);
-  }, [currentView, legalPolicy]);
+  }, [currentView, legalPolicy, selectedProduct, catalogPillar]);
 
   // Back/forward navigation between hash routes
   useEffect(() => {
     const onHashChange = () => {
+      // In-page anchors (e.g. the skip link's #main-content) are not routes.
+      if (!window.location.hash.startsWith('#/')) return;
       const route = hashToRoute(window.location.hash);
       if (route) {
         setCurrentView(route.view);
@@ -156,6 +188,14 @@ export const App: React.FC = () => {
   const handleNavigatePillar = (pillar: string) => {
     setCatalogPillar(pillar);
     setCatalogOccasion(undefined);
+    setCatalogCollection('ALL');
+    setCurrentView('CATALOG');
+  };
+
+  const handleNavigateCollection = (collectionId: string) => {
+    setCatalogPillar('ALL');
+    setCatalogOccasion(undefined);
+    setCatalogCollection(collectionId);
     setCurrentView('CATALOG');
   };
 
@@ -242,6 +282,7 @@ export const App: React.FC = () => {
           onNavigateHome={() => setCurrentView('HOME')}
           onNavigateCatalog={() => handleNavigatePillar('ALL')}
           onNavigatePillar={handleNavigatePillar}
+          onNavigateCollection={handleNavigateCollection}
           onOpenSearch={() => setIsSearchOpen(true)}
           onOpenRunway={() => setIsRunwayOpen(true)}
           onOpenClientPortal={() => setCurrentView('CLIENT')}
@@ -267,6 +308,8 @@ export const App: React.FC = () => {
             />
 
             <OccasionEditsBar onSelectCategory={handleNavigatePillar} onSelectOccasion={handleNavigatePillar} onSelectProduct={handleSelectProduct} />
+
+            <CategoryTiles products={MASTER_CATALOG} onSelectPillar={handleNavigatePillar} />
 
             <ReadyToWearGrid
               // Home capsule shows photographed pieces only — unphotographed
@@ -305,6 +348,7 @@ export const App: React.FC = () => {
                 products={MASTER_CATALOG}
                 initialPillar={catalogPillar}
                 initialOccasion={catalogOccasion}
+                initialCollection={catalogCollection}
                 onSelectProduct={handleSelectProduct}
               />
             </React.Suspense>

@@ -5,6 +5,7 @@ import {
   ArrowUpRight
 } from 'lucide-react';
 import { CATEGORY_DEPARTMENTS } from '../../data/categoryContent';
+import { MASTER_COLLECTIONS } from '../../data/collections';
 import { useCartStore } from '../../stores/cartStore';
 import { useAudioStore } from '../../stores/audioStore';
 import { buildWhatsAppUrl } from '../../data/brand';
@@ -15,6 +16,7 @@ interface NavbarProps {
   onNavigateHome: () => void;
   onNavigateCatalog?: () => void;
   onNavigatePillar: (pillar: string) => void;
+  onNavigateCollection?: (collectionId: string) => void;
   onOpenSearch: () => void;
   onOpenRunway: () => void;
   onOpenClientPortal: () => void;
@@ -28,6 +30,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onNavigateHome,
   onNavigateCatalog,
   onNavigatePillar,
+  onNavigateCollection,
   onOpenSearch,
   onOpenRunway,
   onOpenClientPortal,
@@ -223,13 +226,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                     </button>
                   </div>
 
-                  {/* 2-Column Layout: Category List + Visual Editorial Spotlight */}
-                  <div className="grid grid-cols-12 gap-8 text-xs">
+                  {/* 3-Column Layout: Categories + Collections + Visual Editorial Spotlight */}
+                  <div className="grid grid-cols-12 gap-7 text-xs">
 
-                    {/* Column 1: The Capsule (5 cols) */}
-                    <div className="col-span-5 space-y-3">
+                    {/* Column 1: Categories (4 cols) */}
+                    <div className="col-span-4 space-y-3">
                       <span className="text-[10px] font-mono-luxury text-muted uppercase tracking-[0.2em] block font-semibold border-b border-black/10 pb-2">
-                        Ready-to-Wear · The Capsule
+                        Categories · Ready-to-Wear
                       </span>
                       <div className="space-y-0.5">
                         {CATEGORY_DEPARTMENTS.map((cat) => (
@@ -254,8 +257,37 @@ export const Navbar: React.FC<NavbarProps> = ({
                       </div>
                     </div>
 
-                    {/* Column 2: Editorial Spotlight Card (7 cols) */}
-                    <div className="col-span-7">
+                    {/* Column 2: Collections — the drops (3 cols) */}
+                    {MASTER_COLLECTIONS.length > 0 && (
+                      <div className="col-span-3 space-y-3">
+                        <span className="text-[10px] font-mono-luxury text-muted uppercase tracking-[0.2em] block font-semibold border-b border-black/10 pb-2">
+                          Collections · The Drops
+                        </span>
+                        <div className="space-y-0.5">
+                          {MASTER_COLLECTIONS.map((col) => (
+                            <button
+                              key={col.id}
+                              onClick={() => {
+                                playTactileClick();
+                                if (onNavigateCollection) onNavigateCollection(col.id);
+                                setIsCategoryDropdownOpen(false);
+                              }}
+                              className="w-full text-left py-1.5 px-2 hover:bg-[#F9F8F6] transition-colors flex items-center justify-between group rounded-none"
+                            >
+                              <span className="font-sans-luxury text-[12px] text-noir/80 group-hover:text-black group-hover:font-semibold">
+                                {col.name}
+                              </span>
+                              <span className="text-[10px] text-black/20 group-hover:text-bronze group-hover:translate-x-0.5 transition-all">
+                                ⟶
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Column 3: Editorial Spotlight Card (5 cols) */}
+                    <div className="col-span-5">
                       <div className="bg-[#F8F7F5] border border-black/10 p-3 h-full flex flex-col justify-between group">
                         <div className="space-y-2.5">
                           <div className="relative aspect-[16/10] w-full overflow-hidden bg-neutral-200">
