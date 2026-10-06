@@ -119,7 +119,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
           </p>
           <p className="mt-4" style={{ fontSize: 13, lineHeight: 1.9, color: '#69645e' }}>
             Led creatively by Fashion Director <strong style={{ color: '#201f1d' }}>Oluchi
-            Irokanulo</strong> since October 2017, the house has dressed milestone celebrations
+            Irokanulo</strong> since 2016, the house has dressed milestone celebrations
             across Nigeria and the global diaspora — from landmark asoebi editorials to
             red-carpet and bridal moments.
           </p>

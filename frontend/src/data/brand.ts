@@ -10,7 +10,7 @@ export const BRAND = {
   instagramUrl: 'https://www.instagram.com/finaluchi_couture/',
   creativeLead: 'Oluchi Irokanulo',
   creativeLeadRole: 'Fashion Director & Creative Designer',
-  creativeLeadSince: 'October 2017',
+  creativeLeadSince: '2016',
   positioning: 'A Nigerian luxury fashion house built on the power of togetherness.',
   bio: 'Togetherness in Style — a Nigerian luxury fashion house creating bespoke couture, haute couture, and ready-to-wear.',
   brandStory:
