@@ -365,3 +365,43 @@
   transform: translateY(-50%) rotate(180deg);
 }
 
+/* Responsive 2-column form rows */
+.order-row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 26px;
+}
+
+@media (max-width: 640px) {
+  .order-row-2col {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+/* Touch targets and iOS Safari auto-zoom prevention (inputs < 16px trigger zoom) */
+.order-select-wrap select {
+  min-height: 44px;
+}
+
+.order-field input,
+.order-field textarea {
+  min-height: 42px;
+}
+
+@media (max-width: 768px) {
+  .order-field input,
+  .order-field select,
+  .order-field textarea,
+  .order-select-wrap select {
+    font-size: 16px !important;
+  }
+}
+
+.order-summary-scroll {
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+

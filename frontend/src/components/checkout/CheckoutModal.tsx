@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { X, Lock, ArrowUpRight, AlertCircle, ChevronDown } from 'lucide-react';
+import { X, Lock, ArrowUpRight, AlertCircle, ChevronDown, Loader2 } from 'lucide-react';
 import { useCartStore } from '../../stores/cartStore';
 import { useCurrencyStore } from '../../stores/currencyStore';
 import { useOrderStore } from '../../stores/orderStore';
 import { useAudioStore } from '../../stores/audioStore';
-import { formatKoboToNgn, formatPriceWithDisplay } from '../../utils/formatters';
+import { formatKoboToNgn, formatIndicative } from '../../utils/formatters';
 import { ShippingAddress } from '../../types';
 import { toast } from 'sonner';
 import { useModalA11y } from '../../lib/useModalA11y';
@@ -18,6 +18,25 @@ interface CheckoutModalProps {
   onPaymentInitiated: (orderId: string, totalKobo: number, customerEmail: string) => void;
 }
 
+const CACHED_ADDRESS_KEY = 'flc_guest_shipping_address';
+
+function loadCachedAddress(): Partial<ShippingAddress> {
+  try {
+    const raw = localStorage.getItem(CACHED_ADDRESS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveCachedAddress(addr: Partial<ShippingAddress>) {
+  try {
+    localStorage.setItem(CACHED_ADDRESS_KEY, JSON.stringify(addr));
+  } catch {
+    // Ignore storage quota limits
+  }
+}
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Nigerian mobile formats: +2348031234567, 2348031234567 or 08031234567.
 const NG_PHONE_RE = /^(?:\+?234|0)\d{9,10}$/;
@@ -27,7 +46,9 @@ const INTL_PHONE_RE = /^\+?[1-9]\d{6,14}$/;
 function isValidPhone(raw: string, country: string): boolean {
   const digits = raw.replace(/[\s\-()]/g, '');
   if (!digits) return false;
-  return country === 'NG' ? NG_PHONE_RE.test(digits) : INTL_PHONE_RE.test(digits);
+  // If Nigerian format with redundant 0 after country code (e.g. +234 080... or 234080...), normalize it
+  const normalized = country === 'NG' ? digits.replace(/^(\+?234)0/, '$1') : digits;
+  return country === 'NG' ? NG_PHONE_RE.test(normalized) : INTL_PHONE_RE.test(normalized);
 }
 
 export const CheckoutModal: React.FC<CheckoutModalProps> = ({
@@ -52,17 +73,20 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const { playTactileClick } = useAudioStore();
   const panelRef = useModalA11y<HTMLDivElement>({ onClose, isOpen });
 
-  // Form State
-  const [country, setCountry] = useState<'NG' | string>('NG');
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [state, setState] = useState('FCT (Abuja)');
+  const cached = loadCachedAddress();
+
+  // Form State initialized with cached delivery details to prevent lost inputs
+  const [country, setCountry] = useState<string>(cached.country || 'NG');
+  const [fullName, setFullName] = useState(cached.fullName || '');
+  const [email, setEmail] = useState(cached.email || '');
+  const [phone, setPhone] = useState(cached.phone || '');
+  const [state, setState] = useState(cached.state || 'FCT (Abuja)');
   const [customState, setCustomState] = useState('');
-  const [city, setCity] = useState('');
-  const [addressLine1, setAddressLine1] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [landmarkNotes, setLandmarkNotes] = useState('');
+  const [city, setCity] = useState(cached.city || '');
+  const [addressLine1, setAddressLine1] = useState(cached.addressLine1 || '');
+  const [postalCode, setPostalCode] = useState(cached.postalCode || '');
+  const [landmarkNotes, setLandmarkNotes] = useState(cached.landmarkNotes || '');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const currentCountry = getCountryByCode(country);
 
@@ -91,6 +115,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (isSubmitting) return;
+
     if (!fullName.trim() || !email.trim() || !phone.trim() || !city.trim() || !addressLine1.trim()) {
       toast.error('Please complete all required delivery details.');
       return;
@@ -102,7 +128,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       return;
     }
 
-    if (!EMAIL_RE.test(email.trim())) {
+    const cleanEmail = email.trim().toLowerCase();
+    if (!EMAIL_RE.test(cleanEmail)) {
       toast.error('Please enter a valid email address — your order confirmation is sent there.');
       return;
     }
@@ -121,29 +148,49 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       return;
     }
 
+    setIsSubmitting(true);
     playTactileClick();
 
+    const cleanPhone = country === 'NG'
+      ? phone.trim().replace(/^(\+?234)0/, '$1')
+      : phone.trim();
+
     const shippingAddress: ShippingAddress = {
-      fullName,
-      email,
-      phone,
+      fullName: fullName.trim(),
+      email: cleanEmail,
+      phone: cleanPhone,
       country,
       state: effectiveState,
-      city,
-      addressLine1,
-      postalCode: country === 'NG' ? undefined : postalCode,
-      landmarkNotes,
+      city: city.trim(),
+      addressLine1: addressLine1.trim(),
+      postalCode: country === 'NG' ? undefined : postalCode.trim(),
+      landmarkNotes: landmarkNotes.trim(),
     };
+
+    // Cache the address so accidental modal closures never lose customer inputs
+    saveCachedAddress(shippingAddress);
 
     // Initialize Order Intent
     const newOrder = createOrder(shippingAddress, packagingType, isGift, giftMessage);
 
     // Trigger Paystack Gateway Modal
-    onPaymentInitiated(newOrder.orderNumber, total, email);
+    onPaymentInitiated(newOrder.orderNumber, total, cleanEmail);
+
+    setTimeout(() => {
+      setIsSubmitting(false);
+    }, 1200);
   };
 
   return (
-    <div className="order-veil">
+    <div
+      className="order-veil"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          playTactileClick();
+          onClose();
+        }
+      }}
+    >
       <div
         ref={panelRef}
         role="dialog"
@@ -233,13 +280,14 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               {/* Contact */}
               <div style={{ marginTop: 28 }}>
                 <span className="shop-eyebrow" style={{ color: '#846548' }}>01 — Client contact</span>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 26px' }}>
+                <div className="order-row-2col">
                   <label className="order-field">
                     <span>Full legal name *</span>
                     <input
                       type="text"
                       placeholder="e.g. Amara Okafor"
                       required
+                      autoComplete="name"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                     />
@@ -248,6 +296,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     <span>Email address *</span>
                     <input
                       type="email"
+                      inputMode="email"
+                      autoComplete="email"
                       placeholder="client@domain.com"
                       required
                       value={email}
@@ -259,6 +309,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   <span>Phone number (with country code) *</span>
                   <input
                     type="tel"
+                    inputMode="tel"
+                    autoComplete="tel"
                     placeholder={currentCountry.placeholderPhone}
                     required
                     value={phone}
@@ -271,7 +323,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               {/* Address */}
               <div style={{ marginTop: 26 }}>
                 <span className="shop-eyebrow" style={{ color: '#846548' }}>02 — Delivery address</span>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 26px' }}>
+                <div className="order-row-2col">
                   <label className="order-field">
                     <span>{currentCountry.stateLabel} *</span>
                     <div className="order-select-wrap">
@@ -295,6 +347,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     <span>Town / city / area *</span>
                     <input
                       type="text"
+                      autoComplete="address-level2"
                       placeholder={country === 'NG' ? 'e.g. Maitama / Gwarinpa' : 'City / town name'}
                       required
                       value={city}
@@ -320,6 +373,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   <span>Street address line 1 *</span>
                   <input
                     type="text"
+                    autoComplete="street-address"
                     placeholder="House number, street name, estate"
                     required
                     value={addressLine1}
@@ -331,6 +385,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     <span>Postal / ZIP code *</span>
                     <input
                       type="text"
+                      autoComplete="postal-code"
                       placeholder={country === 'US' ? 'e.g. 10001' : country === 'GB' ? 'e.g. W1K 1DA' : 'e.g. M5V 2T6'}
                       required
                       value={postalCode}
@@ -371,7 +426,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 Order summary — {items.length} {items.length === 1 ? 'piece' : 'pieces'}
               </span>
 
-              <div style={{ marginTop: 6 }}>
+              <div className="order-summary-scroll" style={{ marginTop: 6 }}>
                 {items.map((item) => (
                   <div key={item.id} className="order-summary-item">
                     <img
@@ -383,6 +438,11 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       <div style={{ font: "400 16px/1.3 'Antic Didone', serif" }}>{item.product.name}</div>
                       <div style={{ fontSize: 10, color: '#706961', marginTop: 3 }}>
                         {item.colorway.color.name} · {item.size} (×{item.quantity})
+                        {item.isMadeToMeasure && (
+                          <span style={{ display: 'inline-block', marginLeft: 6, padding: '2px 6px', background: '#201f1d', color: '#faf9f6', fontSize: 8, letterSpacing: '.12em', textTransform: 'uppercase' }}>
+                            Bespoke fit
+                          </span>
+                        )}
                       </div>
                     </div>
                     <span style={{ fontSize: 11, whiteSpace: 'nowrap' }}>
@@ -423,14 +483,27 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   <span style={{ fontSize: 16 }}>{formatKoboToNgn(total)}</span>
                 </div>
                 {displayCurrency !== 'NGN' && (
-                  <div style={{ textAlign: 'right', fontSize: 11, color: '#846548', marginTop: 6 }}>
-                    {formatPriceWithDisplay(total, displayCurrency)}
+                  <div style={{ textAlign: 'right', fontSize: 11, color: '#846548', marginTop: 6, fontStyle: 'italic' }}>
+                    Indicative: {formatIndicative(total, displayCurrency)}
                   </div>
                 )}
 
-                <button type="submit" className="order-submit">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="order-submit"
+                  style={{ opacity: isSubmitting ? 0.7 : 1, cursor: isSubmitting ? 'wait' : 'pointer' }}
+                >
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
-                    <Lock size={12} /> Confirm order &amp; request invoice
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 size={13} className="animate-spin" /> Preparing checkout…
+                      </>
+                    ) : (
+                      <>
+                        <Lock size={12} /> Confirm order &amp; request invoice
+                      </>
+                    )}
                   </span>
                   <ArrowUpRight size={15} />
                 </button>
