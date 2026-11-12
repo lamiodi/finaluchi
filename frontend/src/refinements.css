@@ -301,3 +301,67 @@
 /* Collection axis — the drop chips under the category tabs (shop page) */
 .shop-collection-row { border-bottom: 1px solid #e4dfd6; }
 .shop-collection-row button { padding: 14px 0; font-size: 11px; }
+
+/* ── Bespoke theme-matched select & dropdown fields ──────────── */
+.order-select-wrap {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+}
+
+.order-select-wrap select {
+  display: block;
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #faf9f6;
+  border: 1px solid #dcd8d0;
+  border-radius: 0;
+  padding: 12px 38px 12px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #201f1d;
+  cursor: pointer;
+  transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+
+.order-select-wrap select:hover {
+  border-color: #846548;
+  background-color: #f7f4ed;
+}
+
+.order-select-wrap select:focus {
+  outline: none;
+  border-color: #846548;
+  box-shadow: 0 0 0 1px #846548;
+  background-color: #ffffff;
+}
+
+.order-select-wrap select option {
+  background-color: #faf9f6;
+  color: #201f1d;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.order-select-wrap .order-select-chevron {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #846548;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .2s ease;
+}
+
+.order-select-wrap:focus-within .order-select-chevron {
+  transform: translateY(-50%) rotate(180deg);
+}
+

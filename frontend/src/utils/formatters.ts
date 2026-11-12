@@ -49,8 +49,51 @@ export function formatPriceWithDisplay(kobo: number, displayCurrency: SupportedD
  * e.g. FC-94820
  */
 export function generateOrderNumber(): string {
-  const rand = Math.floor(10000 + Math.random() * 90000);
-  return `FC-${rand}`;
+  // Time-based prefix + random suffix: collision-proof across clients and
+  // non-guessable (order numbers double as tracking keys and Paystack metadata).
+  const time = Date.now().toString(36).toUpperCase().slice(-6);
+  const rand = Math.floor(100 + Math.random() * 900);
+  return `FC-${time}-${rand}`;
+}
+
+/* ------------------------------------------------------------------------
+ * International destinations — indicative currency per delivery country.
+ * Paystack always charges NGN; this only powers the "≈ in your currency" line.
+ * ---------------------------------------------------------------------- */
+const EUR_COUNTRIES = new Set(['FR', 'DE', 'IT', 'ES', 'NL', 'BE', 'IE', 'PT', 'AT', 'FI', 'GR', 'LU']);
+
+export function displayCurrencyForCountry(country: string): SupportedDisplayCurrency {
+  const c = (country || 'NG').toUpperCase();
+  if (c === 'NG') return 'NGN';
+  if (c === 'GB') return 'GBP';
+  if (c === 'CA') return 'CAD';
+  if (c === 'AE') return 'AED';
+  if (EUR_COUNTRIES.has(c)) return 'EUR';
+  return 'USD';
+}
+
+/** Indicative conversion only, e.g. "≈ £118 GBP". */
+export function formatIndicative(kobo: number, currency: SupportedDisplayCurrency): string {
+  if (currency === 'NGN') return formatKoboToNgn(kobo);
+  const info = INDICATIVE_RATES[currency];
+  const converted = Math.round(kobo / 100 / info.rateToNgn);
+  return `≈ ${info.symbol}${converted.toLocaleString()} ${currency}`;
+}
+
+/** Best-guess display currency from the browser time zone (no network call). */
+export function detectDisplayCurrency(): SupportedDisplayCurrency {
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    if (tz === 'Africa/Lagos' || !tz) return 'NGN';
+    if (tz === 'Europe/London') return 'GBP';
+    if (tz === 'Asia/Dubai') return 'AED';
+    if (/^America\/(Toronto|Vancouver|Edmonton|Winnipeg|Halifax|Regina|St_Johns)/.test(tz)) return 'CAD';
+    if (tz.startsWith('America/')) return 'USD';
+    if (tz.startsWith('Europe/')) return 'EUR';
+    return 'NGN';
+  } catch {
+    return 'NGN';
+  }
 }
 
 /**

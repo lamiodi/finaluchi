@@ -226,8 +226,8 @@ export const POLICIES: Record<PolicyId, PolicyDoc> = {
       {
         heading: '2. Delivery Fees',
         bullets: [
-          'Nigerian delivery is ₦15,000, complimentary on orders of ₦300,000 and above.',
-          'International express delivery is a flat ₦85,000, confirmed on your invoice before payment.',
+          'Nigerian delivery is a flat rate of ₦15,000, dispatched directly from our Abuja atelier via insured express courier.',
+          'International express delivery is a flat rate of ₦85,000 via DHL Express / insured international courier, confirmed on your invoice.',
         ],
       },
       {
@@ -312,6 +312,11 @@ export const FAQ_GROUPS: FaqGroup[] = [
   {
     category: 'Production & Delivery',
     items: [
+      {
+        question: 'What are your delivery fees?',
+        answer:
+          'All orders are dispatched directly from our Abuja atelier via insured express courier. Nigerian nationwide delivery is a flat rate of ₦15,000 (1–5 business days). International express delivery (via DHL Express to the US, UK, Canada, Europe, UAE and more) is a flat rate of ₦85,000 (5–7 business days).',
+      },
       {
         question: 'How long does a custom piece take?',
         answer:

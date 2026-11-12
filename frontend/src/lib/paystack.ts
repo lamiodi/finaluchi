@@ -79,13 +79,18 @@ export function loadPaystackInline(): Promise<void> {
 
 /**
  * Opens the Paystack checkout popup for an order.
- * `reference` doubles as the order number so the backend can reconcile the
- * transaction without extra state.
+ * Each attempt gets a unique transaction reference (`<orderNumber>-<stamp>`)
+ * because Paystack rejects a reused reference — so a client who closes the
+ * popup can retry. The order number travels in metadata, which is what the
+ * backend verify endpoint and webhook use to find the order.
  */
 export async function openPaystackCheckout(options: {
   email: string;
   amountKobo: number;
-  reference: string;
+  reference: string; // order number
+  customerName?: string;
+  customerPhone?: string;
+  country?: string;
   onSuccess: (reference: string) => void;
   onCancel: () => void;
 }): Promise<void> {
@@ -96,6 +101,9 @@ export async function openPaystackCheckout(options: {
   const PaystackPop = window.PaystackPop;
   if (!PaystackPop) throw new Error('Paystack Inline unavailable.');
 
+  const orderNumber = options.reference;
+  const attemptRef = `${orderNumber}-${Date.now().toString(36).toUpperCase()}`;
+
   let settled = false;
   const handleSuccess = (res: PaystackCallbackResponse | string) => {
     if (settled) return;
@@ -103,7 +111,7 @@ export async function openPaystackCheckout(options: {
     const resolvedRef =
       typeof res === 'string'
         ? res
-        : res?.reference || res?.trxref || options.reference;
+        : res?.reference || res?.trxref || attemptRef;
     options.onSuccess(resolvedRef);
   };
 
@@ -117,14 +125,22 @@ export async function openPaystackCheckout(options: {
     email: options.email,
     amount: Math.round(options.amountKobo),
     currency: 'NGN',
-    ref: options.reference,
+    ref: attemptRef,
     metadata: {
-      orderNumber: options.reference,
+      orderNumber,
+      customerName: options.customerName,
+      customerPhone: options.customerPhone,
+      deliveryCountry: options.country || 'NG',
       custom_fields: [
         {
           display_name: 'Order Number',
           variable_name: 'order_number',
-          value: options.reference,
+          value: orderNumber,
+        },
+        {
+          display_name: 'Delivery Country',
+          variable_name: 'delivery_country',
+          value: options.country || 'NG',
         },
       ],
     },

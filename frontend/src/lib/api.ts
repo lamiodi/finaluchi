@@ -34,31 +34,46 @@ async function request<T>(path: string, init?: RequestInit): Promise<T | null> {
 
 /* ---------------------------- Storefront flow ---------------------------- */
 
+// Render's free tier sleeps after inactivity (~30–50s cold start). Pinging the
+// health endpoint when checkout opens wakes it while the client types.
+let warmedUp = false;
+export function warmUpApi(): void {
+  if (!isApiConfigured || warmedUp) return;
+  warmedUp = true;
+  void fetch(`${API_URL}/api/health`).catch(() => {
+    warmedUp = false;
+  });
+}
+
 interface OrderSyncEntry {
   order: Order;
-  synced: boolean;
-  inFlight: Promise<boolean> | null;
+  serverOrder: Order | null;
+  inFlight: Promise<Order | null> | null;
 }
 
 const orderSyncMap = new Map<string, OrderSyncEntry>();
 
-export function submitOrder(order: Order): Promise<boolean> {
+/**
+ * Registers the order with the backend and resolves to the SERVER copy —
+ * whose totals are recomputed from the authoritative catalog. Paystack must
+ * always be charged the server total, or settlement flags an amount mismatch.
+ */
+export function registerOrder(order: Order): Promise<Order | null> {
   const key = (order.orderNumber || '').toUpperCase();
-  const entry: OrderSyncEntry = orderSyncMap.get(key) || {
-    order,
-    synced: false,
-    inFlight: null,
-  };
+  const existing = orderSyncMap.get(key);
+  if (existing?.serverOrder) return Promise.resolve(existing.serverOrder);
+  if (existing?.inFlight) return existing.inFlight;
+
+  const entry: OrderSyncEntry = existing || { order, serverOrder: null, inFlight: null };
   entry.order = order;
 
-  const p = request<{ ok: boolean }>('/api/orders', {
+  const p = request<{ ok: boolean; order: Order }>('/api/orders', {
     method: 'POST',
     body: JSON.stringify(order),
   }).then((res) => {
-    const ok = Boolean(res?.ok);
-    entry.synced = ok;
+    entry.serverOrder = res?.ok && res.order ? res.order : null;
     entry.inFlight = null;
-    return ok;
+    return entry.serverOrder;
   });
 
   entry.inFlight = p;
@@ -66,22 +81,19 @@ export function submitOrder(order: Order): Promise<boolean> {
   return p;
 }
 
+export async function submitOrder(order: Order): Promise<boolean> {
+  return Boolean(await registerOrder(order));
+}
+
 // Server-to-server verification of a Paystack reference. The backend calls
 // Paystack's verify API with its secret key before an order can turn paid —
-// the client callback alone is never trusted. Awaits any in-flight order
-// registration first so verify never races ahead of POST /api/orders.
+// the client callback alone is never trusted. Ensures the order is registered
+// first so verify never races ahead of POST /api/orders.
 export async function verifyPayment(
   reference: string,
   orderFallback?: Order
 ): Promise<{ ok: boolean; order?: Order; alreadyPaid?: boolean } | null> {
-  const key = (orderFallback?.orderNumber || reference || '').toUpperCase();
-  const entry = orderSyncMap.get(key);
-  if (entry?.inFlight) {
-    await entry.inFlight;
-  }
-  if ((!entry || !entry.synced) && (entry?.order || orderFallback)) {
-    await submitOrder((entry?.order || orderFallback)!);
-  }
+  if (orderFallback) await registerOrder(orderFallback);
   return request(`/api/payments/verify/${encodeURIComponent(reference)}`, {
     method: 'POST',
   });

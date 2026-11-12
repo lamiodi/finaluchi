@@ -32,10 +32,12 @@ export const PACKAGING_PRICE_KOBO: Record<string, number> = {
   ECO_LUXURY_CARRIER: 1500000, // ₦15,000
 };
 
-const FREE_SHIPPING_THRESHOLD_KOBO = 30000000; // ₦300,000
-const LOCAL_SHIPPING_KOBO = 1500000; // ₦15,000
-const INTERNATIONAL_SHIPPING_KOBO = 8500000; // ₦85,000
-const VAT_RATE_NG = 0.075;
+// Flat rate shipping dispatched from the Abuja atelier:
+// - Nationwide Nigeria (intra-city & interstate express courier): ₦15,000 flat rate
+// - International (DHL / FedEx express courier DDU): ₦85,000 flat rate
+export const NIGERIA_FLAT_SHIPPING_KOBO = 1500000; // ₦15,000
+export const INTERNATIONAL_FLAT_SHIPPING_KOBO = 8500000; // ₦85,000
+export const VAT_RATE_NG = 0.075;
 const MAX_UNITS_PER_LINE = 10;
 
 export const SERVER_CATALOG: CatalogProduct[] = [
@@ -355,11 +357,8 @@ export interface OrderTotals {
 export function computeOrderTotals(subtotalKobo: number, packagingType: string, country: string): OrderTotals {
   const packagingKobo = PACKAGING_PRICE_KOBO[packagingType] ?? 0;
   const isNG = (country || 'NG').toUpperCase() === 'NG';
-  const shippingKobo = isNG
-    ? subtotalKobo >= FREE_SHIPPING_THRESHOLD_KOBO
-      ? 0
-      : LOCAL_SHIPPING_KOBO
-    : INTERNATIONAL_SHIPPING_KOBO;
+  // Products are dispatched from the Abuja atelier: flat rate across Nigeria or International
+  const shippingKobo = isNG ? NIGERIA_FLAT_SHIPPING_KOBO : INTERNATIONAL_FLAT_SHIPPING_KOBO;
   const taxKobo = isNG ? Math.round(subtotalKobo * VAT_RATE_NG) : 0;
   return {
     packagingKobo,

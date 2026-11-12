@@ -434,7 +434,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               <div className="pdp-accordion-body">
                 <p>{ORDER_CLARITY_NOTE}</p>
                 <p style={{ marginTop: 10 }}><strong>Itemized written invoice:</strong> every order is backed by an itemized written invoice stating garment specifications, fabric details, confirmed delivery date, and agreed price.</p>
-                <p style={{ marginTop: 8 }}><strong>Delivery timelines:</strong> production timelines and transit dates are agreed in writing before cutting. Nationwide Nigerian delivery is handled via vetted dispatch/couriers; international orders are fulfilled via express DHL/FedEx.</p>
+                <p style={{ marginTop: 8 }}><strong>Delivery from Abuja:</strong> all pieces are dispatched directly from our Abuja atelier. Nationwide Nigerian delivery is a flat rate of ₦15,000 via insured express courier; international delivery is a flat rate of ₦85,000 via DHL Express (5–7 business days). Production timelines and transit dates are confirmed in writing on your invoice.</p>
                 <p style={{ marginTop: 8 }}><strong>Fittings &amp; alterations:</strong> ready-to-wear pieces may be exchanged within 48 hours in unworn original condition. Custom bespoke garments receive dedicated fitting consultations and complimentary alteration adjustments at our Abuja studio or through guided virtual fitting reviews.</p>
               </div>
             </details>

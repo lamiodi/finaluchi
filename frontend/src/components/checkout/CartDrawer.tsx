@@ -239,9 +239,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               </div>
             )}
             <div className="bag-ledger-row">
-              <span>Local shipping (NG)</span>
+              <span>Flat rate shipping (NG)</span>
               <span style={{ color: '#201f1d' }}>
-                {shipping === 0 ? 'Complimentary' : formatKoboToNgn(shipping)}
+                {formatKoboToNgn(shipping)}
               </span>
             </div>
             <div className="bag-ledger-row">

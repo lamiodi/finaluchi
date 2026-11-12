@@ -111,6 +111,36 @@ function isRealSecret(value: string | undefined): boolean {
 }
 
 // ---------------------------------------------------------------------------
+// Helper: Resolve Order Number from Paystack transaction reference / metadata
+// Handles attempt suffixes like FC-XXXXX-timestamp or metadata.orderNumber
+// ---------------------------------------------------------------------------
+async function resolvePaymentOrderNumber(tx: any, fallbackRef: string): Promise<string> {
+  const candidate =
+    tx?.metadata?.orderNumber ||
+    tx?.metadata?.custom_fields?.find((f: any) => f.variable_name === 'order_number')?.value ||
+    tx?.reference ||
+    fallbackRef;
+
+  if (typeof candidate === 'string' && candidate.trim()) {
+    const trimmed = candidate.trim().toUpperCase();
+    const directOrder = await findOrderByNumber(trimmed);
+    if (directOrder) return directOrder.orderNumber;
+
+    // Check if reference has an attempt suffix e.g. FC-XXXXX-1234
+    if (trimmed.startsWith('FC-')) {
+      const parts = trimmed.split('-');
+      for (let i = parts.length - 1; i >= 2; i--) {
+        const prefix = parts.slice(0, i).join('-');
+        const match = await findOrderByNumber(prefix);
+        if (match) return match.orderNumber;
+      }
+    }
+    return trimmed;
+  }
+  return fallbackRef;
+}
+
+// ---------------------------------------------------------------------------
 // Admin authentication: passcode -> short-lived HMAC token
 // ---------------------------------------------------------------------------
 const ADMIN_PASSCODE = process.env.ADMIN_PASSCODE || '';
@@ -332,7 +362,7 @@ app.post('/api/payments/verify/:reference', rateLimit, async (req: Request, res:
       });
     }
 
-    const orderNumber = tx.metadata?.orderNumber || tx.reference || reference;
+    const orderNumber = await resolvePaymentOrderNumber(tx, reference);
     const result = await settleSuccessfulPayment({
       orderNumber: String(orderNumber),
       reference: String(tx.reference || reference),
@@ -537,16 +567,9 @@ app.post('/api/webhooks/paystack', async (req: Request, res: Response) => {
   const event = req.body;
   console.log('[Paystack Webhook Verified]:', event?.event || 'Unknown event');
 
-  const orderNumberFromEvent = (data: any): string | undefined =>
-    data?.metadata?.orderNumber ||
-    (typeof data?.metadata?.custom_fields?.[0]?.value === 'string'
-      ? data.metadata.custom_fields[0].value
-      : undefined) ||
-    (typeof data?.reference === 'string' ? data.reference : undefined);
-
   if (event?.event === 'charge.success') {
     const data = event.data || {};
-    const orderNumber = orderNumberFromEvent(data);
+    const orderNumber = await resolvePaymentOrderNumber(data, data?.reference || '');
     if (!orderNumber) {
       console.warn(`[Paystack Webhook] charge.success ref ${data?.reference} — no order reference in payload.`);
       return res.status(200).json({ received: true });
@@ -568,7 +591,7 @@ app.post('/api/webhooks/paystack', async (req: Request, res: Response) => {
 
   if (event?.event === 'charge.failed') {
     const data = event.data || {};
-    const orderNumber = orderNumberFromEvent(data);
+    const orderNumber = await resolvePaymentOrderNumber(data, data?.reference || '');
     const existing = orderNumber ? await findOrderByNumber(orderNumber) : undefined;
     if (existing && existing.paymentStatus === 'PAYMENT_PENDING') {
       // Only pending orders roll back — never clobber a successful retry that

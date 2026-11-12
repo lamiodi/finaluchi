@@ -303,13 +303,20 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
                     <span>{currentOrder.packagingType.replace(/_/g, ' ')}</span>
                   </div>
                   <div className="flex justify-between text-muted">
-                    <span>Shipping:</span>
-                    <span>{currentOrder.shippingKobo === 0 ? 'Complimentary' : formatKoboToNgn(currentOrder.shippingKobo)}</span>
+                    <span>Shipping ({currentOrder.shippingAddress?.country === 'NG' || !currentOrder.shippingAddress?.country ? 'Nigeria flat rate' : `International (${currentOrder.shippingAddress.country})`}):</span>
+                    <span>{formatKoboToNgn(currentOrder.shippingKobo)}</span>
                   </div>
-                  <div className="flex justify-between text-muted">
-                    <span>VAT (7.5%):</span>
-                    <span>{formatKoboToNgn(currentOrder.taxKobo)}</span>
-                  </div>
+                  {currentOrder.taxKobo > 0 ? (
+                    <div className="flex justify-between text-muted">
+                      <span>VAT (7.5%):</span>
+                      <span>{formatKoboToNgn(currentOrder.taxKobo)}</span>
+                    </div>
+                  ) : (
+                    <div className="flex justify-between text-muted">
+                      <span>Export VAT / Duties:</span>
+                      <span>0% (DDU)</span>
+                    </div>
+                  )}
                   <div className="flex justify-between text-sm font-bold text-black pt-2 border-t border-black/10">
                     <span>Order Total (NGN):</span>
                     <span>{formatKoboToNgn(currentOrder.totalKobo)}</span>

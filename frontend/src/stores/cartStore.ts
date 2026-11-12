@@ -181,12 +181,9 @@ export const useCartStore = create<CartState>()(
 
   getShippingKobo: (countryCode = 'NG') => {
     if (get().items.length === 0) return 0;
-    // Section 15.4: Local Nigerian shipping is ₦15,000 (or complimentary over ₦300,000), International is ₦85,000
-    const subtotal = get().getSubtotalKobo();
-    if (countryCode === 'NG') {
-      return subtotal >= 30000000 ? 0 : 1500000; // Free over ₦300k, else ₦15k
-    }
-    return 8500000; // ₦85,000 International Courier Express
+    // Flat rate delivery dispatched from the Abuja atelier:
+    // ₦15,000 flat nationwide in Nigeria; ₦85,000 flat International Express
+    return countryCode === 'NG' ? 1500000 : 8500000;
   },
 
   getTaxKobo: (countryCode = 'NG') => {
