@@ -4,10 +4,10 @@
   "id": "prod-dress-06",
   "collection": { "id": "recall-aw2425", "name": "The Recall Collection · 2024/25 Autumn Drop" },
   "status": "LIVE",
-  "mirroredOn": "2026-10-01",
+  "mirroredOn": "2026-11-10",
   "sourceOfTruth": "frontend/src/data/catalog.ts + backend/src/catalog.ts (keep in sync)",
   "category": { "pillar": "DRESSES", "categoryName": "Dresses" },
-  "isFeatured": false,
+  "isFeatured": true,
   "pricing": {
     "currency": "NGN",
     "basePriceNaira": 105000,
@@ -22,7 +22,7 @@
     "sizePriceDeltaKobo": 0
   },
   "colors": [
-    { "name": "Alabaster Ivory", "colorCode": "CL-02", "sku": "FC-DR-RC24-TRS-IVR", "isDefault": true, "photoStatus": "PHOTOGRAPHED" }
+    { "name": "Dune Crepe", "colorCode": "CL-04", "sku": "FC-DR-RC24-TRS-IVR", "isDefault": true, "photoStatus": "PHOTOGRAPHED" }
   ],
   "copy": {
     "headline": "The Teresa — the collection's lightest dress, made for long evenings.",
@@ -32,11 +32,11 @@
     "occasions": ["COCKTAIL_SOIREE", "VACATION"]
   },
   "fabric": {
-    "material": null,
+    "material": "Crisp cotton-blend weave with pearl-trimmed contrast collar",
     "composition": null,
     "weightGsm": 160,
-    "drapeDescription": "Light, easy drape with gentle movement",
-    "finish": null,
+    "drapeDescription": "Light, easy drape with a gathered basque waist and full midi skirt",
+    "finish": "Sculpted camel collar edged in pearl beading over a gathered midi skirt",
     "careInstructions": "Dry clean recommended. Cool iron on reverse."
   },
   "silhouette": { "fit": 70, "drape": 80, "weight": 25, "structure": 25, "stretch": 20 },

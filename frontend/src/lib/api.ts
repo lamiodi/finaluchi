@@ -2,12 +2,15 @@
 //
 // Every call degrades gracefully: when VITE_API_URL is not configured (or the
 // backend is unreachable) the site keeps working fully on local browser
-// storage, exactly as it did before the backend existed.
+// storage, exactly as it did before the backend existed. In local development
+// (`import.meta.env.DEV`), if VITE_API_URL is unset, requests default to
+// http://localhost:5000 so local Paystack / checkout testing talks to the local
+// backend automatically without needing to toggle .env between dev and prod.
 
 import { Appointment, Order } from '../types';
 
-const RAW_API_URL = import.meta.env.VITE_API_URL as string | undefined;
-export const API_URL = (RAW_API_URL || '').replace(/\/+$/, '');
+const RAW_API_URL = ((import.meta.env.VITE_API_URL as string | undefined) || '').trim();
+export const API_URL = (RAW_API_URL || (import.meta.env.DEV ? 'http://localhost:5000' : '')).replace(/\/+$/, '');
 export const isApiConfigured = API_URL.length > 0;
 
 async function request<T>(path: string, init?: RequestInit): Promise<T | null> {
@@ -31,17 +34,54 @@ async function request<T>(path: string, init?: RequestInit): Promise<T | null> {
 
 /* ---------------------------- Storefront flow ---------------------------- */
 
-export function submitOrder(order: Order): Promise<unknown> {
-  return request('/api/orders', {
+interface OrderSyncEntry {
+  order: Order;
+  synced: boolean;
+  inFlight: Promise<boolean> | null;
+}
+
+const orderSyncMap = new Map<string, OrderSyncEntry>();
+
+export function submitOrder(order: Order): Promise<boolean> {
+  const key = (order.orderNumber || '').toUpperCase();
+  const entry: OrderSyncEntry = orderSyncMap.get(key) || {
+    order,
+    synced: false,
+    inFlight: null,
+  };
+  entry.order = order;
+
+  const p = request<{ ok: boolean }>('/api/orders', {
     method: 'POST',
     body: JSON.stringify(order),
+  }).then((res) => {
+    const ok = Boolean(res?.ok);
+    entry.synced = ok;
+    entry.inFlight = null;
+    return ok;
   });
+
+  entry.inFlight = p;
+  orderSyncMap.set(key, entry);
+  return p;
 }
 
 // Server-to-server verification of a Paystack reference. The backend calls
 // Paystack's verify API with its secret key before an order can turn paid —
-// the client callback alone is never trusted.
-export async function verifyPayment(reference: string): Promise<{ ok: boolean; order?: Order; alreadyPaid?: boolean } | null> {
+// the client callback alone is never trusted. Awaits any in-flight order
+// registration first so verify never races ahead of POST /api/orders.
+export async function verifyPayment(
+  reference: string,
+  orderFallback?: Order
+): Promise<{ ok: boolean; order?: Order; alreadyPaid?: boolean } | null> {
+  const key = (orderFallback?.orderNumber || reference || '').toUpperCase();
+  const entry = orderSyncMap.get(key);
+  if (entry?.inFlight) {
+    await entry.inFlight;
+  }
+  if ((!entry || !entry.synced) && (entry?.order || orderFallback)) {
+    await submitOrder((entry?.order || orderFallback)!);
+  }
   return request(`/api/payments/verify/${encodeURIComponent(reference)}`, {
     method: 'POST',
   });

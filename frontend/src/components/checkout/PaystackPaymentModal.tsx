@@ -28,6 +28,7 @@ export const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
 }) => {
   const { playTactileClick, playSuccessChime } = useAudioStore();
   const processPaystackSuccess = useOrderStore((s) => s.processPaystackSuccess);
+  const getOrderByNumber = useOrderStore((s) => s.getOrderByNumber);
   const panelRef = useModalA11y<HTMLDivElement>({ onClose, isOpen });
 
   const [isOpening, setIsOpening] = useState(false);
@@ -81,7 +82,8 @@ export const PaystackPaymentModal: React.FC<PaystackPaymentModalProps> = ({
               settleOrder(reference);
               return;
             }
-            const result = await verifyPayment(reference);
+            const localOrder = getOrderByNumber(orderId);
+            const result = await verifyPayment(reference, localOrder);
             if (result?.ok) {
               settleOrder(reference);
             } else {

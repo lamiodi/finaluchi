@@ -36,10 +36,10 @@ Collection folder names match the `collectionId` used in the site's registry
 | `dahlia-tank-top/` | Dahlia Tank Top | ₦35,000 | S–L | cream, caramel nude | **LIVE**, photographed |
 | `dahlia-skirt/` | Dahlia Skirt | ₦46,000 | 6–18 | wine, white, black | **LIVE**; white/black not photographed |
 | `leonie-capri-lounge-2-piece/` | Leonie Capri Lounge 2 Piece | ₦80,000 | 10–16 | house leopard | **LIVE**, photographed |
-| `essence-set/` | Essence Set | ₦78,900 | 6–16 | peach, black, white, navy blue | **New brief** — photos staged in `images/` |
-| `diza-set/` | Diza Set | ₦125,000 | 6–16 | pink, cream, black | **New brief** — photos staged in `images/` |
-| `amber-dress/` | Amber Dress | ₦85,000 | 6–12 | black, cream | **New brief** — photos staged in `images/` |
-| `hasam-set/` | Hasam Set | ₦97,900 | 6–12 | clay brown, white, black, navy blue, "crusty brown" | **New brief** — photos staged in `images/` |
+| `essence-set/` | Essence Set | ₦78,900 | 6–16 | peach, black, white, navy blue | **LIVE** (`rtw-2026`), peach photographed |
+| `diza-set/` | Diza Set | ₦125,000 | 6–16 | pink, cream, black | **LIVE** (`rtw-2026`), pink photographed (2 views) |
+| `amber-dress/` | Amber Dress | ₦85,000 | 6–12 | black, cream | **LIVE** (`rtw-2026`), black photographed (2 views) |
+| `hasam-set/` | Hasam Set | ₦97,900 | 6–12 | clay brown, white, black, navy blue, burnished copper | **LIVE** (`rtw-2026`), clay brown photographed (4 views) |
 
 ## Inventory — The Recall Collection (`recall-aw2425/`)
 

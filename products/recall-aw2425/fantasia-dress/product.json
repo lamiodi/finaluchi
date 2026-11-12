@@ -4,10 +4,10 @@
   "id": "prod-dress-04",
   "collection": { "id": "recall-aw2425", "name": "The Recall Collection · 2024/25 Autumn Drop" },
   "status": "LIVE",
-  "mirroredOn": "2026-10-01",
+  "mirroredOn": "2026-11-10",
   "sourceOfTruth": "frontend/src/data/catalog.ts + backend/src/catalog.ts (keep in sync)",
   "category": { "pillar": "DRESSES", "categoryName": "Dresses" },
-  "isFeatured": false,
+  "isFeatured": true,
   "pricing": {
     "currency": "NGN",
     "basePriceNaira": 145000,
@@ -32,11 +32,11 @@
     "occasions": ["COCKTAIL_SOIREE", "WEDDING"]
   },
   "fabric": {
-    "material": null,
+    "material": "Textured grid-weave cotton blend with sculpted bustier bodice",
     "composition": null,
     "weightGsm": 180,
-    "drapeDescription": "Fluid, body-skimming drape",
-    "finish": null,
+    "drapeDescription": "Corseted bodice over an asymmetric dropped-waist bubble midi skirt",
+    "finish": "Tonal windowpane texture with corset lacing, tie straps and bubble midi hem",
     "careInstructions": "Dry clean recommended. Cool iron on reverse."
   },
   "silhouette": { "fit": 75, "drape": 75, "weight": 35, "structure": 30, "stretch": 15 },

@@ -130,6 +130,6 @@ The 81 responsive WebP variants (`-480w/-640w/.webp`) under `frontend/public/ima
 - [x] Step 11: Root debris and public README.txt files deleted; WebP generation moved into the build pipeline
 
 ### Phase 4: Production Infrastructure & Key Rotation
-- [x] Step 12 (partial): Storage hardened + persistent-volume guidance; **full Postgres migration pending external DB account** → `docs/LAUNCH_RUNBOOK.md`
-- [x] Step 13 (partial): `.env.example` files fully documented; **real production values pending Paystack/Resend accounts** → `docs/LAUNCH_RUNBOOK.md`
-- [ ] Step 14: End-to-end live canary test (₦100 real transaction) — **requires live Paystack keys**
+- [x] Step 12: `backend/src/storage.ts` migrated to Supabase Postgres (`public.orders`, `public.appointments`, `public.contacts`, `public.newsletter_subscribers` via `002_create_store_tables.sql`) with automatic JSON fallback; all 14 products wired in `npm run db:sync`
+- [x] Step 13 (partial): `.env.example` files fully documented; Supabase, Cloudinary, Resend and Admin secrets configured; **Paystack test/live keys pending** → `docs/LAUNCH_RUNBOOK.md`
+- [ ] Step 14: End-to-end live canary test (₦100 real transaction) — **ready to run as soon as Paystack test/live keys are pasted**

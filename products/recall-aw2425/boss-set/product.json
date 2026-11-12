@@ -4,10 +4,10 @@
   "id": "prod-2pc-03",
   "collection": { "id": "recall-aw2425", "name": "The Recall Collection · 2024/25 Autumn Drop" },
   "status": "LIVE",
-  "mirroredOn": "2026-10-01",
+  "mirroredOn": "2026-11-10",
   "sourceOfTruth": "frontend/src/data/catalog.ts + backend/src/catalog.ts (keep in sync)",
   "category": { "pillar": "2PIECES", "categoryName": "2pieces" },
-  "isFeatured": false,
+  "isFeatured": true,
   "pricing": {
     "currency": "NGN",
     "basePriceNaira": 220000,
@@ -23,7 +23,7 @@
     "sizePriceDeltasKobo": { "14": 3000000, "16": 3000000, "18": 3000000 }
   },
   "colors": [
-    { "name": "Noir Onyx", "colorCode": "CL-01", "sku": "FC-2P-RC24-BSS-BLK", "isDefault": true, "photoStatus": "PHOTOGRAPHED" }
+    { "name": "Dune Crepe", "colorCode": "CL-04", "sku": "FC-2P-RC24-BSS-BLK", "isDefault": true, "photoStatus": "PHOTOGRAPHED" }
   ],
   "copy": {
     "headline": "The Boss — a statement two-piece that runs boardroom to banquet.",
@@ -33,11 +33,11 @@
     "occasions": ["GALA_BLACK_TIE", "RED_CARPET", "PRIVATE_DINNER"]
   },
   "fabric": {
-    "material": null,
+    "material": "Structured suiting twill with houndstooth pocket & feather cuff trim",
     "composition": null,
     "weightGsm": 220,
     "drapeDescription": "Clean structured drape through both pieces",
-    "finish": null,
+    "finish": "Matte camel twill, contrast brown lapel, check patch pocket and feather cuffs",
     "careInstructions": "Dry clean recommended. Cool iron on reverse."
   },
   "silhouette": { "fit": 85, "drape": 55, "weight": 55, "structure": 70, "stretch": 10 },

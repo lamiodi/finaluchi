@@ -4,10 +4,10 @@
   "id": "prod-dress-05",
   "collection": { "id": "recall-aw2425", "name": "The Recall Collection · 2024/25 Autumn Drop" },
   "status": "LIVE",
-  "mirroredOn": "2026-10-01",
+  "mirroredOn": "2026-11-10",
   "sourceOfTruth": "frontend/src/data/catalog.ts + backend/src/catalog.ts (keep in sync)",
   "category": { "pillar": "DRESSES", "categoryName": "Dresses" },
-  "isFeatured": false,
+  "isFeatured": true,
   "pricing": {
     "currency": "NGN",
     "basePriceNaira": 245000,
@@ -22,7 +22,7 @@
     "sizePriceDeltaKobo": 0
   },
   "colors": [
-    { "name": "Alabaster Ivory", "colorCode": "CL-02", "sku": "FC-DR-RC24-ELZ-IVR", "isDefault": true, "photoStatus": "PHOTOGRAPHED" }
+    { "name": "Sahara Terracotta", "colorCode": "CL-10", "sku": "FC-DR-RC24-ELZ-IVR", "isDefault": true, "photoStatus": "PHOTOGRAPHED" }
   ],
   "copy": {
     "headline": "The Elizabeth — a sculpted bra-top dress with an elongated skirt.",
@@ -32,11 +32,11 @@
     "occasions": ["WEDDING", "COCKTAIL_SOIREE", "PRIVATE_DINNER"]
   },
   "fabric": {
-    "material": null,
+    "material": "Asymmetric tailored crepe blazer bodice over textured cream weave",
     "composition": null,
     "weightGsm": 220,
-    "drapeDescription": "Sculpted hold through the bodice, fluid skirt",
-    "finish": null,
+    "drapeDescription": "Sculpted hold through the bodice, fluid skirt with gathered bubble hem",
+    "finish": "Two-tone cognac and cream construction with gathered bubble hem and cuff",
     "careInstructions": "Dry clean recommended. Cool iron on reverse."
   },
   "silhouette": { "fit": 85, "drape": 60, "weight": 45, "structure": 55, "stretch": 10 },

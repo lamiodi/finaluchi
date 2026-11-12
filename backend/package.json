@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "db:sync": "node scripts/apply-products-migration.mjs",
+    "db:check": "tsx scripts/db-check.ts"
   },
   "dependencies": {
     "cloudinary": "^2.11.0",

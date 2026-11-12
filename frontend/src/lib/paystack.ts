@@ -5,6 +5,15 @@
 // docs/LAUNCH_RUNBOOK.md) the placeholder value keeps the storefront on the
 // WhatsApp concierge flow, so checkout never breaks.
 
+export interface PaystackCallbackResponse {
+  reference?: string;
+  trxref?: string;
+  trans?: string;
+  transaction?: string;
+  status?: string;
+  message?: string;
+}
+
 export interface PaystackSetupOptions {
   key: string;
   email: string;
@@ -12,17 +21,25 @@ export interface PaystackSetupOptions {
   currency: string;
   ref: string;
   metadata?: Record<string, unknown>;
-  onSuccess: (reference: string) => void;
-  onCancel: () => void;
+  // Paystack Inline v1 (https://js.paystack.co/v1/inline.js) uses `callback` + `onClose`
+  callback?: (response: PaystackCallbackResponse | string) => void;
+  onClose?: () => void;
+  // Paystack Inline v2 / wrapper compatibility
+  onSuccess?: (response: PaystackCallbackResponse | string) => void;
+  onCancel?: () => void;
 }
 
 interface PaystackHandler {
   openIframe: () => void;
 }
 
+type PaystackGlobal = {
+  setup?: (options: PaystackSetupOptions) => PaystackHandler;
+} & (() => { setup: (options: PaystackSetupOptions) => PaystackHandler });
+
 declare global {
   interface Window {
-    PaystackPop?: () => { setup: (options: PaystackSetupOptions) => PaystackHandler };
+    PaystackPop?: PaystackGlobal;
   }
 }
 
@@ -32,7 +49,7 @@ let inlineLoadPromise: Promise<void> | null = null;
 /** Returns the configured public key, or undefined while it is unset/placeholder. */
 export function getPaystackPublicKey(): string | undefined {
   const key = ((import.meta.env.VITE_PAYSTACK_PUBLIC_KEY as string | undefined) || '').trim();
-  if (!key || key.includes('your_')) return undefined;
+  if (!key || key.includes('your_') || /^pk_(test|live)_x+$/i.test(key)) return undefined;
   return key;
 }
 
@@ -79,10 +96,26 @@ export async function openPaystackCheckout(options: {
   const PaystackPop = window.PaystackPop;
   if (!PaystackPop) throw new Error('Paystack Inline unavailable.');
 
-  PaystackPop().setup({
+  let settled = false;
+  const handleSuccess = (res: PaystackCallbackResponse | string) => {
+    if (settled) return;
+    settled = true;
+    const resolvedRef =
+      typeof res === 'string'
+        ? res
+        : res?.reference || res?.trxref || options.reference;
+    options.onSuccess(resolvedRef);
+  };
+
+  const handleClose = () => {
+    if (settled) return;
+    options.onCancel();
+  };
+
+  const setupOptions: PaystackSetupOptions = {
     key,
     email: options.email,
-    amount: options.amountKobo,
+    amount: Math.round(options.amountKobo),
     currency: 'NGN',
     ref: options.reference,
     metadata: {
@@ -95,7 +128,16 @@ export async function openPaystackCheckout(options: {
         },
       ],
     },
-    onSuccess: options.onSuccess,
-    onCancel: options.onCancel,
-  }).openIframe();
+    callback: handleSuccess,
+    onClose: handleClose,
+    onSuccess: handleSuccess,
+    onCancel: handleClose,
+  };
+
+  const handler =
+    typeof PaystackPop.setup === 'function'
+      ? PaystackPop.setup(setupOptions)
+      : PaystackPop().setup(setupOptions);
+
+  handler.openIframe();
 }

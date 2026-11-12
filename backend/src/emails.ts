@@ -212,6 +212,10 @@ export async function sendEmail({ to, subject, html, replyTo }: SendEmailOptions
  * Template 1 — Order Confirmation & Atelier Receipt
  * ------------------------------------------------------------------------- */
 export function renderOrderConfirmationEmail(order: StoredOrder): { subject: string; html: string } {
+  const isPaid = order.paymentStatus === 'PAYMENT_SUCCESSFUL';
+  const isEcoCarrier = (order.packagingType || '').includes('ECO');
+  const packagingLabel = isEcoCarrier ? `${formatKobo(1500000)} (Eco-Luxury Carrier)` : 'Complimentary';
+
   const items = (order.items || []).map((item: any) => {
     const name = escapeHtml(item.productNameSnapshot);
     const meta = [
@@ -246,10 +250,14 @@ export function renderOrderConfirmationEmail(order: StoredOrder): { subject: str
 
     <tr>
       <td style="padding: 40px 40px 26px 40px;">
-        ${eyebrow('Finaluchi / Order confirmation &amp; atelier receipt')}
-        ${displayHeading(`Your order is <em style="color: ${BRONZE};">received.</em>`)}
+        ${eyebrow(isPaid ? 'Finaluchi / Payment confirmation &amp; atelier receipt' : 'Finaluchi / Order registration &amp; atelier invoice')}
+        ${displayHeading(isPaid ? `Your payment is <em style="color: ${BRONZE};">confirmed.</em>` : `Your order is <em style="color: ${BRONZE};">received.</em>`)}
         <div style="height: 14px; line-height: 14px;">&nbsp;</div>
-        ${bodyParagraph(`Dear ${escapeHtml(order.customerFullName)}, thank you for choosing Finaluchi Couture. Your order has been officially received and entered into the master production schedule at our Abuja atelier.`)}
+        ${bodyParagraph(
+          isPaid
+            ? `Dear ${escapeHtml(order.customerFullName)}, your payment for order <strong style="color: ${INK};">${escapeHtml(order.orderNumber)}</strong> has been verified and settled. Your pieces are now confirmed in the master production schedule at our Abuja atelier.`
+            : `Dear ${escapeHtml(order.customerFullName)}, thank you for choosing Finaluchi Couture. Your order has been officially registered at our Abuja atelier.`
+        )}
         ${bodyParagraph(`Every creation by our Creative Director, <strong style="color: ${INK};">Oluchi Irokanulo</strong>, is hand-tailored to celebrate individuality and craftsmanship. The registered details of your order follow below.`)}
       </td>
     </tr>
@@ -264,8 +272,12 @@ export function renderOrderConfirmationEmail(order: StoredOrder): { subject: str
                 <strong style="font-family: ${MONO}; font-size: 15px; color: ${INK}; letter-spacing: 0.04em; display: block; margin-top: 5px;">${escapeHtml(order.orderNumber)}</strong>
               </td>
               <td align="right">
-                <span style="font-family: ${SANS}; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: ${LABEL}; display: block;">Estimated delivery</span>
-                <strong style="font-family: ${SANS}; font-size: 12px; color: ${INK}; display: block; margin-top: 6px;">${escapeHtml(order.estimatedDeliveryDate || 'To be confirmed')}</strong>
+                <span style="font-family: ${SANS}; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: ${LABEL}; display: block;">Payment status</span>
+                <strong style="font-family: ${SANS}; font-size: 12px; color: ${isPaid ? INK : BRONZE}; display: block; margin-top: 6px;">${
+                  isPaid
+                    ? `Confirmed${order.gatewayReference ? ` · Ref ${escapeHtml(order.gatewayReference)}` : ''}`
+                    : 'Awaiting settlement'
+                }</strong>
               </td>
             </tr>
           </table>
@@ -292,10 +304,11 @@ export function renderOrderConfirmationEmail(order: StoredOrder): { subject: str
         <div style="height: 8px; line-height: 8px;">&nbsp;</div>
         <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
           ${ledgerRow('Subtotal', formatKobo(order.subtotalKobo))}
-          ${ledgerRow('Packaging &amp; keepsake box', (order.packagingType || '').includes('ECO') ? 'Eco-Luxury Carrier' : 'Complimentary')}
+          ${ledgerRow('Packaging &amp; keepsake box', packagingLabel)}
           ${ledgerRow('Insured courier delivery', (order.shippingKobo || 0) === 0 ? 'Complimentary' : formatKobo(order.shippingKobo))}
+          ${(order.taxKobo || 0) > 0 ? ledgerRow('VAT (7.5%)', formatKobo(order.taxKobo)) : ''}
           <tr><td colspan="2" style="border-top: 1px solid ${HAIRLINE}; font-size: 1px; line-height: 1px;">&nbsp;</td></tr>
-          ${ledgerRow('TOTAL (NGN)', formatKobo(order.totalKobo), true)}
+          ${ledgerRow(isPaid ? 'TOTAL SETTLED (NGN)' : 'TOTAL BILLED (NGN)', formatKobo(order.totalKobo), true)}
         </table>
       </td>
     </tr>
@@ -318,8 +331,15 @@ export function renderOrderConfirmationEmail(order: StoredOrder): { subject: str
   </table>`;
 
   return {
-    subject: `Order Confirmation ${order.orderNumber} — Finaluchi Couture`,
-    html: emailShell(inner, `Your Finaluchi order ${order.orderNumber} has been received by our Abuja atelier.`),
+    subject: isPaid
+      ? `Payment Confirmed ${order.orderNumber} — Finaluchi Couture`
+      : `Order Confirmation ${order.orderNumber} — Finaluchi Couture`,
+    html: emailShell(
+      inner,
+      isPaid
+        ? `Payment confirmed for your Finaluchi order ${order.orderNumber} — now in atelier production.`
+        : `Your Finaluchi order ${order.orderNumber} has been received by our Abuja atelier.`
+    ),
   };
 }
 

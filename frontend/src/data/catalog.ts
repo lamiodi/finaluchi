@@ -314,10 +314,7 @@ export const MASTER_PRODUCTS: Product[] = [
   },
 
   // ————— THE RECALL COLLECTION · 2024/25 AUTUMN DROP —————
-  // Photos pending: media folders are public/images/products/<slug>/ — drop
-  // <product>-1.jpeg, -2.jpeg … into each and commit+push (Vercel serves
-  // images from the repo, not a database). Until then every image reference
-  // degrades to the house crest via onImageError.
+  // Photographed and live in public/images/products/<slug>/.
 
   // 6. SLOANE DRESS — Dresses, ₦120,000, UK 6–12
   {
@@ -338,17 +335,17 @@ export const MASTER_PRODUCTS: Product[] = [
     has360Rotation: false,
     editorialQuote: 'Simple, but never plain — the one you reach for first.',
     fabricIntelligence: {
-      material: 'To be confirmed', // TODO(product): confirm with atelier
+      material: 'Textured piqué weave with contrast check & tan hem panel',
       composition: 'To be confirmed', // TODO(product)
       weightGsm: 180, // TODO(product): confirm
-      drapeDescription: 'Fluid, body-skimming drape',
-      finish: 'To be confirmed', // TODO(product)
+      drapeDescription: 'Sculpted pencil silhouette with clean structure through the midi skirt',
+      finish: 'Pebbled white ground with covered buttons and geometric houndstooth hem inlay',
       careInstructions: 'Dry clean recommended. Cool iron on reverse.',
+      macroZoomUrl: '/images/products/sloane-dress/sloane-2.jpeg',
     },
     silhouette: { fit: 70, drape: 75, weight: 35, structure: 30, stretch: 15 },
     colorways: [
       {
-        // TODO(product): placeholder colour — update when photos arrive.
         id: 'cw-dr3-ivory',
         colorId: 'cl-02',
         color: getColorByCode('CL-02'),
@@ -392,20 +389,20 @@ export const MASTER_PRODUCTS: Product[] = [
     has360Rotation: false,
     editorialQuote: 'Walk in like the meeting is already won.',
     fabricIntelligence: {
-      material: 'To be confirmed', // TODO(product): confirm with atelier
+      material: 'Structured suiting twill with houndstooth pocket & feather cuff trim',
       composition: 'To be confirmed', // TODO(product)
       weightGsm: 220, // TODO(product): confirm
       drapeDescription: 'Clean structured drape through both pieces',
-      finish: 'To be confirmed', // TODO(product)
+      finish: 'Matte camel twill, contrast brown lapel, check patch pocket and feather cuffs',
       careInstructions: 'Dry clean recommended. Cool iron on reverse.',
+      macroZoomUrl: '/images/products/boss-set/boss-2.jpeg',
     },
     silhouette: { fit: 85, drape: 55, weight: 55, structure: 70, stretch: 10 },
     colorways: [
       {
-        // TODO(product): placeholder colour — update when photos arrive.
         id: 'cw-2pc3-black',
-        colorId: 'cl-01',
-        color: getColorByCode('CL-01'),
+        colorId: 'cl-04',
+        color: getColorByCode('CL-04'),
         sku: 'FC-2P-RC24-BSS-BLK',
         heroImageUrl: '/images/products/boss-set/boss-1.jpeg',
         mediaGalleryUrls: [
@@ -449,17 +446,17 @@ export const MASTER_PRODUCTS: Product[] = [
     has360Rotation: false,
     editorialQuote: 'Half dress, half evening — entirely Fantasia.',
     fabricIntelligence: {
-      material: 'To be confirmed', // TODO(product): confirm with atelier
+      material: 'Textured grid-weave cotton blend with sculpted bustier bodice',
       composition: 'To be confirmed', // TODO(product)
       weightGsm: 180, // TODO(product): confirm
-      drapeDescription: 'Fluid, body-skimming drape',
-      finish: 'To be confirmed', // TODO(product)
+      drapeDescription: 'Corseted bodice over an asymmetric dropped-waist bubble midi skirt',
+      finish: 'Tonal windowpane texture with corset lacing, tie straps and bubble midi hem',
       careInstructions: 'Dry clean recommended. Cool iron on reverse.',
+      macroZoomUrl: '/images/products/fantasia-dress/fantasia-1.jpeg',
     },
     silhouette: { fit: 75, drape: 75, weight: 35, structure: 30, stretch: 15 },
     colorways: [
       {
-        // TODO(product): placeholder colour — update when photos arrive.
         id: 'cw-dr4-ivory',
         colorId: 'cl-02',
         color: getColorByCode('CL-02'),
@@ -504,20 +501,20 @@ export const MASTER_PRODUCTS: Product[] = [
     has360Rotation: false,
     editorialQuote: 'A bodice with opinions — the Elizabeth speaks first.',
     fabricIntelligence: {
-      material: 'To be confirmed', // TODO(product): confirm with atelier
+      material: 'Asymmetric tailored crepe blazer bodice over textured cream weave',
       composition: 'To be confirmed', // TODO(product)
       weightGsm: 220, // TODO(product): confirm
-      drapeDescription: 'Sculpted hold through the bodice, fluid skirt',
-      finish: 'To be confirmed', // TODO(product)
+      drapeDescription: 'Sculpted hold through the bodice, fluid skirt with gathered bubble hem',
+      finish: 'Two-tone cognac and cream construction with gathered bubble hem and cuff',
       careInstructions: 'Dry clean recommended. Cool iron on reverse.',
+      macroZoomUrl: '/images/products/elizabeth-brazer-dress/elizabeth-2.jpeg',
     },
     silhouette: { fit: 85, drape: 60, weight: 45, structure: 55, stretch: 10 },
     colorways: [
       {
-        // TODO(product): placeholder colour — update when photos arrive.
         id: 'cw-dr5-ivory',
-        colorId: 'cl-02',
-        color: getColorByCode('CL-02'),
+        colorId: 'cl-10',
+        color: getColorByCode('CL-10'),
         sku: 'FC-DR-RC24-ELZ-IVR',
         heroImageUrl: '/images/products/elizabeth-brazer-dress/elizabeth-1.jpeg',
         mediaGalleryUrls: [
@@ -558,20 +555,20 @@ export const MASTER_PRODUCTS: Product[] = [
     has360Rotation: false,
     editorialQuote: 'Light on the body, long on the evening.',
     fabricIntelligence: {
-      material: 'To be confirmed', // TODO(product): confirm with atelier
+      material: 'Crisp cotton-blend weave with pearl-trimmed contrast collar',
       composition: 'To be confirmed', // TODO(product)
       weightGsm: 160, // TODO(product): confirm
-      drapeDescription: 'Light, easy drape with gentle movement',
-      finish: 'To be confirmed', // TODO(product)
+      drapeDescription: 'Light, easy drape with a gathered basque waist and full midi skirt',
+      finish: 'Sculpted camel collar edged in pearl beading over a gathered midi skirt',
       careInstructions: 'Dry clean recommended. Cool iron on reverse.',
+      macroZoomUrl: '/images/products/teresa-dress/teresa-1.jpeg',
     },
     silhouette: { fit: 70, drape: 80, weight: 25, structure: 25, stretch: 20 },
     colorways: [
       {
-        // TODO(product): placeholder colour — update when photos arrive.
         id: 'cw-dr6-ivory',
-        colorId: 'cl-02',
-        color: getColorByCode('CL-02'),
+        colorId: 'cl-04',
+        color: getColorByCode('CL-04'),
         sku: 'FC-DR-RC24-TRS-IVR',
         heroImageUrl: '/images/products/teresa-dress/teresa-1.jpeg',
         mediaGalleryUrls: ['/images/products/teresa-dress/teresa-1.jpeg'],

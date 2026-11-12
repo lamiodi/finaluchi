@@ -9,11 +9,13 @@ import {
   addContact,
   addSubscriber,
   findOrderByNumber,
+  getStorageStatus,
   listAppointments,
   listOrders,
   sanitizeOrderForClient,
   upsertOrder,
 } from './storage.js';
+import { isDatabaseConfigured } from './db.js';
 import { computeOrderTotals, priceOrderItems } from './catalog.js';
 import {
   notifyStudio,
@@ -105,7 +107,7 @@ function isValidEmail(value: unknown): value is string {
 // are only usable once a real account exists (see docs/LAUNCH_RUNBOOK.md).
 function isRealSecret(value: string | undefined): boolean {
   const v = (value || '').trim();
-  return v.length > 0 && !v.includes('your_') && !v.startsWith('sk_test_x') && !v.startsWith('pk_test_x');
+  return v.length > 0 && !v.includes('your_') && !/^[sp]k_(test|live)_x+$/i.test(v);
 }
 
 // ---------------------------------------------------------------------------
@@ -148,10 +150,13 @@ function requireAdmin(req: Request, res: Response, next: NextFunction) {
 // ---------------------------------------------------------------------------
 // Health Check Endpoint
 // ---------------------------------------------------------------------------
-app.get('/api/health', (_req: Request, res: Response) => {
+app.get('/api/health', async (_req: Request, res: Response) => {
+  const storage = await getStorageStatus();
   res.json({
     status: 'ok',
     service: 'finaluchi-backend',
+    storage,
+    database: isDatabaseConfigured ? (storage === 'postgres' ? 'connected' : 'unreachable-using-fallback') : 'not-configured',
     email: process.env.RESEND_API_KEY ? 'configured' : 'not-configured',
     admin: ADMIN_PASSCODE ? 'configured' : 'not-configured',
     paystack: isRealSecret(process.env.PAYSTACK_SECRET_KEY) ? 'configured' : 'not-configured',

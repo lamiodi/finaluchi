@@ -1,13 +1,14 @@
 {
   "name": "Essence Set",
   "slug": "essence-set",
-  "proposedId": "prod-2pc-04",
-  "collection": { "id": null, "name": "RTW core line" },
+  "id": "prod-2pc-04",
+  "collection": { "id": "rtw-2026", "name": "The 2026 Capsule · Ready-to-Wear" },
   "category": { "pillar": "2PIECES", "categoryName": "2pieces" },
-  "status": "PHOTOS_STAGED",
+  "status": "LIVE",
   "addedOn": "2026-09-29",
-  "updatedOn": "2026-10-01",
-  "source": "Owner brief, 2026-09-29",
+  "mirroredOn": "2026-10-05",
+  "sourceOfTruth": "frontend/src/data/catalog.ts + backend/src/catalog.ts (keep in sync)",
+  "isFeatured": false,
   "pricing": {
     "currency": "NGN",
     "basePriceNaira": 78900,
@@ -22,41 +23,34 @@
     "sizePriceDeltaKobo": 0
   },
   "colors": [
-    { "name": "Peach", "colorCodeSuggestion": null, "colorCodeStatus": "NEW_CODE_NEEDED", "notes": "Not in the house palette yet — add as the next free code (CL-23+) in frontend/src/data/colors.ts when confirmed." },
-    { "name": "Black", "colorCodeSuggestion": "CL-01", "colorCodeStatus": "SUGGESTED_MATCH", "notes": "CL-01 Noir Onyx — confirm with atelier." },
-    { "name": "White", "colorCodeSuggestion": "CL-02", "colorCodeStatus": "SUGGESTED_MATCH", "notes": "Catalog maps white to CL-02 Alabaster Ivory — confirm." },
-    { "name": "Navy Blue", "colorCodeSuggestion": "CL-07", "colorCodeStatus": "SUGGESTED_MATCH", "notes": "CL-07 Yoruba Indigo is the house navy — confirm." }
+    { "name": "Harmattan Peach", "colorCode": "CL-24", "sku": "FC-2P-2026-ESS-PCH", "isDefault": true, "photoStatus": "PHOTOGRAPHED" },
+    { "name": "Noir Onyx", "colorCode": "CL-01", "sku": "FC-2P-2026-ESS-BLK", "isDefault": false, "photoStatus": "REUSING_DEFAULT_HERO" },
+    { "name": "Alabaster Ivory", "colorCode": "CL-02", "sku": "FC-2P-2026-ESS-WHT", "isDefault": false, "photoStatus": "REUSING_DEFAULT_HERO" },
+    { "name": "Yoruba Indigo", "colorCode": "CL-07", "sku": "FC-2P-2026-ESS-NVY", "isDefault": false, "photoStatus": "REUSING_DEFAULT_HERO" }
   ],
   "copy": {
-    "headline": null,
-    "description": null,
-    "atelierNotes": null,
-    "editorialQuote": null,
-    "occasions": []
+    "headline": "Oversized collar top with a wave-embroidered hem, matched to easy shorts.",
+    "description": "The Essence Set is ease, tailored. An oversized camp-collar top in a soft peach weave carries a single line of wave embroidery along the hem — the atelier's signature drawn in one continuous stroke — falling over matching shorts cut long enough for the street and light enough for the heat. Wear it as a set or split it; it answers to both.",
+    "atelierNotes": "Ready-to-wear piece produced in limited runs. Wave embroidery is applied by hand-guided machine.",
+    "editorialQuote": "One line, drawn all the way to the hem.",
+    "occasions": ["VACATION", "PRIVATE_DINNER"]
   },
   "fabric": {
-    "material": null,
+    "material": "Soft-breathable woven",
     "composition": null,
-    "weightGsm": null,
-    "drapeDescription": null,
-    "finish": null,
-    "careInstructions": null
+    "weightGsm": 160,
+    "drapeDescription": "Relaxed and airy; boxy through the top, easy through the short",
+    "finish": "Tonal buttons and a single wave-embroidered hem line",
+    "careInstructions": "Dry clean recommended. Cool iron on reverse."
   },
+  "silhouette": { "fit": 25, "drape": 60, "weight": 30, "structure": 15, "stretch": 5 },
   "skuPattern": {
     "colorway": "FC-2P-2026-ESS-<CLR>",
     "size": "FC-2P-2026-ESS-<SIZE>"
   },
   "media": {
-    "imageFolder": "images/",
-    "stagedImages": ["essence-1.jpeg"],
-    "imageNaming": "essence-1.jpeg, essence-2.jpeg, … — numbered set per product, galleries reuse per colorway (same convention as live products)",
-    "videoFolder": "videos/",
-    "videoNaming": "essence-<color>.mp4 or essence-360.mp4 — optional; has360Rotation stays false unless a 360 spin set is provided",
-    "webpNote": "Never commit .webp variants — the build generates them."
-  },
-  "notes": [
-    "TODO(product): write headline/description/atelierNotes before promoting to the live catalog — match the voice in frontend/src/data/catalog.ts.",
-    "TODO(product): confirm fabric details with the atelier.",
-    "TODO(product): confirm colour-code matches with the atelier."
-  ]
+    "liveMediaFolder": "frontend/public/images/products/essence-set/",
+    "images": ["essence-1.jpeg"],
+    "note": "Promoted to live catalog 2026-10-05 and uploaded to Cloudinary."
+  }
 }

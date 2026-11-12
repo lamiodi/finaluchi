@@ -43,15 +43,11 @@ serverless storage until the Postgres migration below is done.
 **persistent disk mounted**, env `DATA_DIR=/var/data/finaluchi` pointing at the disk.
 Order/appointment/contact records then survive deploys and restarts.
 
-**Option B (durable, recommended before real volume):** provision Postgres
-(Neon free tier or Supabase), then migrate `backend/src/storage.ts` to it:
-1. `npm i pg` in `backend/`, set `DATABASE_URL` in `backend/.env`.
-2. Create tables: `orders` (jsonb payload, `order_number` unique index), plus
-   `appointments`, `contacts`, `newsletter_subscribers` mirroring the interfaces
-   in `storage.ts`.
-3. Replace the file read/write internals of `storage.ts` with SQL upserts — the
-   function signatures (`upsertOrder`, `findOrderByNumber`, `listOrders`, …) are
-   already the only touchpoints `server.ts` uses, so nothing else changes.
+**Option B (durable — IMPLEMENTED in `backend/src/storage.ts`):**
+`backend/src/storage.ts` now writes directly to Supabase Postgres (`DATABASE_URL` in `backend/.env`) across four RLS-protected tables (`public.orders`, `public.appointments`, `public.contacts`, `public.newsletter_subscribers`) and automatically falls back to `backend/data/db.json` if `DATABASE_URL` is unset or temporarily paused.
+1. Ensure your Supabase project (`pueovgrhdqjwqusyuppm`) is active (not paused due to free-tier inactivity).
+2. Run `npm run db:sync` from the repo root to apply `001_create_products.sql` + `002_create_store_tables.sql` and upsert all **14 live products** into `public.products`.
+3. `GET /api/health` will report `"storage": "postgres"` and `"database": "connected"`.
 
 Regardless of option, set on the backend host:
 ```
@@ -88,10 +84,9 @@ ADMIN_TOKEN_SECRET=<different long random hex> # generate: openssl rand -hex 32
 
 ## 6. Known follow-ups (not launch blockers)
 
-- Fabric compositions / weights in `frontend/src/data/catalog.ts` still `TODO(product)`.
-- Cleo "white" and Dahlia "white/black" colorways reuse other photos until shot.
-- Order confirmation email is sent both at order creation and at payment — consider
-  distinct templates later.
+- Fabric compositions / exact GSM weights in `frontend/src/data/catalog.ts` still `TODO(product)` (Recall Collection material, finish, macro zoom, and true garment colourways have been updated from the studio photography).
+- Cleo "white", Dahlia "white/black", and secondary colourways of Essence/Diza/Hasam/Amber reuse the photographed hero shot until per-colourway studio shots arrive.
+- Order registration vs. payment settlement emails now use distinct subject lines, headings, and ledger status rows (`renderOrderConfirmationEmail` in `backend/src/emails.ts`).
 - When real stock counts diverge from the flat `8` per variant, keep
   `backend/src/catalog.ts` in sync with `frontend/src/data/catalog.ts` (the server
   copy is the validation authority).
