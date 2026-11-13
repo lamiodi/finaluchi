@@ -7,6 +7,7 @@
     "backend"
   ],
   "scripts": {
+    "test:checkout": "node --import tsx --test backend/tests/checkout.test.ts frontend/tests/paystack.test.ts",
     "build": "npm run build --prefix frontend && node -e \"const fs = require('fs'); fs.cpSync('frontend/dist', 'dist', { recursive: true });\"",
     "dev": "npm run dev --prefix frontend",
     "dev:frontend": "npm run dev --prefix frontend",

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useEffect, useState } from 'react';
 import { 
   CheckCircle2, QrCode, Sparkles, Package,
   Scissors, Truck, UserCheck, Search, Lock, MessageCircle, Loader2
@@ -14,6 +14,7 @@ import { isApiConfigured, trackOrder } from '../../lib/api';
 interface OrderTrackerPageProps {
   initialOrderNumber?: string;
   onExploreCatalog?: () => void;
+  onResumePayment?: (orderNumber: string, totalKobo: number, email: string) => void;
 }
 
 const ATELIER_JOURNEY_STAGES = [
@@ -28,6 +29,7 @@ const ATELIER_JOURNEY_STAGES = [
 
 export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
   initialOrderNumber,
+  onResumePayment,
 }) => {
   const [searchInput, setSearchInput] = useState(initialOrderNumber || '');
   const [emailInput, setEmailInput] = useState('');
@@ -41,6 +43,15 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
   const certificate = currentOrder?.certificateSerialNumber
     ? getCertificateBySerial(currentOrder.certificateSerialNumber)
     : undefined;
+
+  useEffect(() => {
+    if (!currentOrder || !isApiConfigured) return;
+    let cancelled = false;
+    void trackOrder(currentOrder.orderNumber, currentOrder.customerEmail).then((remote) => {
+      if (remote && !cancelled) mergeRemoteOrder(remote);
+    });
+    return () => { cancelled = true; };
+  }, [currentOrder?.orderNumber, mergeRemoteOrder]);
 
   // Order number + checkout email lets the atelier API resolve the order on any
   // device; without an email (or when the API is unreachable) this browser's
@@ -100,6 +111,12 @@ export const OrderTrackerPage: React.FC<OrderTrackerPageProps> = ({
             </p>
           </div>
 
+          {currentOrder && onResumePayment && ['PAYMENT_PENDING', 'PAYMENT_FAILED'].includes(currentOrder.paymentStatus) && (
+            <button className="px-5 py-3 bg-white text-noir text-sm font-semibold"
+              onClick={() => onResumePayment(currentOrder.orderNumber, currentOrder.totalKobo, currentOrder.customerEmail)}>
+              {currentOrder.gatewayReference ? 'Check payment status' : 'Complete payment with Paystack'}
+            </button>
+          )}
           {/* Search by Order Number (+ checkout email for cross-device lookup) */}
           <form onSubmit={handleSearch} className="flex flex-col gap-2.5 w-full sm:w-auto">
             <div className="relative flex flex-col sm:flex-row gap-2.5">

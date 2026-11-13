@@ -282,8 +282,8 @@ export type PriceItemsResult =
 /**
  * Validates cart lines against the server catalog: existence, quantity limits,
  * per-variant stock caps and server-authoritative unit prices. Made-to-measure
- * lines keep their bespoke atelier price (custom garments are quoted per client)
- * but still respect the per-line unit cap.
+ * lines require a separate atelier quote; client-supplied bespoke prices
+ * must never be accepted as payment amounts.
  */
 export function priceOrderItems(rawItems: unknown[]): PriceItemsResult {
   const requestedPerVariant = new Map<string, number>();
@@ -310,13 +310,17 @@ export function priceOrderItems(rawItems: unknown[]): PriceItemsResult {
     const isMadeToMeasure = sizeSnapshot.startsWith('Made to Measure');
     const variant = product.variants.find((v) => v.size === sizeSnapshot);
 
+    if (isMadeToMeasure) return { ok: false, error: 'Made-to-measure orders require an atelier quote before payment.' };
+    if (!colorway) return { ok: false, error: `Unknown colour selection for ${product.name}.` };
+
     if (!isMadeToMeasure && !variant) {
       return { ok: false, error: `Unknown size "${sizeSnapshot}" for ${product.name}.` };
     }
 
-    const unitPriceKobo = isMadeToMeasure
-      ? Math.max(0, Math.round(Number(item.unitPriceKobo) || 0))
-      : product.basePriceKobo + (colorway?.priceDeltaKobo || 0) + (variant?.priceDeltaKobo || 0);
+    if (skuSnapshot !== `${colorway.sku}-${sizeSnapshot}`) {
+      return { ok: false, error: `Invalid SKU for ${product.name}.` };
+    }
+    const unitPriceKobo = product.basePriceKobo + colorway.priceDeltaKobo + (variant?.priceDeltaKobo || 0);
 
     if (variant) {
       const alreadyRequested = requestedPerVariant.get(variant.id) || 0;
@@ -337,6 +341,11 @@ export function priceOrderItems(rawItems: unknown[]): PriceItemsResult {
 
     priced.push({
       ...item,
+      productId,
+      sizeSnapshot,
+      skuSnapshot,
+      quantity,
+      productNameSnapshot: product.name,
       unitPriceKobo,
       productSlugSnapshot: product.slug,
       productImageSnapshot,

@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import { Appointment, AuditLogEntry, DigitalCertificate, Order, OrderItemSnapshot, ShippingAddress } from '../types';
 import { useCartStore } from './cartStore';
 import { generateCertificateSerialNumber, generateOrderNumber } from '../utils/formatters';
-import { submitAppointment, submitOrder } from '../lib/api';
+import { submitAppointment } from '../lib/api';
 
 interface OrderState {
   orders: Order[];
@@ -228,14 +228,15 @@ export const useOrderStore = create<OrderState>()(
       ]
     }));
 
-    // Persist to the atelier backend (confirmation email + studio notification)
-    // whenever it is configured; local storage remains the offline fallback.
-    void submitOrder(newOrder);
-
     return newOrder;
   },
 
   processPaystackSuccess: (orderId, gatewayReference) => {
+    const existing = get().orders.find((order) => order.id === orderId || order.orderNumber === orderId);
+    if (existing?.paymentStatus === 'PAYMENT_SUCCESSFUL' && get().certificates.some((cert) => cert.serialNumber === existing.certificateSerialNumber)) {
+      useCartStore.getState().clearCart();
+      return existing;
+    }
     let targetOrder: Order | undefined;
 
     set((state) => {

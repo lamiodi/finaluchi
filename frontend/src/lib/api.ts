@@ -1,8 +1,7 @@
 // API client for the Finaluchi atelier backend.
 //
-// Every call degrades gracefully: when VITE_API_URL is not configured (or the
-// backend is unreachable) the site keeps working fully on local browser
-// storage, exactly as it did before the backend existed. In local development
+// Tracking can fall back to browser storage. Checkout requires successful
+// server registration and payment verification. In local development
 // (`import.meta.env.DEV`), if VITE_API_URL is unset, requests default to
 // http://localhost:5000 so local Paystack / checkout testing talks to the local
 // backend automatically without needing to toggle .env between dev and prod.
@@ -17,8 +16,9 @@ async function request<T>(path: string, init?: RequestInit): Promise<T | null> {
   if (!isApiConfigured) return null;
   try {
     const res = await fetch(`${API_URL}${path}`, {
-      headers: { 'Content-Type': 'application/json' },
+      signal: AbortSignal.timeout(60000),
       ...init,
+      headers: { 'Content-Type': 'application/json', ...init?.headers },
     });
     const data = await res.json().catch(() => null);
     if (!res.ok) {
@@ -33,6 +33,10 @@ async function request<T>(path: string, init?: RequestInit): Promise<T | null> {
 }
 
 /* ---------------------------- Storefront flow ---------------------------- */
+
+export function getPaymentGatewayConfig(): Promise<{ configured: boolean; mode: 'test' | 'live' | null } | null> {
+  return request('/api/payments/config');
+}
 
 // Render's free tier sleeps after inactivity (~30–50s cold start). Pinging the
 // health endpoint when checkout opens wakes it while the client types.
@@ -58,10 +62,10 @@ const orderSyncMap = new Map<string, OrderSyncEntry>();
  * whose totals are recomputed from the authoritative catalog. Paystack must
  * always be charged the server total, or settlement flags an amount mismatch.
  */
-export function registerOrder(order: Order): Promise<Order | null> {
+export function registerOrder(order: Order, refresh = false): Promise<Order | null> {
   const key = (order.orderNumber || '').toUpperCase();
   const existing = orderSyncMap.get(key);
-  if (existing?.serverOrder) return Promise.resolve(existing.serverOrder);
+  if (existing?.serverOrder && !refresh) return Promise.resolve(existing.serverOrder);
   if (existing?.inFlight) return existing.inFlight;
 
   const entry: OrderSyncEntry = existing || { order, serverOrder: null, inFlight: null };
@@ -93,7 +97,7 @@ export async function verifyPayment(
   reference: string,
   orderFallback?: Order
 ): Promise<{ ok: boolean; order?: Order; alreadyPaid?: boolean } | null> {
-  if (orderFallback) await registerOrder(orderFallback);
+  if (orderFallback && !(await registerOrder(orderFallback))) return null;
   return request(`/api/payments/verify/${encodeURIComponent(reference)}`, {
     method: 'POST',
   });

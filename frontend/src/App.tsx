@@ -377,6 +377,7 @@ export const App: React.FC = () => {
             <React.Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center font-mono-luxury text-xs text-bronze-deep">Loading Order Tracker...</div>}>
               <OrderTrackerPage
                 initialOrderNumber={trackerOrderNumber}
+                onResumePayment={handlePaymentInitiated}
                 onExploreCatalog={() => setCurrentView('CATALOG')}
               />
             </React.Suspense>

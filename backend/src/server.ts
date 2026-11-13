@@ -16,7 +16,7 @@ import {
   upsertOrder,
 } from './storage.js';
 import { isDatabaseConfigured } from './db.js';
-import { computeOrderTotals, priceOrderItems } from './catalog.js';
+import { computeOrderTotals, PACKAGING_PRICE_KOBO, priceOrderItems } from './catalog.js';
 import {
   notifyStudio,
   sendAppointmentConfirmation,
@@ -110,6 +110,30 @@ function isRealSecret(value: string | undefined): boolean {
   return v.length > 0 && !v.includes('your_') && !/^[sp]k_(test|live)_x+$/i.test(v);
 }
 
+// Serialize registration and settlement of the same order in this API process.
+// This also prevents a webhook and browser verification from sending duplicate emails.
+const orderLocks = new Map<string, Promise<void>>();
+async function withOrderLock<T>(orderNumber: string, action: () => Promise<T>): Promise<T> {
+  const previous = orderLocks.get(orderNumber) || Promise.resolve();
+  let release!: () => void;
+  const current = new Promise<void>((resolve) => { release = resolve; });
+  const tail = previous.then(() => current);
+  orderLocks.set(orderNumber, tail);
+  await previous;
+  try {
+    return await action();
+  } finally {
+    release();
+    if (orderLocks.get(orderNumber) === tail) orderLocks.delete(orderNumber);
+  }
+}
+
+app.get('/api/payments/config', (_req: Request, res: Response) => {
+  const secretKey = (process.env.PAYSTACK_SECRET_KEY || '').trim();
+  const configured = /^sk_(test|live)_[a-z0-9]+$/i.test(secretKey) && isRealSecret(secretKey);
+  return res.json({ configured, mode: configured ? (secretKey.startsWith('sk_test_') ? 'test' : 'live') : null });
+});
+
 // ---------------------------------------------------------------------------
 // Helper: Resolve Order Number from Paystack transaction reference / metadata
 // Handles attempt suffixes like FC-XXXXX-timestamp or metadata.orderNumber
@@ -199,10 +223,25 @@ app.get('/api/health', async (_req: Request, res: Response) => {
 // ---------------------------------------------------------------------------
 app.post('/api/orders', rateLimit, async (req: Request, res: Response) => {
   const body = req.body as Partial<StoredOrder>;
-  const orderNumber = String(body.orderNumber || '').trim();
+  const orderNumber = String(body.orderNumber || '').trim().toUpperCase();
 
   if (!orderNumber || !isValidEmail(body.customerEmail) || !Array.isArray(body.items) || body.items.length === 0) {
     return res.status(400).json({ error: 'orderNumber, customerEmail and at least one item are required.' });
+  }
+  if (!/^FC-[A-Z0-9-]{3,80}$/.test(orderNumber)) {
+    return res.status(400).json({ error: 'Invalid order number.' });
+  }
+  const address = body.shippingAddress;
+  const customerFullName = typeof body.customerFullName === 'string' ? body.customerFullName.trim() : '';
+  const customerPhone = typeof body.customerPhone === 'string' ? body.customerPhone.trim() : '';
+  if (!customerFullName || !customerPhone || !address ||
+      !['fullName', 'email', 'phone', 'state', 'city', 'addressLine1'].every((field) => typeof address[field] === 'string' && String(address[field]).trim()) ||
+      !/^[A-Z]{2}$/.test(String(address.country || ''))) {
+    return res.status(400).json({ error: 'Complete customer and delivery details are required.' });
+  }
+  const packagingType = String(body.packagingType || 'SIGNATURE_BOX');
+  if (!Object.hasOwn(PACKAGING_PRICE_KOBO, packagingType)) {
+    return res.status(400).json({ error: 'Invalid packaging option.' });
   }
 
   // Server-authoritative validation: prices are recomputed from the catalog
@@ -213,36 +252,57 @@ app.post('/api/orders', rateLimit, async (req: Request, res: Response) => {
   }
 
   const country = String((body.shippingAddress as Record<string, unknown> | undefined)?.country || 'NG');
-  const totals = computeOrderTotals(priced.subtotalKobo, String(body.packagingType || 'SIGNATURE_BOX'), country);
+  const totals = computeOrderTotals(priced.subtotalKobo, packagingType, country);
 
   try {
-    const order = await upsertOrder({
-      ...body,
-      items: priced.items,
-      currency: 'NGN',
-      packagingType: String(body.packagingType || 'SIGNATURE_BOX'),
-      subtotalKobo: priced.subtotalKobo,
-      shippingKobo: totals.shippingKobo,
-      taxKobo: totals.taxKobo,
-      discountKobo: 0,
-      totalKobo: totals.totalKobo,
-      // A new order always starts unpaid regardless of what the client claims;
-      // payment state changes only via verified Paystack flows.
-      paymentStatus: 'PAYMENT_PENDING',
-      orderStatus: 'PENDING_PAYMENT',
-      fulfillmentStatus: 'UNFULFILLED',
-    } as StoredOrder);
+    return await withOrderLock(orderNumber, async () => {
+      // Re-registering a saved order must never reset payment or production.
+      const existing = await findOrderByNumber(orderNumber);
+      if (existing) {
+        if (existing.customerEmail?.toLowerCase() !== body.customerEmail!.trim().toLowerCase() || existing.id !== body.id) {
+          return res.status(409).json({ error: 'This order number is already registered.' });
+        }
+        return res.json({ ok: true, order: sanitizeOrderForClient(existing) });
+      }
+      const order = await upsertOrder({
+        id: typeof body.id === 'string' && body.id.length <= 100 ? body.id : crypto.randomUUID(),
+        orderNumber,
+        customerFullName,
+        customerEmail: body.customerEmail!.trim().toLowerCase(),
+        customerPhone,
+        shippingAddress: address,
+        isGift: Boolean(body.isGift),
+        giftMessage: typeof body.giftMessage === 'string' ? body.giftMessage.slice(0, 2000) : undefined,
+        atelierCurrentStageIndex: 0,
+        createdAt: new Date().toISOString(),
+        estimatedDeliveryDate: 'To be confirmed',
+        certificateSerialNumber: `FC-${crypto.randomUUID().toUpperCase()}`,
+        items: priced.items,
+        currency: 'NGN',
+        packagingType,
+        subtotalKobo: priced.subtotalKobo,
+        shippingKobo: totals.shippingKobo,
+        taxKobo: totals.taxKobo,
+        discountKobo: 0,
+        totalKobo: totals.totalKobo,
+        // A new order always starts unpaid regardless of what the client claims;
+        // payment state changes only via verified Paystack flows.
+        paymentStatus: 'PAYMENT_PENDING',
+        orderStatus: 'PENDING_PAYMENT',
+        fulfillmentStatus: 'UNFULFILLED',
+      } as StoredOrder);
 
-    void sendOrderConfirmation(order);
-    void notifyStudio(`New Order ${order.orderNumber}`, [
-      `Order: ${order.orderNumber}`,
-      `Client: ${order.customerFullName} (${order.customerEmail}, ${order.customerPhone})`,
-      `Pieces: ${(order.items || []).map((i: any) => `${i.productNameSnapshot} ×${i.quantity}`).join('; ') || '—'}`,
-      `Total: ₦${Math.round((order.totalKobo || 0) / 100).toLocaleString('en-NG')} (${order.paymentStatus || 'PAYMENT_PENDING'})`,
-      `Delivery: ${order.shippingAddress?.city || ''}, ${order.shippingAddress?.state || ''}, ${order.shippingAddress?.country || ''}`,
-    ]);
+      void sendOrderConfirmation(order);
+      void notifyStudio(`New Order ${order.orderNumber}`, [
+        `Order: ${order.orderNumber}`,
+        `Client: ${order.customerFullName} (${order.customerEmail}, ${order.customerPhone})`,
+        `Pieces: ${(order.items || []).map((i: any) => `${i.productNameSnapshot} ×${i.quantity}`).join('; ') || '—'}`,
+        `Total: ₦${Math.round((order.totalKobo || 0) / 100).toLocaleString('en-NG')} (${order.paymentStatus || 'PAYMENT_PENDING'})`,
+        `Delivery: ${order.shippingAddress?.city || ''}, ${order.shippingAddress?.state || ''}, ${order.shippingAddress?.country || ''}`,
+      ]);
 
-    return res.status(201).json({ ok: true, order: sanitizeOrderForClient(order) });
+      return res.status(201).json({ ok: true, order: sanitizeOrderForClient(order) });
+    });
   } catch (err: any) {
     console.error('[Orders] Create failed:', err?.message || err);
     return res.status(500).json({ error: 'Could not register order.' });
@@ -275,19 +335,31 @@ type SettleResult =
   | { ok: true; order: Record<string, unknown>; alreadyPaid: boolean }
   | { ok: false; status: number; error: string };
 
-async function settleSuccessfulPayment(params: {
+interface SettlementParams {
   orderNumber: string;
   reference: string;
   amount: number;
   currency: string;
+  customerEmail: string;
   source: 'webhook' | 'verify';
-}): Promise<SettleResult> {
+}
+
+async function settleSuccessfulPayment(params: SettlementParams): Promise<SettleResult> {
+  return withOrderLock(params.orderNumber, () => settlePaymentUnlocked(params));
+}
+
+async function settlePaymentUnlocked(params: SettlementParams): Promise<SettleResult> {
   const existing = await findOrderByNumber(params.orderNumber);
   if (!existing) {
     console.warn(
       `[Payment:${params.source}] Ref ${params.reference} — no matching order "${params.orderNumber}".`
     );
     return { ok: false, status: 404, error: 'No matching order for this payment reference.' };
+  }
+
+  if (!params.reference.startsWith(`${existing.orderNumber}-`) ||
+      !params.customerEmail || params.customerEmail.toLowerCase() !== existing.customerEmail?.toLowerCase()) {
+    return { ok: false, status: 400, error: 'Payment does not belong to this order.' };
   }
 
   // Idempotency guard: redelivered events for an already-paid order stop here.
@@ -347,14 +419,14 @@ app.post('/api/payments/verify/:reference', rateLimit, async (req: Request, res:
   try {
     const response = await fetch(
       `https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`,
-      { headers: { Authorization: `Bearer ${secretKey}` } }
+      { headers: { Authorization: `Bearer ${secretKey}` }, signal: AbortSignal.timeout(20000) }
     );
     const payload = (await response.json().catch(() => null)) as
-      | { status?: boolean; data?: { status?: string; reference?: string; amount?: number; currency?: string; metadata?: { orderNumber?: string } } }
+      | { status?: boolean; data?: { status?: string; reference?: string; amount?: number; currency?: string; customer?: { email?: string }; metadata?: { orderNumber?: string } } }
       | null;
     const tx = payload?.data;
 
-    if (!response.ok || !payload?.status || !tx || tx.status !== 'success') {
+    if (!response.ok || !payload?.status || !tx || tx.status !== 'success' || tx.reference !== reference) {
       console.warn(`[Payment:verify] Ref ${reference} not successful (gateway status: ${tx?.status || 'unknown'}).`);
       return res.status(400).json({
         error: 'Payment was not successful or the reference is unknown.',
@@ -368,6 +440,7 @@ app.post('/api/payments/verify/:reference', rateLimit, async (req: Request, res:
       reference: String(tx.reference || reference),
       amount: Number(tx.amount),
       currency: String(tx.currency || ''),
+      customerEmail: String(tx.customer?.email || ''),
       source: 'verify',
     });
 
@@ -533,77 +606,88 @@ app.post('/api/admin/orders/:orderNumber/dispatch', requireAdmin, async (req: Re
 // Paystack Webhook Handler — HMAC SHA-512, fail-closed
 // ---------------------------------------------------------------------------
 app.post('/api/webhooks/paystack', async (req: Request, res: Response) => {
-  const signature = req.headers['x-paystack-signature'];
-  const webhookSecret = process.env.PAYSTACK_WEBHOOK_SECRET || process.env.PAYSTACK_SECRET_KEY;
+  try {
+    const signature = req.headers['x-paystack-signature'];
+    const webhookSecret = isRealSecret(process.env.PAYSTACK_WEBHOOK_SECRET)
+      ? process.env.PAYSTACK_WEBHOOK_SECRET
+      : process.env.PAYSTACK_SECRET_KEY;
 
-  // Fail closed: without a configured secret we cannot authenticate Paystack at
-  // all, so the event is rejected instead of trusted.
-  if (!isRealSecret(webhookSecret)) {
-    console.error(
-      '[Paystack Webhook] Rejected: PAYSTACK_WEBHOOK_SECRET / PAYSTACK_SECRET_KEY is not configured.'
-    );
-    return res.status(503).json({ error: 'Webhook secret is not configured.' });
-  }
-  if (typeof signature !== 'string' || signature.length === 0) {
-    return res.status(401).json({ error: 'Missing x-paystack-signature header' });
-  }
+    // Fail closed: without a configured secret we cannot authenticate Paystack at
+    // all, so the event is rejected instead of trusted.
+    if (!isRealSecret(webhookSecret)) {
+      console.error(
+        '[Paystack Webhook] Rejected: PAYSTACK_WEBHOOK_SECRET / PAYSTACK_SECRET_KEY is not configured.'
+      );
+      return res.status(503).json({ error: 'Webhook secret is not configured.' });
+    }
+    if (typeof signature !== 'string' || signature.length === 0) {
+      return res.status(401).json({ error: 'Missing x-paystack-signature header' });
+    }
 
-  const rawBody: Buffer | undefined = (req as any).rawBody;
-  if (!rawBody || rawBody.length === 0) {
-    return res.status(400).json({ error: 'Webhook body unavailable for verification.' });
-  }
+    const rawBody: Buffer | undefined = (req as any).rawBody;
+    if (!rawBody || rawBody.length === 0) {
+      return res.status(400).json({ error: 'Webhook body unavailable for verification.' });
+    }
 
-  const expectedSignature = crypto
-    .createHmac('sha512', webhookSecret as string)
-    .update(rawBody)
-    .digest('hex');
-  const received = Buffer.from(signature, 'utf-8');
-  const expected = Buffer.from(expectedSignature, 'utf-8');
-  if (received.length !== expected.length || !crypto.timingSafeEqual(received, expected)) {
-    console.warn('[Paystack Webhook] Invalid signature rejected.');
-    return res.status(401).json({ error: 'Invalid webhook signature' });
-  }
+    const expectedSignature = crypto
+      .createHmac('sha512', webhookSecret as string)
+      .update(rawBody)
+      .digest('hex');
+    const received = Buffer.from(signature, 'utf-8');
+    const expected = Buffer.from(expectedSignature, 'utf-8');
+    if (received.length !== expected.length || !crypto.timingSafeEqual(received, expected)) {
+      console.warn('[Paystack Webhook] Invalid signature rejected.');
+      return res.status(401).json({ error: 'Invalid webhook signature' });
+    }
 
-  const event = req.body;
-  console.log('[Paystack Webhook Verified]:', event?.event || 'Unknown event');
+    const event = req.body;
+    console.log('[Paystack Webhook Verified]:', event?.event || 'Unknown event');
 
-  if (event?.event === 'charge.success') {
-    const data = event.data || {};
-    const orderNumber = await resolvePaymentOrderNumber(data, data?.reference || '');
-    if (!orderNumber) {
-      console.warn(`[Paystack Webhook] charge.success ref ${data?.reference} — no order reference in payload.`);
+    if (event?.event === 'charge.success') {
+      const data = event.data || {};
+      const orderNumber = await resolvePaymentOrderNumber(data, data?.reference || '');
+      if (!orderNumber) {
+        console.warn(`[Paystack Webhook] charge.success ref ${data?.reference} — no order reference in payload.`);
+        return res.status(200).json({ received: true });
+      }
+
+      const result = await settleSuccessfulPayment({
+        orderNumber: String(orderNumber),
+        reference: String(data?.reference || ''),
+        amount: Number(data?.amount),
+        currency: String(data?.currency || ''),
+        customerEmail: String(data?.customer?.email || ''),
+        source: 'webhook',
+      });
+
+      if (!result.ok && result.status === 404) {
+        console.warn(`[Paystack Webhook] charge.success ref ${data?.reference} — order "${orderNumber}" not found.`);
+        return res.status(503).json({ error: 'Order not available yet. Retry this event.' });
+      }
       return res.status(200).json({ received: true });
     }
 
-    const result = await settleSuccessfulPayment({
-      orderNumber: String(orderNumber),
-      reference: String(data?.reference || ''),
-      amount: Number(data?.amount),
-      currency: String(data?.currency || ''),
-      source: 'webhook',
-    });
-
-    if (!result.ok && result.status === 404) {
-      console.warn(`[Paystack Webhook] charge.success ref ${data?.reference} — order "${orderNumber}" not found.`);
+    if (event?.event === 'charge.failed') {
+      const data = event.data || {};
+      const orderNumber = await resolvePaymentOrderNumber(data, data?.reference || '');
+      if (orderNumber) await withOrderLock(orderNumber, async () => {
+      const existing = await findOrderByNumber(orderNumber);
+      if (existing && existing.paymentStatus === 'PAYMENT_PENDING') {
+        // Only pending orders roll back — never clobber a successful retry that
+        // may have landed before this failure event.
+        await upsertOrder({ ...existing, paymentStatus: 'PAYMENT_FAILED' } as StoredOrder);
+        console.warn(`[Paystack Webhook] charge.failed — order ${existing.orderNumber} marked PAYMENT_FAILED.`);
+      }
+      });
+      return res.status(200).json({ received: true });
     }
-    return res.status(200).json({ received: true });
-  }
 
-  if (event?.event === 'charge.failed') {
-    const data = event.data || {};
-    const orderNumber = await resolvePaymentOrderNumber(data, data?.reference || '');
-    const existing = orderNumber ? await findOrderByNumber(orderNumber) : undefined;
-    if (existing && existing.paymentStatus === 'PAYMENT_PENDING') {
-      // Only pending orders roll back — never clobber a successful retry that
-      // may have landed before this failure event.
-      await upsertOrder({ ...existing, paymentStatus: 'PAYMENT_FAILED' } as StoredOrder);
-      console.warn(`[Paystack Webhook] charge.failed — order ${existing.orderNumber} marked PAYMENT_FAILED.`);
-    }
+    // Acknowledge all other verified events immediately with 200 OK
     return res.status(200).json({ received: true });
+  } catch (err) {
+    console.error('[Paystack Webhook] Processing failed:', err instanceof Error ? err.message : err);
+    return res.status(500).json({ error: 'Could not process payment notification. Retry this event.' });
   }
-
-  // Acknowledge all other verified events immediately with 200 OK
-  return res.status(200).json({ received: true });
 });
 
 // Root route
@@ -639,10 +723,12 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   });
 });
 
-app.listen(PORT, () => {
+if (process.env.NODE_ENV !== 'test') app.listen(PORT, () => {
   console.log(`[Finaluchi API] Server listening on http://localhost:${PORT}`);
   if (!process.env.RESEND_API_KEY) console.log('[Finaluchi API] RESEND_API_KEY not set — transactional emails will be logged, not sent.');
   if (!ADMIN_PASSCODE) console.log('[Finaluchi API] ADMIN_PASSCODE not set — admin login endpoint is disabled.');
 });
+
+export { app };
 
 export default app;

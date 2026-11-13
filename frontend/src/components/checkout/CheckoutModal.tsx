@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, Lock, ArrowUpRight, AlertCircle, ChevronDown, Loader2 } from 'lucide-react';
 import { useCartStore } from '../../stores/cartStore';
 import { useCurrencyStore } from '../../stores/currencyStore';
 import { useOrderStore } from '../../stores/orderStore';
 import { useAudioStore } from '../../stores/audioStore';
 import { formatKoboToNgn, formatIndicative } from '../../utils/formatters';
-import { ShippingAddress } from '../../types';
+import { Order, ShippingAddress } from '../../types';
 import { toast } from 'sonner';
 import { useModalA11y } from '../../lib/useModalA11y';
 import { webpVariant, onImageError } from '../../utils/images';
-import { warmUpApi } from '../../lib/api';
+import { isApiConfigured, registerOrder, warmUpApi } from '../../lib/api';
+import { isPaystackConfigured } from '../../lib/paystack';
 import { DESTINATION_COUNTRIES, getCountryByCode } from '../../data/destinations';
 
 interface CheckoutModalProps {
@@ -69,9 +70,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   } = useCartStore();
 
   const { displayCurrency, setDisplayCurrency } = useCurrencyStore();
-  const { createOrder } = useOrderStore();
+  const { createOrder, mergeRemoteOrder } = useOrderStore();
   const { playTactileClick } = useAudioStore();
-  const panelRef = useModalA11y<HTMLDivElement>({ onClose, isOpen });
 
   const cached = loadCachedAddress();
 
@@ -87,6 +87,9 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [postalCode, setPostalCode] = useState(cached.postalCode || '');
   const [landmarkNotes, setLandmarkNotes] = useState(cached.landmarkNotes || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const submittingRef = useRef(false);
+  const pendingOrderRef = useRef<{ fingerprint: string; order: Order } | null>(null);
+  const panelRef = useModalA11y<HTMLDivElement>({ onClose: () => { if (!submittingRef.current) onClose(); }, isOpen });
 
   const currentCountry = getCountryByCode(country);
 
@@ -112,10 +115,14 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     setDisplayCurrency(countryData.currency);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (isSubmitting) return;
+    if (submittingRef.current) return;
+    if (!isPaystackConfigured() || !isApiConfigured) {
+      toast.error('Secure payment is temporarily unavailable. Please try again later. Your bag is saved.');
+      return;
+    }
 
     if (!fullName.trim() || !email.trim() || !phone.trim() || !city.trim() || !addressLine1.trim()) {
       toast.error('Please complete all required delivery details.');
@@ -149,6 +156,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     }
 
     setIsSubmitting(true);
+    submittingRef.current = true;
     playTactileClick();
 
     const cleanPhone = country === 'NG'
@@ -170,22 +178,33 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     // Cache the address so accidental modal closures never lose customer inputs
     saveCachedAddress(shippingAddress);
 
-    // Initialize Order Intent
-    const newOrder = createOrder(shippingAddress, packagingType, isGift, giftMessage);
-
-    // Trigger Paystack Gateway Modal
-    onPaymentInitiated(newOrder.orderNumber, total, cleanEmail);
-
-    setTimeout(() => {
+    try {
+      const fingerprint = JSON.stringify({ shippingAddress, items, packagingType, isGift, giftMessage });
+      const newOrder = pendingOrderRef.current?.fingerprint === fingerprint
+        ? pendingOrderRef.current.order
+        : createOrder(shippingAddress, packagingType, isGift, giftMessage);
+      pendingOrderRef.current = { fingerprint, order: newOrder };
+      const serverOrder = await registerOrder(newOrder);
+      if (!serverOrder) {
+        toast.error('We could not save your order with the atelier. Please try again. You have not been charged.');
+        return;
+      }
+      mergeRemoteOrder(serverOrder);
+      // Always charge the server catalog total, including shipping and VAT.
+      onPaymentInitiated(serverOrder.orderNumber, serverOrder.totalKobo, serverOrder.customerEmail);
+    } catch {
+      toast.error('Could not prepare checkout. Your bag is saved. Please try again.');
+    } finally {
       setIsSubmitting(false);
-    }, 1200);
+      submittingRef.current = false;
+    }
   };
 
   return (
     <div
       className="order-veil"
       onClick={(e) => {
-        if (e.target === e.currentTarget) {
+        if (e.target === e.currentTarget && !submittingRef.current) {
           playTactileClick();
           onClose();
         }
@@ -218,6 +237,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
             }}
             className="bag-head-close"
             aria-label="Close checkout"
+            disabled={isSubmitting}
           >
             <X size={17} />
           </button>
@@ -501,7 +521,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       </>
                     ) : (
                       <>
-                        <Lock size={12} /> Confirm order &amp; request invoice
+                        <Lock size={12} /> Continue to Paystack
                       </>
                     )}
                   </span>
@@ -509,9 +529,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 </button>
 
                 <p style={{ fontSize: 9, lineHeight: 1.8, letterSpacing: '.06em', color: '#8b8378', marginTop: 14, textTransform: 'uppercase' }}>
-                  Your piece specifications, custom sizing and guaranteed completion date are reviewed
-                  directly by the Abuja atelier. An itemized written invoice and traceable payment
-                  instructions follow confirmation.
+                  Pay securely with Paystack in NGN. Your order is confirmed after payment verification.
+                  The Abuja atelier will follow up on sizing and production details.
                 </p>
               </div>
             </div>

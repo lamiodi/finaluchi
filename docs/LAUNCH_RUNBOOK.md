@@ -2,24 +2,26 @@
 
 Everything that **cannot be finished from the codebase alone** because it needs an
 external account, a production secret, or a live money movement. Work top to bottom.
-Code-side state as of 2026-09-29: all audit fixes are in (`docs/PRE_LAUNCH_AUDIT_2026-09-29.md`);
-the storefront automatically falls back to the WhatsApp concierge flow while Paystack
-keys are placeholders, so nothing is broken today.
+Checkout updated 2026-11-13: website purchases use Paystack. Missing payment
+configuration blocks payment and preserves the bag; checkout does not redirect
+customers to WhatsApp or mark an unverified browser callback as paid.
 
 ---
 
-## 1. Paystack account (OWNER: not yet created)
+## 1. Paystack configuration
 
 1. Sign up at <https://paystack.com> with the business email (finaluchi.com domain email preferred).
 2. Complete business verification (CAC certificate, director ID, bank account for payouts).
 3. In **Settings → API Keys & Webhooks** copy:
    - **Test Secret Key** (`sk_test_…`) → `backend/.env` → `PAYSTACK_SECRET_KEY`
-   - **Test Public Key** (`pk_test_…`) → `frontend/.env` → `VITE_PAYSTACK_PUBLIC_KEY`
+   - **Test Public Key** (`pk_test_…`) → frontend Vercel env → `PAYSTACK_PUBLIC_KEY` (legacy `VITE_PAYSTACK_PUBLIC_KEY` also works)
    - `PAYSTACK_WEBHOOK_SECRET` = the same **secret key** (Paystack signs webhooks with `sk_…`).
 4. In **Settings → Webhooks** set the URL to `https://<your-backend-host>/api/webhooks/paystack`.
-5. The moment a real `pk_test_…` key lands in `frontend/.env`, the checkout modal
-   automatically switches from the WhatsApp concierge to the live Paystack popup —
-   no code change needed.
+5. Redeploy the frontend after changing the key: Vite embeds it at build time.
+   Vercel Development, Preview, and Production environment scopes are separate;
+   a Development-only value does not reach a Production deployment. The backend
+   must use the matching test/live secret key. `/api/payments/config` reports
+   readiness and mode without exposing a secret.
 6. **Test with Paystack test cards before going live**, e.g.
    `4084 0840 8408 4081` (success), `4084 0000 0000 4081` (declined), plus the
    bank-transfer and USSD test flows. Phone auth OTP: `123456`.
@@ -65,15 +67,25 @@ ADMIN_TOKEN_SECRET=<different long random hex> # generate: openssl rand -hex 32
 2. Set environment variables in Vercel:
    - `VITE_API_URL=https://<backend-host>` (no trailing slash)
    - `VITE_SITE_URL=https://finaluchi.com`
-   - `VITE_PAYSTACK_PUBLIC_KEY=pk_test_…` (later `pk_live_…`)
-3. Redeploy after keys change — Vite bakes `VITE_*` values in at build time.
+   - `PAYSTACK_PUBLIC_KEY=pk_test_…` (later `pk_live_…`)
+3. Select the environment scope for the intended deployment and redeploy after
+   key changes. Vite exposes only this public Paystack key; secret keys belong
+   only on the separately deployed backend.
+4. Deploy backend code changes too. Frontend-only Vercel hosting does not run
+   `backend/src/server.ts`. Set `VITE_API_URL` to the backend's HTTPS origin.
+5. Run `npm run test:checkout`, `npm run build:backend`, and `npm run build:frontend`.
+   Regression tests use isolated temporary storage and mocked gateway responses;
+   they do not replace a real Paystack test-mode checkout after deployment.
 
 ## 5. Canary checklist (run once per environment, test → live)
 
 - [ ] Health: `curl https://<backend-host>/api/health` → `status: ok`, email + admin `configured`
 - [ ] Place a test order end-to-end (card succeeds) → order confirmation email arrives,
       studio alert arrives, order shows in `/admin` (passcode login) with `PAYMENT_SUCCESSFUL`
-- [ ] Pay ₦100-declined test card → order stays `PAYMENT_FAILED`, no confirmation email
+- [ ] Decline or close the payment popup → order stays unpaid and bag remains;
+      a signed `charge.failed` webhook marks a pending order `PAYMENT_FAILED`.
+- [ ] Retry verification after a successful payment → no second charge, paid
+      order remains confirmed; duplicate webhooks do not reset order progress.
 - [ ] Tamper check: `curl -X POST …/api/payments/verify/bogus-ref` → 400
 - [ ] Webhook signature check: `curl -X POST …/api/webhooks/paystack -d '{}'` without
       signature header → 401

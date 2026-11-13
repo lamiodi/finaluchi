@@ -1,9 +1,7 @@
 // Paystack Inline (popup) integration.
 //
-// The gateway activates automatically the moment a real public key is present
-// in VITE_PAYSTACK_PUBLIC_KEY. Until the Paystack account is created (see
-// docs/LAUNCH_RUNBOOK.md) the placeholder value keeps the storefront on the
-// WhatsApp concierge flow, so checkout never breaks.
+// Vite maps PAYSTACK_PUBLIC_KEY (or VITE_PAYSTACK_PUBLIC_KEY) to this
+// explicitly allowlisted browser value at build time.
 
 export interface PaystackCallbackResponse {
   reference?: string;
@@ -49,7 +47,7 @@ let inlineLoadPromise: Promise<void> | null = null;
 /** Returns the configured public key, or undefined while it is unset/placeholder. */
 export function getPaystackPublicKey(): string | undefined {
   const key = ((import.meta.env.VITE_PAYSTACK_PUBLIC_KEY as string | undefined) || '').trim();
-  if (!key || key.includes('your_') || /^pk_(test|live)_x+$/i.test(key)) return undefined;
+  if (!/^pk_(test|live)_[a-z0-9]+$/i.test(key) || /^pk_(test|live)_x+$/i.test(key)) return undefined;
   return key;
 }
 
@@ -67,11 +65,19 @@ export function loadPaystackInline(): Promise<void> {
     const script = document.createElement('script');
     script.src = PAYSTACK_INLINE_SRC;
     script.async = true;
-    script.onload = () => (window.PaystackPop ? resolve() : reject(new Error('Paystack Inline loaded but unavailable')));
-    script.onerror = () => {
+    const fail = (message: string) => {
+      window.clearTimeout(timeout);
+      script.remove();
       inlineLoadPromise = null;
-      reject(new Error('Could not load Paystack Inline. Check your connection and try again.'));
+      reject(new Error(message));
     };
+    const timeout = window.setTimeout(() => fail('Paystack took too long to load. Check your connection and try again.'), 20000);
+    script.onload = () => {
+      window.clearTimeout(timeout);
+      if (window.PaystackPop) resolve();
+      else fail('Paystack Inline loaded but unavailable. Please try again.');
+    };
+    script.onerror = () => fail('Could not load Paystack Inline. Check your connection and try again.');
     document.head.appendChild(script);
   });
   return inlineLoadPromise;
@@ -96,13 +102,16 @@ export async function openPaystackCheckout(options: {
 }): Promise<void> {
   const key = getPaystackPublicKey();
   if (!key) throw new Error('Paystack is not configured.');
+  if (!Number.isSafeInteger(options.amountKobo) || options.amountKobo <= 0) {
+    throw new Error('The order total is invalid. Please review your order.');
+  }
 
   await loadPaystackInline();
   const PaystackPop = window.PaystackPop;
   if (!PaystackPop) throw new Error('Paystack Inline unavailable.');
 
   const orderNumber = options.reference;
-  const attemptRef = `${orderNumber}-${Date.now().toString(36).toUpperCase()}`;
+  const attemptRef = `${orderNumber}-${crypto.randomUUID()}`;
 
   let settled = false;
   const handleSuccess = (res: PaystackCallbackResponse | string) => {
@@ -117,6 +126,7 @@ export async function openPaystackCheckout(options: {
 
   const handleClose = () => {
     if (settled) return;
+    settled = true;
     options.onCancel();
   };
 

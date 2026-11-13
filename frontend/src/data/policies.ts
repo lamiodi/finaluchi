@@ -113,7 +113,7 @@ export const POLICIES: Record<PolicyId, PolicyDoc> = {
       {
         heading: '1. How Orders Are Confirmed',
         body: [
-          'Finaluchi operates a concierge-confirmed order model. Submitting your details on this website registers an order request; a binding contract of sale is formed only when the atelier confirms your order — in writing on WhatsApp or by email — with an official invoice stating the agreed pieces, specifications, price and delivery date. This protects both you and the atelier for made-to-order couture.',
+          'For website ready-to-wear purchases, submit your delivery details and complete the secure Paystack checkout. Your order is confirmed after payment verification. Bespoke and made-to-measure commissions require a separate atelier consultation and written invoice confirming specifications, price and delivery date before payment.',
         ],
       },
       {
@@ -270,7 +270,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         question: 'How do I place an order?',
         answer:
-          'Add the pieces you love to your bag and complete the delivery details at checkout — this registers your order request and reserves your selections. The atelier then confirms availability, sizing, delivery date and payment on WhatsApp (or by email) and issues your official written invoice before any payment is taken.',
+          'Add the pieces you love to your bag, complete your delivery details, then continue to Paystack to pay securely in NGN. Your order is saved before payment and confirmed after payment verification. The atelier follows up on sizing and production details. For bespoke commissions, contact the atelier for a consultation and quote.',
       },
       {
         question: 'Which payment methods do you accept?',
@@ -280,7 +280,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         question: 'When am I charged?',
         answer:
-          'Only after the atelier confirms your order in writing. You will never be charged automatically just for submitting a request through the website.',
+          'You pay when you complete the Paystack payment step. Entering your delivery details alone does not charge you. If payment completes but confirmation is interrupted, use “Check payment status” to verify the existing payment before trying to pay again.',
       },
       {
         question: 'Can I order from outside Nigeria?',
